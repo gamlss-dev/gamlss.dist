@@ -1,0 +1,190 @@
+<html><head><title>The Sichel distribution for fitting a GAMLSS model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>SICHEL(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   SICHEL">
+<param name="keyword" value="R:   dSICHEL">
+<param name="keyword" value="R:   pSICHEL">
+<param name="keyword" value="R:   qSICHEL">
+<param name="keyword" value="R:   rSICHEL">
+<param name="keyword" value="R:   VSICHEL">
+<param name="keyword" value=" The Sichel distribution for fitting a GAMLSS model">
+</object>
+
+
+<h2>The Sichel distribution for fitting a GAMLSS model</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The <code>SICHEL()</code> function defines the Sichel distribution, a three parameter discrete distribution, for a <code>gamlss.family</code> object to be used 
+in GAMLSS fitting using the function <code>gamlss()</code>.    
+The functions <code>dSICHEL</code>, <code>pSICHEL</code>, <code>qSICHEL</code> and <code>rSICHEL</code> define the density, distribution function, quantile function and random
+generation for the Sichel <code>SICHEL()</code>, distribution. The function <code>VSICHEL</code> gives the variance of a fitted Sichel model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+SICHEL(mu.link = "log", sigma.link = "log", nu.link = "identity")
+dSICHEL(x, mu=1, sigma=1, nu=-0.5, log=FALSE)
+pSICHEL(q, mu=1, sigma=1, nu=-0.5, lower.tail = TRUE, 
+         log.p = FALSE)
+qSICHEL(p, mu=1, sigma=1, nu=-0.5,  lower.tail = TRUE, 
+        log.p = FALSE, max.value = 10000)        
+rSICHEL(n, mu=1, sigma=1, nu=-0.5, max.value = 10000)
+VSICHEL(obj)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "log" link as the default for the mu parameter</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the <code>nu.link</code>, with "identity" link as the default for the nu parameter </td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+vector of (non-negative integer) quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of positive mu</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of positive despersion parameter</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of nu</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities</td></tr>
+<tr valign="top"><td><code>q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of random values to return</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p)</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x]</td></tr>
+<tr valign="top"><td><code>max.value</code></td>
+<td>
+a constant, set to the default value of 10000 for how far the algorithm  should look for q</td></tr>
+<tr valign="top"><td><code>obj</code></td>
+<td>
+a fitted Sichel gamlss model</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability function of the Sichel distribution is given by
+</p><p align="center"><i>f(y|mu,sigma,nu)=mu^y Ky+n(alpha)/(alpha sigma)^(y+v) y! Knu(1/sigma)</i></p><p> 
+where  <i>alpha^2=1/sigma^2 +2*mu/c*sigma</i>,
+and <i>c=Rv(1/sigma)=Kv+1(1/sigma)/Kv(1/sigma)</i> 
+for <i>y=0,1,2,...</i> 
+where  <i>mu&gt;0</i> , <i>&sigma;&gt;0</i> and <i>-Inf&lt;nu&lt;Inf</i> and <i>K_{&lambda;}(t)=frac{1}{2}int_0^{infty} x^{&lambda;-1} exp{-frac{1}{2}t(x+x^{-1})}dx</i> is the 
+modified Bessel function of the third kind.
+Note that the above parameterization is different from Stein, Zucchini and Juritz (1988) who use the above probability function 
+but treat
+<i>mu</i>, <i>alpha</i>  and <i>nu</i> as the parameters.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Returns a <code>gamlss.family</code> object which can be used to fit a Sichel distribution in the <code>gamlss()</code> function.</p>
+
+<h3>Note</h3>
+
+<p>
+The mean of the above Sichel distribution is <i>mu</i> and the variance is 
+<i>mu^2 *( 2*sigma*(nu+1)/c + (1/c^2)-1 )</i>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Rigby, R. A.,  Stasinopoulos D. M. and Akantziliotou C.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Rigby, R. A., Stasinopoulos D. M. and Akantziliotou, C. (2006) Modelling the parameters of a family of mixed Poisson distribtions including the Sichel and Delaptorte.
+Submitted for publication.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2003) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stein, G. Z., Zucchini, W. and Juritz, J. M. (1987). Parameter
+Estimation of the Sichel Distribution and its Multivariate Extension.
+<EM>Journal of American Statistical Association</EM>, <B>82</B>, 938-944.
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="PIG.html">PIG</a></code> , <code><a href="SI.html">SI</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+SICHEL()# gives information about the default links for the  Sichel distribution 
+#plot the pdf using plot 
+plot(function(y) dSICHEL(y, mu=10, sigma=1, nu=1), from=0, to=100, n=100+1, type="h") # pdf
+# plot the cdf
+plot(seq(from=0,to=100),pSICHEL(seq(from=0,to=100), mu=10, sigma=1, nu=1), type="h")   # cdf
+# generate random sample
+tN &lt;- table(Ni &lt;- rSICHEL(100, mu=5, sigma=1, nu=1))
+r &lt;- barplot(tN, col='lightblue')
+# fit a model to the data 
+# library(gamlss)
+# gamlss(Ni~1,family=SICHEL, control=gamlss.control(n.cyc=50))
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

@@ -1,0 +1,164 @@
+<html><head><title>Generalized Gamma distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>GG(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   GG">
+<param name="keyword" value="R:   pGG">
+<param name="keyword" value="R:   dGG">
+<param name="keyword" value="R:   qGG">
+<param name="keyword" value="R:   rGG">
+<param name="keyword" value=" Generalized Gamma distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>Generalized Gamma distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function GG defines the generalized gamma distribution, a three parameter distribution, 
+for a gamlss.family object to be used in GAMLSS fitting using the function gamlss(). 
+The parameterization used has the mean of the distribution equal to mu and the variance 
+equal to <i>(sigma^2)*(mu^2)</i>. The functions dGG, pGG, qGG and rGG define the density, 
+distribution function, quantile function and random generation for the specific parameterization 
+of the generalized gamma distribution defined by function GG.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+GG(mu.link = "log", sigma.link = "log", 
+                       nu.link = "identity")
+dGG(x, mu=1, sigma=0.1, nu=1,  
+                      log = FALSE)
+pGG(q, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, 
+                     log.p = FALSE)
+qGG(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, 
+                     log.p = FALSE )
+rGG(n, mu=1, sigma=0.1, nu=1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the mu.link, with "log" link as the default for the mu parameter, 
+other links are "inverse" and "identity" </td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the sigma.link, with "log" link as the default for the sigma parameter, 
+other links are "inverse" and "identity" </td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the nu.link, with "identity" link as the default for the sigma parameter, 
+other links are <i>"1/nu^2"</i> and "log"</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles </td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values </td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values </td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of shape parameter values </td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p). </td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x], otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If length(n) &gt; 1, the length is taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The specific parameterization of the generalized gamma distribution used in GG is 
+</p><p align="center"><i>f(y|mu,sigma,nu)=theta^theta*z^theta*nu*e^(-theta*z)/(Gamma(theta)*y)</i></p><p>
+where <i>z =(y/mu)^nu</i>, 
+<i>theta = 1/(sigma^2*abs(nu)^2)</i>
+for y&gt;0, <i>mu&gt;0</i>, <i>sigma&gt;0</i> and <i>-Inf&gt;nu&gt;Inf</i>. Note that for 
+<i>nu=0</i> the distribution is log normal.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+GG() returns a gamlss.family object which can be used to fit a generalized gamma distribution in 
+the gamlss() function. dGG() gives the density, pGG() gives the distribution function, qGG() gives the quantile function, 
+and rGG() generates random deviates.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos d.stasinopoulos@londonmet.ac.uk, Bob Rigby r.rigby@londonmet.ac.uk and Nicoleta Motpan
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Lopatatzidis, A. and Green, P. J. (2000), Nonparametric quantile regression using the gamma distribution, unpublished.
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>). 
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="GA.html">GA</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y&lt;-rGG(100,mu=1,sigma=0.1, nu=-.5) # generates 100 random observations  
+hist(y)
+# library(gamlss)
+#histDist(y, family=GG)
+#m1 &lt;-gamlss(y~1,family=GG)
+#prof.dev(m1, "nu", min=-2, max=2, step=0.2)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

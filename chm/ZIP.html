@@ -1,0 +1,155 @@
+<html><head><title>Zero inflated poisson distribution for fitting a GAMLSS model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>ZIP(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   ZIP">
+<param name="keyword" value="R:   dZIP">
+<param name="keyword" value="R:   pZIP">
+<param name="keyword" value="R:   qZIP">
+<param name="keyword" value="R:   rZIP">
+<param name="keyword" value=" Zero inflated poisson distribution for fitting a GAMLSS model">
+</object>
+
+
+<h2>Zero inflated poisson distribution for fitting a GAMLSS model</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>ZIP</code> defines the zero inflated Poisson distribution, a two parameter distribution, for a <code>gamlss.family</code> object to be used in GAMLSS fitting 
+using the function <code>gamlss()</code>. The functions <code>dZIP</code>, <code>pZIP</code>, <code>qZIP</code> and <code>rZIP</code> define the density, distribution function, quantile function 
+and random generation for the inflated poisson, <code>ZIP()</code>, distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ZIP(mu.link = "log", sigma.link = "logit")
+dZIP(x, mu = 5, sigma = 0.1, log = FALSE)
+pZIP(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
+qZIP(p, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
+rZIP(n, mu = 5, sigma = 0.1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+defines the <code>mu.link</code>, with "log" link as the default for the <code>mu</code> parameter</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+defines the <code>sigma.link</code>, with "logit" link as the default for the sigma parameter which in this case is the probability at zero. 
+Other links are "probit" and "cloglog"'(complementary log-log)</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+vector of (non-negative integer) quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of positive means</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of probabilities at zero</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities</td></tr>
+<tr valign="top"><td><code>q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of random values to return</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p)</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x]</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Let <i>Y=0</i> with probability <i>&sigma;</i> and <i>Y sim Po(&mu;)</i> with probability <i>(1-&sigma;)</i> the Y has
+a Zero inflated Poisson Distribution given by
+</p>
+<p align="center"><i>sigma+(1-sigma)e^(-mu)</i></p><p> if (y=0)
+</p><p align="center"><i>f(y)=(1-sigma)e^-mu mu^y/y!</i></p><p> if (y&gt;0)
+for <i>y=0,1,...,</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+returns a <code>gamlss.family</code> object which can be used to fit a zero inflated poisson distribution in the <code>gamlss()</code> function.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Lambert, D. (1992), Zero-inflated Poisson Regression with an application to defects in Manufacturing,
+<EM>Technometrics</EM>,  <B>34</B>, pp 1-14.
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).  
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="PO.html">PO</a></code>, <code><a href="ZIP2.html">ZIP2</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ZIP()# gives information about the default links for the normal distribution
+# creating data and plotting them 
+dat&lt;-rZIP(1000, mu=5, sigma=.1)
+r &lt;- barplot(table(dat), col='lightblue')
+# library(gamlss)
+# fit the distribution 
+# mod1&lt;-gamlss(dat~1, family=ZIP)# fits a constant for mu and sigma 
+# fitted(mod1)[1]
+# fitted(mod1,"sigma")[1]
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

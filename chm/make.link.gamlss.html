@@ -1,0 +1,278 @@
+<html><head><title>Create a Link for GAMLSS families</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>make.link.gamlss(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   make.link.gamlss">
+<param name="keyword" value="R:   show.link">
+<param name="keyword" value="R:   own.linkfun">
+<param name="keyword" value="R:   own.linkinv">
+<param name="keyword" value="R:   own.mu.eta">
+<param name="keyword" value="R:   own.valideta">
+<param name="keyword" value=" Create a Link for GAMLSS families">
+</object>
+
+
+<h2>Create a Link for GAMLSS families</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>make.link.gamlss()</code> is used with <code>gamlss.family</code> distributions in package <span class="pkg">gamlss()</span>.
+Given a link, it returns a link function, an inverse link  function, the derivative dpar/deta where 'par' is 
+the appropriate 
+distribution parameter and a function for checking the domain. It differs from the usual <code>make.link</code> of <code>glm()</code> 
+by having extra links as the <code>logshifto1</code>, and the 
+<code>own</code>. For the use of the <code>own</code> link see the example bellow. 
+<code>show.link</code> provides a way in which the user can identify the link functions available for each gamlss distribution. 
+If your required link function is not available for any of the gamlss distributions you can add it in.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+make.link.gamlss(link)
+show.link(family = "NO")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>link</code></td>
+<td>
+character or numeric; one of <code>"logit"</code>, <code>"probit"</code>,
+<code>"cloglog"</code>, <code>"identity"</code>, <code>"log"</code>,  <code>"sqrt"</code>,  <code>"1/mu^2"</code>,
+<code>"inverse"</code>, <code>"logshifted"</code>, <code>"logitshifted"</code>, or number, say lambda resulting in power link <i>mu^lambda</i>.</td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+a gamlss distribution  <code>family</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The <code>own</code> link function is added to allow the user greater flexibility. 
+In order to used the own link function for any of the parameters of the distribution the <code>own</code> link should 
+appear in the available links for this parameter. You can check this using the function <code>show.link</code>. 
+If the <code>own</code> do not appear in the list you can create a new function for the distribution in which    
+<code>own</code> is added in the list. For example the first line of the code  of the binomial distribution, 
+<code>BI</code>, has change 
+from 
+</p>
+<p>
+"mstats &lt;- checklink("mu.link", "Binomial", substitute(mu.link), c("logit", "probit", "cloglog", "log")),
+in version 1.0-0 of gamlss,  to 
+</p>
+<p>
+"mstats &lt;- checklink("mu.link", "Binomial", substitute(mu.link), c("logit", "probit", "cloglog", "log", "own")) 
+</p>
+<p>
+in version 1.0-1. Given that the parameter has <code>own</code> as an option the user needs also to define the following 
+four new functions in order to used an <code>own</code> link.  
+</p>
+<p>
+i) own.linkfun 
+</p>
+<p>
+ii) own.linkinv
+</p>
+<p>
+iii) own.mu.eta and 
+</p>
+<p>
+iv) own.valideta.
+</p>
+<p>
+An example is given below.  
+</p>
+<p>
+Only one parameter of the distribution at a time is allowed to have its <code>own</code> link,
+(unless the same four <code>own</code> functions above are suitable for more that one parameter of the distribution).
+</p>
+<p>
+Note that from <span class="pkg">gamlss</span> version 1.9-0 the user can introduce its own link function by define an appropriate function, (see the example below).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+For the <code>make.link.gamlss</code> a list with components 
+<br>
+linkfun: Link function <code>function(parameter)</code>
+<br>
+linkinv: Inverse link function <code>function(eta)</code>
+<br>
+mu.eta: Derivative <code>function(eta)</code> dparameter/deta
+<br>
+valideta: <code>function(eta)</code> TRUE if all of eta is in the domain of <code>linkinv</code>.
+<br>
+For the <code>show.link</code> a list with components the available links for the distribution parameters</p>
+
+<h3>Note</h3>
+
+<p>
+For the links  involving parameters as in <code>logshifted</code> and <code>logitshifted</code> the parameters 
+can be passed in the definition of the distribution by calling the  <code> checklink</code> function, for example in the definition of 
+the <code>tau</code> parameter in BCPE distribution the following call is made: 
+<code>tstats &lt;- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
+                           c("logshifted", "log", "identity"), par.link = c(1))  </code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos and Bob Rigby
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>). 
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+str(make.link.gamlss("logshiftto1"))
+l2&lt;-make.link.gamlss("logshiftto1")
+l2$linkfun(2) # should close to zero (Note that 0.00001 is added)
+l2$linkfun(1-0.00001) # should be -Inf but it is large negative
+#---------------------------------------------------------
+# now use the own link function
+# first if the distribution allows you
+show.link(BI)
+# seems OK now define the four own functions
+# First try the probit link using the own link function
+# 1: the linkfun function
+own.linkfun &lt;- function(mu) { qNO(p=mu)}
+# 2: the inverse link function 
+own.linkinv &lt;- function(eta) { 
+              thresh &lt;- -qNO(.Machine$double.eps)
+               eta &lt;- pmin(thresh, pmax(eta, -thresh))
+              pNO(eta)}
+# 3: the dmu/deta function 
+own.mu.eta &lt;- function(eta) pmax(dNO(eta), .Machine$double.eps)
+# 4: the valideta function 
+own.valideta &lt;- function(eta) TRUE
+
+## bring the data
+# library(gamlss) 
+#data(aep)
+# fitting the model using "own"   
+# h1&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link="own"), data=aep)  
+# model h1 should be identical to the probit 
+# h2&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link="probit"), data=aep)
+# now using a function instead of "own" 
+probittest &lt;- function()
+{
+linkfun &lt;- function(mu) { qNO(p=mu)}
+linkinv &lt;- function(eta) 
+            { 
+              thresh &lt;- -qNO(.Machine$double.eps)
+               eta &lt;- pmin(thresh, pmax(eta, -thresh))
+              pNO(eta)
+            }
+mu.eta &lt;- function(eta) pmax(dNO(eta), .Machine$double.eps) 
+valideta &lt;- function(eta) TRUE
+link &lt;- "probitTest"
+structure(list(linkfun = linkfun, linkinv = linkinv, mu.eta = mu.eta, 
+        valideta = valideta, name = link), class = "link-gamlss")
+}
+# h3&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link=probittest()), data=aep)  
+# Second try the complementary log-log 
+# using the Gumbel distribution  
+own.linkfun &lt;- function(mu) { qGU(p=mu)} 
+own.linkinv &lt;- function(eta) { 
+              thresh &lt;- -qGU(.Machine$double.eps)
+               eta &lt;- pmin(thresh, pmax(eta, -thresh))
+              pGU(eta)} 
+own.mu.eta &lt;- function(eta) pmax(dGU(eta), .Machine$double.eps)
+own.valideta &lt;- function(eta) TRUE
+# h1 and h2 should be identical to cloglog
+# h1&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link="own"), data=aep)  
+# h2&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link="cloglog"), data=aep)
+# note that the Gumbel distribution is negatively skew
+# for a positively skew link function we can used the Reverse Gumbel 
+revloglog  &lt;- function()
+{
+linkfun &lt;- function(mu) { qRG(p=mu)} 
+linkinv &lt;- function(eta) { 
+              thresh &lt;- -qRG(.Machine$double.eps)
+               eta &lt;- pmin(thresh, pmax(eta, -thresh))
+              pRG(eta)}
+mu.eta &lt;- function(eta) pmax(dRG(eta), .Machine$double.eps)
+valideta &lt;- function(eta) TRUE
+link &lt;- "revloglog"
+structure(list(linkfun = linkfun, linkinv = linkinv, mu.eta = mu.eta, 
+        valideta = valideta, name = link), class = "link-gamlss")
+}
+# h1&lt;-gamlss(y~ward+loglos+year, family=BI(mu.link=revloglog()), data=aep)  
+# a considerable improvement in the deviance
+# try a shifted logit link function from -1, 1 
+own.linkfun &lt;- function(mu)
+             { shift = c(-1,1)           
+               log((mu-shift[1])/(shift[2]-mu))
+             }
+own.linkinv &lt;- function(eta) 
+            {
+            shift = c(-1,1)  
+            thresh &lt;- -log(.Machine$double.eps)
+               eta &lt;- pmin(thresh, pmax(eta, -thresh))
+                      shift[2]-(shift[2]-shift[1])/(1 + exp(eta))
+            } 
+own.mu.eta &lt;- function(eta) 
+            {
+        shift = c(-1,1)  
+            thresh &lt;- -log(.Machine$double.eps)
+               res &lt;- rep(.Machine$double.eps, length(eta))
+            res[abs(eta) &lt; thresh] &lt;- ((shift[2]-shift[1])*exp(eta)/(1 + exp(eta))^2)[abs(eta) &lt; thresh]
+            res
+            }
+own.valideta &lt;- function(eta) TRUE       
+#----------
+str(make.link.gamlss("own"))
+l2&lt;-make.link.gamlss("own")
+l2$linkfun(0) # should be zero
+l2$linkfun(1) # should be Inf
+l2$linkinv(-5:5)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

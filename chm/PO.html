@@ -1,0 +1,153 @@
+<html><head><title>Poisson distribution for fitting a GAMLSS model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>PO(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   PO">
+<param name="keyword" value="R:   dPO">
+<param name="keyword" value="R:   pPO">
+<param name="keyword" value="R:   qPO">
+<param name="keyword" value="R:   rPO">
+<param name="keyword" value=" Poisson distribution for fitting a GAMLSS model">
+</object>
+
+
+<h2>Poisson distribution for fitting a GAMLSS model</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function <code>PO</code> defines the Poisson distribution, an one parameter distribution, for a <code>gamlss.family</code> object to be used in GAMLSS fitting 
+using the function <code>gamlss()</code>. The functions <code>dPO</code>, <code>pPO</code>, <code>qPO</code> and <code>rPO</code> define the density, distribution function, quantile function and random
+generation for the Poisson, <code>PO()</code>, distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+PO(mu.link = "log")
+dPO(x, mu = 1, log = FALSE)
+pPO(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
+qPO(p, mu = 1, lower.tail = TRUE, log.p = FALSE)
+rPO(n, mu = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "log" link as the default for the mu parameter</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+vector of (non-negative integer) quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of positive means</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities</td></tr>
+<tr valign="top"><td><code>q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of random values to return</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p)</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x]</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Definition file for Poisson distribution. 
+</p><p align="center"><i>f(y|mu)=e^(-mu)*mu^y/&Gamma;(y+1)</i></p><p>
+for <i>y=0,1,2,...</i> and <i>&mu;&gt;0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+returns a <code>gamlss.family</code> object which can be used to fit a Poisson distribution in the <code>gamlss()</code> function.</p>
+
+<h3>Note</h3>
+
+<p>
+<i>mu</i> is the mean of the Poisson distribution
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a>, Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, and Kalliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>,  <code><a href="NBI.html">NBI</a></code>, <code><a href="NBII.html">NBII</a></code>, 
+<code><a href="SI.html">SI</a></code>, <code><a href="SICHEL.html">SICHEL</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+PO()# gives information about the default links for the Poisson distribution  
+# fitting data using PO()
+
+# plotting the distribution
+plot(function(y) dPO(y, mu=10 ), from=0, to=20, n=20+1, type="h")
+# creating random variables and plot them 
+tN &lt;- table(Ni &lt;- rPO(1000, mu=5))
+ r &lt;- barplot(tN, col='lightblue')
+# library(gamlss)
+# data(aids)
+# h&lt;-gamlss(y~cs(x,df=7)+qrt, family=PO, data=aids) # fits the constant+x+qrt model 
+# plot(h)
+# pdf.plot(family=PO, mu=10, min=0, max=20, step=1)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

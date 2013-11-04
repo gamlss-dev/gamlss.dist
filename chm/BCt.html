@@ -1,0 +1,197 @@
+<html><head><title>Box-Cox t distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>BCT(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   BCT">
+<param name="keyword" value="R:   dBCT">
+<param name="keyword" value="R:   pBCT">
+<param name="keyword" value="R:   qBCT">
+<param name="keyword" value="R:   rBCT">
+<param name="keyword" value="R:   BCTuntr">
+<param name="keyword" value=" Box-Cox t distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>Box-Cox t distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>BCT()</code>  defines the Box-Cox t distribution, a four parameter distribution, 
+for a <code>gamlss.family</code> object to be used in GAMLSS fitting using the function <code>gamlss()</code>. The functions <code>dBCT</code>, 
+<code>pBCT</code>, <code>qBCT</code> and <code>rBCT</code> define the density, distribution function, quantile function and random
+generation for the Box-Cox t distribution.  
+[The function <code>BCTuntr()</code> is the original version of the function suitable only for the untruncated BCT distribution]. 
+See Rigby and Stasinopoulos (2003) for details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+BCT(mu.link = "identity", sigma.link = "log", nu.link = "identity", 
+          tau.link = "log")
+BCTuntr(mu.link = "identity", sigma.link = "log", nu.link = "identity", 
+          tau.link = "log")
+dBCT(x, mu = 5, sigma = 0.1, nu = 1, tau = 2, log = FALSE)
+pBCT(q, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)
+qBCT(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)          
+rBCT(n, mu = 5, sigma = 0.1, nu = 1, tau = 2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the <code>mu</code> parameter. Other links are "inverse", "log" and "own"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the <code>sigma</code> parameter. Other links are "inverse","identity", "own"</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "identity" link as the default for the <code>nu</code> parameter. Other links are "inverse", "log", "own"</td></tr>
+<tr valign="top"><td><code>tau.link</code></td>
+<td>
+Defines the  <code>tau.link</code>, with "log" link as the default for the <code>tau</code> parameter. Other links are "inverse", "identity" and "own"</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles </td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of <code>nu</code> parameter values</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+vector of <code>tau</code> parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function of the untruncated Box-Cox t distribution, <code>BCTuntr</code>, is given by 
+</p><p align="center"><i>f(y|mu,sigma,nu,tau)=(1/(y*sigma))*(&Gamma;((tau+1)/2)/(Gamma(1/2)*Gamma(tau/2)*tau^0.5))*(1+z^2/tau)^(-(tau+1)/2)</i></p><p> 
+where if <i>nu!=0</i> then  <i>z=[(y/mu)^(nu)-1]/(nu*sigma)</i> else <i>z=log(y/&mu;)/&sigma;</i>, 
+for <i>y&gt;0</i>, <i>&mu;&gt;0</i>, <i>&sigma;&gt;0</i>, <i>nu=(-Inf,+Inf)</i> and <i>tau&gt;0</i>. 
+</p>
+<p>
+The Box-Cox <EM>t</EM> distribution,   <code>BCT</code>, adjusts the above density <i>f(y|mu,sigma,nu,tau</i> for the 
+truncation resulting from the condition <i>y&gt;0</i>. See Rigby and Stasinopoulos (2003) for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>BCT()</code>  returns a <code>gamlss.family</code> object which can be used to fit a Box Cox-t distribution in the <code>gamlss()</code> function. 
+<code>dBCT()</code> gives the density, <code>pBCT()</code> gives the distribution
+function, <code>qBCT()</code> gives the quantile function, and <code>rBCT()</code>
+generates random deviates.</p>
+
+<h3>Warning</h3>
+
+<p>
+The use <code>BCTuntr</code> distribution may be unsuitable for some combinations of the parameters (mainly for large <i>sigma</i>) 
+where the integrating constant is less than 0.99. A warning will be given if this is the case.
+</p>
+<p>
+The <code>BCT</code> distribution is suitable for all combinations of the parameters within their ranges 
+[i.e. <i>mu&gt;0, sigma&gt;0, nu=(-Inf,+Inf) and tau&gt;0</i> ]
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+<i>mu</i> is the median of the distribution, <i>sigma*(tau/(tau-2))^0.5</i> 
+is approximate the coefficient of variation (for small <i>sigma</i> and moderate <code>nu&gt;0</code> and moderate or large <i>tau</i>), 
+<i>nu</i> controls the skewness and <i>tau</i> the kurtosis of the distribution
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos, Bob Rigby and Calliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox <EM>t</EM> distribution in GAMLSS to mode skewnees and  and kurtosis.
+to appear in <EM>Statistical Modelling</EM>.
+</p>
+<p>
+Stasinopoulos, D. M. Rigby, R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="BCPE.html">BCPE</a></code>, <code><a href="BCCG.html">BCCG</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+BCT()   # gives information about the default links for the Box Cox t distribution
+# library(gamlss)
+#data(abdom)
+#h&lt;-gamlss(y~cs(x,df=3), sigma.formula=~cs(x,1), family=BCT, data=abdom) # 
+#plot(h)
+plot(function(x)dBCT(x, mu=5,sigma=.5,nu=1, tau=2), 0.0, 20, 
+ main = "The BCT  density mu=5,sigma=.5,nu=1, tau=2")
+plot(function(x) pBCT(x, mu=5,sigma=.5,nu=1, tau=2), 0.0, 20, 
+ main = "The BCT  cdf mu=5, sigma=.5, nu=1, tau=2")
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

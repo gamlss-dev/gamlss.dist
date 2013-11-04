@@ -1,0 +1,199 @@
+<html><head><title>Log Normal distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>LNO(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   LNO">
+<param name="keyword" value="R:   dLNO">
+<param name="keyword" value="R:   pLNO">
+<param name="keyword" value="R:   qLNO">
+<param name="keyword" value="R:   rLNO">
+<param name="keyword" value="R:   LOGNO">
+<param name="keyword" value="R:   dLOGNO">
+<param name="keyword" value="R:   pLOGNO">
+<param name="keyword" value="R:   qLOGNO">
+<param name="keyword" value="R:   rLOGNO">
+<param name="keyword" value=" Log Normal distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>Log Normal distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function  <code>LOGNO</code> defines a <code>gamlss.family</code> distribution to fits the log-Normal distribution.
+The function   <code>LNO</code> is more general and can fit a Box-Cox transformation 
+to data using the <code>gamlss()</code> function.
+In the  <code>LOGNO</code> there are two parameters involved <code>mu</code> <code>sigma</code>, while in the 
+<code>LNO</code> there are three parameters <code>mu</code> <code>sigma</code>,
+and the transformation parameter <code>nu</code>. 
+The transformation parameter <code>nu</code> in <code>LNO</code> is a 'fixed' parameter (not estimated) and it has its default value equal to 
+zero allowing the fitting of the log-normal distribution as in <code>LOGNO</code>.   
+See the example below on how to fix <code>nu</code> to be a particular value. 
+In order to estimate (or model) the parameter <code>nu</code>, use the <code><a href="gamlss.family.html">gamlss.family</a></code>
+<code><a href="BCCG.html">BCCG</a></code> distribution which uses a reparameterized version of the the Box-Cox transformation.
+The functions <code>dLOGNO</code>, <code>pLOGNO</code>, <code>qLOGNO</code> and <code>rLOGNO</code> define the density, distribution function, quantile function and random
+generation for the specific parameterization of the log-normal distribution.
+The functions <code>dLNO</code>, <code>pLNO</code>, <code>qLNO</code> and <code>rLNO</code> define the density, distribution function, quantile function and random
+generation for the specific parameterization of the log-normal distribution and more generally a Box-Cox transformation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+
+LNO(mu.link = "identity", sigma.link = "log")
+LOGNO(mu.link = "identity", sigma.link = "log")
+dLNO(x, mu = 1, sigma = 0.1, nu = 0, log = FALSE)
+dLOGNO(x, mu = 0, sigma = 1, log = FALSE)
+pLNO(q, mu = 1, sigma = 0.1, nu = 0, lower.tail = TRUE, log.p = FALSE)
+pLOGNO(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+qLNO(p, mu = 1, sigma = 0.1, nu = 0, lower.tail = TRUE, log.p = FALSE)
+qLOGNO(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+rLNO(n, mu = 1, sigma = 0.1, nu = 0)
+rLOGNO(n, mu = 0, sigma = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the mu parameter. Other links are "inverse", "log" and "own"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter. Other links are "inverse", "identity" ans "own"</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of shape parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function in <code>LOGNO</code> is defined as  
+</p><p align="center"><i>f(y|mu,sigma)=(1/(y*sqrt(2*pi)*sigma))*exp(-0.5*((log(y)-mu)/(sigma))^2)</i></p><p>  
+for <i>y&gt;0</i>, <i>mu=(-Inf,+Inf)</i> and <i>&sigma;&gt;0</i>. 
+</p>
+<p>
+The probability density function in <code>LNO</code> is defined as  
+</p><p align="center"><i>f(y|mu,sigma,nu)=(1/(sqrt(2*pi)*sigma))*(y^(nu-1))*exp(-((z-mu)/(2sigma))^2)</i></p>
+<p>
+where if <i>nu!=0</i> <i>z=(y^nu-1)/nu</i>  else <i>z=log(y)</i> and <i>z sim N(0,&sigma;^2)</i>, 
+for <i>y&gt;0</i>, <i>&mu;&gt;0</i>, <i>&sigma;&gt;0</i> and <i>nu=(-Inf,+Inf)</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>LNO()</code> returns a <code>gamlss.family</code> object which can be used to fit a log-narmal distribution in the <code>gamlss()</code> function.
+<code>dLNO()</code> gives the density, <code>pLNO()</code> gives the distribution
+function, <code>qLNO()</code> gives the quantile function, and <code>rLNO()</code>
+generates random deviates.</p>
+
+<h3>Warning</h3>
+
+<p>
+This is a two parameter fit for <i>mu</i> and <i>sigma</i> while <i>nu</i> is fixed. 
+If you wish to model <i>nu</i> use the gamlss family <code>BCCG</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+<i>mu</i> is the mean of z (and also the median of y), the Box-Cox transformed variable and <i>sigma</i> is the standard deviation of z
+and approximate the coefficient of variation of y
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos, Bob Rigby and Calliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Box, G. E. P. and Cox, D. R. (1964) An analysis of transformations (with discussion), <EM>J. R. Statist. Soc.</EM> B., <B>26</B>, 211&ndash;252
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="BCCG.html">BCCG</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+LOGNO()#  gives information about the default links for the log normal distribution 
+LNO()# gives information about the default links for the Box Cox distribution 
+# library(gamlss)
+# data(abdom)
+# h1&lt;-gamlss(y~cs(x), family=LOGNO, data=abdom)#fits the log-Normal distribution  
+# h2&lt;-gamlss(y~cs(x), family=LNO, data=abdom)  #should be identical to the one above   
+# to change to square root transformation, i.e. fix nu=0.5 
+# h3&lt;-gamlss(y~cs(x), family=LNO, data=abdom, nu.fix=TRUE, nu.start=0.5)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

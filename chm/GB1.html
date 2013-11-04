@@ -1,0 +1,179 @@
+<html><head><title>The generalized Beta type 1 distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>GB1(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   GB1">
+<param name="keyword" value="R:   dGB1">
+<param name="keyword" value="R:   pGB1">
+<param name="keyword" value="R:   qGB1">
+<param name="keyword" value="R:   rGB1">
+<param name="keyword" value=" The generalized Beta type 1 distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>The generalized Beta type 1 distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function defines the generalized t distribution, a four parameter distribution, 
+for a <code>gamlss.family</code> object to be used for a  
+GAMLSS fitting using the function <code>gamlss()</code>. Note the range of the response variable is from zero to one. 
+The functions <code>dGB1</code>, 
+<code>GB1</code>, <code>qGB1</code> and <code>rGB1</code> define the density, 
+distribution function, quantile function and random
+generation for the generalized beta type 1 distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+GB1(mu.link = "logit", sigma.link = "logit", nu.link = "log", 
+      tau.link = "log")
+dGB1(x, mu = 0.5, sigma = 0.4, nu = 1, tau = 1, log = FALSE)
+pGB1(q, mu = 0.5, sigma = 0.4, nu = 1, tau = 1, lower.tail = TRUE, 
+       log.p = FALSE)
+qGB1(p, mu = 0.5, sigma = 0.4, nu = 1, tau = 1, lower.tail = TRUE, 
+       log.p = FALSE)
+rGB1(n, mu = 0.5, sigma = 0.4, nu = 1, tau = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the <code>mu</code> parameter. </td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the <code>sigma</code> parameter. </td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "log" link as the default for the <code>nu</code> parameter. </td></tr>
+<tr valign="top"><td><code>tau.link</code></td>
+<td>
+Defines the  <code>tau.link</code>, with "log" link as the default for the <code>tau</code> parameter.</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values </td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of skewness <code>nu</code> parameter values</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+vector of kurtosis <code>tau</code> parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function of the Generalized Beta type 1, (<code>GB1</code>), is defined as 
+</p>
+<p align="center"><i>f(y|mu,sigma,nu,tau)=(tau*nu^beta*y^(tau*alpha-1)(1-y^tau))^(beta-1)/(Beta(alpha,beta)*(nu+(1-nu)*y^tau))^(alpha*beta))</i></p>
+<p>
+where  <i>0&lt;y&lt;1</i>, <i>alpha=mu*(1-sigma^2)/sigma^2</i>
+and <i>(1-mu)*(1-sigma^2)/sigma^2</i>, and 
+<i>alpha&gt;0</i>, <i>beta&gt;0</i>. Note the <i>alpha/(alpha+beta)</i>,
+<i>sigma=(alpha+beta+1)^(-1/2)</i>. 
+.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>GB1()</code>  returns a <code>gamlss.family</code> object which can be used to fit the GB1 distribution in the 
+<code>gamlss()</code> function. 
+<code>dGB1()</code> gives the density, <code>pGB1()</code> gives the distribution
+function, <code>qGB1()</code> gives the quantile function, and <code>rGB1()</code>
+generates random deviates.</p>
+
+<h3>Warning</h3>
+
+<p>
+The qSHASH and rSHASH are slow since they are relying on golden section for finding the quantiles
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>). 
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a onclick="findlink('gamls', 'gamlss.family.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss.family</a></code>, <code><a onclick="findlink('gamlss', 'JSU.html')" style="text-decoration: underline; color: blue; cursor: hand">JSU</a></code>, <code><a onclick="findlink('gamlss', 'BCT.html')" style="text-decoration: underline; color: blue; cursor: hand">BCT</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+GB1()   # 
+y&lt;- rGB1(200, mu=.1, sigma=.6, nu=1, tau=4)
+hist(y)
+# library(gamlss)
+# histDist(y, family=GB1, n.cyc=60)
+curve(dGB1(x, mu=.1 ,sigma=.6, nu=1, tau=4), 0.01, 0.99, main = "The GB1  density mu=0.1, sigma=.6, nu=1, tau=4")
+
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

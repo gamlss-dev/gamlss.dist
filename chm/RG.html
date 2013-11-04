@@ -1,0 +1,157 @@
+<html><head><title>The Reverse Gumbel distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>RG(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   RG">
+<param name="keyword" value="R:   dRG">
+<param name="keyword" value="R:   pRG">
+<param name="keyword" value="R:   qRG">
+<param name="keyword" value="R:   rRG">
+<param name="keyword" value=" The Reverse Gumbel distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>The Reverse Gumbel distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>RG</code> defines the reverse Gumbel distribution, a two parameter distribution, for a
+<code>gamlss.family</code> object to be used in GAMLSS fitting using the
+function  <code>gamlss()</code>.
+The functions <code>dRG</code>, <code>pRG</code>, <code>qRG</code> and <code>rRG</code> define the density, distribution function, quantile function and random
+generation for the specific parameterization of the reverse Gumbel distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+RG(mu.link = "identity", sigma.link = "log")
+dRG(x, mu = 0, sigma = 1, log = FALSE)
+pRG(q, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+qRG(p, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+rRG(n, mu = 0, sigma = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the mu parameter. other available link is "inverse", "log" and "own"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter, other links are the "inverse", "identity" and "own"</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The specific parameterization of the reverse Gumbel  distribution used in <code>RG</code> is
+</p><p align="center"><i>f(y|mu,sigma)=(1/sigma)*exp(-((y-mu)/sigma)-exp(-((y-mu)/sigma)))  </i></p><p>
+for <i>y=(-Inf,+Inf)</i>, <i>&mu;=(-Inf,+Inf)</i> and <i>&sigma;&gt;0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>RG()</code> returns a <code>gamlss.family</code> object which can be used to fit a Gumbel distribution in the <code>gamlss()</code> function.
+<code>dRG()</code> gives the density, <code>pGU()</code> gives the distribution
+function, <code>qRG()</code> gives the quantile function, and <code>rRG()</code>
+generates random deviates.</p>
+
+<h3>Note</h3>
+
+<p>
+The mean of the distribution is  <i>mu-0.57722*sigma</i> and the variance is 
+<i>pi^2 sigma^2/6</i>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Calliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).   
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+plot(function(x) dRG(x, mu=0,sigma=1), -3, 6, 
+ main = "{Reverse Gumbel  density mu=0,sigma=1}")
+RG()# gives information about the default links for the Gumbel distribution      
+dat&lt;-rRG(100, mu=10, sigma=2) # generates 100 random observations 
+# library(gamlss)
+# gamlss(dat~1,family=RG) # fits a constant for each parameter mu and sigma 
+
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

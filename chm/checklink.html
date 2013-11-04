@@ -1,0 +1,97 @@
+<html><head><title>Set the Right Link Function for Specified Parameter and Distribution</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>checklink(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   checklink">
+<param name="keyword" value=" Set the Right Link Function for Specified Parameter and Distribution">
+</object>
+
+
+<h2>Set the Right Link Function for Specified Parameter and Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function is used within the distribution family specification of a GAMLSS model to define the right link for each of the parameters 
+of the distribution. 
+This function should not be called by the user unless he/she specify a new distribution family or wishes to change existing link 
+functions in the parameters.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+checklink(which.link = NULL, which.dist = NULL, link = NULL, link.List = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which.link</code></td>
+<td>
+which parameter link e.g. <code>which.link="mu.link"</code> </td></tr>
+<tr valign="top"><td><code>which.dist</code></td>
+<td>
+which distribution family e.g. <code>which.dist="Cole.Green"</code> </td></tr>
+<tr valign="top"><td><code>link</code></td>
+<td>
+a repetition of <code>which.link</code> e.g. <code>link=substitute(mu.link)</code> </td></tr>
+<tr valign="top"><td><code>link.List</code></td>
+<td>
+what link function are required e.g. <code>link.List=c("inverse", "log", "identity")</code> </td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+Defines the right link for each parameter</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Calliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).  
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>
+</p>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

@@ -1,0 +1,189 @@
+<html><head><title>Beta Binomial Distribution For Fitting a GAMLSS Model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>BB(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   BB">
+<param name="keyword" value="R:   dBB">
+<param name="keyword" value="R:   pBB">
+<param name="keyword" value="R:   qBB">
+<param name="keyword" value="R:   rBB">
+<param name="keyword" value=" Beta Binomial Distribution For Fitting a GAMLSS Model">
+</object>
+
+
+<h2>Beta Binomial Distribution For Fitting a GAMLSS Model</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function defines the beta binomial distribution, a two parameter distribution, for a <code>gamlss.family</code> object to be used in a
+GAMLSS fitting using the function gamlss()
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+BB(mu.link = "logit", sigma.link = "log")
+dBB(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
+pBB(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE,
+      log.p = FALSE)
+qBB(p, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, 
+       log.p = FALSE, fast = FALSE)
+rBB(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "logit" link as the default for the mu parameter. Other links are "probit" and "cloglog"'(complementary log-log)</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter. Other links are "inverse", "identity" and "sqrt" </td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of positive probabilities</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+the dispersion parameter</td></tr>
+<tr valign="top"><td><code>bd</code></td>
+<td>
+vector of binomial denominators</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of random values to return</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p)</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x]</td></tr>
+<tr valign="top"><td><code>fast</code></td>
+<td>
+a logical variable if  <code>fast=TRUE</code> the <code>dBB</code> function is used in the calculation of the 
+inverse c.d.f function. This is faster to the default <code>fast=FALSE</code>, where the <code>pBB{}</code> is used,  
+but not always consistent with the results obtained from <code>pBB()</code>, for example if   
+p &lt;- pBB(c(0,1,2,3,4,5), mu=.5 , sigma=1, bd=5) do not ensure that  qBB(p, mu=.5 , sigma=1, bd=5) will be 
+c(0,1,2,3,4,5)
+</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Definition file for beta binomial distribution. 
+</p><p align="center"><i>f(y|mu,sigma)=[Gamma(n+1)*Gamma(y+1)/Gamma(n-y+1)]*[Gamma(y+mu/sigma)*Gamma(1/sigma)*Gamma[n+(1-mu)/sigma-y]]/[Gamma(n+(1/sigma)) * Gamma(mu/sigma) * Gamma((1-mu)/sigma)]</i></p>
+<p>
+for <i>y=0,1,2,...,n</i>, <i>0&lt;&mu;&lt;1</i> and <i>&sigma;&gt;0</i>. For <i>&mu;=0.5</i> and <i>&sigma;=0.5</i> the distribution is uniform.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Returns a <code>gamlss.family</code> object which can be used to fit a Beta Binomial distribution in the <code>gamlss()</code> function.</p>
+
+<h3>Warning</h3>
+
+<p>
+The functions <code>pBB</code> and <code>qBB</code> are calculated using a laborious procedure so they are relatively slow.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+The response variable should be a matrix containing two columns, the first with the count of successes and the second with the count of failures. 
+The parameter <code>mu</code> represents a probability parameter with limits <i>0 &lt; mu &lt;1</i>.
+<i>n*mu</i> is the mean of the distribution where n is the binomial denominator. 
+<i>[n mu (1-mu)[1+(n-1) sigma/(sigma+1)]]^0.5</i> is the standard deviation of the 
+Beta Binomial distribution. Hence <i>sigma</i> is a dispersion type parameter
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Kalliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="BI.html">BI</a></code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# BB()# gives information about the default links for the Beta Binomial distribution 
+#plot the pdf
+plot(function(y) dBB(y, mu = .5, sigma = 1, bd =40), from=0, to=40, n=40+1, type="h")
+#calculate the cdf and plotting it
+ppBB &lt;- pBB(seq(from=0, to=40), mu=.2 , sigma=3, bd=40)
+plot(0:40,ppBB, type="h")
+#calculating quantiles and plotting them  
+qqBB &lt;- qBB(ppBB, mu=.2 , sigma=3, bd=40)
+plot(qqBB~ ppBB)
+# when the argument fast is useful
+p &lt;- pBB(c(0,1,2,3,4,5), mu=.01 , sigma=1, bd=5)
+qBB(p, mu=.01 , sigma=1, bd=5, fast=TRUE)
+#  0 1 1 2 3 5
+qBB(p, mu=.01 , sigma=1, bd=5, fast=FALSE)
+#  0 1 2 3 4 5
+# generate random sample
+tN &lt;- table(Ni &lt;- rBB(1000, mu=.2, sigma=1, bd=20))
+r &lt;- barplot(tN, col='lightblue')
+# fitting a model 
+# library(gamlss)
+#data(aep)   
+# fits a Beta-Binomial model
+#h&lt;-gamlss(y~ward+loglos+year, sigma.formula=~year+ward, family=BB, data=aep) 
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

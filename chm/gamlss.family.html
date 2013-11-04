@@ -1,0 +1,311 @@
+<html><head><title>Family Objects for fitting a GAMLSS model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>gamlss.family(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   gamlss.family">
+<param name="keyword" value="R:   as.gamlss.family">
+<param name="keyword" value="R:   print.gamlss.family">
+<param name="keyword" value="R:   gamlss.family.default">
+<param name="keyword" value="R:   as.family">
+<param name="keyword" value=" Family Objects for fitting a GAMLSS model">
+</object>
+
+
+<h2>Family Objects for fitting a GAMLSS model</h2>
+
+
+<h3>Description</h3>
+
+<p>
+GAMLSS families are the current available distributions that can be fitted using the <code>gamlss()</code> function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+gamlss.family(object,...)
+as.gamlss.family(object)
+as.family(object)
+## S3 method for class 'gamlss.family':
+print(x,...)
+gamlss.family.default(object,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+a gamlss family object e.g. <code>BCT</code> </td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+a gamlss family object e.g. <code>BCT</code></td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+There are several distributions available for the response variable in the <code>gamlss</code> function. 
+The following table display their names and their abbreviations in <code>R</code>. Note that the different distributions can be fitted 
+using their <code>R</code> abbreviations 
+(and optionally excluding the brackets) i.e. family=BI(), family=BI are equivalent. 
+<table summary="Rd table">
+<tr>
+  <td align="left"><B>Distributions</B>         </td>  <td align="left"> <B>R names</B>                       </td>  <td align="left"> <B>No of parameters</B> </td>
+</tr>
+<tr>
+  <td align="left"> Beta                         </td>  <td align="left"> <code><a href="BE.html">BE</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Beta Binomial                </td>  <td align="left"> <code><a href="BB.html">BB</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Beta one inflated            </td>  <td align="left"> <code><a href="BEOI().html">BEOI()</a></code>    </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Beta zero inflated           </td>  <td align="left"> <code><a href="BEZI().html">BEZI()</a></code>    </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Beta inflated                </td>  <td align="left"> <code><a href="BEINF.html">BEINF</a>()</code>                </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Binomial                     </td>  <td align="left"> <code><a href="BI.html">BI</a>()</code>                   </td>  <td align="left">  1  </td>
+</tr>
+<tr>
+  <td align="left"> Box-Cox Cole and Green       </td>  <td align="left"> <code><a href="BCCG.html">BCCG</a>()</code>                 </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Box-Cox Power Exponential    </td>  <td align="left"> <code><a href="BCPE.html">BCPE</a>()</code>                 </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Box-Cox-t                    </td>  <td align="left"> <code><a href="BCt.html">BCT</a>()</code>                  </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Delaport                     </td>  <td align="left"> <code><a href="DEL().html">DEL()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Exponential                  </td>  <td align="left"> <code><a href="EXP().html">EXP()</a></code>     </td>  <td align="left">  1  </td>
+</tr>
+<tr>
+  <td align="left"> Exponential Gaussian         </td>  <td align="left"> <code><a href="exGAUS().html">exGAUS()</a></code>  </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Exponential generalized Beta  type 2 </td>  <td align="left"> <code><a href="EGB2().html">EGB2()</a></code> </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Gamma                        </td>  <td align="left"> <code><a href="GA.html">GA</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Generalized Beta  type 1     </td>  <td align="left"> <code><a href="GB1().html">GB1()</a></code>     </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Generalized Beta  type 2     </td>  <td align="left"> <code><a href="GB2().html">GB2()</a></code>     </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Generalized Gamma            </td>  <td align="left"> <code><a href="GG().html">GG()</a></code>      </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Generalized Inverse Gaussian </td>  <td align="left"> <code><a href="GIG().html">GIG()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Generalized t                </td>  <td align="left"> <code><a href="GT().html">GT()</a></code>      </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left"> Gumbel                       </td>  <td align="left"> <code><a href="GU.html">GU</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Inverse Gaussian             </td>  <td align="left"> <code><a href="IG.html">IG</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Johnson's SU                 </td>  <td align="left"> <code><a href="JSU.html">JSU</a>()</code>                  </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">    Logistic                     </td>  <td align="left"> <code><a href="LOGISTIC.html">LO</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> log-Normal                   </td>  <td align="left"> <code><a href="LNO.html">LOGNO</a>()</code>                </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> log-Normal  (Box-Cox)        </td>  <td align="left"> <code><a href="LNO.html">LNO</a>()</code>                  </td>  <td align="left">  3 (1 fixed)  </td>
+</tr>
+<tr>
+  <td align="left"> Negative Binomial type I     </td>  <td align="left"> <code><a href="NBI.html">NBI</a>()</code>                  </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Negative Binomial type II    </td>  <td align="left"> <code><a href="NBII.html">NBII</a>()</code>                 </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Normal Exponential <EM>t</EM>   </td>  <td align="left"> <code><a href="NET.html">NET</a>()</code>                  </td>  <td align="left">  4 (2 fixed)  </td>
+</tr>
+<tr>
+  <td align="left"> Normal                       </td>  <td align="left"> <code><a href="NO.html">NO</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Normal Family                </td>  <td align="left"> <code><a href="NOF().html">NOF()</a></code>     </td>  <td align="left">  3 (1 fixed)  </td>
+</tr>
+<tr>
+  <td align="left"> Power Exponential            </td>  <td align="left"> <code><a href="PE.html">PE</a>()</code>                   </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Power Exponential  type 2    </td>  <td align="left"> <code><a href="PE.html">PE2</a>()</code>                  </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Poison                       </td>  <td align="left"> <code><a href="PO.html">PO</a>()</code>                   </td>  <td align="left">  1  </td>
+</tr>
+<tr>
+  <td align="left"> Poisson inverse Gaussian     </td>  <td align="left"> <code><a href="PIG.html">PIG</a>()</code>                  </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Reverse generalized extreme  </td>  <td align="left"> <code><a href="RGE().html">RGE()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Reverse Gumbel               </td>  <td align="left"> <code><a href="RG.html">RG</a>()</code>                   </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left">  Skew Power Exponential type 1 </td>  <td align="left"> <code><a href="SEP1().html">SEP1()</a></code>   </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">  Skew Power Exponential type 2 </td>  <td align="left"> <code><a href="SEP2().html">SEP2()</a></code>   </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">  Skew Power Exponential type 3 </td>  <td align="left"> <code><a href="SEP3().html">SEP3()</a></code>   </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">  Skew Power Exponential type 4 </td>  <td align="left"> <code><a href="SEP4().html">SEP4()</a></code>   </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">  Shash                        </td>  <td align="left"> <code><a href="SHASH().html">SHASH()</a></code>   </td>  <td align="left">  4  </td>
+</tr>
+<tr>
+  <td align="left">  Sichel  (original)           </td>  <td align="left"> <code><a href="SI.html">SI</a>()</code>                   </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Sichel  (mu as the maen)     </td>  <td align="left"> <code><a href="SICHEL().html">SICHEL()</a></code>  </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Skew t  type 1               </td>  <td align="left"> <code><a href="ST1().html">ST1()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left">  Skew t  type 2               </td>  <td align="left"> <code><a href="ST2().html">ST2()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left">  Skew t  type 3               </td>  <td align="left"> <code><a href="ST3().html">ST3()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left">  Skew t  type 4               </td>  <td align="left"> <code><a href="ST4().html">ST4()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left">  Skew t  type 5               </td>  <td align="left"> <code><a href="ST5().html">ST5()</a></code>     </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left">  t-distribution               </td>  <td align="left"> <code><a href="TF.html">TF</a>()</code>                   </td>  <td align="left">  3  </td>
+</tr>
+<tr>
+  <td align="left"> Weibull                      </td>  <td align="left"> <code><a href="WEI.html">WEI</a>()</code>                  </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Weibull(PH parameterization) </td>  <td align="left"> <code><a href="WEI2.html">WEI2</a>()</code>                 </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Weibull (mu as mean)         </td>  <td align="left"> <code><a href="WEI3().html">WEI3()</a></code>    </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Zero inflated poisson        </td>  <td align="left"> <code><a href="ZIP.html">ZIP</a>()</code>                  </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Zero inf. poiss.(mu as mean) </td>  <td align="left"> <code><a href="ZIP2().html">ZIP2()</a></code>    </td>  <td align="left">  2  </td>
+</tr>
+<tr>
+  <td align="left"> Zero adjusted IG             </td>  <td align="left"> <code><a href="ZAIG.html">ZAIG</a>()</code>                 </td>  <td align="left">  2  </td>
+</tr>
+</table>
+<p>
+Note that some of the distributions are in the package <code>gamlss.dist</code>.
+The parameters of the distributions are in order, <B><code>mu</code></B> for location, <B><code>sigma</code></B> for scale (or dispersion), 
+and <B><code>nu</code></B>  and <B><code>tau</code></B> for shape.
+More specifically for the <code>BCCG</code> family <code>mu</code> is the median, <code>sigma</code> approximately the coefficient of variation, and <code>nu</code> the skewness parameter.
+The parameters for <code>BCPE</code> distribution have the same interpretation with the extra fourth parameter <code>tau</code> modelling 
+the kurtosis of the distribution. The parameters for BCT have the same interpretation except that 
+<i>sigma*((tau/(tau-2))^0.5)</i> is 
+approximately the coefficient of variation.
+</p>
+<p>
+All of the distribution in the above list are also provided with the corresponding <code>d</code>,  <code>p</code>, <code>q</code> and <code>r</code> functions 
+for  density (pdf), distribution function (cdf), quantile function and random  generation function respectively, (see individual distribution for details).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+The above GAMLSS families return an object which is of type <code>gamlss.family</code>. This object is used to define the family in the <code>gamlss()</code> fit.</p>
+
+<h3>Note</h3>
+
+<p>
+More distributions will be documented in later GAMLSS releases. Further user defined distributions can 
+be incorporate relatively easy, see, for example, the help documentation accompanying the gamlss library.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Calliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>,<code><a href="BE.html">BE</a></code>,<code><a href="BB.html">BB</a></code>,<code><a href="BEINF.html">BEINF</a></code>,<code><a href="BI.html">BI</a></code>,<code><a href="LNO.html">LNO</a></code>,<code><a href="BCt.html">BCT</a></code>,<code><a href="BCPE.html">BCPE</a></code>,<code><a href="BCCG.html">BCCG</a></code>,
+<code><a href="GA.html">GA</a></code>,<code><a href="GU.html">GU</a></code>,<code><a href="JSU.html">JSU</a></code>,<code><a href="IG.html">IG</a></code>,<code><a href="LOGISTIC.html">LO</a></code>,<code><a href="NBI.html">NBI</a></code>,<code><a href="NBII.html">NBII</a></code>,<code><a href="NO.html">NO</a></code>,<code><a href="PE.html">PE</a></code>
+,<code><a href="PO.html">PO</a></code>,<code><a href="RG.html">RG</a></code>,<code><a href="PIG.html">PIG</a></code>,<code><a href="TF.html">TF</a></code>,<code><a href="WEI.html">WEI</a></code>,<code><a href="WEI2.html">WEI2</a></code>,<code><a href="ZIP.html">ZIP</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ normal&lt;-NO(mu.link="log", sigma.link="log")
+ normal
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

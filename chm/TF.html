@@ -1,0 +1,163 @@
+<html><head><title>t family distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>TF(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   TF">
+<param name="keyword" value="R:   dTF">
+<param name="keyword" value="R:   pTF">
+<param name="keyword" value="R:   qTF">
+<param name="keyword" value="R:   rTF">
+<param name="keyword" value=" t family distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>t family distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>TF</code> defines the t-family distribution, a three parameter distribution,
+for a <code>gamlss.family</code> object to be used in GAMLSS fitting using the function <code>gamlss()</code>. 
+The functions <code>dTF</code>, <code>pTF</code>, <code>qTF</code> and <code>rTF</code> define the density, distribution function, quantile function and random
+generation for the specific parameterization of the t distribution given in details below, with mean equal to <i>mu</i>
+and standard deviation equal to <i>sigma*(nu/(nu-2))^0.5</i> with the degrees of freedom <i>nu</i>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+TF(mu.link = "identity", sigma.link = "log", nu.link = "log")
+dTF(x, mu = 0, sigma = 1, nu = 10, log = FALSE)
+pTF(q, mu = 0, sigma = 1, nu = 10, lower.tail = TRUE, log.p = FALSE)
+qTF(p, mu = 0, sigma = 1, nu = 10, lower.tail = TRUE, log.p = FALSE) 
+rTF(n, mu = 0, sigma = 1, nu = 10)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the mu parameter</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the <code>nu.link</code>, with "log" link as the default for the nu parameter</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of the degrees of freedom parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Definition file for t family distribution. 
+</p><p align="center"><i>f(y|mu,sigma,nu)=((Gamma((nu+1)/2)/(sigma*Gamma(1/2)*Gamma(nu/2))*nu^0.5 )*(1+(y-mu)^2/(nu*sigma^2))^(-(nu+1)/2)</i></p><p> 
+<i>y=(-Inf,+Inf)</i>, <i>&mu;=(-Inf,+Inf)</i>, <i>&sigma;&gt;0</i> and <i>nu&gt;0</i>. 
+Note that <i>z=(y-mu)/sigma</i> has a standard t distribution with degrees of freedom <i>nu</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>TF()</code> returns a <code>gamlss.family</code> object which can be used to fit a t distribution in the <code>gamlss()</code> function.
+<code>dTF()</code> gives the density, <code>pTF()</code> gives the distribution
+function, <code>qTF()</code> gives the quantile function, and <code>rTF()</code>
+generates random deviates. The latest functions are based on the equivalent <code>R</code> functions for gamma distribution.</p>
+
+<h3>Note</h3>
+
+<p>
+<i>mu</i> is the mean and <i>sigma*(nu/(nu-2))^0.5</i> is the standard deviation of the t family distribution.
+<i>nu&gt;0</i> is a positive real valued parameter.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Kalliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+TF()# gives information about the default links for the t-family distribution 
+# library(gamlss)
+#data(abdom)
+#h&lt;-gamlss(y~cs(x,df=3), sigma.formula=~cs(x,1), family=TF, data=abdom) # fits 
+#plot(h)
+newdata&lt;-rTF(1000,mu=0,sigma=1,nu=5) # generates 1000 random observations
+hist(newdata) 
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

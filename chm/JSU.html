@@ -1,0 +1,186 @@
+<html><head><title>The Johnson's Su distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>JSU(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   JSU">
+<param name="keyword" value="R:   dJSU">
+<param name="keyword" value="R:   pJSU">
+<param name="keyword" value="R:   qJSU">
+<param name="keyword" value="R:   rJSU">
+<param name="keyword" value=" The Johnson's Su distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>The Johnson's Su distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function defines the , a four parameter distribution, for a <code>gamlss.family</code> object to be used for a  
+GAMLSS fitting using the function <code>gamlss()</code>.  The functions <code>dJSU</code>, 
+<code>pJSU</code>, <code>qJSU</code> and <code>rJSU</code> define the density, distribution function, quantile function and random
+generation for the the Johnson's Su distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+JSU(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link = "log")
+dJSU(x, mu = 0, sigma = 1, nu = 1, tau = 0.5, log = FALSE)
+pJSU(q, mu = 0, sigma = 1, nu = 1, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+qJSU(p, mu = 0, sigma = 1, nu = 0, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
+rJSU(n, mu = 0, sigma = 1, nu = 0, tau = 0.5)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the <code>mu</code> parameter. Other links are "inverse" "log" ans "own"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the <code>sigma</code> parameter. Other links are "inverse", "identity" ans "own"</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "identity" link as the default for the <code>nu</code> parameter. Other links are "onverse", "log" and "own"</td></tr>
+<tr valign="top"><td><code>tau.link</code></td>
+<td>
+Defines the  <code>tau.link</code>, with "log" link as the default for the <code>tau</code> parameter. Other links are "onverse", "identity" ans "own"</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values </td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of skewness <code>nu</code> parameter values</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+vector of kurtosis <code>tau</code> parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function of the Jonhson's SU distribution, (<code>JSU</code>), is defined as 
+</p>
+<p align="center"><i>f(y|mu,sigma,nu,tau)=1/(c*sigma*2*pi)*(1/(tau*(z^2+1)^.5))exp(-.5r^2)</i></p>
+<p>
+for <i>0&lt;y&lt;0</i>, <i>mu=(-Inf,+Inf)</i>, 
+<i>sigma&gt;0</i>, <i>nu=(-Inf,+Inf)</i> and <i>tau&gt;0</i>. 
+where <i>r=-nu+sinh^-1(z)/tau</i>, <i>z=(y-(mu+c*sigma*w^(.5) sinh(omega)))/(c*sigma)</i>,
+<i>c=(.5*(w-1)*(w*cosh(2*omega)+1))^(-.5)</i>,
+<i>w=exp{tau^2}</i> and <i>omega= -nu*tau</i>.
+</p>
+<p>
+This is a reparameterization of the original Johnson Su distribution, Johnson (1954), 
+so the parameters <code>mu</code> and <code>sigma</code> are the mean and the standard deviation of the distribution.
+The parameter <code>nu</code> determines the skewness of the distribution with <code>nu&gt;0</code> indicating positive skewness and
+<code>nu&lt;0</code> negative. The parameter <code>tau</code>  determines the kurtosis of the distribution. <code>tau</code> should be positive and most likely in the region
+from zero to 1. As <code>tau</code> goes to  0 (and for <code>nu=0</code>) the distribution approaches  the the Normal density function.
+The distribution is appropriate for leptokurtic data that is data with kurtosis larger that the Normal distribution one.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>JSU()</code>  returns a <code>gamlss.family</code> object which can be used to fit a Johnson's Su distribution in the <code>gamlss()</code> function. 
+<code>dJSU()</code> gives the density, <code>pJSU()</code> gives the distribution
+function, <code>qJSU()</code> gives the quantile function, and <code>rJSU()</code>
+generates random deviates.</p>
+
+<h3>Warning</h3>
+
+<p>
+The function <code>JSU</code> uses first derivatives square in the fitting procedure so 
+standard errors should be interpreted with caution
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby and Mikis Stasinopoulos
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Johnson, N. L. (1954). Systems of frequency curves derived from the first law of Laplace.,
+<EM>Trabajos de Estadistica</EM>, <B>5</B>, 283-291.
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="JSUoriginal.html">JSUo</a></code>, <code><a href="BCt.html">BCT</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+JSU()   
+plot(function(x)dJSU(x, mu=0,sigma=1,nu=-1, tau=.5), -4, 4, 
+ main = "The JSU  density mu=0,sigma=1,nu=-1, tau=.5")
+plot(function(x) pJSU(x, mu=0,sigma=1,nu=-1, tau=.5), -4, 4, 
+ main = "The JSU  cdf mu=0, sigma=1, nu=-1, tau=.5")
+# library(gamlss)
+# data(abdom) 
+# h&lt;-gamlss(y~cs(x,df=3), sigma.formula=~cs(x,1), family=JSU, data=abdom) 
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

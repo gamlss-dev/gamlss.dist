@@ -1,0 +1,218 @@
+<html><head><title>The Skew Power exponential type 1-4  distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>SEP1(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   SEP1">
+<param name="keyword" value="R:   dSEP1">
+<param name="keyword" value="R:   pSEP1">
+<param name="keyword" value="R:   qSEP1">
+<param name="keyword" value="R:   rSEP1">
+<param name="keyword" value="R:   SEP2">
+<param name="keyword" value="R:   dSEP2">
+<param name="keyword" value="R:   pSEP2">
+<param name="keyword" value="R:   qSEP2">
+<param name="keyword" value="R:   rSEP2">
+<param name="keyword" value="R:   SEP3">
+<param name="keyword" value="R:   dSEP3">
+<param name="keyword" value="R:   pSEP3">
+<param name="keyword" value="R:   qSEP3">
+<param name="keyword" value="R:   rSEP3">
+<param name="keyword" value="R:   SEP4">
+<param name="keyword" value="R:   dSEP4">
+<param name="keyword" value="R:   pSEP4">
+<param name="keyword" value="R:   qSEP4">
+<param name="keyword" value="R:   rSEP4">
+<param name="keyword" value=" The Skew Power exponential type 1-4  distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>The Skew Power exponential type 1-4  distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions define the Skew Power exponential type 1 to 4  distributions. All of them are four 
+parameter distributions and can be used to fit a GAMLSS model.   
+The functions <code>dSEP1</code>, <code>dSEP2</code>, <code>dSEP3</code> and <code>dSEP4</code> define the probability distribution functions,
+the functions <code>pSEP1</code>, <code>pSEP2</code>, <code>pSEP3</code> and <code>pSEP4</code> define the cumulative distribution functions 
+the functions <code>qSEP1</code>, <code>qSEP2</code>, <code>qSEP3</code> and <code>qSEP4</code> define the inverse cumulative distribution functions and 
+the functions <code>rSEP1</code>, <code>rSEP2</code>, <code>rSEP3</code> and <code>rSEP4</code> define the random generation for the Skew exponential power
+distributions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+SEP1(mu.link = "identity", sigma.link = "log", nu.link = "identity", 
+     tau.link = "log")
+dSEP1(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
+pSEP1(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+     log.p = FALSE)
+qSEP1(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+     log.p = FALSE)
+rSEP1(n, mu = 0, sigma = 1, nu = 0, tau = 2)
+
+SEP2(mu.link = "identity", sigma.link = "log", nu.link = "identity", 
+      tau.link = "log")
+dSEP2(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
+pSEP2(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+qSEP2(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+rSEP2(n, mu = 0, sigma = 1, nu = 0, tau = 2)
+
+SEP3(mu.link = "identity", sigma.link = "log", nu.link = "log", 
+      tau.link = "log")
+dSEP3(x, mu = 0, sigma = 1, nu = 2, tau = 2, log = FALSE)
+pSEP3(q, mu = 0, sigma = 1, nu = 2, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+qSEP3(p, mu = 0, sigma = 1, nu = 2, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+
+SEP4(mu.link = "identity", sigma.link = "log", nu.link = "log", 
+      tau.link = "log")
+dSEP4(x, mu = 0, sigma = 1, nu = 2, tau = 2, log = FALSE)      
+pSEP4(q, mu = 0, sigma = 1, nu = 2, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+qSEP4(p, mu = 0, sigma = 1, nu = 2, tau = 2, lower.tail = TRUE, 
+      log.p = FALSE)
+rSEP4(n, mu = 0, sigma = 1, nu = 2, tau = 2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the <code>mu</code> parameter. Other links are "inverse" and "log"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the <code>sigma</code> parameter. Other links are "inverse" and "identity"</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "log" link as the default for the <code>nu</code> parameter. Other links are "identity" and "inverse"</td></tr>
+<tr valign="top"><td><code>tau.link</code></td>
+<td>
+Defines the  <code>tau.link</code>, with "log" link as the default for the <code>tau</code> parameter. Other links are "inverse", and "identity</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of skewness <code>nu</code> parameter values</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+vector of kurtosis <code>tau</code> parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function of the Skew Power exponential distribution type 2, (<code>SEP2</code>), is defined as 
+</p>
+<p align="center"><i>f(y|mu,sigma,nu,tau)=nu/(sigma*(1+nu^2)*2^(1/tau) Gamma(1+1/tau))*(exp(-.5*abs(nu(y-mu)/sigma))^tau*I(y&lt;mu)+exp(-.5*abs((y-mu)/sigma*nu))^tau*I(y&gt;=mu))</i></p>
+<p>
+for <i>0&lt;y&lt;0</i>,
+<i>mu=(-Inf,+Inf)</i>,
+<i>sigma&gt;0</i>,
+<i>nu&gt;0)</i> and
+<i>tau&gt;0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>SEP2()</code>  returns a <code>gamlss.family</code> object which can be used to fit the SEP2 distribution in the <code>gamlss()</code> function. 
+<code>dSEP2()</code> gives the density, <code>pSEP2()</code> gives the distribution
+function, <code>qSEP2()</code> gives the quantile function, and <code>rSEP2()</code>
+generates random deviates.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a> and Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Fernadez C., Osiewalski J. and Steel M.F.J.(1995) Modelling and inference with v-spherical distributions. 
+<EM>JASA</EM>, <B>90</B>, pp 1331-1340. 
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).  
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="SEP.html">SEP</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+SEP1() 
+curve(dSEP4(x, mu=5 ,sigma=1, nu=2, tau=1.5), -2, 10, main = "The SEP4  density mu=5 ,sigma=1, nu=1, tau=1.5")
+# library(gamlss)
+#y&lt;- rSEP4(100, mu=5, sigma=1, nu=2, tau=1.5);hist(y)
+#m1&lt;-gamlss(y~1, family=SEP1, n.cyc=50)
+#m2&lt;-gamlss(y~1, family=SEP2, n.cyc=50)
+#m3&lt;-gamlss(y~1, family=SEP3, n.cyc=50)
+#m4&lt;-gamlss(y~1, family=SEP4, n.cyc=50) 
+#GAIC(m1,m2,m3,m4)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

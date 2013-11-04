@@ -1,0 +1,188 @@
+<html><head><title>Reverse generalized extreme family distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>RGE(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   RGE">
+<param name="keyword" value="R:   dRGE">
+<param name="keyword" value="R:   pRGE">
+<param name="keyword" value="R:   qRGE">
+<param name="keyword" value="R:   rRGE">
+<param name="keyword" value=" Reverse generalized extreme family distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>Reverse generalized extreme family distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The function <code>RGE</code> defines the reverse generalized extreme family distribution, a three parameter distribution,
+for a <code>gamlss.family</code> object to be used in GAMLSS fitting using the function <code>gamlss()</code>. 
+The functions <code>dRGE</code>, <code>pRGE</code>, <code>qRGE</code> and <code>rRGE</code> define the density, distribution function, quantile function and random
+generation for the specific parameterization of the reverse generalized extreme distribution given in details below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+RGE(mu.link = "identity", sigma.link = "log", nu.link = "log")
+dRGE(x, mu = 1, sigma = 0.1, nu = 1, log = FALSE)
+pRGE(q, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE)
+qRGE(p, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE) 
+rRGE(n, mu = 1, sigma = 0.1, nu = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the mu parameter</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the <code>nu.link</code>, with "log" link as the default for the nu parameter</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of the shape parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Definition file for reverse generalized extreme family distribution. 
+</p>
+<p>
+The probability density function of the generalized extreme value
+distribution is obtained from Johnson <EM>et al.</EM> (1995), Volume 2,
+p76, equation (22.184) [where <i>(xi,theta,gamma)-&gt;(mu,sigma, nu)</i>].
+</p>
+<p>
+The probability density function of the reverse generalized extreme value distribution 
+is then obtained by replacing y by -y and <i>&mu;</i> by <i>-&mu;</i>.
+</p>
+<p>
+Hence the probability density function of the reverse generalized extreme value distribution 
+with <i>nu&gt;0</i> is given by
+</p>
+<p align="center"><i>f(y|mu,sigma,nu)=(1/sigma)(1+(nu*(y-mu))/(sigma))^(1/(nu-1))*S1(y|mu,sigma,nu)</i></p>
+<p>
+for </p><p align="center"><i>&mu;-frac{&sigma;}{nu}&lt;y&lt;infty</i></p>
+<p>
+where
+</p>
+<p align="center"><i>S1(y|mu,sigma,nu)=exp(-[1+(nu*(y-mu))/(sigms)]^(1/nu))</i></p>
+<p>
+and where <i>-infty&lt;&mu;&lt;y+frac{&sigma;}{nu}</i>, <i>&sigma;&gt;0</i>
+and <i>nu&gt;0</i>. Note that only the case <i>nu&gt;0</i> is allowed here. The reverse generalized extreme value distribution is denoted
+as RGE(<i>&mu;,&sigma;,nu</i>) or as Reverse Generalized.Extreme.Family(<i>&mu;,&sigma;,nu</i>).
+</p>
+<p>
+Note the the above distribution is a reparameterization of the three parameter Weibull distribution given by
+</p>
+<p align="center"><i>f(y|mu,sigma,nu)=(a3/a2)*((y-a1)/a2)^(a3-1)exp(-((y-a1)/a2)^a3)</i></p>
+<p>
+given by setting <i>a1=mu-(sigma/nu)</i>, <i>a2=sigma/nu</i>, <i>1/nu</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>RGE()</code> returns a <code>gamlss.family</code> object which can be used to fit a reverse generalized extreme distribution in the <code>gamlss()</code> function.
+<code>dRGE()</code> gives the density, <code>pRGE()</code> gives the distribution
+function, <code>qRGE()</code> gives the quantile function, and <code>rRGE()</code>
+generates random deviates.</p>
+
+<h3>Note</h3>
+
+<p>
+This distribution is very difficult to fit because the y values depends
+on the parameter  values. The <code>RS()</code> and <code>CG()</code> algorithms are not appropriate for this type of problem.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a>, Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a> and Kalliope Akantziliotou
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+RGE()# gives information about the default links for the reverse generalized extreme family distribution 
+newdata&lt;-rRGE(100,mu=0,sigma=1,nu=5) # generates 100 random observations
+# library(gamlss)
+# gamlss(newdata~1, family=RGE, method=mixed(5,50)) # difficult to converse 
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

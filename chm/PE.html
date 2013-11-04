@@ -1,0 +1,186 @@
+<html><head><title>Power Exponential distribution for fitting a GAMLSS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>PE(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   PE">
+<param name="keyword" value="R:   dPE">
+<param name="keyword" value="R:   pPE">
+<param name="keyword" value="R:   qPE">
+<param name="keyword" value="R:   rPE">
+<param name="keyword" value="R:   PE2">
+<param name="keyword" value="R:   dPE2">
+<param name="keyword" value="R:   pPE2">
+<param name="keyword" value="R:   qPE2">
+<param name="keyword" value="R:   rPE2">
+<param name="keyword" value=" Power Exponential distribution for fitting a GAMLSS">
+</object>
+
+
+<h2>Power Exponential distribution for fitting a GAMLSS</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The functions define the Power Exponential distribution, a three parameter distribution, for a <code>gamlss.family</code> 
+object to be used in GAMLSS 
+fitting using the function <code>gamlss()</code>. 
+The functions <code>dPE</code>, <code>pPE</code>, <code>qPE</code> and <code>rPE</code> define the density, distribution function, 
+quantile function and random generation for the specific parameterization of the power exponential distribution 
+showing below.
+The functions <code>dPE2</code>, <code>pPE2</code>, <code>qPE2</code> and <code>rPE2</code> define the density, distribution function, 
+quantile function and random generation of a standard  parameterization of the power exponential distribution.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+PE(mu.link = "identity", sigma.link = "log", nu.link = "log")
+dPE(x, mu = 0, sigma = 1, nu = 2, log = FALSE)
+pPE(q, mu = 0, sigma = 1, nu = 2, lower.tail = TRUE, log.p = FALSE)
+qPE(p, mu = 0, sigma = 1, nu = 2, lower.tail = TRUE, log.p = FALSE)
+rPE(n, mu = 0, sigma = 1, nu = 2)
+PE2(mu.link = "identity", sigma.link = "log", nu.link = "log")
+dPE2(x, mu = 0, sigma = 1, nu = 2, log = FALSE)
+pPE2(q, mu = 0, sigma = 1, nu = 2, lower.tail = TRUE, log.p = FALSE)
+qPE2(p, mu = 0, sigma = 1, nu = 2, lower.tail = TRUE, log.p = FALSE)
+rPE2(n, mu = 0, sigma = 1, nu = 2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the mu parameter</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the sigma parameter</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the <code>nu.link</code>, with "log" link as the default for the nu parameter</td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of location parameter values</td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of kurtosis parameter </td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Power Exponential distribution (PE) is defined as 
+</p><p align="center"><i>f(y|mu,sigma,nu)=(1/sigma)*(nu*exp(-0.5*|z/c|^nu))/(c*2^(1+1/nu)*Gamma(1/nu))</i></p><p>
+where <i>c=[2^(-2/nu)Gamma(1/nu)/Gamma(3/nu)]^0.5</i>,
+for <i>y=(-Inf,+Inf)</i>, <i>&mu;=(-Inf,+Inf)</i>, <i>&sigma;&gt;0</i> and <i>nu&gt;0</i>. 
+This parametrization was used by Nelson (1991) and ensures <i>mu</i> is the mean and <i>sigma</i> is the standard deviation of y 
+(for all parameter values of <i>mu</i>, <i>sigma</i> and <i>nu</i> within the rages above)
+</p>
+<p>
+Thw Power Exponential distribution (PE2) is defined as 
+</p><p align="center"><i>f(y|mu,sigma,nu)=(nu *exp(-abs(z)^2))/(2*sigma*Gamma(1/nu))</i></p>
+
+
+<h3>Value</h3>
+
+<p>
+returns a <code>gamlss.family</code> object which can be used to fit a Power Exponential distribution in the <code>gamlss()</code> function.</p>
+
+<h3>Note</h3>
+
+<p>
+<i>mu</i> is the mean and <i>sigma</i> is the standard deviation of the Power Exponential distribution
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Mikis Stasinopoulos <a href="mailto:d.stasinopoulos@londonmet.ac.uk">d.stasinopoulos@londonmet.ac.uk</a>, Bob Rigby <a href="mailto:r.rigby@londonmet.ac.uk">r.rigby@londonmet.ac.uk</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Nelson, D.B. (1991) Conditional heteroskedasticity in asset returns: a new approach.  <EM>Econometrica</EM>, <B>57</B>, 347-370.
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="BCPE.html">BCPE</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+PE()# gives information about the default links for the Power Exponential distribution  
+# library(gamlss)
+# data(abdom)
+# h1&lt;-gamlss(y~cs(x,df=3), sigma.formula=~cs(x,1), family=PE, data=abdom) # fit
+# h2&lt;-gamlss(y~cs(x,df=3), sigma.formula=~cs(x,1), family=PE2, data=abdom) # fit 
+# plot(h1)
+# plot(h2)
+# leptokurtotic
+plot(function(x) dPE(x, mu=10,sigma=2,nu=1), 0.0, 20, 
+ main = "The PE  density mu=10,sigma=2,nu=1")
+# platykurtotic
+plot(function(x) dPE(x, mu=10,sigma=2,nu=4), 0.0, 20, 
+ main = "The PE  density mu=10,sigma=2,nu=4") 
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

@@ -1,0 +1,263 @@
+<html><head><title>The skew t distributions, type 1 to 5</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>ST1(gamlss.dist)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   ST1">
+<param name="keyword" value="R:   dST1">
+<param name="keyword" value="R:   pST1">
+<param name="keyword" value="R:   qST1">
+<param name="keyword" value="R:   rST1">
+<param name="keyword" value="R:   ST2">
+<param name="keyword" value="R:   dST2">
+<param name="keyword" value="R:   pST2">
+<param name="keyword" value="R:   qST2">
+<param name="keyword" value="R:   rST2">
+<param name="keyword" value="R:   ST3">
+<param name="keyword" value="R:   dST3">
+<param name="keyword" value="R:   pST3">
+<param name="keyword" value="R:   qST3">
+<param name="keyword" value="R:   rST3">
+<param name="keyword" value="R:   ST4">
+<param name="keyword" value="R:   dST4">
+<param name="keyword" value="R:   pST4">
+<param name="keyword" value="R:   qST4">
+<param name="keyword" value="R:   rST4">
+<param name="keyword" value="R:   ST5">
+<param name="keyword" value="R:   dST5">
+<param name="keyword" value="R:   pST5">
+<param name="keyword" value="R:   qST5">
+<param name="keyword" value="R:   rST5">
+<param name="keyword" value=" The skew t distributions type 1 to 5">
+</object>
+
+
+<h2>The skew t distributions type 1 to 5</h2>
+
+
+<h3>Description</h3>
+
+<p>
+There are 5 different skew t distributions implemented in GAMLSS. 
+</p>
+<p>
+The Skew t type 3 distribution Jones and Faddy (2003). 
+The functions <code>dST3</code>, <code>pST3</code>, <code>qST3</code> and <code>rST3</code> define the density, distribution function,
+quantile function and random generation for the skew t distribution type 3.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ST1(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link="log")
+dST1(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
+pST1(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+qST1(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+rST1(n, mu = 0, sigma = 1, nu = 0, tau = 2)
+
+ST2(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link = "log")
+dST2(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
+pST2(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+qST2(p, mu = 1, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+rST2(n, mu = 0, sigma = 1, nu = 0, tau = 2)
+
+ST3(mu.link = "identity", sigma.link = "log", nu.link = "log", tau.link = "log")
+dST3(x, mu = 0, sigma = 1, nu = 1, tau = 10, log = FALSE)
+pST3(q, mu = 0, sigma = 1, nu = 1, tau = 10, lower.tail = TRUE, log.p = FALSE)
+qST3(p, mu = 0, sigma = 1, nu = 1, tau = 10, lower.tail = TRUE, log.p = FALSE)
+rST3(n, mu = 0, sigma = 1, nu = 1, tau = 10)
+
+ST4(mu.link = "identity", sigma.link = "log", nu.link = "log", tau.link = "log")
+dST4(x, mu = 0, sigma = 1, nu = 1, tau = 10, log = FALSE)
+pST4(q, mu = 0, sigma = 1, nu = 1, tau = 10, lower.tail = TRUE, log.p = FALSE)
+qST4(p, mu = 0, sigma = 1, nu = 1, tau = 10, lower.tail = TRUE, log.p = FALSE)
+rST4(n, mu = 0, sigma = 1, nu = 1, tau = 10)
+
+ST5(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link = "log")
+dST5(x, mu = 0, sigma = 1, nu = 0, tau = 1, log = FALSE)
+pST5(q, mu = 0, sigma = 1, nu = 0, tau = 1, lower.tail = TRUE, log.p = FALSE)
+qST5(p, mu = 0, sigma = 1, nu = 0, tau = 1, lower.tail = TRUE, log.p = FALSE)
+rST5(n, mu = 0, sigma = 1, nu = 0, tau = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mu.link</code></td>
+<td>
+Defines the <code>mu.link</code>, with "identity" link as the default for the <code>mu</code> parameter. 
+Other links are "<i>1/mu^2</i>" and "log"</td></tr>
+<tr valign="top"><td><code>sigma.link</code></td>
+<td>
+Defines the  <code>sigma.link</code>, with "log" link as the default for the <code>sigma</code> parameter. 
+Other links are "inverse" and "identity"</td></tr>
+<tr valign="top"><td><code>nu.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "identity" link as the default for the <code>nu</code> parameter. 
+Other links are "<i>1/mu^2</i>" and "log"</td></tr>
+<tr valign="top"><td><code>tau.link</code></td>
+<td>
+Defines the  <code>nu.link</code>, with "log" link as the default for the <code>nu</code> parameter. 
+Other links are "inverse", "identity" </td></tr>
+<tr valign="top"><td><code>x,q</code></td>
+<td>
+vector of quantiles</td></tr>
+<tr valign="top"><td><code>mu</code></td>
+<td>
+vector of <code>mu</code> parameter values </td></tr>
+<tr valign="top"><td><code>sigma</code></td>
+<td>
+vector of scale parameter values</td></tr>
+<tr valign="top"><td><code>nu</code></td>
+<td>
+vector of <code>nu</code> parameter values</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+vector of <code>tau</code> parameter values</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are P[X &lt;= x],
+otherwise, P[X &gt; x] </td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities. </td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length is
+taken to be the number required</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+for extra arguments</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The probability density function of the skew t distribution type 1, (<code>ST1</code>), Azzalini (1986) is defined as 
+</p>
+<p align="center"><i>f(y|mu,sigma,nu,tau)=z/sigma *f(z)F(nu*z)</i></p>
+<p>
+for  <i>-Inf&lt;y&lt;Inf</i> and  <i>z~TF(0,1)</i> has a t distribution with 
+<i>tau&gt;0</i> degrees of freedom with <i>tau</i> treated as a continuous parameter. 
+</p>
+<p>
+The probability density function of the skew t distribution type 2, (<code>ST2</code>), Azzalini and Capitano (2003), 
+is defined as 
+</p>
+<p align="center"><i>f(y|mu,sigma,nu,tau)=z/sigma f_z1(z)F_z2(w)</i></p>
+<p>
+for <i>-Inf&lt;y&lt;Inf</i>, where <i>z=(y-mu)/sigma</i>, 
+<i>w=nu*sqrt(lambda)*z</i>, <i>lambda=(tau+1)/(tau+z*z)</i> and 
+<i>z_1 ~ TF(01,1,tau)</i> and <i>z_2 ~ TF(0,1,tau+1)</i>.
+</p>
+<p>
+The probability density function of the skew t distribution type q, (<code>ST3</code>), is defined in Chapter 10 of the 
+GAMLSS manual.  
+</p>
+<p>
+The probability density function of the skew t distribution type q, (<code>ST4</code>), is defined in Chapter of the 
+GAMLSS manual.  
+</p>
+<p>
+The probability density function of the skew t distribution type 5, (<code>ST5</code>), is defined as 
+</p><p align="center"><i>f(y|mu,sigma,nu,tau)=(1/c)*(1+(z/(a+b+z^2)^0.5))^(a+0.5)*(1-(a+b+z^2)^0.5)^(b+0.5)</i></p>
+<p>
+where <i>c=2^(a+b-1)*(a+b)^0.5 *B(a,b)</i>, and 
+<i>Gamma(a)*Gamma(b)/Gamma(a+b)</i> and 
+<i>(y-mu)/sigma</i> and 
+<i>nu=(a-b)/(a*b*(a+b))^0.5</i>
+and
+<i>tau=2/(a+b)</i> 
+for <i>-Inf&lt;y&lt;Inf</i>, <i>-Inf&lt;mu&lt;Inf</i>, <i>&sigma;&gt;0</i>, 
+<i>-Inf&lt;nu&lt;Inf</i> and <i>tau&gt;0</i>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>ST1()</code>, <code>ST2()</code>, <code>ST3()</code>, <code>ST4()</code> and <code>ST5()</code>  return a <code>gamlss.family</code> object 
+which can be used to fit the skew t type 1-5 distribution in the <code>gamlss()</code> function. 
+<code>dST1()</code>, <code>dST2()</code>, <code>dST3()</code>, <code>dST4()</code> and <code>dST5()</code> give the density functions, 
+<code>pST1()</code>, <code>pST2()</code>, <code>pST3()</code>, <code>pST4()</code> and <code>pST5()</code>  give the cumulative distribution  functions, 
+<code>qST1()</code>, <code>qST2()</code>, <code>qST3()</code>, <code>qST4()</code> and <code>qST5()</code> give the quantile function, and 
+<code>rST1()</code>, <code>rST2()</code>, <code>rST3()</code>, <code>rST4()</code> and <code>rST3()</code>  generates random deviates.</p>
+
+<h3>Note</h3>
+
+<p>
+The mean of the ex-Gaussian is <i>mu+nu</i> and the variance is <i>sigma^2+nu^2</i>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Bob Rigby and Mikis Stasinopoulos
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Jones, M.C. and Faddy, M. J. (2003) A skew extension of the t distribution, with applications. 
+<EM>Journal of the Royal Statistical Society</EM>, Series B, <B>65</B>, pp 159-174.  
+</p>
+<p>
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+<EM>Appl. Statist.</EM>, <B>54</B>, part 3, pp 507-554.
+</p>
+<p>
+Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
+Accompanying documentation in the current GAMLSS  help files, (see also  <a href="http://www.gamlss.com/">http://www.gamlss.com/</a>).
+</p>
+<p>
+Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
+<EM>Journal of Statistical Software</EM>, Vol. <B>23</B>, Issue 7, Dec 2007, <a href="http://www.jstatsoft.org/v23/i07">http://www.jstatsoft.org/v23/i07</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a onclick="findlink('gamlss', 'gamlss.html')" style="text-decoration: underline; color: blue; cursor: hand">gamlss</a></code>, <code><a href="gamlss.family.html">gamlss.family</a></code>, <code><a href="BCCG.html">BCCG</a></code>, <code><a href="GA.html">GA</a></code>, 
+<code><a href="IG.html">IG</a></code>  <code><a href="LNO.html">LNO</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre> 
+y&lt;- rST5(200, mu=5, sigma=1, nu=.1)
+hist(y)
+curve(dST5(x, mu=30 ,sigma=5,nu=-1), -50, 50, main = "The ST5  density mu=30 ,sigma=5,nu=1")
+# library(gamlss)
+# m1&lt;-gamlss(y~1, family=ST1)
+# m2&lt;-gamlss(y~1, family=ST2)
+# m3&lt;-gamlss(y~1, family=ST3)
+# m4&lt;-gamlss(y~1, family=ST4)
+# m5&lt;-gamlss(y~1, family=ST5) 
+# GAIC(m1,m2,m3,m4,m5)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>gamlss.dist</em> version 3.0-0 <a href="00Index.html">Index</a>]</div>
+
+</body></html>
