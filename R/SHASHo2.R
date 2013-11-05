@@ -50,7 +50,7 @@ SHASHo2 <- function (mu.link = "identity", sigma.link = "log",
           d2ldm2
         }, 
         dldd = function(y, mu, sigma, nu, tau) {
-        #   dd <- gamlss.dist:::numeric.deriv(dSHASHo(y, mu, sigma, 
+        #   dd <- numeric.deriv(dSHASHo(y, mu, sigma, 
        #         nu, tau, log = TRUE), "sigma", delta=0.001)
        #   dldd <- as.vector(attr(dd, "gradient"))
           
@@ -63,7 +63,7 @@ SHASHo2 <- function (mu.link = "identity", sigma.link = "log",
           dldd
         }, 
         d2ldd2 = function(y, mu, sigma, nu, tau) {
-  #        dd <- gamlss.dist:::numeric.deriv(dSHASHo2(y, mu, sigma, 
+  #        dd <- numeric.deriv(dSHASHo2(y, mu, sigma, 
   #              nu, tau, log = TRUE), "sigma", delta=0.001)
   #        dldd <- as.vector(attr(dd, "gradient"))
   
@@ -81,7 +81,7 @@ SHASHo2 <- function (mu.link = "identity", sigma.link = "log",
    c <- cosh(tau*asinh(z)-nu)
    r <- sinh(tau*asinh(z)-nu)
             dldv<- r*cosh(tau*asinh(z)-nu)-(1/c)*sinh(tau*asinh(z)-nu)
- #         nd <- gamlss.dist:::numeric.deriv(dSHASHo2(y, mu, sigma, 
+ #         nd <- numeric.deriv(dSHASHo2(y, mu, sigma, 
  #               nu, tau, log = TRUE), "nu", delta=0.001)
  #         dldv <- as.vector(attr(nd, "gradient"))
           dldv
@@ -91,7 +91,7 @@ z <- (y-mu)/(sigma*tau)
    c <- cosh(tau*asinh(z)-nu)
    r <- sinh(tau*asinh(z)-nu)
             dldv<- r*cosh(tau*asinh(z)-nu)-(1/c)*sinh(tau*asinh(z)-nu)
- #         nd <- gamlss.dist:::numeric.deriv(dSHASHo2(y, mu, sigma, 
+ #         nd <- numeric.deriv(dSHASHo2(y, mu, sigma, 
  #               nu, tau, log = TRUE), "nu", delta=0.001)
  #         dldv <- as.vector(attr(nd, "gradient"))
           d2ldv2 <- -dldv*dldv
@@ -104,7 +104,7 @@ z <- (y-mu)/(sigma*tau)
           dldt <- (-r*cosh(tau*asinh(z)-nu)+(1/c)*sinh(tau*asinh(z)-nu))*
                   (asinh(z)+(1/(1+z^2)^(1/2))*(-z)) + (z^2/(tau*(1+z^2)))
          
- #                 td <- gamlss.dist:::numeric.deriv(dSHASHo2(y, mu, sigma, 
+ #                 td <- numeric.deriv(dSHASHo2(y, mu, sigma, 
  #               nu, tau, log = TRUE), "tau", delta=0.001)
  #         dldt <- as.vector(attr(td, "gradient"))
  
@@ -117,7 +117,7 @@ z <- (y-mu)/(sigma*tau)
           dldt <- (-r*cosh(tau*asinh(z)-nu)+(1/c)*sinh(tau*asinh(z)-nu))*
                   (asinh(z)+(1/(1+z^2)^(1/2))*(-z)) + (z^2/(tau*(1+z^2)))
          
- #                 td <- gamlss.dist:::numeric.deriv(dSHASHo2(y, mu, sigma, 
+ #                 td <- numeric.deriv(dSHASHo2(y, mu, sigma, 
  #               nu, tau, log = TRUE), "tau", delta=0.001)
  #         dldt <- as.vector(attr(td, "gradient"))
           d2ldt2 <- -dldt*dldt

@@ -46,7 +46,7 @@
                      #    U <- calcU(y = y, mu = mu, sigma = sigma, nu = nu)
                      # dldd <- digamma(1/sigma)/(sigma*sigma)-(mu*(1-nu))/(sigma*(1+mu*sigma*(1-nu)))
                      # dldd <- dldd+log(1+mu*sigma*(1-nu))/(sigma^2)+U/S
-                        nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
+                        nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
                       dldd <- as.vector(attr(nd, "gradient"))
                       dldd
                         },
@@ -56,7 +56,7 @@
                       #   U <- calcU(y = y, mu = mu, sigma = sigma, nu = nu)
                       #dldd <- digamma(1/sigma)/(sigma*sigma)-(mu*(1-nu))/(sigma*(1+mu*sigma*(1-nu)))
                       #dldd <- dldd+log(1+mu*sigma*(1-nu))/(sigma^2)+U/S
-                     nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
+                     nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
                    dldd <- as.vector(attr(nd, "gradient"))
                  d2ldd2 <- -dldd*dldd
                  d2ldd2
@@ -69,7 +69,7 @@
                                       dDEL(y, mu=mu, sigma=sigma, nu=nu, log=TRUE)
                        ty  <- exp(logty)
                       dldm <- (y-ty)/mu
-                        nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
+                        nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
                       dldd <- as.vector(attr(nd, "gradient"))
                      #     c <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
                      #  dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
@@ -84,7 +84,7 @@
                        ty  <- exp(logty)
                       dldm <- (y-ty)/mu
                  #calculates the dldv                 
-                   nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
+                   nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldmdv
               d2ldmdv <- -dldm *dldv
@@ -97,9 +97,9 @@
                  #dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
                  #dldd <- (((ty*(c+sigma*mu)/mu) - (sigma*y)-c)/(sigma^2))+dcdd*(ty-y)/c
                 #calculates the dldv
-                   nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
+                   nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "sigma", delta=0.01)
                  dldd <- as.vector(attr(nd, "gradient"))
-                   nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
+                   nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldddv 
               d2ldddv <- -dldd *dldv
@@ -107,13 +107,13 @@
                        },               
                  dldv = function(y,mu,sigma,nu) 
                        {                           
-                   nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
+                   nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
                  dldv <- as.vector(attr(nd, "gradient"))
                  dldv
                        },
                d2ldv2 = function(y,mu,sigma,nu)
                        {
-                   nd <- gamlss.dist:::numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
+                   nd <- numeric.deriv(dDEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
                  dldv <- as.vector(attr(nd, "gradient"))
                d2ldv2 <- -dldv*dldv
                d2ldv2
@@ -146,7 +146,7 @@ dDEL<-function(x, mu=1, sigma=1, nu=.5, log=FALSE)
     mu <- rep(mu, length = ly)   
     nu <- rep(nu, length = ly) 
  logpy0 <- -mu*nu-(1/sigma)*(log(1+mu*sigma*(1-nu)))
-  S <- gamlss.dist:::tofyDEL(x, mu, sigma, nu, what=2)
+  S <- tofyDEL(x, mu, sigma, nu, what=2)
 #   S <- tofyDELPORT(x, mu, sigma, nu)[,2]
  logfy <-  logpy0-lgamma(x+1)+S
  if(log==FALSE) fy <- exp(logfy) else fy <- logfy

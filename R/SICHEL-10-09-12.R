@@ -34,13 +34,13 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                  dldm = function(y,mu,sigma,nu) 
                            {
                       sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                         ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                        dldm}, 
                d2ldm2 = function(y,mu,sigma,nu) 
                            {
                      sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                        ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                       dldm <- (y-ty)/mu
                     d2ldm2 <- - dldm * dldm
                     d2ldm2 <- ifelse(d2ldm2 < -1e-15, d2ldm2,-1e-15)  
@@ -49,7 +49,7 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                  dldd = function(y,mu,sigma,nu) 
                            {
                              sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                        ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                          c <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
                       dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
                       dldd <- (((ty*(c+sigma*mu)/mu) - (sigma*y)-c)/(sigma^2))+dcdd*(ty-y)/c
@@ -58,7 +58,7 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                d2ldd2 = function(y,mu,sigma,nu)
                             {
                               sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                        ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                          c <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
                       dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
                       dldd <- (((ty*(c+sigma*mu)/mu) - (sigma*y)-c)/(sigma^2))+dcdd*(ty-y)/c
@@ -70,7 +70,7 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
               d2ldmdd = function(y,mu,sigma,nu) 
                              {
                                sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                         ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                           c <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
                        dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
@@ -80,29 +80,29 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                               }, 
               d2ldmdv = function(y,mu,sigma,nu) {
                 sigma <- ifelse(sigma>10000&nu>0, 10000, sigma )
-                   ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                   ty <- tofySICHEL(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                  dldm <- (y-ty)/mu
                  #calculates the dldv                 
-                   nd <- gamlss.dist:::numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
+                   nd <- numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldmdv
               d2ldmdv <- -dldm *dldv
               d2ldmdv
                                     }, 
               d2ldddv = function(y,mu,sigma,nu) {
-                   ty <- gamlss.dist:::tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                   ty <- tofySICHEL(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                     c <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
                  dcdd <- (c*sigma*(2*nu+1)+1-c*c)/(sigma*sigma)   
                  dldd <- (((ty*(c+sigma*mu)/mu) - (sigma*y)-c)/(sigma^2))+dcdd*(ty-y)/c
                 #calculates the dldv
-                   nd <- gamlss.dist:::numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
+                   nd <- numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldddv 
               d2ldddv <- -dldd *dldv
               d2ldddv
                                  },               
                  dldv = function(y,mu,sigma,nu) {                           
-                   nd <- gamlss.dist:::numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
+                   nd <- numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
                  dldv <- as.vector(attr(nd, "gradient"))
                  dldv
                                     },
@@ -110,7 +110,7 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                 #  delta  <- 0.01
                 #    dldv <- (dSI(y=y, mu=mu, sigma=sigma, nu=nu+delta, log = TRUE)- 
                 #            dSI(y=y, mu=mu, sigma=sigma, nu=nu, log= TRUE))/ delta   
-                   nd <- gamlss.dist:::numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
+                   nd <- numeric.deriv(dSICHEL(y, mu, sigma, nu, log=TRUE), "nu", delta=0.001)
                  dldv <- as.vector(attr(nd, "gradient"))
                d2ldv2 <- -dldv*dldv
                d2ldv2 <- ifelse(d2ldv2 < -1e-15, d2ldv2,-1e-15)  
