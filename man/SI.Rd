@@ -4,6 +4,7 @@
 \alias{pSI}
 \alias{qSI}
 \alias{rSI}
+\alias{tofyS}
 
 
 \title{The Sichel dustribution for fitting a GAMLSS model}
@@ -21,6 +22,7 @@ pSI(q, mu = 0.5, sigma = 0.02, nu = -0.5, lower.tail = TRUE,
 qSI(p, mu = 0.5, sigma = 0.02, nu = -0.5, lower.tail = TRUE, 
     log.p = FALSE, max.value = 10000)
 rSI(n, mu = 0.5, sigma = 0.02, nu = -0.5)
+tofyS(y, mu, sigma, nu, what = 1)
 }
 
 
@@ -39,6 +41,8 @@ rSI(n, mu = 0.5, sigma = 0.02, nu = -0.5)
   \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],
           otherwise, P[X > x]}  
   \item{max.value}{a constant, set to the default value of 10000 for how far the algorithm  should look for q}
+  \item{y}{the y variable. The function \code{tofyS()} should be not used on its own.}
+   \item{what}{take values 1 or 2, for function \code{tofyS()}.}
 }
 \details{
 The probability function of the Sichel distribution is given by
@@ -60,7 +64,7 @@ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for lo
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2003) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.

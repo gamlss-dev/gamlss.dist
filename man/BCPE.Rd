@@ -10,6 +10,10 @@
 \alias{BCPEuntr}
 \alias{checkBCPE}
 \alias{BCPEo}
+\alias{dBCPEo}
+\alias{pBCPEo}
+\alias{qBCPEo}
+\alias{rBCPEo}
 
 \title{Box-Cox Power Exponential distribution for fitting a GAMLSS}
 \description{
@@ -35,6 +39,10 @@ dBCPE(x, mu = 5, sigma = 0.1, nu = 1, tau = 2, log = FALSE)
 pBCPE(q, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)
 qBCPE(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)          
 rBCPE(n, mu = 5, sigma = 0.1, nu = 1, tau = 2)
+dBCPEo(x, mu = 5, sigma = 0.1, nu = 1, tau = 2, log = FALSE)
+pBCPEo(q, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)
+qBCPEo(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)          
+rBCPEo(n, mu = 5, sigma = 0.1, nu = 1, tau = 2)
 checkBCPE(obj = NULL, mu = 10, sigma = 0.1, nu = 0.5, tau = 2,...)
 }
 
@@ -87,7 +95,7 @@ Rigby, R. A. and Stasinopoulos, D. M. (2004). Smooth centile curves for skew and
 Exponential distribution. \emph{Statistics in Medicine}, \bold{23}: 3053-3076.
 
 Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.

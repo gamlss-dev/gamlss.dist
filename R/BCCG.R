@@ -72,7 +72,7 @@ BCCG <- function (mu.link="identity", sigma.link="log", nu.link ="identity")
             class = c("gamlss.family","family"))
 }
 #--------------------------------------------------------------
-dBCCG <- function(x, mu=1, sigma=0.1, nu=1,  log = FALSE)
+dBCCG <-dBCCGo <- function(x, mu=1, sigma=0.1, nu=1,  log = FALSE)
  {
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -85,7 +85,7 @@ dBCCG <- function(x, mu=1, sigma=0.1, nu=1,  log = FALSE)
        ft
   }    
 #--------------------------------------------------------------  
-pBCCG <- function(q, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE)
+pBCCG <- pBCCGo <- function(q, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE)
  {  
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -102,7 +102,7 @@ pBCCG <- function(q, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE)
          FYy     
  }
 #--------------------------------------------------------------
-qBCCG <- function(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE )
+qBCCG <- qBCCGo <- function(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE )
  { 
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -123,7 +123,7 @@ qBCCG <- function(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p = FALSE )
        ya
  }
 #--------------------------------------------------------------
-rBCCG <- function(n, mu=1, sigma=0.1, nu=1)
+rBCCG <- rBCCGo <- function(n, mu=1, sigma=0.1, nu=1)
   {
     if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 

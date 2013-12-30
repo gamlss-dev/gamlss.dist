@@ -7,6 +7,10 @@
 \alias{qBCCG}
 \alias{rBCCG}
 \alias{BCCGo}
+\alias{pBCCGo}
+\alias{qBCCGo}
+\alias{rBCCGo}
+\alias{dBCCGo}
 
 \title{Box-Cox Cole and Green distribution (or Box-Cox normal) for fitting a GAMLSS}
 \description{
@@ -26,6 +30,10 @@ dBCCG(x, mu = 1, sigma = 0.1, nu = 1, log = FALSE)
 pBCCG(q, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE)
 qBCCG(p, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE)
 rBCCG(n, mu = 1, sigma = 0.1, nu = 1)
+dBCCGo(x, mu = 1, sigma = 0.1, nu = 1, log = FALSE)
+pBCCGo(q, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE)
+qBCCGo(p, mu = 1, sigma = 0.1, nu = 1, lower.tail = TRUE, log.p = FALSE)
+rBCCGo(n, mu = 1, sigma = 0.1, nu = 1)
 }
 
 \arguments{
@@ -73,7 +81,7 @@ Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox \emph{t} distributio
 to appear in \emph{Statistical Modelling}.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.

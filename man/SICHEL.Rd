@@ -5,7 +5,7 @@
 \alias{qSICHEL}
 \alias{rSICHEL}
 \alias{VSICHEL}
-
+\alias{tofySICHEL}
 
 \title{The Sichel distribution for fitting a GAMLSS model}
 \description{
@@ -23,6 +23,7 @@ qSICHEL(p, mu=1, sigma=1, nu=-0.5,  lower.tail = TRUE,
         log.p = FALSE, max.value = 10000)        
 rSICHEL(n, mu=1, sigma=1, nu=-0.5, max.value = 10000)
 VSICHEL(obj)
+tofySICHEL(y, mu, sigma, nu, what = 1)
 }
 
 
@@ -42,6 +43,9 @@ VSICHEL(obj)
           otherwise, P[X > x]}  
   \item{max.value}{a constant, set to the default value of 10000 for how far the algorithm  should look for q}
   \item{obj}{a fitted Sichel gamlss model}
+  \item{y}{the y variable,  the \code{tofySICHEL()} should not be used on its own.}
+  \item{what}{ takes values 1 and 2.}
+    
 }
 \details{
 The probability function of the Sichel distribution is given by
@@ -69,7 +73,7 @@ Rigby, R. A., Stasinopoulos D. M. and Akantziliotou, C. (2006) Modelling the par
 Submitted for publication.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2003) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
 
 Stein, G. Z., Zucchini, W. and Juritz, J. M. (1987). Parameter
 Estimation of the Sichel Distribution and its Multivariate Extension.

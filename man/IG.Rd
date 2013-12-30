@@ -49,7 +49,7 @@ y}\hspace{1mm}(y-\mu)^2\right\}}{f(y|mu,sigma)=(1/(sqrt(2*pi*sigma^2*y^3))* exp(
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.com/}) 
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}) 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.

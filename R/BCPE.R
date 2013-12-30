@@ -166,7 +166,7 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
-dBCPE <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
+dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
  {
      f.T <- function(t,log=FALSE){
          log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
@@ -194,7 +194,7 @@ dBCPE <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
        ft
   }    
 #-----------------------------------------------------------------  
-pBCPE <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
+pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
  {  
         F.T <- function(t,tau){
              log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
@@ -221,7 +221,7 @@ pBCPE <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FA
  }
 #-----------------------------------------------------------------  
 
-qBCPE <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
+qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
  {   F.T <- function(t,tau) # cdf of PE(0,1,tau)
         {
      log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
@@ -260,7 +260,7 @@ qBCPE <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = F
      ya   
  }
 #-----------------------------------------------------------------  
-rBCPE <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
+rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
   {
     if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 

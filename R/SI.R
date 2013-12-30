@@ -32,22 +32,22 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
              sigma.dr = dstats$mu.eta, 
                 nu.dr = vstats$mu.eta,
                  dldm = function(y,mu,sigma,nu) {
-                         ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                        dldm}, 
                d2ldm2 = function(y,mu,sigma,nu) {
-                        ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                       dldm <- (y-ty)/mu
                     d2ldm2 <- - dldm * dldm
                     d2ldm2
                                     },
                  dldd = function(y,mu,sigma,nu) {
-                        ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                      lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                       dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                                  dldd},
                d2ldd2 = function(y,mu,sigma,nu){
-                       ty  <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                       ty  <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                      lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                       dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                     d2ldd2 <- -dldd*dldd
@@ -55,7 +55,7 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                                     },
               #d2ldmdd = function() 0,
               d2ldmdd = function(y,mu,sigma,nu) {
-                         ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                       lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                        dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
@@ -63,28 +63,28 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                     d2ldmdd
                                     }, 
               d2ldmdv = function(y,mu,sigma,nu) {
-                   ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                   ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                  dldm <- (y-ty)/mu
                  #calculates the dldv                 
-                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldmdv
               d2ldmdv <- -dldm *dldv
               d2ldmdv
                                     }, 
               d2ldddv = function(y,mu,sigma,nu) {
-                  ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                  ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                 dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                 #calculates the dldv
-                  nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                  nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                 dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldddv 
              d2ldddv <- -dldd *dldv
              d2ldddv
                                  },               
                  dldv = function(y,mu,sigma,nu) {                           
-                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                  dldv
                                     },
@@ -92,7 +92,7 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                 #  delta  <- 0.01
                 #    dldv <- (dSI(y=y, mu=mu, sigma=sigma, nu=nu+delta, log = TRUE)- 
                 #            dSI(y=y, mu=mu, sigma=sigma, nu=nu, log= TRUE))/ delta   
-                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                d2ldv2 <- -dldv*dldv
                d2ldv2

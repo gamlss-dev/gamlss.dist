@@ -1,6 +1,6 @@
 # distibutions
 export(WEI3, dWEI3, pWEI3, qWEI3, rWEI3,
-       SICHEL, dSICHEL, pSICHEL, qSICHEL, rSICHEL,VSICHEL,
+       SICHEL, dSICHEL, pSICHEL, qSICHEL, rSICHEL,VSICHEL,tofySICHEL,
        SHASH, dSHASH, pSHASH, qSHASH, rSHASH,
        SHASHo, dSHASHo, pSHASHo, qSHASHo, rSHASHo,
        SHASHo2, dSHASHo2, pSHASHo2, qSHASHo2, rSHASHo2,
@@ -43,8 +43,11 @@ export(WEI3, dWEI3, pWEI3, qWEI3, rWEI3,
        SN2, dSN2, pSN2, qSN2, rSN2)
 # original distibutions
 export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
+       dBCCGo, pBCCGo, qBCCGo, rBCCGo,
        dBCPE, pBCPE, qBCPE, rBCPE, BCPE, BCPEo, BCPEuntr,
+       dBCPEo, pBCPEo, qBCPEo, rBCPEo,
        dBCT, pBCT, qBCT, rBCT, BCT, BCTo, BCTuntr,
+       dBCTo, pBCTo, qBCTo, rBCTo,
        dGA, pGA, qGA, rGA, GA,
        dGU, pGU, qGU, rGU, GU,
        dIG, pIG, qIG, rIG, IG,
@@ -78,7 +81,7 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        SEP, dSEP, pSEP, qSEP, rSEP,
        ZIP, dZIP, pZIP, qZIP, rZIP,
        PIG, dPIG, pPIG, qPIG, rPIG,
-       SI, dSI, pSI, qSI, rSI,
+       SI, dSI, pSI, qSI, rSI, tofyS,
        ZAIG, dZAIG, pZAIG, qZAIG, rZAIG, plotZAIG, meanZAIG,
        ZAGA, dZAGA, pZAGA, qZAGA, rZAGA, plotZAGA, meanZAGA,
        GE, dGE, pGE, qGE, rGE,
@@ -93,9 +96,8 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
       MN5, dMN5, pMN5, qMN5, rMN5,
       MULTIN, fittedMN,
       hazardFun, gen.hazard,
-      Family, Family.d, Family.p, Family.q, Family.r, gen.Family 
+      Family, Family.d, Family.p, Family.q, Family.r, gen.Family
 )
-
 # needed for gamlss family
 export(as.family, gamlss.family, gamlss.family.default, as.gamlss.family,
        checklink, make.link.gamlss, show.link)
