@@ -8,6 +8,7 @@ export(WEI3, dWEI3, pWEI3, qWEI3, rWEI3,
        ST1, dST1, pST1, qST1, rST1,
        ST2, dST2, pST2, qST2, rST2,
        ST3, dST3, pST3, qST3, rST3,
+       ST3C, dST3C, pST3C, qST3C, rST3C,
        SST, dSST, pSST, qSST, rSST,
        ST4, dST4, pST4, qST4, rST4,
        ST5, dST5, pST5, qST5, rST5,
@@ -39,8 +40,20 @@ export(WEI3, dWEI3, pWEI3, qWEI3, rWEI3,
        ZIBB, dZIBB, pZIBB, qZIBB, rZIBB,
        ZABB, dZABB, pZABB, qZABB, rZABB,
        ZIPIG, dZIPIG, pZIPIG, qZIPIG, rZIPIG,
+       ZAPIG, dZAPIG, pZAPIG, qZAPIG, rZAPIG,
+       ZIPF, dZIPF, pZIPF, qZIPF, rZIPF, zetaP,
+       ZAZIPF, dZAZIPF, pZAZIPF, qZAZIPF, rZAZIPF,
+       NBF, dNBF, pNBF, qNBF,rNBF,
        SN1, dSN1, pSN1, qSN1, rSN1,
-       SN2, dSN2, pSN2, qSN2, rSN2)
+       SN2, dSN2, pSN2, qSN2, rSN2,
+       DPO, dDPO, pDPO, qDPO, rDPO, get_C,
+       BNB, dBNB, pBNB, qBNB, rBNB,
+       ZABNB, dZABNB, pZABNB, qZABNB, rZABNB,
+       ZIBNB, dZIBNB, pZIBNB, qZIBNB, rZIBNB,
+       ZINBF, dZINBF, pZINBF, qZINBF, rZINBF,
+       ZASICHEL, dZASICHEL, pZASICHEL, qZASICHEL, rZASICHEL,
+       ZISICHEL, dZISICHEL, pZISICHEL, qZISICHEL, rZISICHEL,
+       DBI, dDBI, pDBI, qDBI, rDBI, GetBI_C)
 # original distibutions
 export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        dBCCGo, pBCCGo, qBCCGo, rBCCGo,
@@ -59,6 +72,7 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        dLOGNO2, pLOGNO2, qLOGNO2, rLOGNO2, LOGNO2,
        dLOGITNO, pLOGITNO, qLOGITNO, rLOGITNO, LOGITNO,
        dNO2, pNO2, qNO2, rNO2, NO2,
+       dLQNO, pLQNO, qLQNO, rLQNO, LQNO,
        dNET, pNET, NET,
        dNO, pNO, qNO, rNO, NO,
        dPE, pPE, qPE, rPE, PE,
@@ -84,28 +98,35 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        SI, dSI, pSI, qSI, rSI, tofyS,
        ZAIG, dZAIG, pZAIG, qZAIG, rZAIG, plotZAIG, meanZAIG,
        ZAGA, dZAGA, pZAGA, qZAGA, rZAGA, plotZAGA, meanZAGA,
-       GE, dGE, pGE, qGE, rGE,
+       GEOMo, dGEOMo, pGEOMo, qGEOMo, rGEOMo,
        IGAMMA, dIGAMMA, pIGAMMA, qIGAMMA,rIGAMMA,
        PARETO2, dPARETO2, pPARETO2, qPARETO2, rPARETO2,
        PARETO2o, dPARETO2o, pPARETO2o, qPARETO2o, rPARETO2o,
       WARING, dWARING, pWARING, qWARING, rWARING,
       YULE, dYULE, pYULE, qYULE, rYULE,
+      GPO, dGPO, pGPO, qGPO, rGPO,
       GEOM, dGEOM, pGEOM, qGEOM, rGEOM,
       MN3, dMN3, pMN3, qMN3, rMN3,
       MN4, dMN4, pMN4, qMN4, rMN4,
       MN5, dMN5, pMN5, qMN5, rMN5,
       MULTIN, fittedMN,
       hazardFun, gen.hazard,
-      Family, Family.d, Family.p, Family.q, Family.r, gen.Family
+      Family, Family.d, Family.p, Family.q, Family.r, gen.Family,
+      flexDist
 )
 # needed for gamlss family
 export(as.family, gamlss.family, gamlss.family.default, as.gamlss.family,
        checklink, make.link.gamlss, show.link)
-
+importFrom("methods", "is")
+import(MASS)
+import(graphics)
+import(stats)
 # documented but unexported methods
 
 S3method(gamlss.family, default)
 S3method(print, gamlss.family)
 
-
-useDynLib(gamlss.dist)
+# the following commands has to be used for creating the c file 
+# to register the c functions
+# tools::package_native_routine_registration_skeleton(".")
+useDynLib(gamlss.dist, .registration = TRUE)

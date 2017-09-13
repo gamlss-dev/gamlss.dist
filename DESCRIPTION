@@ -1,16 +1,16 @@
 Package: gamlss.dist
-Type: Package
-Title: Distributions to be used for GAMLSS modelling.
-Version: 4.2-4
-Date: 2013-12-30
-Author: Mikis Stasinopoulos <d.stasinopoulos@londonmet.ac.uk>, Bob
-        Rigby <r.rigby@londonmet.ac.uk> with contributions from
+Title: Distributions for Generalized Additive Models for Location Scale and Shape 
+Version: 5.0-3
+Date: 2017-10-08
+Author: Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>, Bob
+        Rigby  with contributions from
         Calliope Akantziliotou, Gillian Heller, Raydonal Ospina
         <rospina@ime.usp.br>, Nicoletta Motpan, Fiona McElduff, Vlasios
-        Voudouris and Majid Djennad.
-Maintainer: Mikis Stasinopoulos <d.stasinopoulos@londonmet.ac.uk>
-Depends: R (>= 2.15.0), MASS
-Description: This package contains the distributions for GAMLSS
-        modelling.
+        Voudouris, Majid Djennad, Marco Enea, Alexios Ghalanos, 
+        Christos Argyropoulos.
+Maintainer: Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>
+Depends: R (>= 2.15.0), MASS, graphics, stats, methods
+Description: The different distributions used for the response variables in Generalized Additive Models for Location Scale and Shape.
 License: GPL-2 | GPL-3
 URL: http://www.gamlss.org/
+
