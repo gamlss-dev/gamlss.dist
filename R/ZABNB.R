@@ -178,6 +178,12 @@ pZABNB <- function(q, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
    if (any(tau <= 0)|any(tau >= 1))  #In this parametrization  nu = alpha
       stop(paste("tau must be between 0 and 1 ", "\n", ""))
    if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+    ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
+     q <- rep(q, length = ly)      
+ sigma <- rep(sigma, length = ly)
+    mu <- rep(mu, length = ly)   
+    nu <- rep(nu, length = ly) 
+   tau <- rep(tau, length = ly)
    cdf0 <- pBNB(0, mu = mu, sigma=sigma, nu=nu)
    cdf1 <- pBNB(q, mu = mu, sigma=sigma, nu=nu)                   
    cdf3 <- tau+((1-tau)*(cdf1-cdf0)/(1-cdf0))

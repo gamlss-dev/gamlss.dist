@@ -69,11 +69,16 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 Stein, G. Z., Zucchini, W. and Juritz, J. M. (1987). Parameter
 Estimation of the Sichel Distribution and its Multivariate Extension.
 \emph{Journal of American Statistical Association}, \bold{82}, 938-944.
+
+
 }
-\author{Akantziliotou C., Rigby, R. A. and  Stasinopoulos D. M. }
+\author{Akantziliotou C., Rigby, R. A.,  Stasinopoulos D. M. and Marco Enea}
 
  
 

@@ -96,7 +96,12 @@ dZIPIG<-function(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
         if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
-        if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+        if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
+          ly <- max(length(x),length(mu),length(sigma),length(nu)) 
+           x <- rep(x, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
         if (length(sigma)>1) fy <- ifelse(sigma>0.0001, dPIG(x, mu = mu, sigma=sigma, log = T), 
                                           dPO(x, mu = mu, log = T) )
         else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = T) 
@@ -114,6 +119,11 @@ pZIPIG <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
         if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
                     stop(paste("nu must be between 0 and 1 ", "\n", ""))
         if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+          ly <- max(length(q),length(mu),length(sigma),length(nu)) 
+           q <- rep(q, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
         if (length(sigma)>1) cdf <- ifelse(sigma>0.0001, pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F), 
                                           ppois(q, lambda = mu) )
         else cdf <- if (sigma<0.0001) ppois(q, lambda = mu)
@@ -124,7 +134,8 @@ pZIPIG <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
          cdf
    }
 #------------------------------------------------------------------------------------------
-qZIPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE)
+qZIPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE,
+                   max.value = 10000)
   {      
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
@@ -133,19 +144,24 @@ qZIPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
           if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
           if (log.p == TRUE) p <- exp(p)   else p <- p
           if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+          ly <- max(length(p),length(mu),length(sigma),length(nu)) 
+           p <- rep(p, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
           pnew <- (p-nu)/(1-nu)-1e-10
           pnew <- ifelse((pnew > 0 ),pnew, 0)
-          if (length(sigma)>1) q <- ifelse(sigma>0.0001,  qPIG(pnew, mu = mu, sigma=sigma, lower.tail=T, log.p = F), 
+          if (length(sigma)>1) q <- ifelse(sigma>0.0001,  qPIG(pnew, mu = mu, sigma=sigma, lower.tail=TRUE, log.p = FALSE, max.value = max.value), 
                                           qpois(pnew, lambda = mu) )
           else q <- if (sigma<0.0001) qpois(pnew, lambda = mu)
-                   else qPIG(pnew, mu = mu, sigma=sigma, lower.tail=T, log.p = F)
+                   else qPIG(pnew, mu = mu, sigma=sigma, lower.tail=TRUE, log.p = FALSE, max.value = max.value)
            # q2 <- suppressWarnings(ifelse((pnew > 0 ), q, 0))
 #          suppressWarnings(q <- ifelse((pnew > 0 ), qpois(pnew, lambda = mu, ), 0))
           q
    }
 #------------------------------------------------------------------------------------------
-rZIPIG <- function(n, mu = 1, sigma = 1, nu = 0.3)
-  { 
+rZIPIG <- function(n, mu = 1, sigma = 1, nu = 0.3, max.value = 10000)
+  {
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha

@@ -4,24 +4,33 @@
 \alias{pGEOM}
 \alias{qGEOM}
 \alias{rGEOM}
-\title{
-Geometric distribution for fitting a GAMLSS model
-}
+\alias{GEOMo}
+\alias{dGEOMo}
+\alias{pGEOMo}
+\alias{qGEOMo}
+\alias{rGEOMo}
+
+
+\title{Geometric distribution for fitting a GAMLSS model}
 \description{
-The function \code{GEOM()} defines the Geometric distribution, a one parameter 
+The functions  \code{GEOMo()} and  \code{GEOM()} define  two parametrizations of the geometric distribution. The geometric distribution is a  one parameter 
 distribution, for a \code{gamlss.family} object to be used in GAMLSS fitting 
-using the function \code{gamlss()}, with mean equal to the parameter \code{mu}. 
+using the function \code{gamlss()}.  The  mean of \code{GEOM()} is equal to the parameter \code{mu}. 
 The functions \code{dGEOM}, \code{pGEOM}, \code{qGEOM} and \code{rGEOM} define 
 the density, distribution function, quantile function and random generation for 
 the \code{GEOM} parameterization of the Geometric distribution. 
 }
 \usage{
-
 GEOM(mu.link = "log")
 dGEOM(x, mu = 2, log = FALSE)
 pGEOM(q, mu = 2, lower.tail = TRUE, log.p = FALSE)
-qGEOM(p, mu = 2, lower.tail = TRUE, log.p = FALSE, max.value=10000)
+qGEOM(p, mu = 2, lower.tail = TRUE, log.p = FALSE)
 rGEOM(n, mu = 2)
+GEOMo(mu.link = "logit")
+dGEOMo(x, mu = 0.5, log = FALSE)
+pGEOMo(q, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
+qGEOMo(p, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
+rGEOMo(n, mu = 0.5)
 }
 
 \arguments{
@@ -32,14 +41,17 @@ rGEOM(n, mu = 2)
   \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x], otherwise P[X > x]}
   \item{p}{vector of probabilities}
   \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required}
-  \item{max.value}{constant; generates a sequence of values for the cdf function.}
 }
 \details{
-The parameterization of the Geometric distribution in the function \code{GEOM} is
-\deqn{f(y|\mu) = (1-p)^y\,p}{f(y|mu) = (1-p)^y p}
+The parameterization of the original geometric distribution in the function \code{GE} is
+\deqn{f(y|\mu) = (1-\mu)^y\, \mu}{f(y|\mu) = (1-\mu)^y \mu}
+for \eqn{y>=0} and \eqn{\mu>0}.
+
+The parameterization of the geometric distribution in the function \code{GEOM} is
+\deqn{f(y|\mu) = \mu^y/(\mu+1)^{y+1}}{f(y|\mu) = \mu^y/(\mu+1)^{y+1} }
 where
-\eqn{p = 1/(mu+1)}
-for \eqn{y>=0} and \eqn{mu>0}.
+for \eqn{y>=0} and \eqn{\mu>0}.
+
 }
 \value{
 returns a \code{gamlss.family} object which can be used to fit a Geometric distribution in the \code{gamlss()} function.}
@@ -57,6 +69,9 @@ Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R. \emph{Journal of Statistical Software}, Vol. 23, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}. 
 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
 
 \seealso{\code{\link{gamlss.family}}} 
@@ -72,6 +87,16 @@ plot(p , qGEOM(p), type="s")
 dat <- rGEOM(100)
 hist(dat)
 #summary(gamlss(dat~1, family=GEOM))
+par(mfrow=c(2,2))
+y<-seq(0,20,1)
+plot(y, dGEOMo(y), type="h")
+q <- seq(0, 20, 1)
+plot(q, pGEOMo(q), type="h")
+p<-seq(0.0001,0.999,0.05)
+plot(p , qGEOMo(p), type="s")
+dat <- rGEOMo(100)
+hist(dat)
+#summary(gamlss(dat~1, family="GE"))
 }
 \keyword{distribution}
 \keyword{regression}

@@ -34,9 +34,7 @@ rYULE(n, mu = 2)
 }
 \details{
 The Yule distribution has density
-\deqn{p(y)=beta(lambda+1, x+1)/beta(lambda, 1)}
-where 
-\deqn{lambda = (mu+1)/mu}
+\deqn{P(Y=y|\mu) = (\mu^{-1}+1) B(y+1,\mu^{-1}+2)}{f(y|\mu)=(1/\mu+1) B(y+1, 1/\mu +2)}
 for \eqn{y=0,1,2,\ldots} and \eqn{mu>0}.  
 
 }
@@ -45,6 +43,9 @@ Returns a \code{gamlss.family} object which can be used to fit a Yule distributi
 }
 \references{
 Wimmer, G. and Altmann, G. (1999) \emph{Thesaurus of univariate discrete probability distributions.} Stamm.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
 }
 \author{
 Fiona McElduff, Bob Rigby and Mikis Stasinopoulos.

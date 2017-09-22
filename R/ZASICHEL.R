@@ -183,6 +183,12 @@ pZASICHEL <- function(q, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE, log
    if (any(tau <= 0)|any(tau >= 1))  #In this parametrization  nu = alpha
       stop(paste("tau must be between 0 and 1 ", "\n", ""))
    if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+     ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
+      q <- rep(q, length = ly)      
+  sigma <- rep(sigma, length = ly)
+     mu <- rep(mu, length = ly)   
+     nu <- rep(nu, length = ly) 
+    tau <- rep(tau, length = ly)
    cdf0 <- pSICHEL(0, mu = mu, sigma=sigma, nu=nu)
    cdf1 <- pSICHEL(q, mu = mu, sigma=sigma, nu=nu)                   
    cdf3 <- tau+((1-tau)*(cdf1-cdf0)/(1-cdf0))
@@ -202,6 +208,12 @@ qZASICHEL <- function(p, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE,
        if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
        if (log.p == TRUE) p <- exp(p)   else p <- p
        if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+       ly <- max(length(p),length(mu),length(sigma),length(nu),length(tau)) 
+            p <- rep(p, length = ly)      
+        sigma <- rep(sigma, length = ly)
+           mu <- rep(mu, length = ly)   
+           nu <- rep(nu, length = ly) 
+          tau <- rep(tau, length = ly)
          pnew <- (p-tau)/(1-tau)-1e-10
          cdf0 <- pSICHEL(0, mu = mu, sigma=sigma, nu=nu)                   
          pnew2 <- cdf0*(1-pnew) + pnew           

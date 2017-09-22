@@ -64,7 +64,7 @@ BE <- function (mu.link = "logit", sigma.link = "logit")
                 class = c("gamlss.family","family"))
 }
 #------------------------------------------------------------------------------------------
-dBE<-function(x, mu = 0.5, sigma = 0.02, log = FALSE)
+dBE<-function(x, mu = 0.5, sigma = 0.2, log = FALSE)
  { 
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
           if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
@@ -75,7 +75,7 @@ dBE<-function(x, mu = 0.5, sigma = 0.02, log = FALSE)
           fy
   }
 #------------------------------------------------------------------------------------------
-pBE <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
+pBE <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
@@ -86,7 +86,7 @@ pBE <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
           cdf
    }
 #------------------------------------------------------------------------------------------
-qBE <- function(p, mu=0.5, sigma=0.02,  lower.tail = TRUE, log.p = FALSE)
+qBE <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
   {      if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", ""))   
          if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
@@ -96,7 +96,7 @@ qBE <- function(p, mu=0.5, sigma=0.02,  lower.tail = TRUE, log.p = FALSE)
           q
    }
 #------------------------------------------------------------------------------------------
-rBE <- function(n, mu=0.5, sigma=0.02)
+rBE <- function(n, mu=0.5, sigma=0.2)
   { if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
     if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", ""))   
     if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))  

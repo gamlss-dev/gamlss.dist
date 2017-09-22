@@ -1,6 +1,6 @@
 # Amended 20/10/2007, see change to sigma link, dEGB2 and dldd to allow for negative sigma
 # starting values for mu and sigma  (and nu and tau) may need to be changed 
-EGB2 <- function (mu.link="identity", sigma.link="identity", nu.link ="log", tau.link="log")
+EGB2 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Exponential generalized beta 2 (i.e. of the second kind)", substitute(mu.link), 
                            c("inverse", "log", "identity", "own"))
@@ -112,7 +112,7 @@ EGB2 <- function (mu.link="identity", sigma.link="identity", nu.link ="log", tau
            -2*dEGB2(y,mu,sigma,nu,tau,log=TRUE)
                         } ,                     
          rqres = expression(   
-               rqres(pfun="pGB2", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)) ,
+               rqres(pfun="pEGB2", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)) ,
     mu.initial = expression(mu <- (y+mean(y))/2), 
     sigma.initial = expression(sigma <- rep(0.1, length(y))), 
     nu.initial = expression(nu <- rep(1, length(y))), 

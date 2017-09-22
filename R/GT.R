@@ -185,7 +185,7 @@ dGT <- function(x, mu=0, sigma=1, nu=3, tau=1.5, log=FALSE)
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(nu <= 0))  stop(paste("nu must be positive", "\n", ""))
           if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
-          z <- (x-mu)/sigma
+           z <- (x-mu)/sigma
           zt <- (abs(z))^tau
           loglik <- log(tau)-log(2*sigma)-(1/tau)*log(nu)- lgamma(1/tau)-lgamma(nu)
           loglik <- loglik +lgamma(nu+(1/tau)) - (nu+(1/tau))*log(1+(zt/nu))
@@ -212,7 +212,7 @@ pGT <- function(q, mu=0, sigma=1, nu=3, tau=1.5, lower.tail = TRUE, log.p = FALS
           {
           endInt <- (q[i]-mu[i])/sigma[i]
          cdf[i] <- integrate(function(x) 
-                 dGT(x, mu = 0, sigma = 1, nu = nu[i], tau = tau[i]), -Inf, endInt)$value
+                 dGT(x, mu = 0, sigma = 1, nu = nu[i], tau = tau[i]), -Inf, endInt, rel.tol=.Machine$double.eps^0.4)$value
          if(endInt>0&&cdf<0.001) cdf[i] <- 1  # MS and BR 7-10-11    
           }    
          if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
@@ -263,7 +263,7 @@ qGT <- function(p, mu=0, sigma=1, nu=3, tau=1.5, lower.tail = TRUE, log.p = FALS
               j<-j+1 
               }
            }
-        q[i] <- uniroot(h1, interval)$root
+        q[i] <- uniroot(h1, interval, tol=.Machine$double.eps^0.4)$root
         #interval <- c(.Machine$double.xmin, 20)
          }
     q

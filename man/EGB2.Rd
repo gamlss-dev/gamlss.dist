@@ -16,7 +16,7 @@ distribution function, quantile function and random
 generation for the generalized beta type 2 distribution.   
 }
 \usage{
-EGB2(mu.link = "identity", sigma.link = "identity", nu.link = "log", 
+EGB2(mu.link = "identity", sigma.link = "log", nu.link = "log", 
       tau.link = "log")
 dEGB2(x, mu = 0, sigma = 1, nu = 1, tau = 0.5, log = FALSE)
 pEGB2(q, mu = 0, sigma = 1, nu = 1, tau = 0.5, lower.tail = TRUE, 
@@ -71,8 +71,12 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
-\author{Bob Rigby \email{r.rigby@londonmet.ac.uk} and Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk} }
+\author{Bob Rigby and Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} }
 
 
 
@@ -88,7 +92,8 @@ lines(seq(min(y),20,length=200),fx)
 # library(gamlss)
 # histDist(y, family=EGB2, n.cyc=60)
 integrate(function(x) x*dEGB2(x=x, mu=5, sigma=2, nu=1, tau=4), -Inf, Inf)
-curve(dEGB2(x, mu=5 ,sigma=2, nu=1, tau=4), -10, 10, main = "The EGB2  density mu=5, sigma=2, nu=1, tau=4")
+curve(dEGB2(x, mu=5 ,sigma=2, nu=1, tau=4), -10, 10, main = "The EGB2  density 
+             mu=5, sigma=2, nu=1, tau=4")
 }
 \keyword{distribution}
 \keyword{ regression}

@@ -7,8 +7,8 @@
 # it would be nice if the parametrization for mu change log(mu) or logit(mu)
 # this is more difficult sinse all mu aprearancies in the derivatives 
 # have to change
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # pdf
 Family.d <-function(family = "NO", type = c("log", "logit"), ...)
   {
@@ -38,8 +38,8 @@ fun <- if (type=="log")
        } 
   fun
   }
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # cdf
 Family.p <-function(family = "NO", type = c("log", "logit"), ...)
   {
@@ -68,8 +68,8 @@ fun <- if (type=="log")
        } 
   fun
   }
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # inverse cdf
 Family.q <-function(family = "NO", type = c("log", "logit"), ...)
   {
@@ -96,8 +96,8 @@ fun <- if (type=="log")
        } 
   fun
   }
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # random generating
 Family.r <-function(family = "NO", type = c("log", "logit"), ...)
 {
@@ -124,24 +124,24 @@ Family.r <-function(family = "NO", type = c("log", "logit"), ...)
     } 
   fun
 }
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 # function to generate d p q r and fitting functions
 gen.Family <-function(family = "NO", 
                       type = c("log", "logit"),
                     ...)
 {
-  type <- match.arg(type)
-  fam  <- as.gamlss.family(family) #ds Monday, March 10, 2008 at 10:07
-  fname <- fam$family[[1]] 
+    type <- match.arg(type)
+    fam  <- as.gamlss.family(family) #ds Monday, March 10, 2008 at 10:07
+   fname <- fam$family[[1]] 
   # fname <- family
   # if (mode(family) != "character" && mode(family) != "name")
   # fname <- as.character(substitute(family))
-  dfun <- paste( paste("d",type,sep=""), fname, sep="")
-  pfun <- paste( paste("p",type,sep=""), fname, sep="")
-  qfun <- paste( paste("q",type,sep=""), fname, sep="")
-  rfun <- paste( paste("r",type,sep=""), fname, sep="")
-  fun <- paste(type, fname, sep="")
+    dfun <- paste( paste("d",type,sep=""), fname, sep="")
+    pfun <- paste( paste("p",type,sep=""), fname, sep="")
+    qfun <- paste( paste("q",type,sep=""), fname, sep="")
+    rfun <- paste( paste("r",type,sep=""), fname, sep="")
+     fun <- paste(type, fname, sep="")
   alldislist <-c(dfun,pfun,qfun,rfun,fun)
   # generate d 
   eval(dummy <- Family.d(family = fname, type = type, ...))
@@ -174,17 +174,34 @@ Family <- function (
     ...)
 {
   #------------------------------------------
-  # dummy name
-  TEST <- "TEST" 
-    type <- match.arg(type)
-    yvar <- switch(type,"log"="log(y)", "logit"="log(y/(1-y))")
-     fam <- as.gamlss.family(family) # the family 
-   fname <- fam$family[[1]] #  only the family name
-  family <- c("None", "None")  # 
-  dorfun <- paste("d",fname,sep="") # say "dNO"
-  porfun <- paste("p",fname,sep="") # say "pNO"
-    dfun <- paste(paste("d",substr(type,start=1,stop=5),sep=""),fname, sep="") # say dlohNO
-    pfun <- paste(paste("p",substr(type,start=1,stop=5),sep=""),fname, sep="") # 
+# # get the formal arguments of the gamlss. family
+#   if (is.function(family))          Argum <- formals(family) 
+#    else if (is.character(family))   Argum <- formals(get(family))
+#    else  
+#     {
+#     chFamily <- deparse(substitute(family))
+#           nc <- nchar(chFamily)
+#          FAM <- substr(chFamily, 1, nc-2)
+#        Argum <- formals(get(FAM))
+#     }
+# dummy name 
+     TEST <- "TEST" 
+     type <- match.arg(type)
+     yvar <- switch(type,"log"="log(y)", "logit"="log(y/(1-y))")
+    fname <- if (is.name(family)) as.character(family)
+             else if (is.character(family)) family
+             else if (is.call(family)) as.character(family[[1]])
+             else if (is.function(family)) deparse(substitute(family))
+             else if (is(family, "gamlss.family"))  family$family[1]
+             else stop("the family must be a character or a gamlss.family name")
+     fam1 <- eval(parse(text=fname)) # the family to output
+      fam <- as.gamlss.family(family) # this is created so I can get things
+    nopar <- fam$nopar
+   family <- c("None", "None")  # 
+   dorfun <- paste("d",fname,sep="") # say "dNO"
+   porfun <- paste("p",fname,sep="") # say "pNO"
+     dfun <- paste(paste("d",substr(type,start=1,stop=5),sep=""),fname, sep="") # say dlohNO
+     pfun <- paste(paste("p",substr(type,start=1,stop=5),sep=""),fname, sep="") # 
   if (local)
   {
     #--trying to get gamlss sys.frame--  
@@ -206,11 +223,11 @@ Family <- function (
   family[[1]] <- paste( substr(type,start=1,stop=5),fname, sep="")
   family[[2]] <- paste(type, fam$family[[2]])
    fam$family <- family 
+body(fam1)[[nopar+2]][[2]]$family <- family
   # Global deviance increment  
-         sGD <- gsub(dorfun, dfun, deparse(body(fam$G.dev.incr)))
-  body(fam$G.dev.incr) <- parse(text=sGD)
-  # get the no of parameters  
-       nopar <- fam$nopar
+          sGD <- gsub(dorfun, dfun, deparse(body(fam$G.dev.incr)))
+body(fam$G.dev.incr) <- parse(text=sGD)
+body(fam1)[[nopar+2]][[2]]$G.dev.incr <- fam$G.dev.incr
   # checking whether continuous
   if (!(fam$type=="Continuous")) stop("the gamlss.family distribution should be continuous")
   # now change the first derivatives
@@ -219,206 +236,254 @@ Family <- function (
   # 1 parameter 
   # since only exponential exist do not use (we have not corrected for mu yet) 
   # fam$dldm
-  yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldm) <- parse(text=yval)[[1]]   
-  # fam$d2ldd2
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldm2) <- parse(text=yval)[[1]]
+       yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
+       yval <- gsub('any[,1]', 'any', yval, fixed=T)
+       body(fam$dldm) <- parse(text=yval)[[1]]   
+       body(fam1)[[nopar+2]][[2]]$dldm  <- fam$dldm
+       # fam$d2ldd2
+       yval <-  gsub("y", yvar,  deparse(body(fam$d2ldm2)))
+       yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+       body(fam$d2ldm2) <- parse(text=yval)[[1]] 
+       body(fam1)[[nopar+2]][[2]]$d2ldm2  <- fam$d2ldm2
   #residuals
-  sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
-  sres <- gsub("expression", "",  sres)
+       sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
+       sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
+  body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres  
   # initial mu fam$mu.initial
-  inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-  inimu <- gsub("expression", "",  inimu)
+      inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
+      inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
-  # initial sigma fam$sigma.initial
-  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
-  inisigma <- gsub("expression", "",  inisigma)
-  fam$sigma.initial <- parse(text=inisigma) 
+  body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial
   #y.valid           
   yval <- switch(type,"log"="all(y > 0)", "logit"="all(y > 0 & y < 1)")
   body(fam$y.valid) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$y.valid  <- fam$y.valid 
 }, 
 { 
   # 2 parameters 
   # fam$dldm
-  yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldm) <- parse(text=yval)[[1]]   
+     yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
+     yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+    body(fam$dldm) <- parse(text=yval)[[1]] 
+    body(fam1)[[nopar+2]][[2]]$dldm  <- fam$dldm
   # fam$d2ldd2
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldm2) <- parse(text=yval)[[1]]
+     yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
+     yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+     body(fam$d2ldm2) <- parse(text=yval)[[1]]
+     body(fam1)[[nopar+2]][[2]]$d2ldm2  <- fam$d2ldm2
   # fam$dldd
-  yval <- gsub("y", yvar,  deparse(body(fam$dldd)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldd) <- parse(text=yval)[[1]]
+     yval <- gsub("y", yvar,  deparse(body(fam$dldd)))
+     yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+     body(fam$dldd) <- parse(text=yval)[[1]]
+     body(fam1)[[nopar+2]][[2]]$dldd  <- fam$dldd
   # fam$d2ldd2
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldd2)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldd2) <- parse(text=yval)[[1]]
+     yval <- gsub("y", yvar,  deparse(body(fam$d2ldd2)))
+     yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+     body(fam$d2ldd2) <- parse(text=yval)[[1]]
+     body(fam1)[[nopar+2]][[2]]$d2ldd2  <- fam$d2ldd2
   # fam$d2ldmdd
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdd)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldmdd) <- parse(text=yval)[[1]]
+     yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdd)))
+     yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+     body(fam$d2ldmdd) <- parse(text=yval)[[1]]
+     body(fam1)[[nopar+2]][[2]]$d2ldmdd  <- fam$d2ldmdd
   #residuals
-  sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
-  sres <- gsub("expression", "",  sres)
-  fam$rqres <- parse(text=sres)
+     sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
+     sres <- gsub("expression", "",  sres)
+     fam$rqres <- parse(text=sres)
+     body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres  
   # initial mu fam$mu.initial
-  inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-  inimu <- gsub("expression", "",  inimu)
-  fam$mu.initial <- parse(text=inimu)
+    inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
+    inimu <- gsub("expression", "",  inimu)
+    fam$mu.initial <- parse(text=inimu)
+    body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial  
   # initial sigma fam$sigma.initial
-  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
-  inisigma <- gsub("expression", "",  inisigma)
+ inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
+ inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
+  body(fam1)[[nopar+2]][[2]]$sigma.initial <- fam$sigma.initial 
   #y.valid           
-  yval <- switch(type,"log"="all(y > 0)", "logit"="all(y > 0 & y < 1)")
-  body(fam$y.valid) <- parse(text=yval)[[1]]
-}, 
+     yval <- switch(type,"log"="all(y > 0)", "logit"="all(y > 0 & y < 1)")
+     body(fam$y.valid) <- parse(text=yval)[[1]]
+     body(fam1)[[nopar+2]][[2]]$y.valid <- fam$y.valid 
+ }, 
 {
   # 3 parameters   
   # fam$dldm
-  yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldm) <- parse(text=yval)[[1]]   
+   yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
+   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+   body(fam$dldm) <- parse(text=yval)[[1]]  
+   body(fam1)[[nopar+2]][[2]]$dldm  <- fam$dldm
   # fam$d2ldm2
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldm2) <- parse(text=yval)[[1]]
+   yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
+   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+   yval <-  gsub('anlog(y)', 'any', yval, fixed=T)
+   body(fam$d2ldm2) <- parse(text=yval)[[1]]
+   body(fam1)[[nopar+2]][[2]]$d2ldm2  <- fam$d2ldm2
   # fam$dldd
-  yval <- gsub("y", yvar,  deparse(body(fam$dldd)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldd) <- parse(text=yval)[[1]]
+   yval <- gsub("y", yvar,  deparse(body(fam$dldd)))
+   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+   body(fam$dldd) <- parse(text=yval)[[1]]
+   body(fam1)[[nopar+2]][[2]]$dldd  <- fam$dldd
   # fam$d2ldd2
-  yval <- gsub("y", yvar,  deparse(body(fam$d2ldd2)))
-  yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$d2ldd2) <- parse(text=yval)[[1]]
+   yval <- gsub("y", yvar,  deparse(body(fam$d2ldd2)))
+   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
+   body(fam$d2ldd2) <- parse(text=yval)[[1]]
+   body(fam1)[[nopar+2]][[2]]$d2ldd2  <- fam$d2ldd2
   # fam$d2ldmdd
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdd)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldmdd) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldmdd  <- fam$d2ldmdd
   # fam$dldv
   yval <- gsub("y", yvar,  deparse(body(fam$dldv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$dldv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$dldv  <- fam$dldv
   # fam$d2ldv2
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldv2)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldv2) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldv2  <- fam$d2ldv2
   # fam$d2ldmdv
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldmdv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldmdv  <- fam$d2ldmdv
   # fam$d2ldddv
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldddv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldddv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldddv  <- fam$d2ldddv
   #residuals
   sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
   sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
+  body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres 
   # initial mu fam$mu.initial
   inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
   inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
+  body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial 
   # initial sigma fam$sigma.initial
   inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
   inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
+  body(fam1)[[nopar+2]][[2]]$sigma.initial <- fam$sigma.initial
   # initial nu fam$sigma.initial
   ininu <- gsub("y", yvar,  deparse(fam$nu.initial))
   ininu <- gsub("expression", "",  ininu)
   fam$nu.initial <- parse(text=ininu)
+  body(fam1)[[nopar+2]][[2]]$nu.initial <- fam$nu.initial 
   #y.valid           
   yval <- switch(type,"log"="all(y > 0)", "logit"="all(y > 0 & y < 1)")
   body(fam$y.valid) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$y.valid <- fam$y.valid 
 },
 {
   # 4 parameters
   # fam$dldm
   yval <- gsub("y", yvar,  deparse(body(fam$dldm)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
-  body(fam$dldm) <- parse(text=yval)[[1]]   
+  body(fam$dldm) <- parse(text=yval)[[1]] 
+  body(fam1)[[nopar+2]][[2]]$dldm  <- fam$dldm
   # fam$d2ldm2
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldm2)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldm2) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldm2  <- fam$d2ldm2
   # fam$dldd
   yval <- gsub("y", yvar,  deparse(body(fam$dldd)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$dldd) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$dldd  <- fam$dldd
   # fam$d2ldd2
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldd2)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldd2) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldd2  <- fam$d2ldd2
   # fam$d2ldmdd
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdd)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldmdd) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldmdd  <- fam$d2ldmdd
   # fam$dldv
   yval <- gsub("y", yvar,  deparse(body(fam$dldv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$dldv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$dldv  <- fam$dldv
   # fam$d2ldv2
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldv2)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldv2) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldv2  <- fam$d2ldv2
   # fam$d2ldmdv
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldmdv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldmdv  <- fam$d2ldmdv
   # fam$d2ldddv
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldddv)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldddv) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldddv  <- fam$d2ldddv
   # fam$dldt
   yval <- gsub("y", yvar,  deparse(body(fam$dldt)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$dldt) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$dldt  <- fam$dldt
   # fam$d2ldt2
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldt2)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldt2) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldt2 <- fam$d2ldt2
   # fam$d2ldmdt
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldmdt)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldmdt) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldmdt  <- fam$d2ldmdt
   # fam$d2ldddt
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldddt)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldddt) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldddt  <- fam$d2ldddt
   # fam$d2ldvdt
   yval <- gsub("y", yvar,  deparse(body(fam$d2ldvdt)))
   yval <-  gsub('any[,1]', 'any', yval, fixed=T)
   body(fam$d2ldvdt) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$d2ldvdt  <- fam$d2ldvdt
   #residuals
   sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
   sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
+  body(fam1)[[nopar+2]][[2]]$rqres   <- fam$rqres 
   # initial mu fam$mu.initial
   inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
   inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
+  body(fam1)[[nopar+2]][[2]]$mu.initial  <- fam$mu.initial
   # initial sigma fam$sigma.initial
   inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
   inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
+  body(fam1)[[nopar+2]][[2]]$sigma.initial  <- fam$sigma.initial
   # initial nu fam$nu.initial
   ininu <- gsub("y", yvar,  deparse(fam$nu.initial))
   ininu <- gsub("expression", "",  ininu)
   fam$nu.initial <- parse(text=ininu)
+  body(fam1)[[nopar+2]][[2]]$nu.initial <- fam$nu.initial
   # initial tau fam$tau.initial
   initau <- gsub("y", yvar,  deparse(fam$tau.initial))
   initau <- gsub("expression", "",  initau)
   fam$tau.initial <- parse(text=initau)
+  body(fam1)[[nopar+2]][[2]]$tau.initial  <- fam$tau.initial
   #y.valid           
   yval <- switch(type,"log"="all(y > 0)", "logit"="all(y > 0 & y < 1)")
   body(fam$y.valid) <- parse(text=yval)[[1]]
+  body(fam1)[[nopar+2]][[2]]$y.valid  <- fam$y.valid
 })
-  fam 
+#            fun <- function() {}
+#   formals(fun) <- Argum
+#      body(fun) <- fam
+fam1
 }

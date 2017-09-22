@@ -91,20 +91,20 @@ dNET <- function(x, mu=0, sigma=1, nu=1.5, tau=2, log=FALSE)
        tc  <- (x-mu)/sigma
         d1 <- (abs(tc) <= k1)*(-(tc^2)/2)
         d2 <- ((abs(tc) > k1) & (abs(tc) <= k2))*(-k1*abs(tc)+((k1^2)/2))
-        d3 <- (abs(tc) > k2)*(-k1*k2*log(abs(tc)/k2)-k1*k2+((k1^2)/2))
+        d3 <- ifelse(x==0, 0, (abs(tc) > k2)*(-k1*k2*log(abs(tc)/k2)-k1*k2+((k1^2)/2)))
     loglik <- log(ct)-log(sigma)+d1+d2+d3 
       if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
        ft
   }      
 #----------------------------------------------------------------------------------------
-pNET <- function(q, mu=5, sigma=0.1, nu=1, tau=2)
+pNET <- function(q,  mu=0, sigma=1, nu=1.5, tau=2)
  {  
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(nu <= 0))  stop(paste("nu must be positive", "\n", ""))  
           if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
           if (any(tau < nu))  stop(paste(" tau must greater or equal than  nu", "\n", ""))  
-        k1 <- nu[1]
-        k2 <- tau[1]
+        k1 <- nu
+        k2 <- tau
         c1 <- (1-2*pnorm(-k1))*sqrt(2*pi)
         c2 <- (2/k1)*exp(-((k1^2)/2))
         c3 <- 2*exp(-k1*k2+((k1^2)/2))/((k1*k2-1)*k1)
@@ -112,7 +112,7 @@ pNET <- function(q, mu=5, sigma=0.1, nu=1, tau=2)
         tc <- (q-mu)/sigma
                                     #Fk2 is cdf up to the point -k2
        Fk2 <- (ct*k2^(k1*k2)/(k1*k2-1)) * exp(-k1*k2+(k1^2/2))* 
-               abs(tc)^(-k1*k2+1) 
+               ifelse(tc==0,1, abs(tc)^(-k1*k2+1)) 
                                     #cf1 is cdf value up to the point -k2
       cdf1 <- (ct*k2/(k1*k2-1)) * exp(-k1*k2+(k1^2/2)) 
                                     #Fk1 is cdf up to the point -k1
@@ -132,3 +132,58 @@ pNET <- function(q, mu=5, sigma=0.1, nu=1, tau=2)
        cdf                                       
  }
 #----------------------------------------------------------------------------------------
+qNET <- function(p,  mu=0, sigma=1, nu=1.5, tau=2,  lower.tail = TRUE, log.p = FALSE )
+{
+  #---functions--------------------------------------------   
+  h1 <- function(q)
+  { 
+    pNET(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) - p[i] 
+  }
+  h <- function(q)
+  { 
+    pNET(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) 
+  }  
+  if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+  if (any(nu <= 0))  stop(paste("nu must be positive", "\n", ""))  
+  if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
+  if (any(tau < nu))  stop(paste(" tau must greater or equal than  nu", "\n", ""))  
+  if (log.p==TRUE) p <- exp(p) else p <- p
+  if (lower.tail==TRUE) p <- p else p <- 1-p  
+       lp <-  max(length(p),length(mu),length(sigma),length(nu), length(tau))
+        p <- rep(p, length = lp)
+        p <- ifelse(p==0,0.0001,p)
+        p <- ifelse(p==1,0.999, p)
+    sigma <- rep(sigma, length = lp)
+       mu <- rep(mu, length = lp)
+       nu <- rep(nu, length = lp)
+      tau <- rep(tau, length = lp)
+        q <- rep(0,lp)  
+   #    L <- cbind(p=p, mu=mu, sigma=sigma, nu=nu, tau=tau)
+       for (i in  seq(along=p)) 
+       {
+         if (h(mu[i])<p[i]) 
+         { 
+           interval <- c(mu[i], mu[i]+sigma[i])
+           j <-2
+           while (h(interval[2]) < p[i]) 
+           {interval[2]<- mu[i]+j*sigma[i]
+           j<-j+1 
+           }
+         } 
+         else  
+         {
+           interval <-  c(mu[i]-sigma[i], mu[i])
+           j <-2
+           while (h(interval[1]) > p[i]) 
+           {interval[1]<- mu[i]-j*sigma[i]
+           j<-j+1 
+           }
+         }
+         q[i] <- uniroot(h1, interval)$root
+       }
+       q
+}
+
+
+
+

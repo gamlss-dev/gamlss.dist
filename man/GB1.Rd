@@ -76,8 +76,12 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
  }
-\author{Bob Rigby \email{r.rigby@londonmet.ac.uk} and Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk} }
+\author{Bob Rigby and Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} }
 
 \section{Warning}{The qSHASH and rSHASH are slow since they are relying on golden section for finding the quantiles} 
 
@@ -88,7 +92,8 @@ y<- rGB1(200, mu=.1, sigma=.6, nu=1, tau=4)
 hist(y)
 # library(gamlss)
 # histDist(y, family=GB1, n.cyc=60)
-curve(dGB1(x, mu=.1 ,sigma=.6, nu=1, tau=4), 0.01, 0.99, main = "The GB1  density mu=0.1, sigma=.6, nu=1, tau=4")
+curve(dGB1(x, mu=.1 ,sigma=.6, nu=1, tau=4), 0.01, 0.99, main = "The GB1  
+           density mu=0.1, sigma=.6, nu=1, tau=4")
 
 }
 \keyword{distribution}

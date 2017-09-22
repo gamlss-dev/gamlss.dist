@@ -293,7 +293,7 @@ BCTo <- function (mu.link="log", sigma.link="log", nu.link ="identity", tau.link
     tstats <- checklink("tau.link", "Box Cox t ",substitute(tau.link), 
                          c("inverse", "log", "identity", "own")) 
     structure(
-          list(family = c("BCTo",  "Box-Cox-o t"),
+          list(family = c("BCTo",  "Box-Cox-t-orig."),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
                  type = "Continuous",
@@ -362,8 +362,8 @@ BCTo <- function (mu.link="log", sigma.link="log", nu.link ="identity", tau.link
               d2ldddt = function(sigma,tau) 2/(sigma*(tau+1)*(tau+3)),
               d2ldvdt = function(sigma,nu,tau) (2*sigma^2*nu)/(tau^2), 
           G.dev.incr  = function(y,mu,sigma,nu,tau,...) 
-                                  -2*dBCT(y,mu,sigma,nu,tau,log=TRUE), 
-                 rqres = expression(rqres(pfun="pBCT", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)) ,
+                                  -2*dBCTo(y,mu,sigma,nu,tau,log=TRUE), 
+                 rqres = expression(rqres(pfun="pBCTo", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)) ,
             mu.initial = expression(mu <- (y+mean(y))/2), 
          sigma.initial = expression(sigma<- rep(0.1, length(y))),
             nu.initial = expression(nu <- rep(0.5, length(y))), 

@@ -20,6 +20,7 @@
 # "1/mu^2, 
 # logshiftto1,
 # logshiftto2
+# logshiftto2 - Slog
 # own
 # inverse
 
@@ -131,6 +132,13 @@ if (is.character(link) && length(grep("^power", link) > 0))
         mu.eta <- function(eta) pmax(.Machine$double.eps, exp(eta))
       valideta <- function(eta) TRUE
      }, 
+    Slog  = # identical to logshiftto0 
+     {
+       linkfun <- function(mu) { log(mu - 1e-05)}
+       linkinv <- function(eta){ 1e-05 + pmax(.Machine$double.eps, exp(eta))}
+        mu.eta <- function(eta) pmax(.Machine$double.eps, exp(eta))
+      valideta <- function(eta) TRUE
+}, 
        #logitshift.5 = { # MS Saturday, February 19, 2005 depreciated 
        #linkfun <- function(mu, shift = par )           
        #                  log((mu-shift[1])/(shift[2]-mu))
@@ -190,7 +198,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
 #own.linkinv <- get("own.linkinv", envir=globalenv()) 
 #own.mu.eta <- get("own.mu.eta", envir=globalenv()) 
 #own.valideta <- get("own.valideta", envir=globalenv()) 
-#----------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------
 show.link <- function(family = "NO")
  {
      what <-  c("mu", "sigma", "nu", "tau")

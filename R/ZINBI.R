@@ -1,4 +1,5 @@
-# 30/4/10  corrected
+# 30/4/10corrected
+# 28/2/17 the q function is corrected thanks to Prof. Cajo J.F. ter Braak 
 # ---------------------------------------------------------------------------------------
 # zero inflated negative binomial type I (with probability y=0 is nu) 01/03/10
 # ---------------------------------------------------------------------------------------
@@ -97,6 +98,11 @@ dZINBI<-function(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
         if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
         if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+          ly <- max(length(x),length(mu),length(sigma),length(nu)) 
+           x <- rep(x, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
           fy <- dNBI(x, mu = mu, sigma=sigma, log = T)
           logfy <- rep(0, length(x))
           logfy <- ifelse((x==0), log(nu+(1-nu)*exp(fy)), (log(1-nu) + fy ))          
@@ -111,6 +117,11 @@ pZINBI <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
         if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
                     stop(paste("nu must be between 0 and 1 ", "\n", ""))
         if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+          ly <- max(length(q),length(mu),length(sigma),length(nu)) 
+           q <- rep(q, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
          cdf <- pNBI(q, mu = mu, sigma=sigma)
          cdf <- nu + (1-nu)*cdf
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
@@ -127,7 +138,12 @@ qZINBI <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
           if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
           if (log.p == TRUE) p <- exp(p)   else p <- p
           if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-          pnew <- (p-nu)/(1-nu)
+            ly <- max(length(p),length(mu),length(sigma),length(nu)) 
+             p <- rep(p, length = ly)      
+         sigma <- rep(sigma, length = ly)
+            mu <- rep(mu, length = ly)   
+            nu <- rep(nu, length = ly) 
+          pnew <- (p-nu)/(1-nu)-(1e-7)# added 28-2-17
           pnew <- ifelse((pnew > 0 ),pnew, 0)
           q <- qNBI(pnew, mu = mu, sigma=sigma)           
           q

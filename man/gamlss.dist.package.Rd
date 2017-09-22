@@ -22,10 +22,10 @@ This package is design to be used with the package \pkg{gamlss} but the \code{d}
 can be used separately.  
 }
 \author{
-Mikis Stasinopoulos <d.stasinopoulos@londonmet.ac.uk>, Bob Rigby <r.rigby@londonmet.ac.uk> with
+Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>, Bob Rigby <r.rigby@londonmet.ac.uk> with
         contributions from Calliope Akantziliotou  and Raydonal Ospina <rospina@ime.usp.br>.
 
-Maintainer: Mikis Stasinopoulos <d.stasinopoulos@londonmet.ac.uk>
+Maintainer: Mikis Stasinopoulos <mikis.stasinopoulos@gamlss.org>
 }
 \references{
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
@@ -36,6 +36,10 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
 \seealso{ \code{\link{gamlss.family}} } 
 

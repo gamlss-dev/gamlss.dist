@@ -36,7 +36,13 @@ rNBI(n, mu = 1, sigma = 1)
 }
 \details{
   Definition file for Negative Binomial type I distribution. 
- \deqn{f(y|\mu,\sigma)=\frac{\Gamma(y+1/\sigma)}{\Gamma(y+1)\Gamma(1/\sigma)} \left[\frac{(\mu \sigma)^y}{(\mu \sigma +1)}\right]^{y+(1/\sigma)}}{f(y|mu,sigma)=Gamma(y+1/sigma)/(Gamma(y+1)*Gamma(1/sigma))*(mu*sigma)^y/(mu*sigma+1)^(y+(1/sigma))} 
+ \deqn{P(Y=y|\mu, \sigma)=
+\frac{\Gamma(y+\frac{1}{\sigma})}{\Gamma(\frac{1}{\sigma})
+\Gamma(y+1)}\hspace{1mm}\left( \frac{\sigma \mu}{1+\sigma
+\mu}\right)^y \hspace{1mm}\left( \frac{1}{1+\sigma \mu}
+\right)^{1/\sigma}}{P(Y=y|\mu, \sigma)=
+\Gamma(y+1/\sigma)/\Gamma(1/\sigma) \Gamma(y+1) ((\sigma \mu)/ (1+\sigma
+\mu))^y(1/(1+\sigma \mu))^{1/\sigma}} 
  for \eqn{y=0,1,2,\ldots,\infty}{y=0,1,2, ...,Inf}, \eqn{\mu>0} and \eqn{\sigma>0}. This
 parameterization is equivalent to that used by Anscombe (1950) except he used \eqn{\alpha=1/\sigma}{alpha=1/sigma} instead of \eqn{\sigma}{sigma}.
 }
@@ -55,8 +61,12 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
  }
-\author{Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk} and Calliope Akantziliotou}
+\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby  and Calliope Akantziliotou}
 \note{\eqn{\mu}{mu} is the mean and \eqn{(\mu+\sigma \mu^2)^{0.5}}{(mu+sigma*mu^2)^0.5} is the standard deviation of the Negative Binomial 
 type I distribution (so \eqn{\sigma}{sigma} is the dispersion parameter in the usual GLM for the negative binomial type I distribution)}
 

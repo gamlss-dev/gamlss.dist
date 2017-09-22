@@ -8,16 +8,11 @@ dGEOM<-function (x, mu = 2, log = FALSE)
         stop(paste("mu must be > 0)", "\n", ""))
     if (any(x < 0))
         stop(paste("x must be >=0", "\n", ""))
-   # lx <- max(length(x), length(mu))
-   # mu<- rep(mu, length = lx)
-    #prob <- 
-    #if (length(x)<100) browser()
-    #logfx <- x*log(1-(1/(mu+1))) + log(1/(mu+1))
-    logfx <- x*log(mu/(mu+1)) + log(1/(mu+1))
-   #  cat("x", x, "\n")
-   #  browser()
-    if (log==FALSE) logfx <- exp(logfx)
-    logfx
+    lx <- max(length(x), length(mu))
+    mu <- rep(mu, length = lx) 
+   prob <- 1/(mu+1)
+    fy <- dgeom(x = x, prob = prob, log = log)
+    fy #logfx  
 }
 
 #Cumulative density function
@@ -27,47 +22,27 @@ pGEOM<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
         stop(paste("mu must be > 0", "\n", ""))
     if (any(q < 0))
         stop(paste("q must be >=0", "\n", ""))
-   # ly <- max(length(q), length(mu))
-  #  q <- rep(q, length = ly)
-  #  mu<- rep(mu, length = ly)
-  #  s1<- seq(0, max(q))
-  #  cdf<- cumsum(dGEOM(s1, mu=mu))
-  #  s2<-match(q,s1, nomatch=0)
-   # cdf<- cdf[s2]
-     cdf <- 1-(mu/(mu+1))^(q+1)  
-     cdf <- if (log.p==FALSE) cdf else log(cdf)
-     cdf <- if (lower.tail == TRUE) cdf   else  1 - cdf
-    if (log.p == TRUE) cdf<-log(cdf)
-    cdf
+     ly <- max(length(q), length(mu))
+      q <- rep(q, length = ly)
+     mu <- rep(mu, length = ly)
+   prob <- 1/(mu+1)
+    cdf <-  pgeom(q, prob=prob, lower.tail = lower.tail, log.p =log.p)
+    cdf    
+    
 }
 
 #Quantile function
-qGEOM<-function (p, mu = 2, lower.tail = TRUE, log.p = FALSE, max.value = 10000)
+qGEOM<-function (p, mu = 2, lower.tail = TRUE, log.p = FALSE)
 {
-    if (any(p < 0) | any(p > 1.0001))
-        stop(paste("p must be in [0,1]", "\n", ""))
     if (any(mu < 0))
         stop(paste("mu must be > 0)", "\n", ""))     
-if (lower.tail) p <- p
-else p <- 1 - p
-    ly <- max(length(p), length(mu))
-    p <- rep(p, length = ly)
-    QQQ <- rep(0, length = ly)
-    mu <- rep(mu, length = ly)
-    for (i in seq(along = p)) {
-        cumpro <- 0
-        if (p[i] + 1e-09 >= 1)
-            QQQ[i] <- Inf
-        else {
-            for (j in seq(from = 0, to = max.value)) {
-                cumpro <- pGEOM(j, mu= mu[i])
-                QQQ[i] <- j
-                if (p[i] <= cumpro)
-                  break
-            }
-        }
-    }
-QQQ
+  if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
+     ly <- max(length(p), length(mu))
+      p <- rep(p, length = ly)
+     mu <- rep(mu, length = ly)
+   prob <- 1/(mu+1)
+    QQQ <- qgeom(p, prob=prob, lower.tail = TRUE, log.p = FALSE)
+  QQQ
 }
 
 #Random Generating Function

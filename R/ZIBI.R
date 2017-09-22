@@ -56,7 +56,12 @@ dZIBI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
  { 
           if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))           
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
+          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
+             ly <- max(length(x),length(mu),length(sigma),length(bd)) 
+              x <- rep(x, length = ly)      
+          sigma <- rep(sigma, length = ly)
+             mu <- rep(mu, length = ly)   
+             bd <- rep(bd, length = ly) 
           logfy <- rep(0, length(x))
           logfy <- ifelse((x==0), log(sigma+(1-sigma)*dBI(0,bd,mu)), (log(1-sigma) + dBI(x,bd,mu,log=T) ))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
@@ -67,7 +72,12 @@ pZIBI <- function(q, bd = 1, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = F
   {     
          if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))          
          if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", ""))  
+         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
+          ly <- max(length(q),length(mu),length(sigma)) 
+           q <- rep(q, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          bd <- rep(bd, length = ly) 
          cdf <- rep(0,length(q))
          cdf <- pbinom(q, size = bd, prob = mu, lower.tail = TRUE, log.p = FALSE)
          cdf <- sigma + (1-sigma)*cdf
@@ -83,6 +93,11 @@ qZIBI <- function(p, bd = 1, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = F
          if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
          if (log.p == TRUE) p <- exp(p)   else p <- p
          if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+         ly <- max(length(p),length(mu),length(sigma)) 
+             p <- rep(p, length = ly)      
+         sigma <- rep(sigma, length = ly)
+            mu <- rep(mu, length = ly)   
+            bd <- rep(bd, length = ly)  
           pnew <- (p-sigma)/(1-sigma)-1e-10
           suppressWarnings(q <- ifelse((pnew > 0 ), qbinom(pnew, size = bd, prob = mu, ), 0))
           q

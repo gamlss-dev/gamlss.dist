@@ -53,9 +53,14 @@ rZALG(n, mu = 0.5, sigma = 0.1)
   \item{max.value}{valued needed for the numerical calculation of the q-function}
 }
 \details{
-For the definition of the distributions see   Rigby and Stasinopoulos (2010) below.
-}
+For the definition of the distributions see  Rigby and Stasinopoulos (2010) below.
 
+The parameterization of the logarithmic distribution in the function \code{LM} is
+\deqn{f(y|\mu) = \alpha \mu^y / y}{f(y|mu) = \alpha \mu^y / y }
+where
+for \eqn{y>=1} and \eqn{\mu>0} and \deqn{\alpha = - [\log(1-\mu)]^{-1}
+}{\alpha= [log(1-\mu)]^{-1}}
+}
 \value{
 The function \code{LG} and \code{ZALG} return a \code{gamlss.family} object which can be used to fit a 
 logarithmic and a zero inflated logarithmic  distributions respectively  in the \code{gamlss()} function.  
@@ -75,9 +80,13 @@ Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location s
 
 Rigby, R. A.  and Stasinopoulos D. M. (2010) The gamlss.family distributions, (distributed with this package or see 
 \url{http://www.gamlss.org/}) 
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
 \author{
-Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk}
+Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby
 }
 
 

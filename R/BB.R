@@ -58,10 +58,15 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
     if (any(mu < 0) | any(mu > 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
     if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
-    sigma <- ifelse((sigma < 1e-10),1e-10,sigma)
+        sigma <- ifelse((sigma < 1e-10),1e-10,sigma)
     if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
     if (any(bd < x))  stop(paste("x  must be <=  than the binomial denominator", bd, "\n"))
-      logfy <-   (lgamma(bd+1)-lgamma(x+1)-lgamma(bd-x+1)
+          ly <- max(length(x),length(mu),length(sigma),length(bd)) 
+           x <- rep(x, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          bd <- rep(bd, length = ly) 
+       logfy <-  (lgamma(bd+1)-lgamma(x+1)-lgamma(bd-x+1)
                   +lgamma((1/sigma))+lgamma(x+mu*(1/sigma))
                   +lgamma(bd+((1-mu)/sigma)-x)-lgamma(mu*(1/sigma))
                   -lgamma((1-mu)/sigma)-lgamma(bd+(1/sigma)))
@@ -69,8 +74,8 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
                                           dBI(x, mu = mu, bd=bd, log = TRUE) )
         else logfy2 <- if (sigma<0.0001)  dBI(x, mu = mu, bd=bd, log = TRUE) 
                    else logfy
-        fy <- if(log == FALSE) exp(logfy2) else logfy2
-        fy
+          fy <- if(log == FALSE) exp(logfy2) else logfy2
+          fy
   }
 #------------------------------------------------------------------------------------------
 pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALSE)
@@ -79,7 +84,12 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
     if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
     if (any(bd < q))  stop(paste("y  must be <=  than the binomial denominator", bd, "\n"))    
-        ly <- length(q)                                                       
+        ly <- max(length(q),length(mu),length(sigma),length(bd)) 
+         q <- rep(q, length = ly)      
+     sigma <- rep(sigma, length = ly)
+        mu <- rep(mu, length = ly)   
+        bd <- rep(bd, length = ly)       
+      # ly <- length(q)                                                       
        FFF <- rep(0,ly)                         
     nsigma <- rep(sigma, length = ly)
        nmu <- rep(mu, length = ly) 
@@ -100,7 +110,7 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
       cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
       if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf, 
                                           pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p) )
-      else cdf2 <- if (sigma<0.0001) qBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
+      else cdf2 <- if (sigma<0.0001) pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
                    else cdf
       cdf2
   }
@@ -111,8 +121,12 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
           if (log.p==TRUE) p <- exp(p) else p <- p
-          if (lower.tail==TRUE) p <- p else p <- 1-p  
-        ly <- length(p)                                                       
+          if (lower.tail==TRUE) p <- p else p <- 1-p
+        ly <- max(length(p),length(mu),length(sigma)) 
+         p <- rep(p, length = ly)      
+     sigma <- rep(sigma, length = ly)
+        mu <- rep(mu, length = ly)   
+        bd <- rep(bd, length = ly)   
        QQQ <- rep(0,ly)                         
     nsigma <- rep(sigma, length = ly)
        nmu <- rep(mu, length = ly) 

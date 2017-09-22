@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------------------
 # The zero inflated beta distribution (BEZI)
 # created by Raydonal Ospina 01 June of 2006
-# IME-USP. University of São Paulo,
-# Department of Statistics. São Paulo-Brazil
+# IME-USP. University of San Paulo,
+# Department of Statistics. San Paulo-Brazil
 # rospina@ime.usp.br
 # ---------------------------------------------------------------------------------------
 BEZI = function (mu.link = "logit", sigma.link = "log", nu.link = "logit") 

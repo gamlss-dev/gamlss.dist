@@ -82,9 +82,13 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
  
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
  
 }
-\author{Bob Rigby \email{r.rigby@londonmet.ac.uk}, Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk} and Kalliope Akantziliotou }
+\author{Bob Rigby, Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} and Kalliope Akantziliotou }
 
 
 \note{This distribution is very difficult to fit because the y values depends
@@ -94,7 +98,7 @@ on the parameter  values. The \code{RS()} and \code{CG()} algorithms are not app
 \seealso{  \code{\link{gamlss.family}}}
 
 \examples{
-RGE()# gives information about the default links for the reverse generalized extreme family distribution 
+RGE()# default links for the reverse generalized extreme family distribution 
 newdata<-rRGE(100,mu=0,sigma=1,nu=5) # generates 100 random observations
 # library(gamlss)
 # gamlss(newdata~1, family=RGE, method=mixed(5,50)) # difficult to converse 

@@ -427,7 +427,7 @@ BCPEo <- function (mu.link="log", sigma.link="log", nu.link ="identity", tau.lin
     tstats <- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
                            c("logshiftto1", "log", "identity", "own")) 
     structure(
-          list(family = c("BCPE", "Box-Cox Power Exponential"),
+          list(family = c("BCPEo", "Box-Cox Power Exponential-orig."),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
                  type = "Continuous",
@@ -564,8 +564,8 @@ BCPEo <- function (mu.link="log", sigma.link="log", nu.link ="identity", tau.lin
     d2ldvdt
                         },
  G.dev.incr  = function(y,mu,sigma,nu,tau,...) 
-                       -2*dBCPE(y,mu,sigma,nu,tau,log=TRUE),                     
-         rqres = expression(rqres(pfun="pBCPE", type="Continuous", y=y, mu=mu, 
+                       -2*dBCPEo(y,mu,sigma,nu,tau,log=TRUE),                     
+         rqres = expression(rqres(pfun="pBCPEo", type="Continuous", y=y, mu=mu, 
                                               sigma=sigma, nu=nu, tau=tau) ),
     mu.initial = expression(mu <- (y+mean(y))/2), #
  sigma.initial = expression(sigma<- rep(0.1, length(y))),

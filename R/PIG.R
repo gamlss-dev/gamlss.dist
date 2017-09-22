@@ -22,48 +22,50 @@ PIG <- function (mu.link = "log", sigma.link = "log")
                 mu.dr = mstats$mu.eta, 
              sigma.dr = dstats$mu.eta, 
                  dldm = function(y,mu,sigma) {
-               ty <- as.double(.C("tofy_", as.double(y), as.double(mu), as.double(sigma),
-                                  as.integer(length(y)),as.integer(max(y)+1),  
-                                  PACKAGE="gamlss.dist")[[1]])
+                   ty <- as.double(.C("tofyPIG1", as.double(y), as.double(mu), as.double(sigma),
+                            ans=double(length(y)), as.integer(length(y)), as.integer(max(y)+1),
+                            PACKAGE="gamlss.dist")$ans)
               dldm <- (y-ty)/mu
               dldm
                                     }, 
                d2ldm2 = function(y,mu,sigma) { 
                                     #d2ldm2 <- eval.parent(quote(-dldp*dldp))
-                         ty <- as.double(.C("tofy_", as.double(y), as.double(mu), as.double(sigma),
-                                   as.integer(length(y)),as.integer(max(y)+1), PACKAGE="gamlss.dist")[[1]])
+                 ty <- as.double(.C("tofyPIG1", as.double(y), as.double(mu), as.double(sigma),
+                            ans=double(length(y)), as.integer(length(y)), as.integer(max(y)+1),
+                            PACKAGE="gamlss.dist")$ans)
                        dldm <- (y-ty)/mu
                      d2ldm2 <- -dldm*dldm
                      d2ldm2 <- ifelse(d2ldm2 < -1e-15, d2ldm2,-1e-15) 
                      d2ldm2
                                     },
                  dldd = function(y,mu,sigma) {
-              ty <- as.double(.C("tofy_", as.double(y), as.double(mu), as.double(sigma),
-                              as.integer(length(y)),as.integer(max(y)+1),
-                              PACKAGE="gamlss.dist")[[1]])
+                   ty <- as.double(.C("tofyPIG1", as.double(y), as.double(mu), as.double(sigma),
+                            ans=double(length(y)), as.integer(length(y)), as.integer(max(y)+1),
+                            PACKAGE="gamlss.dist")$ans)
              dldd <- ((ty*(1+sigma*mu)/mu)-(1+sigma*y))/(sigma^2)
               dldd
                                     },
                d2ldd2 = function(y,mu,sigma){
                                     #d2ldd2 <- eval.parent(quote(-dldp*dldp))
-                       ty <- as.double(.C("tofy_", as.double(y), as.double(mu), as.double(sigma),
-                              as.integer(length(y)),as.integer(max(y)+1),PACKAGE="gamlss.dist")[[1]])
+                 ty <- as.double(.C("tofyPIG1", as.double(y), as.double(mu), as.double(sigma),
+                              ans=double(length(y)), as.integer(length(y)), as.integer(max(y)+1),
+                              PACKAGE="gamlss.dist")$ans)
                      dldd <- ((ty*(1+sigma*mu)/mu)-(1+sigma*y))/(sigma^2)
                    d2ldd2 <- -dldd*dldd
                    d2ldd2 <- ifelse(d2ldd2 < -1e-15, d2ldd2,-1e-15)  
                    d2ldd2
                                    },
               d2ldmdd = function(y,mu,sigma) {
-             ty <- as.double(.C("tofy_", as.double(y), as.double(mu), as.double(sigma),
-                                  as.integer(length(y)),as.integer(max(y)+1),  
-                                  PACKAGE="gamlss.dist")[[1]])
+                ty <- as.double(.C("tofyPIG1", as.double(y), as.double(mu), as.double(sigma),
+                                ans=double(length(y)), as.integer(length(y)), as.integer(max(y)+1),
+                                PACKAGE="gamlss.dist")$ans)
                       dldm <- (y-ty)/mu
                       dldd <- ((ty*(1+sigma*mu)/mu)-(1+sigma*y))/(sigma^2)
                    d2ldmdd <- -dldm*dldd
                     d2ldmdd
                                     },
               
-           G.dev.incr  = function(y,mu,sigma,pw=1,..) -2*dPIG(y, mu, sigma, log=TRUE),
+           G.dev.incr  = function(y,mu,sigma,pw=1,...) -2*dPIG(y, mu, sigma, log=TRUE),
                 rqres = expression(
                   rqres(pfun="pPIG", type="Discrete", ymin=0, y=y, mu=mu, sigma=sigma)
                                    ), 
@@ -106,67 +108,41 @@ PIG <- function (mu.link = "log", sigma.link = "log")
 # result
 #}
 #-----------------------------------------------------------------------------------------
-dPIG<-function(x, mu = 0.5, sigma = 0.02 , log = FALSE)
+dPIG<-function(x, mu = 1, sigma = 1 , log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-          ly <- length(x)                                                                    
+          ly <- max(length(x),length(mu), length(sigma)) 
+           x <- rep(x, length = ly)      
       nsigma <- rep(sigma, length = ly)
          nmu <- rep(mu, length = ly)
-      sumlty <- as.double(.C("tofy_", as.double(x), as.double(nmu),as.double(nsigma),as.integer(ly),
-                          as.integer(max(x)+1),PACKAGE="gamlss.dist")[[2]])
+      sumlty <- as.double(.C("tofyPIG2", as.double(x), as.double(nmu), as.double(nsigma),
+                             ans=double(ly), as.integer(length(x)), 
+                             as.integer(max(x)+1), PACKAGE="gamlss.dist")$ans)
        logfy <- -lgamma(x+1)+(1-sqrt(1+2*sigma*mu))/sigma +sumlty
           if(log==FALSE) fy <- exp(logfy) else fy <- logfy
           fy
   }
 ##-----------------------------------------------------------------------------------------  
-pPIG <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
+pPIG <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
   ## function to calculate the cdf
-  ## we should write this function in FORTRAN
-        tocdf <- function (y, mu, sigma, bsum = TRUE, ...)
-        {
-         ty <- cdf <- rep(0,length(y))
-        for (z1 in length(y):1)
-          {
-        lyp1 <- dum1 <- dum2 <- 0
-        lyp1 <- y[z1]+1 
-        tynew <- rep(0,lyp1)
-        lpnew <- rep(0,lyp1)
-        tynew[1] <- dum1 <- mu[z1]*((1+2*sigma[z1]*mu[z1])^(-0.5)) 
-        lpnew[1] <- dum2 <- (1-((1+2*sigma[z1]*mu[z1])^(0.5)))/sigma[z1]
-        dum <- ifelse(lyp1==1, 1,2)
-         j <- dum:lyp1 
-            for (i in j)
-            {
-            if (i !=1)
-            tynew[i] <- ((sigma[z1]*(2*(i-1)-1)/mu[z1])+(1/tynew[i-1]))*(tynew[1]*tynew[1])
-            if (i !=1)
-                lpnew[i] <- lpnew[i-1] + log(tynew[i-1]) - log(i-1)           
-            tynew[1] <- dum1 
-            lpnew[1] <- dum2
-            ty[z1] <- tynew[lyp1] 
-            }
-        if (bsum ) 
-            cdf[z1] <- sum(exp(lpnew))
-          }
-        cdf
-        }
-    ## function tocdf finish here    
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
-           lq <- length(q)                                                                    
-       nsigma <- rep(sigma, length = lq)
-          nmu <- rep(mu, length = lq)              
-          cdf <- tocdf(y = q, mu = nmu, sigma = nsigma, bsum = TRUE)
-          if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
-          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)                                                                    
-          cdf
+  ## function to calculate the cdf
+  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+  if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
+  lq <- length(q)                                                                    
+  nsigma <- rep(sigma, length = lq)
+  nmu <- rep(mu, length = lq)      
+  cdf <-as.double(.C("tocdf", as.double(q), as.double(nmu), as.double(nsigma),
+           ans=double(lq), as.integer(lq), PACKAGE="gamlss.dist")$ans)
+  if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
+  if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)                                                                    
+  cdf
    }
 ##-----------------------------------------------------------------------------------------
-qPIG <- function(p, mu = 0.5, sigma = 0.02,  lower.tail = TRUE, log.p = FALSE, 
+qPIG <- function(p, mu = 1, sigma = 1,  lower.tail = TRUE, log.p = FALSE, 
                  max.value = 10000)
   {      
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -195,14 +171,14 @@ qPIG <- function(p, mu = 0.5, sigma = 0.02,  lower.tail = TRUE, log.p = FALSE,
           QQQ   
    }
 ##-----------------------------------------------------------------------------------------
-rPIG <- function(n, mu = 0.5, sigma = 0.02)
+rPIG <- function(n, mu = 1, sigma = 1,  max.value = 10000)
   { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))  
           n <- ceiling(n)
           p <- runif(n)
-          r <- qPIG(p, mu=mu, sigma=sigma)
+          r <- qPIG(p, mu=mu, sigma=sigma,  max.value = max.value)
           r
   }
 ##-----------------------------------------------------------------------------------------

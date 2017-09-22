@@ -33,7 +33,7 @@ qZAGA(p, mu = 1, sigma = 1, nu = 0.1, lower.tail = TRUE,
        upper.limit = mu + 10 * sqrt(sigma^2 * mu^2))
 rZAGA(n, mu = 1, sigma = 1, nu = 0.1, ...)
 plotZAGA(mu = 5, sigma = 1, nu = 0.1, from = 0, to = 10, 
-          n = 101, ...)
+          n = 101,  main=NULL, ...)
 meanZAGA(obj)
 
 }
@@ -56,7 +56,8 @@ meanZAGA(obj)
           taken to be the number required}  
   \item{from}{where to start plotting the distribution from}
   \item{to}{up to  where to plot the distribution  }
-  \item{obj}{ a fitted \code{gamlss} object}              
+  \item{obj}{ a fitted \code{gamlss} object}   
+  \item{main}{for title in the plot}
   \item{\dots}{\code{\dots} can be used to pass the uppr.limit argument to \code{qIG}  }      
 }
 \details{
@@ -81,6 +82,10 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
 }
 \author{
 Bob Rigby and Mikis Stasinopoulos

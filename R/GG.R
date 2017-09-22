@@ -113,9 +113,9 @@ pGG <- function(q, mu=1, sigma=0.5, nu=1,  lower.tail = TRUE, log.p = FALSE)
           if (any(q < 0))  stop(paste("q must be positive", "\n", ""))  
             z <- (q/mu)^nu
          if(length(nu)>1)  cdf <- ifelse(abs(nu)>1e-06,
-                           pGA(z, mu=1, sigma=sigma*abs(nu), lower.tail = lower.tail, log.p = log.p),
+                           pGA(z, mu=1, sigma=sigma*abs(nu), lower.tail = (nu<0)-lower.tail, log.p = log.p), # MS  (nu<0)- is added 8-6-17
                            pNO(log(z), mu=log(mu), sigma=sigma))
-          else  if (abs(nu)>1e-06) cdf <- pGA(z, mu=1, sigma=sigma*abs(nu), lower.tail = lower.tail, log.p = log.p)
+          else  if (abs(nu)>1e-06) cdf <- pGA(z, mu=1, sigma=sigma*abs(nu), lower.tail =(nu<0)-lower.tail, log.p = log.p)# # MS  (nu<0)- is added
                  else cdf <- pNO(log(q), mu=log(mu), sigma=sigma)
        cdf
  }

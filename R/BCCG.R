@@ -227,7 +227,7 @@ BCCGo <- function (mu.link="log", sigma.link="log", nu.link ="identity")
     vstats <- checklink("nu.link", "BC Cole Green",substitute(nu.link), 
                          c("inverse", "log", "identity", "own"))  
     structure(
-          list(family = c("BCCG", "Box-Cox-Cole-Green"),
+          list(family = c("BCCGo", "Box-Cox-Cole-Green-orig."),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE), 
                 nopar = 3, 
                  type = "Continuous",
@@ -279,8 +279,8 @@ BCCGo <- function (mu.link="log", sigma.link="log", nu.link ="identity")
               d2ldmdv = function(mu) 1/(2*mu),
               d2ldddv = function(sigma,nu) -sigma*nu,
           G.dev.incr  = function(y,mu,sigma,nu,...) 
-                     -2*dBCCG(y,mu=mu,sigma=sigma,nu=nu,log=TRUE), 
-             rqres = expression(rqres(pfun="pBCCG", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu)),
+                     -2*dBCCGo(y,mu=mu,sigma=sigma,nu=nu,log=TRUE), 
+             rqres = expression(rqres(pfun="pBCCGo", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu)),
         mu.initial = expression( mu <- (y+mean(y))/2), 
      sigma.initial = expression( sigma <- rep(0.1,length(y))), 
         nu.initial = expression( nu <- rep(0.5, length(y))), 

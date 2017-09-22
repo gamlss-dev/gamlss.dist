@@ -54,7 +54,7 @@ BEo <- function (mu.link = "log", sigma.link = "log")
                 class = c("gamlss.family","family"))
 }
 #------------------------------------------------------------------------------------------
-dBEo<-function(x, mu = 0.5, sigma = 0.02, log = FALSE)
+dBEo<-function(x, mu = 0.5, sigma = 0.2, log = FALSE)
  { 
           if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
@@ -63,7 +63,7 @@ dBEo<-function(x, mu = 0.5, sigma = 0.02, log = FALSE)
           fy
   }
 #------------------------------------------------------------------------------------------
-pBEo <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
+pBEo <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
@@ -72,7 +72,7 @@ pBEo <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
           cdf
    }
 #------------------------------------------------------------------------------------------
-qBEo <- function(p, mu=0.5, sigma=0.02,  lower.tail = TRUE, log.p = FALSE)
+qBEo <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
   {      if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", ""))  
          if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
@@ -80,7 +80,7 @@ qBEo <- function(p, mu=0.5, sigma=0.02,  lower.tail = TRUE, log.p = FALSE)
           q
    }
 #------------------------------------------------------------------------------------------
-rBEo <- function(n, mu=0.5, sigma=0.02)
+rBEo <- function(n, mu=0.5, sigma=0.2)
   { if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
     if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))  

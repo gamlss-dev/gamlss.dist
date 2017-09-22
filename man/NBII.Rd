@@ -37,7 +37,9 @@ rNBII(n, mu = 1, sigma = 1)
 }
 \details{
   Definition file for Negative Binomial type II distribution. 
- \deqn{f(y|\mu,\sigma)=\frac{\Gamma(y+(\mu/\sigma)) \sigma^y }{\Gamma(\mu/\sigma)\Gamma(y+1) (1+\sigma)^{y+(\mu/\sigma)}}}{f(y|mu,sigma)=Gamma(y+(mu/sigma))*sigma^y/(Gamma(mu/sigma)*Gamma(y+1)*(1+sigma)^(y+(mu/sigma)))} 
+ \deqn{P(Y=y|\mu,\sigma)=
+\frac{\Gamma(y+\frac{\mu}{\sigma}) \sigma^y }{\Gamma(\frac{\mu}{\sigma})\Gamma(y+1) (1+\sigma)^{y+\mu/\sigma}}}{P(Y=y|\mu,\sigma)=
+\Gamma(y+\mu/\sigma) \sigma^y / \Gamma(\mu/\sigma)\Gamma(y+1) (1+\sigma)^{y+\mu/\sigma}} 
  for \eqn{y=0,1,2,...,\infty}{y=0,1,2, ...,Inf}, \eqn{\mu>0} and \eqn{\sigma>0}. 
  This parameterization was used by Evans (1953)  and also by Johnson \emph{et al.} (1993) p 200.
 }
@@ -60,8 +62,12 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
  }
-\author{Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk} and Calliope Akantziliotou}
+\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby and Calliope Akantziliotou}
 
 \note{\eqn{\mu}{mu} is the mean and \eqn{[(1+\sigma)\mu]^{0.5}}{((1+sigma)*mu)**0.5}  is the standard deviation of the Negative Binomial type II distribution, so 
 \eqn{\sigma}{sigma} is a dispersion parameter}

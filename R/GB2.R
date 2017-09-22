@@ -1,5 +1,5 @@
 # amended 1/12/2007
-GB2 <- function (mu.link="log", sigma.link="identity", nu.link ="log", tau.link="log")
+GB2 <- function (mu.link="log", sigma.link="log", nu.link ="log", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Generalized beta 2 (i.e. of the second kind)", substitute(mu.link), 
                            c("1/mu^2", "log", "identity"))

@@ -4,7 +4,16 @@
 \alias{pPIG}
 \alias{qPIG}
 \alias{rPIG}
-
+\alias{ZIPIG}
+\alias{dZIPIG}
+\alias{pZIPIG}
+\alias{qZIPIG}
+\alias{rZIPIG}
+\alias{ZAPIG}
+\alias{dZAPIG}
+\alias{pZAPIG}
+\alias{qZAPIG}
+\alias{rZAPIG}
 
 
 \title{The Poisson-inverse Gaussian distribution for fitting a GAMLSS model}
@@ -13,23 +22,46 @@ The \code{PIG()} function defines the Poisson-inverse Gaussian distribution, a t
 in GAMLSS fitting using the function \code{gamlss()}.    
 The functions \code{dPIG}, \code{pPIG}, \code{qPIG} and \code{rPIG} define the density, distribution function, quantile function and random
 generation for the Poisson-inverse Gaussian \code{PIG()}, distribution. 
+
+The functions \code{ZAPIG()} and \code{ZIPIG()} are the zero adjusted (hurdle) and zero inflated versions of the  Poisson-inverse Gaussian distribution, respectively. That is three  parameter distributions. 
+
+
+The functions \code{dZAPIG}, \code{dZIPIG}, \code{pZAPIG},\code{pZIPIG}, \code{qZAPIG} \code{qZIPIG}  \code{rZAPIG} and  \code{rZIPIG} define the probability,  cumulative, quantile  and random
+generation functions for the zero adjusted and zero inflated  beta negative binomial distributions, \code{ZAPIG()}, \code{ZIPIG()}, respectively.
+
 }
 \usage{
 PIG(mu.link = "log", sigma.link = "log")
-dPIG(x, mu = 0.5, sigma = 0.02, log = FALSE)
-pPIG(q, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE)
-qPIG(p, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE, 
+dPIG(x, mu = 1, sigma = 1, log = FALSE)
+pPIG(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
+qPIG(p, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE, 
      max.value = 10000)
-rPIG(n, mu = 0.5, sigma = 0.02)
+rPIG(n, mu = 1, sigma = 1, max.value = 10000)
+
+ZIPIG(mu.link = "log", sigma.link = "log", nu.link = "logit")
+dZIPIG(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
+pZIPIG(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE)
+qZIPIG(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE, 
+       max.value = 10000)
+rZIPIG(n, mu = 1, sigma = 1, nu = 0.3, max.value = 10000)
+
+ZAPIG(mu.link = "log", sigma.link = "log", nu.link = "logit")
+dZAPIG(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
+pZAPIG(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE)
+qZAPIG(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE, 
+      max.value = 10000)
+rZAPIG(n, mu = 1, sigma = 1, nu = 0.3, max.value = 10000)
 }
 
 
 \arguments{
   \item{mu.link}{ Defines the \code{mu.link}, with "log" link as the default for the mu parameter}
   \item{sigma.link}{Defines the  \code{sigma.link}, with "log" link as the default for the sigma parameter}
+  \item{nu.link}{Defines the \code{mu.link}, with "logit" link as the default for the nu parameter}
   \item{x}{ vector of (non-negative integer) quantiles}
   \item{mu}{vector of positive means}
   \item{sigma}{vector of positive despersion parameter}
+  \item{nu}{vector of zero probability parameter}
   \item{p}{vector of probabilities}
   \item{q}{vector of quantiles}
   \item{n}{number of random values to return}
@@ -63,9 +95,13 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
  
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}. 
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
  
  }
-\author{Mikis Stasinopoulos ans Bob Rigby}
+\author{Mikis Stasinopoulos, Bob Rigby and Marco Enea}
 
 
 \seealso{ \code{\link{gamlss.family}},  \code{\link{NBI}}, \code{\link{NBII}}, 
@@ -82,7 +118,8 @@ r <- barplot(tN, col='lightblue')
 # fit a model to the data 
 # library(gamlss)
 # gamlss(Ni~1,family=PIG)
-
+ZIPIG()
+ZAPIG()
 }
 \keyword{distribution}
 \keyword{regression}% 

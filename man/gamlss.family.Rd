@@ -28,54 +28,61 @@ as.family(object)
  using their \code{R} abbreviations 
  (and optionally excluding the brackets) i.e. family=BI(), family=BI are equivalent. 
  \tabular{lll}{ 
-  \bold{Distributions}         \tab \bold{R names}                       \tab \bold{No of parameters} \cr
-  Beta                         \tab \code{\link{BE}()}                   \tab  2  \cr
-  Beta Binomial                \tab \code{\link{BB}()}                   \tab  2  \cr
+  \bold{Distributions}  \tab \bold{R names}    \tab \bold{No of parameters} \cr
+  Beta                         \tab \code{\link{BE}()}      \tab  2  \cr
+  Beta Binomial                \tab \code{\link{BB}()}      \tab  2  \cr
+  Beta negative binomial        \tab \code{\link{BNB}()}    \tab  3  \cr
   Beta one inflated            \tab \code{\link{BEOI}()}    \tab  3  \cr
   Beta zero inflated           \tab \code{\link{BEZI}()}    \tab  3  \cr
-  Beta inflated                \tab \code{\link{BEINF}()}                \tab  4  \cr
-  Binomial                     \tab \code{\link{BI}()}                   \tab  1  \cr
-  Box-Cox Cole and Green       \tab \code{\link{BCCG}()}                 \tab  3  \cr
-  Box-Cox Power Exponential    \tab \code{\link{BCPE}()}                 \tab  4  \cr
-  Box-Cox-t                    \tab \code{\link{BCT}()}                  \tab  4  \cr
+  Beta inflated                \tab \code{\link{BEINF}()}   \tab  4  \cr
+  Binomial                     \tab \code{\link{BI}()}      \tab  1  \cr
+  Box-Cox Cole and Green       \tab \code{\link{BCCG}()}    \tab  3  \cr
+  Box-Cox Power Exponential    \tab \code{\link{BCPE}()}    \tab  4  \cr
+  Box-Cox-t                    \tab \code{\link{BCT}()}     \tab  4  \cr
   Delaport                     \tab \code{\link{DEL}()}     \tab  3  \cr
+  Double Poisson               \tab \code{\link{DPO}()}     \tab  2  \cr
+  Double binomial              \tab \code{\link{DBI}()}     \tab  2  \cr
   Exponential                  \tab \code{\link{EXP}()}     \tab  1  \cr
   Exponential Gaussian         \tab \code{\link{exGAUS}()}  \tab  3  \cr
   Exponential generalized Beta type 2 \tab \code{\link{EGB2}()} \tab  4  \cr
-  Gamma                        \tab \code{\link{GA}()}                   \tab  2  \cr
+  Gamma                        \tab \code{\link{GA}()}      \tab  2  \cr
   Generalized Beta  type 1     \tab \code{\link{GB1}()}     \tab  4  \cr
   Generalized Beta  type 2     \tab \code{\link{GB2}()}     \tab  4  \cr
   Generalized Gamma            \tab \code{\link{GG}()}      \tab  3  \cr
   Generalized Inverse Gaussian \tab \code{\link{GIG}()}     \tab  3  \cr
   Generalized t                \tab \code{\link{GT}()}      \tab  4  \cr
-  Geometric                    \tab \code{\link{GEOM}()}                 \tab  1  \cr
-  Gumbel                       \tab \code{\link{GU}()}                   \tab  2  \cr
-  Inverse Gamma                \tab \code{\link{IGAMMA}()}               \tab  2  \cr
-  Inverse Gaussian             \tab \code{\link{IG}()}                   \tab  2  \cr
-  Johnson's SU                 \tab \code{\link{JSU}()}                  \tab  4  \cr   
-  Logarithmic                  \tab \code{\link{LG}()}     \tab  1  \cr
-  Logistic                     \tab \code{\link{LO}()}                   \tab  2  \cr
-  log-Normal                   \tab \code{\link{LOGNO}()}                \tab  2  \cr
-  log-Normal  (Box-Cox)        \tab \code{\link{LNO}()}                  \tab  3 (1 fixed)  \cr
-  Negative Binomial type I     \tab \code{\link{NBI}()}                  \tab  2  \cr
-  Negative Binomial type II    \tab \code{\link{NBII}()}                 \tab  2  \cr
-  Normal Exponential \emph{t}   \tab \code{\link{NET}()}                  \tab  4 (2 fixed)  \cr
-  Normal                       \tab \code{\link{NO}()}                   \tab  2  \cr
+  Geometric                    \tab \code{\link{GEOM}()}    \tab  1  \cr
+  Geometric (original)         \tab \code{\link{GEOMo}()}   \tab  1  \cr
+  Gumbel                       \tab \code{\link{GU}()}      \tab  2  \cr
+  Inverse Gamma                \tab \code{\link{IGAMMA}()}  \tab  2  \cr
+  Inverse Gaussian             \tab \code{\link{IG}()}      \tab  2  \cr
+  Johnson's SU                 \tab \code{\link{JSU}()}     \tab  4  \cr   
+  Logarithmic                  \tab \code{\link{LG}()}      \tab  1  \cr
+  Logistic                     \tab \code{\link{LO}()}      \tab  2  \cr
+  log-Normal                   \tab \code{\link{LOGNO}()}   \tab  2  \cr
+  log-Normal  (Box-Cox)        \tab \code{\link{LNO}()}     \tab  3 (1 fixed)  \cr
+  Negative Binomial type I     \tab \code{\link{NBI}()}     \tab  2  \cr
+  Negative Binomial type II    \tab \code{\link{NBII}()}    \tab  2  \cr
+  Negative Binomial family     \tab \code{\link{NBF}()}     \tab  3  \cr
+  Normal Exponential \emph{t}   \tab \code{\link{NET}()}    \tab  4 (2 fixed)  \cr
+  Normal                       \tab \code{\link{NO}()}      \tab  2  \cr
   Normal Family                \tab \code{\link{NOF}()}     \tab  3 (1 fixed)  \cr
-  Pareto type 2                \tab \code{\link{PARETO2}()}              \tab  2  \cr
-  Pareto type 2  original      \tab \code{\link{PARETO2o}()}              \tab  2  \cr
-  Power Exponential            \tab \code{\link{PE}()}                   \tab  3  \cr
-  Power Exponential  type 2    \tab \code{\link{PE2}()}                  \tab  3  \cr
-  Poison                       \tab \code{\link{PO}()}                   \tab  1  \cr
-  Poisson inverse Gaussian     \tab \code{\link{PIG}()}                  \tab  2  \cr
+  Normal Linear Quadratic      \tab \code{\link{LQNO}()}    \tab  2         \cr
+  Pareto type 2                \tab \code{\link{PARETO2}()} \tab  2  \cr
+  Pareto type 2  original      \tab \code{\link{PARETO2o}()}  \tab  2  \cr
+  Power Exponential            \tab \code{\link{PE}()}      \tab  3  \cr
+  Power Exponential  type 2    \tab \code{\link{PE2}()}     \tab  3  \cr
+  Poison                       \tab \code{\link{PO}()}      \tab  1  \cr
+  Poisson inverse Gaussian     \tab \code{\link{PIG}()}     \tab  2  \cr
+%  Poisson shifted GIG          \tab \code{\link{PSGIG}()}   \tab  4  \cr
   Reverse generalized extreme  \tab \code{\link{RGE}()}     \tab  3  \cr
-  Reverse Gumbel               \tab \code{\link{RG}()}                   \tab  2  \cr 
+  Reverse Gumbel               \tab \code{\link{RG}()}      \tab  2  \cr 
   Skew Power Exponential type 1 \tab \code{\link{SEP1}()}   \tab  4  \cr 
   Skew Power Exponential type 2 \tab \code{\link{SEP2}()}   \tab  4  \cr 
   Skew Power Exponential type 3 \tab \code{\link{SEP3}()}   \tab  4  \cr 
   Skew Power Exponential type 4 \tab \code{\link{SEP4}()}   \tab  4  \cr 
   Shash                        \tab \code{\link{SHASH}()}   \tab  4  \cr 
-  Shash  original              \tab \code{\link{SHASHo}()}   \tab  4  \cr
+  Shash  original              \tab \code{\link{SHASHo}()}  \tab  4  \cr
   Shash  original 2            \tab \code{\link{SHASH}()}   \tab  4  \cr
   Sichel  (original)           \tab \code{\link{SI}()}      \tab  3  \cr
   Sichel  (mu as the maen)     \tab \code{\link{SICHEL}()}  \tab  3  \cr
@@ -85,18 +92,30 @@ as.family(object)
   Skew t  type 4               \tab \code{\link{ST4}()}     \tab  3  \cr 
   Skew t  type 5               \tab \code{\link{ST5}()}     \tab  3  \cr 
   t-distribution               \tab \code{\link{TF}()}      \tab  3  \cr
-  Waring                       \tab \code{\link{WARING}()} \tab  1  \cr
+  Waring                       \tab \code{\link{WARING}()}  \tab  1  \cr
   Weibull                      \tab \code{\link{WEI}()}     \tab  2  \cr
   Weibull(PH parameterization) \tab \code{\link{WEI2}()}    \tab  2  \cr
   Weibull (mu as mean)         \tab \code{\link{WEI3}()}    \tab  2  \cr
   Yule                         \tab \code{\link{YULE}()}    \tab  1  \cr
-  Zero adjusted binomial       \tab \code{\link{ZABI}()}    \tab  2   \cr 
-  Zero inflated binomial       \tab \code{\link{ZIBI}()}    \tab  2   \cr 
-  Zero adjusted logarithmic    \tab \code{\link{ZALG}()}    \tab  2   \cr 
+  Zero adjusted binomial       \tab \code{\link{ZABI}()}    \tab  2  \cr 
+  Zero adjusted beta neg. bin. \tab \code{\link{ZABNB}()}   \tab  4  \cr 
+  Zero adjusted IG             \tab \code{\link{ZAIG}()}    \tab  2  \cr
+  Zero adjusted logarithmic    \tab \code{\link{ZALG}()}    \tab  2  \cr 
+  Zero adjusted neg. bin.      \tab \code{\link{ZANBI}()}   \tab  3  \cr
+%  Zero adjusted neg. bin. fam. \tab \code{\link{ZANBF}()}   \tab  4  \cr
+  Zero adjusted poisson        \tab \code{\link{ZAP}()}     \tab  2  \cr
+%  Zero adjusted PIG           \tab \code{\link{ZAPIG}()}    \tab  3  \cr
+  Zero adjusted Sichel         \tab \code{\link{ZASICHEL}()}\tab  4  \cr 
+  Zero adjusted Zipf           \tab \code{\link{ZAZIPF}()}  \tab  2  \cr
+  Zero inflated binomial       \tab \code{\link{ZIBI}()}    \tab  2  \cr 
+  Zero inflated beta neg. bin. \tab \code{\link{ZIBNB}()}   \tab  4  \cr 
+  Zero inflated neg. bin.      \tab \code{\link{ZINBI}()}   \tab  3  \cr
+%  Zero inflated neg. bin. fam. \tab \code{\link{ZINBF}()}   \tab  4  \cr
   Zero inflated poisson        \tab \code{\link{ZIP}()}     \tab  2  \cr
   Zero inf. poiss.(mu as mean) \tab \code{\link{ZIP2}()}    \tab  2  \cr
-  Zero adjusted poisson        \tab \code{\link{ZAP}()}     \tab  2   \cr 
-  Zero adjusted IG             \tab \code{\link{ZAIG}()}    \tab  2  \cr
+  Zero inflated PIG            \tab \code{\link{ZIPIG}()}   \tab  3  \cr
+  Zero inflated Sichel         \tab \code{\link{ZISICHEL}()}\tab  4  \cr 
+  Zipf                         \tab \code{\link{ZIPF}()}    \tab  1  \cr
   }
  Note that some of the distributions are in the package \code{gamlss.dist}.
  The parameters of the distributions are in order, \bold{\code{mu}} for location, \bold{\code{sigma}} for scale (or dispersion), 
@@ -122,8 +141,12 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
-\author{Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk} and Calliope Akantziliotou}
+\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby and Calliope Akantziliotou}
 
 
 \note{More distributions will be documented in later GAMLSS releases. Further user defined distributions can 

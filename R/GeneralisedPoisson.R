@@ -73,7 +73,11 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
  { 
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-        if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+        if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
+        ly <- max(length(x),length(mu),length(sigma)) 
+         x <- rep(x, length = ly)      
+     sigma <- rep(sigma, length = ly)
+        mu <- rep(mu, length = ly)   
         logL <- x*log(mu/(1+sigma*mu))+(x-1)*log(1+sigma*x)+(-mu*(1+sigma*x))/(1+sigma*mu)-lgamma(x+1)
         Lik <- if (log) logL else exp(logL)
         if (length(sigma)>1) fy <- ifelse(sigma>0.0000001, 

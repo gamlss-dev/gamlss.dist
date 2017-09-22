@@ -24,14 +24,14 @@ generation for the \code{BE} and \code{BEo} parameterizations respectively of th
 }
 \usage{
 BE(mu.link = "logit", sigma.link = "logit")
-dBE(x, mu = 0.5, sigma = 0.02, log = FALSE)
-pBE(q, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE)
-qBE(p, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE)
-rBE(n, mu = 0.5, sigma = 0.02)
+dBE(x, mu = 0.5, sigma = 0.2, log = FALSE)
+pBE(q, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE)
+qBE(p, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE)
+rBE(n, mu = 0.5, sigma = 0.2)
 BEo(mu.link = "log", sigma.link = "log")
-dBEo(x, mu = 0.5, sigma = 0.02, log = FALSE)
-pBEo(q, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE)
-qBEo(p, mu = 0.5, sigma = 0.02, lower.tail = TRUE, log.p = FALSE)
+dBEo(x, mu = 0.5, sigma = 0.2, log = FALSE)
+pBEo(q, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE)
+qBEo(p, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE)
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -69,6 +69,10 @@ Accompanying documentation in the current GAMLSS  help files, (see also  \url{ht
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
 \emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 }
 
 \author{Bob Rigby and Mikis Stasinopoulos }

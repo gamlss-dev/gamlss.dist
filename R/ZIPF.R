@@ -53,7 +53,8 @@ dZIPF<- function(x, mu = 1, log = FALSE)
 }
 #----------------------------------------------------------------------------------------
 pZIPF <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
-{ 
+{
+#----------  
   Zeta.aux<- function (shape, qq) 
   {
     LLL <- max(length(shape), length(qq))

@@ -75,10 +75,12 @@ Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location s
 
 Rigby, R. A.  and Stasinopoulos D. M. (2010) The gamlss.family distributions, (distributed with this package or see 
 \url{http://www.gamlss.org/}) 
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
 }
 \author{
-Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby \email{r.rigby@londonmet.ac.uk} 
-}
+Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby}
 
 \seealso{
  \code{\link{gamlss.family}}, \code{\link{NBI}}, \code{\link{NBII}}}

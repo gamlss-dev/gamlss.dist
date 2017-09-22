@@ -47,7 +47,12 @@ dZABI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
           if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
           if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
-          logfy <- rep(0, length(x))
+          ly <- max(length(x),length(mu),length(sigma),length(bd)) 
+              x <- rep(x, length = ly)      
+          sigma <- rep(sigma, length = ly)
+             mu <- rep(mu, length = ly) 
+             bd <- rep(bd, length = ly)  
+          logfy <- rep(0, ly)
           logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dBI(x,bd,mu,log=TRUE)-log(1-dBI(0,bd,mu)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy

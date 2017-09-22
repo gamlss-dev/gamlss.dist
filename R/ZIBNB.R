@@ -186,6 +186,11 @@ pZIBNB <- function(q, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
   if (any(tau <= 0)|any(tau >= 1)) #In this parametrization  nu = alpha
     stop(paste("tau must be between 0 and 1 ", "\n", ""))
   if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+   ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
+    q <- rep(q, length = ly)       
+sigma <- rep(sigma, length = ly)
+   mu <- rep(mu, length = ly)   
+   nu <- rep(nu, length = ly) 
   cdf <- pBNB(q, mu = mu, sigma=sigma, nu=nu)
   cdf <- tau + (1-tau)*cdf
   if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
@@ -203,6 +208,12 @@ qZIBNB <- function(p, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
         if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", ""))    
         if (log.p == TRUE) p <- exp(p)   else p <- p
         if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+          ly <- max(length(p),length(mu),length(sigma),length(nu),length(tau)) 
+           p <- rep(p, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
+          nu <- rep(nu, length = ly) 
+         tau <- rep(tau, length = ly)
         pnew <- (p-tau)/(1-tau)-(1e-7)# added 28-2-17
         pnew <- ifelse((pnew > 0 ),pnew, 0)
            q <- qBNB(pnew, mu = mu, sigma=sigma, nu, , max.value = max.value)           

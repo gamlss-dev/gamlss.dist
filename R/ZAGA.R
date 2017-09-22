@@ -8,7 +8,7 @@ ZAGA <- function (mu.link ="log", sigma.link="log", nu.link ="logit")
     dstats <- checklink("sigma.link", "ZAIG", substitute(sigma.link), c("inverse", "log", "identity", "own"))
     vstats <- checklink("nu.link", "ZAIG", substitute(nu.link),  c("logit", "probit", "cloglog", "cauchit", "log", "own"))
     structure(
-          list(family = c("ZAGA", "Zero adjusted GA"),
+          list(family = c("ZAGA", "Zero Adjusted GA"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE), 
                 nopar = 3, 
                  type = "Mixed",
@@ -86,8 +86,10 @@ qZAGA <- function(p, mu=1, sigma=1,  nu=0.1, lower.tail = TRUE, log.p = FALSE,
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if (any(p < 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-         lp <- length(p)                                                                    
+        # lp <- length(p) 
+         lp <- max(length(p),length(mu),length(sigma),length(nu)) 
       sigma <- rep(sigma, length = lp)
+          p <- rep(p, length = lp)
          mu <- rep(mu, length = lp)
          nu <- rep(nu, length = lp)
       upper <- rep(upper.limit, length = lp )
@@ -116,16 +118,18 @@ rZAGA <- function(n, mu=1, sigma=1, nu=0.1, ...)
   }
    
 #----------------------------------------------------------------------------------------
-plotZAGA <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, ...)
- {
+plotZAGA <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, main=NULL, ...)
+{
   y = seq(from=0.001, to=to, length.out=n )
   pdf<- dZAGA(y, mu = mu ,sigma = sigma, nu = nu) 
   pr0<-c(dZAGA(0, mu=mu ,sigma=sigma,  nu=nu))
   po<-c(0)
-  plot(pdf~y, main="Zero adjusted GA", ylim=c(0,max(pdf,pr0)), type="l")
+  if (is.null(main)) main = "Zero Adj. Gamma"
+  plot(pdf~y, main=main, ylim=c(0,max(pdf,pr0)), type="l", ...)
   points(po,pr0,type="h")
   points(po,pr0,type="p", col="blue")
- }
+}
+
 #----------------------------------------------------------------------------------------
 meanZAGA <- function(obj)
   {

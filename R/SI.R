@@ -32,22 +32,22 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
              sigma.dr = dstats$mu.eta, 
                 nu.dr = vstats$mu.eta,
                  dldm = function(y,mu,sigma,nu) {
-                         ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                        dldm}, 
                d2ldm2 = function(y,mu,sigma,nu) {
-                        ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                       dldm <- (y-ty)/mu
                     d2ldm2 <- - dldm * dldm
                     d2ldm2
                                     },
                  dldd = function(y,mu,sigma,nu) {
-                        ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                        ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                      lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                       dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                                  dldd},
                d2ldd2 = function(y,mu,sigma,nu){
-                       ty  <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                       ty  <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                      lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                       dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                     d2ldd2 <- -dldd*dldd
@@ -55,7 +55,7 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                                     },
               #d2ldmdd = function() 0,
               d2ldmdd = function(y,mu,sigma,nu) {
-                         ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                         ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                        dldm <- (y-ty)/mu
                       lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                        dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
@@ -63,28 +63,28 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                     d2ldmdd
                                     }, 
               d2ldmdv = function(y,mu,sigma,nu) {
-                   ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
+                   ty <- tofyS(y=y, mu=mu, sigma=sigma, nu=nu, what=1)
                  dldm <- (y-ty)/mu
                  #calculates the dldv                 
-                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldmdv
               d2ldmdv <- -dldm *dldv
               d2ldmdv
                                     }, 
               d2ldddv = function(y,mu,sigma,nu) {
-                  ty <- gamlss.dist:::tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
+                  ty <- tofyS(y=y, mu=mu, sigma=sigma,nu=nu, what=1)
                lbes2 <- log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu))
                 dldd <- ((ty*(1+sigma*mu)/mu) - (sigma*y)-exp(lbes2))/(sigma^2)
                 #calculates the dldv
-                  nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                  nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                 dldv <- as.vector(attr(nd, "gradient"))
                 #calculates the d2ldddv 
              d2ldddv <- -dldd *dldv
              d2ldddv
                                  },               
                  dldv = function(y,mu,sigma,nu) {                           
-                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                  dldv
                                     },
@@ -92,12 +92,12 @@ SI <-function (mu.link ="log", sigma.link="log", nu.link="identity")
                 #  delta  <- 0.01
                 #    dldv <- (dSI(y=y, mu=mu, sigma=sigma, nu=nu+delta, log = TRUE)- 
                 #            dSI(y=y, mu=mu, sigma=sigma, nu=nu, log= TRUE))/ delta   
-                   nd <- gamlss.dist:::numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
+                   nd <- numeric.deriv(dSI(y, mu, sigma, nu, log=TRUE), "nu", delta=0.0001)
                  dldv <- as.vector(attr(nd, "gradient"))
                d2ldv2 <- -dldv*dldv
                d2ldv2
                                   } ,
-          G.dev.incr  = function(y,mu,sigma,nu, pw=1,..) -2*dSI(y, mu, sigma, nu, log=TRUE),
+          G.dev.incr  = function(y,mu,sigma,nu, pw=1,...) -2*dSI(y, mu, sigma, nu, log=TRUE),
                 rqres = expression(
                   rqres(pfun="pSI", type="Discrete", ymin=0, y=y, mu=mu, sigma=sigma, nu=nu)
                                    ), #
@@ -150,9 +150,8 @@ tofyS <- function (y, mu, sigma, nu, what=1)
          nu <- rep(nu, length = ly) 
       alpha <- sqrt(1+2*sigma*mu)/sigma
        lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu))
-     sumlty <- as.double(.C("tofys_", as.double(y), as.double(mu), 
-                               as.double(sigma), as.double(nu), as.double(lbes),  
-                               as.integer(length(y)),as.integer(max(y)+1), PACKAGE="gamlss.dist")[[what]])
+     sumlty <- as.double(.C("tofySI1", as.double(y), as.double(mu),as.double(sigma), as.double(nu),  
+                            as.double(lbes),ans=double(ly), as.integer(ly), as.integer(max(y)+1), PACKAGE="gamlss.dist")$ans)
    sumlty
    }
 #----------------------------------------------------------------------------------------
@@ -168,9 +167,8 @@ dSI<-function(x, mu=0.5, sigma=0.02, nu=-0.5, log=FALSE)
     nu <- rep(nu, length = ly) 
  alpha <- sqrt(1+2*sigma*mu)/sigma
   lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu))
-sumlty <- as.double(.C("tofys_", as.double(x), as.double(mu), 
-                   as.double(sigma), as.double(nu), as.double(lbes),
-                   as.integer(length(x)), as.integer(max(x)+1), PACKAGE="gamlss.dist")[[2]])
+sumlty <- as.double(.C("tofySI2", as.double(x), as.double(mu), as.double(sigma), as.double(nu), 
+                       as.double(lbes), ans=double(ly),  as.integer(ly),as.integer(max(x)+1), PACKAGE="gamlss.dist")$ans)
 logfy <- -lgamma(x+1)-nu*log(sigma*alpha)+sumlty+log(besselK(alpha,nu))-log(besselK((1/sigma),nu))
   if(log==FALSE) fy <- exp(logfy) else fy <- logfy
   fy
@@ -181,7 +179,8 @@ pSI <- function(q, mu=0.5, sigma=0.02, nu=-0.5, lower.tail = TRUE, log.p = FALSE
   #--------------------------------------------------
   tocdfS <- function (y, mu, sigma, nu, bsum=TRUE, ...)
   {
-      ly <- length(y)       
+      ly <- max(length(q),length(mu), length(sigma)) 
+       q <- rep(q, length = ly)     
    sigma <- rep(sigma, length = ly)
       mu <- rep(mu, length = ly)   
       nu <- rep(nu, length = ly) 

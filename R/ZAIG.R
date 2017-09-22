@@ -96,7 +96,9 @@ qZAIG <- function(p, mu=1, sigma=1,  nu=0.1, lower.tail = TRUE, log.p = FALSE,
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if (any(p < 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-         lp <- length(p)                                                                    
+    #     lp <- length(p) 
+         lp <- max(length(p),length(mu),length(sigma),length(nu)) 
+          p <- rep(p, length = lp)
       sigma <- rep(sigma, length = lp)
          mu <- rep(mu, length = lp)
          nu <- rep(nu, length = lp)

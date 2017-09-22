@@ -31,7 +31,7 @@ rIGAMMA(n, mu = 1, sigma = .5)
   \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required}
 }
 \details{
-The parameterization of the Inverse Gamma distribution in the function \code{IGA} is
+The parameterization of the Inverse Gamma distribution in the function \code{IGAMMA} is
 \deqn{f(y|\mu, \sigma) = \frac{\left[\mu\,(\alpha+1)\right]^{\alpha}}{\Gamma(\alpha)} \,y^{-(\alpha+1)}\, \exp{\left[-\frac{\mu\,(\alpha+1)}{y}\right]}}{f(y|mu, sigma) = ([mu (alpha+1)]^alpha)/Gamma(alpha) y^(-(alpha+1)) exp(-(mu (alpha+1))/y)}
 where \eqn{alpha = 1/(sigma^2)}
 for \eqn{y>0}, \eqn{mu>0} and \eqn{sigma>0}.
@@ -46,6 +46,10 @@ Rigby, R. A. and Stasinopoulos D. M. (2005). Generalized additive models for loc
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R. Accompanying documentation in the current GAMLSS help files, (see also \url{http://www.gamlss.org/}). 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R. \emph{Journal of Statistical Software}, Vol. 23, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+
 
 }
 \note{
