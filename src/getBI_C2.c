@@ -2,7 +2,7 @@
 //  getBI_C2.c
 //  
 //
-//  Created by Marco Enea on 23/07/17.
+//  Created by Marco Enea on 18/07/17.
 //
 //
 
@@ -43,8 +43,8 @@ void getBI_C2(double *mu, double *sigma, double *bd, int *ly, double *theC) {
         double sm1 = sigma[i] - 1, s_1=1 - sigma[i];
         n = bd[i];
         double nlogn = n * ((n==0)? 1 : log(n));
-        double logchoose[n], ylogofy[n], nylogofny[n], ylogmu[n],
-               nylog1mu[n], ss[n], expss[n];
+        double logchoose[n+1], ylogofy[n+1], nylogofny[n+1], ylogmu[n+1],
+               nylog1mu[n+1], ss[n+1], expss[n+1];
         int bdj;
       for (j = 0; j <= n; j++) {
         bdj = n - j;
