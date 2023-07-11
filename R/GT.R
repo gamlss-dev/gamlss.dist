@@ -175,7 +175,9 @@ GT <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link="
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
              tau.valid = function(tau) all(tau > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma, nu, tau) ifelse(nu*tau > 1, mu, NaN),
+              variance = function(mu, sigma, nu, tau) ifelse(nu*tau > 2, (sigma^2 * nu^(2/tau) * beta(3*tau^-1, nu-2*tau^-1))/beta(tau^-1,nu), Inf)
           ),
             class = c("gamlss.family","family"))
 }
@@ -211,10 +213,11 @@ pGT <- function(q, mu=0, sigma=1, nu=3, tau=1.5, lower.tail = TRUE, log.p = FALS
        for (i in 1:lp)
           {
           endInt <- (q[i]-mu[i])/sigma[i]
-         cdf[i] <- integrate(function(x) 
+          cdf[i] <- integrate(function(x) 
                  dGT(x, mu = 0, sigma = 1, nu = nu[i], tau = tau[i]), -Inf, endInt, rel.tol=.Machine$double.eps^0.4)$value
-         if(endInt>0&&cdf<0.001) cdf[i] <- 1  # MS and BR 7-10-11    
-          }    
+             # cdf <- ifelse(endInt>0&cdf<0.001, 1,cdf)  
+              if (endInt>0&&cdf[i]<0.001) cdf[i] <- 1  # MS and BR 7-10-11    
+          }      # add cdf[i] instead of cdf in 8-3-22 Mikis
          if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
          if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
          cdf    

@@ -57,11 +57,12 @@ dLNO <- function(x, mu=1, sigma=0.1, nu=0,  log = FALSE)
  {
           if (any(nu!=0 & mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+  #        if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
           if(length(nu)>1)  z <- ifelse(nu != 0,((x^nu)-1)/nu,log(x))
           else   if (nu != 0) z <- ((x^nu)-1)/nu else z <- log(x)
       loglik <- -0.5*log(2*pi)-log(sigma)-0.5*((z-mu)^2)/(sigma^2)+(nu-1)*log(x)
        if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+       ft <-ifelse(x <= 0, 0, ft)
        ft
   }    
 #--------------------------------------------------------------  
@@ -69,12 +70,13 @@ pLNO <- function(q, mu=1, sigma=0.1, nu=0,  lower.tail = TRUE, log.p = FALSE)
  {  
           if (any(nu!=0 & mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(q < 0))  stop(paste("q must be positive", "\n", ""))  
+    #      if (any(q < 0))  stop(paste("q must be positive", "\n", ""))  
           if(length(nu)>1)  z <- ifelse(nu != 0,((q^nu)-1)/nu,log(q))
           else   if (nu != 0) z <- ((q^nu)-1)/nu else z <- log(q)
           Fy <- pnorm(z, mean=mu, sd=sigma)
          if(lower.tail==TRUE) Fy  <- Fy else  Fy <- 1-Fy 
          if(log.p==FALSE) Fy  <- Fy else  Fy<- log(Fy) 
+         Fy <-ifelse(q <= 0, 0, Fy) 
          Fy     
  }
 #--------------------------------------------------------------

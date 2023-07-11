@@ -240,12 +240,14 @@ d2ldvdt
    sigma.valid = function(sigma)  all(sigma > 0),
       nu.valid = function(nu) TRUE , 
      tau.valid = function(tau) all(tau > 0), 
-       y.valid = function(y)  TRUE
+       y.valid = function(y)  TRUE,
+          mean = function(mu, sigma, nu, tau) mu,
+      variance = function(mu, sigma, nu, tau) sigma^2
           ),
             class = c("gamlss.family","family"))
 }
 #----------------------------------------------------------------------------------------
-dJSU <- function(x, mu = 0, sigma = 1, nu = 1, tau = .5, log = FALSE)
+dJSU <- function(x, mu = 0, sigma = 1, nu = 1, tau = 1, log = FALSE)
  {
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
@@ -262,7 +264,7 @@ dJSU <- function(x, mu = 0, sigma = 1, nu = 1, tau = .5, log = FALSE)
        ft
   }    
 #----------------------------------------------------------------------------------------  
-pJSU <- function(q, mu = 0, sigma = 1, nu = 1, tau = .5, lower.tail = TRUE, log.p = FALSE)
+pJSU <- function(q, mu = 0, sigma = 1, nu = 1, tau = 1, lower.tail = TRUE, log.p = FALSE)
  {  
          if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))           
@@ -278,7 +280,7 @@ pJSU <- function(q, mu = 0, sigma = 1, nu = 1, tau = .5, lower.tail = TRUE, log.
       p
  }
 #----------------------------------------------------------------------------------------  
-qJSU <-  function(p, mu=0, sigma=1, nu=0, tau=.5, lower.tail = TRUE, log.p = FALSE)
+qJSU <-  function(p, mu=0, sigma=1, nu=1, tau=1, lower.tail = TRUE, log.p = FALSE)
  {   
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
@@ -293,14 +295,45 @@ omega <- -nu*rtau
     c <- (.5*(w-1)*(w*cosh(2*omega)+1))^(-0.5)     
     q <- (mu+c*sigma*w^(.5)*sinh(omega))+c*sigma*z   
     q
- }
+}
+
+# qJSU1 <-  function(p, mu=0, sigma=1, nu=1, tau=.5, lower.tail = TRUE, log.p = FALSE)
+# {
+#   if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))
+#   if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
+#   if (log.p==TRUE) p <- exp(p) else p <- p
+#   if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))
+#   if (lower.tail==TRUE) p <- p else p <- 1-p
+#   rtau <- 1/tau
+#   w <- ifelse(rtau<0.0000001,1,exp(rtau^2))
+#   #omega <- -nu*rtau
+#   c <- (.5*(w-1)*(w*cosh((2*nu)/tau)+1))^(-0.5)
+#   mu1 <- mu-c*sigma*(w^0.5)*sinh(nu/tau)
+#   r <- qNO(p,0,1)
+#   #z <- sinh(rtau*(r+nu))
+#   q <- mu1+c*sigma*sinh(((r+nu)/tau))
+#   q
+# }
 #-----------------------------------------------------------------  
-rJSU <- function(n, mu=0, sigma=1, nu=0, tau=.5)
+rJSU <- function(n,  mu=0, sigma=1, nu=1, tau=1)
   {
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     n <- ceiling(n)
     p <- runif(n)
-    r <- qJSU(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
+    r <- qJSU(p, mu=mu, sigma=sigma, nu=nu, tau=tau,  lower.tail = TRUE, log.p = FALSE)
     r
   }
 #-----------------------------------------------------------------  
+# integrate(function(x, mu=0, sigma=4, nu=1, tau=0.5) (x-mu)^2*dJSU(x, mu=mu, sigma=sigma, nu=nu, tau=tau), -Inf, Inf)
+#integrate(function(x, mu=1, sigma=1.5, nu=2, tau=2) (x-mu)^2*dJSU(x, mu=mu, sigma=sigma, nu=nu, tau=tau), -Inf, Inf)
+#integrate(dJSU, -Inf, 2, mu=1, sigma=2, nu=2, tau=1)
+#pJSU(2,mu=1, sigma=2, nu=2, tau=1)
+#qJSU(pJSU(-1, mu=1, sigma=2, nu=2, tau=1),  mu=1, sigma=2, nu=2, tau=1)
+## Random Values
+# mu <- 0; sigma <- 2; nu <- .1; tau <- 2
+# rvec <- rJSU(1e6, mu=mu, sigma=sigma, nu=nu, tau=tau) 
+# truehist(rvec)
+# ## Empirical Moments
+# mean(rvec)
+# var(rvec)
+

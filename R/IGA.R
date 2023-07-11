@@ -12,13 +12,13 @@ dIGAMMA <- function(x, mu = 1, sigma = 0.5, log = FALSE)
 	stop(paste("mu must be greater than 0", "\n", ""))
    if (any(sigma <= 0))
 	stop(paste("sigma must be greater than 0", "\n", ""))
-   if (any(x < 0))
-	stop(paste("x must be greater than 0", "\n", ""))
+  # if (any(x < 0))
+	#stop(paste("x must be greater than 0", "\n", ""))
    alpha <- 1/(sigma^2)
    lfy <- alpha*log(mu) + alpha*log(alpha+1) - lgamma(alpha) -
 	  (alpha + 1)*log(x) - ((mu*(alpha + 1))/x)
-   if (log == FALSE) fy <- exp(lfy)
-   else fy <-lfy
+    fy <- if (log == FALSE) exp(lfy) else lfy
+    fy <-ifelse(x <= 0, 0, fy)
    fy
 }
 #--------------------------------------------------------------------------------
@@ -29,14 +29,15 @@ pIGAMMA <- function(q, mu = 1, sigma = 0.5, lower.tail = TRUE, log.p = FALSE)
 	stop(paste("mu must be greater than 0", "\n", ""))
    if (any(sigma <= 0))
 	stop(paste("sigma must be greater than 0", "\n", ""))
-   if (any(q < 0))
-	stop(paste("q must be greater than 0", "\n", ""))
+ #  if (any(q < 0))
+ #	stop(paste("q must be greater than 0", "\n", ""))
    alpha <- 1/(sigma^2)
    lcdf <- pgamma(((mu*(alpha + 1))/q), shape=alpha, lower.tail=FALSE, log.p = TRUE)  
    if (log.p == FALSE) cdf <- exp(lcdf)
    else cdf <- lcdf 
    if (lower.tail == TRUE) cdf <- cdf
    else cdf <- 1 - cdf
+   cdf <-ifelse(q <= 0, 0, cdf)
    cdf
 } 
 #-------------------------------------------------------------------------------
@@ -171,13 +172,19 @@ IGAMMA <- function (mu.link = "log", sigma.link = "log")
        d2ldmdd 
     }, 
     G.dev.incr = function(y, mu, sigma, ...) -2 * dIGAMMA(y, mu, sigma, log = TRUE), 
-    rqres = expression(rqres(pfun = "pIGAMMA", type = "Continuous", y = y, 
+         rqres = expression(rqres(pfun = "pIGAMMA", type = "Continuous", y = y, 
                              mu = mu, sigma = sigma)), 
     mu.initial = expression({ mu <- rep(mean(y), length(y))}), 
-    sigma.initial = expression({ sigma <- rep(((mean(y)^2)/var(y))+2, length(y)) }), 
-    mu.valid = function(mu) all(mu > 0), 
-    sigma.valid = function(sigma) all(sigma > 0), 
-    y.valid = function(y) TRUE), 
+ sigma.initial = expression({ sigma <- rep(((mean(y)^2)/var(y))+2, length(y)) }), 
+      mu.valid = function(mu) all(mu > 0), 
+   sigma.valid = function(sigma) all(sigma > 0), 
+       y.valid = function(y) TRUE,
+          mean = function(mu, sigma) ifelse(sigma^2 < 1,
+                                   ((1+sigma^2)*mu)/(1-sigma^2),Inf),
+      variance = function(mu, sigma) ifelse(sigma^2 < 0.5,
+                      ((1+sigma^2)^2*mu^2*sigma^2)/((1-sigma^2)^2*(1-2*sigma^2)),
+                                       Inf)
+    ),
     class = c("gamlss.family", "family"))
 }
 #--------------------------------------------------------------------------------

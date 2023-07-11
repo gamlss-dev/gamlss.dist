@@ -6,12 +6,12 @@ dGEOM<-function (x, mu = 2, log = FALSE)
 {
     if (any(mu < 0))
         stop(paste("mu must be > 0)", "\n", ""))
-    if (any(x < 0))
-        stop(paste("x must be >=0", "\n", ""))
+  #  if (any(x < 0)) stop(paste("x must be >=0", "\n", ""))
     lx <- max(length(x), length(mu))
     mu <- rep(mu, length = lx) 
    prob <- 1/(mu+1)
     fy <- dgeom(x = x, prob = prob, log = log)
+    fy <-ifelse(x < 0, 0, fy) 
     fy #logfx  
 }
 
@@ -20,13 +20,13 @@ pGEOM<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
 {
     if (any(mu < 0))
         stop(paste("mu must be > 0", "\n", ""))
-    if (any(q < 0))
-        stop(paste("q must be >=0", "\n", ""))
+ #   if (any(q < 0)) stop(paste("q must be >=0", "\n", ""))
      ly <- max(length(q), length(mu))
       q <- rep(q, length = ly)
      mu <- rep(mu, length = ly)
    prob <- 1/(mu+1)
     cdf <-  pgeom(q, prob=prob, lower.tail = lower.tail, log.p =log.p)
+    cdf <-ifelse(q < 0, 0, cdf)
     cdf    
     
 }
@@ -55,7 +55,7 @@ rGEOM<- function(n, mu=2)
      n <- ceiling(n)
      p <- runif(n)
      r <- qGEOM(p, mu=mu)
-     r
+     as.integer(r)
 }
 
 #Distribution function
@@ -84,7 +84,10 @@ structure(list(family = c("GEOM", "Geometric"),
                             ymin = 0, y = y, mu = mu)),   
         mu.initial = expression(mu <- rep(mean(y), length(y))),            
         mu.valid = function(mu) all(mu > 0) , 
-        y.valid = function(y) all(y >=0)),      
+        y.valid = function(y) all(y >=0),
+        mean = function(mu) mu,
+        variance  = function(mu) mu + mu^2  
+        ),      
         class = c("gamlss.family", "family"))
 }
 

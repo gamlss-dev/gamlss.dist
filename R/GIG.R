@@ -112,7 +112,27 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
           mu.valid = function(mu) TRUE , 
        sigma.valid = function(sigma)  all(sigma > 0),
           nu.valid = function(nu) TRUE , 
-           y.valid = function(y) all(y>0)
+           y.valid = function(y) all(y>0),
+              mean = function(mu, sigma, nu) mu,
+          variance = function(mu, sigma, nu) {
+                                                t          <- 1 / sigma^2 
+                                                lambda1    <- nu + 1
+                                                lambda2    <- nu
+                                                integrand1 <- function(x) { 
+                                                  x^(lambda1-1) * exp(-0.5*t*(x+1/x)) 
+                                                }
+                                                integrand2 <- function(x) { 
+                                                  x^(lambda2-1) * exp(-0.5*t*(x+1/x)) 
+                                                }
+                                                K1     <- integrate(integrand1,0,Inf)$value*0.5
+                                                K2     <- integrate(integrand2,0,Inf)$value*0.5
+                                                
+                                                b      <- K1 / K2
+                                                
+                                                return(
+                                                       mu^2 * ( (2*sigma^2 * (nu + 1)) / b + b^(-2) - 1 )
+                                                      )
+                                              }
           ),
             class = c("gamlss.family","family"))
 }
@@ -121,10 +141,11 @@ dGIG <- function(x, mu=1, sigma=1, nu=1,  log = FALSE)
  {
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
+    #      if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
                c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))  
           loglik <- nu*log(c)-nu*log(mu)+(nu-1)*log(x)-log(2)-log(besselK(1/(sigma^2),nu))-1/(2*(sigma^2))*(c*x/mu+mu/(c*x))
           if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+          ft <-ifelse(x <= 0, 0, ft)
           ft
   }    
 #--------------------------------------------------------------  
@@ -132,7 +153,7 @@ pGIG <- function(q, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE)
  {  
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(q < 0))  stop(paste("q must be positive", "\n", ""))  
+ #         if (any(q < 0))  stop(paste("q must be positive", "\n", ""))  
          lq <- length(q)       
       sigma <- rep(sigma, length = lq)
          mu <- rep(mu, length = lq)   

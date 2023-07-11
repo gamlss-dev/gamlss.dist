@@ -28,17 +28,20 @@ IG <-function (mu.link = "log", sigma.link = "log")
          sigma.initial = expression(sigma <- sd(y)/(mean(y))^1.5 ), 
               mu.valid = function(mu) all(mu > 0), 
            sigma.valid = function(sigma)  all(sigma > 0), 
-               y.valid = function(y)  all(y > 0)
+               y.valid = function(y)  all(y > 0),
+                  mean = function(mu, sigma) mu,
+              variance = function(mu, sigma) sigma^2 * mu^3
             ),
-            class = c("gamlss.family","family"))
+                 class = c("gamlss.family","family"))
 }
 #----------------------------------------------------------------------------------------  
 dIG<-function(x, mu = 1, sigma = 1, log=FALSE)
  {        if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+       #   if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
  log.lik <- (-0.5*log(2*pi)-log(sigma)-(3/2)*log(x)-((x-mu)^2)/(2*sigma^2*(mu^2)*x) )
      if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
+      fy <-ifelse(x <= 0, 0, fy)
       fy 
   }
 #----------------------------------------------------------------------------------------  
@@ -46,16 +49,16 @@ pIG <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   {    #  browser() 
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-    if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+#    if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
       lq <- length(q)                                                                    
    sigma <- rep(sigma, length = lq)
       mu <- rep(mu, length = lq)           
-
     cdf1 <- pnorm(((q/mu)-1)/(sigma*sqrt(q))) 
-    lcdf2 <- (2/(mu*sigma^2))+pnorm((-((q/mu)+1))/(sigma*sqrt(q)),log.p=TRUE)
+   lcdf2 <- (2/(mu*sigma^2))+pnorm((-((q/mu)+1))/(sigma*sqrt(q)),log.p=TRUE)
      cdf <- cdf1+ exp(lcdf2)
     if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
+    cdf <-ifelse(q <= 0, 0, cdf) 
     cdf
    }
 #----------------------------------------------------------------------------------------  

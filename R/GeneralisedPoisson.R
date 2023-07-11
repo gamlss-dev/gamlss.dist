@@ -64,7 +64,9 @@ GPO <- function (mu.link = "log", sigma.link = "log")
                       sigma <- rep( 0.1,length(y))),
               mu.valid = function(mu) all(mu > 0) , 
            sigma.valid = function(sigma)  all(sigma > 0), 
-               y.valid = function(y)  all(y >= 0)
+               y.valid = function(y)  all(y >= 0),
+                  mean = function(mu, sigma) mu,
+              variance = function(mu, sigma) mu * (1 + sigma * mu)^2
           ),
             class = c("gamlss.family","family"))
 }
@@ -73,7 +75,7 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
  { 
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-        if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
+    #    if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
         ly <- max(length(x),length(mu),length(sigma)) 
          x <- rep(x, length = ly)      
      sigma <- rep(sigma, length = ly)
@@ -85,6 +87,7 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
                                           dPO(x, mu = mu, log = log))
         else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = log) 
                    else Lik
+        fy <-ifelse(x < 0, 0, fy) 
         fy
 }
 #------------------------------------------------------------------------------------------
@@ -92,7 +95,7 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   {     
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-        if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
+  #      if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
       ly <- length(q)                                                       
      FFF <- rep(0,ly)                         
@@ -117,6 +120,7 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
                                     pPO(q, mu = mu, log.p = log.p, lower.tail=lower.tail))
     else cdf <- if (sigma<0.0001)   pPO(q, mu = mu, log.p = log.p, lower.tail=lower.tail) 
     else cdf 
+        cdf <-ifelse(q < 0, 0, cdf) 
         cdf
    }
 #------------------------------------------------------------------------------------------

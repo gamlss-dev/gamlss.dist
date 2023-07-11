@@ -148,7 +148,9 @@ JSUo <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
    sigma.valid = function(sigma)  all(sigma > 0),
       nu.valid = function(nu) TRUE , 
      tau.valid = function(tau) all(tau > 0), 
-       y.valid = function(y)  TRUE
+       y.valid = function(y)  TRUE,
+          mean = function(mu, sigma, nu, tau) mu - sigma * sqrt(exp(1/tau^2)) * sinh(nu/tau),
+      variance = function(mu, sigma, nu, tau) 0.5 * sigma^2 * (exp(1/tau^2) - 1) * (exp(1/tau^2)*cosh(2*nu/tau)+1)
           ),
             class = c("gamlss.family","family"))
 }

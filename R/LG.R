@@ -22,7 +22,10 @@ LG <- function (mu.link = "logit")
                 rqres = expression(rqres(pfun="pLG", type="Discrete", ymin=1, y=y, mu=mu)), 
             mu.initial =expression({mu <- 0.9 } ),
               mu.valid = function(mu) all(mu > 0  & mu < 1), 
-               y.valid = function(y)  all(y > 0) 
+               y.valid = function(y)  all(y > 0),
+                  mean = function(mu) -(log(1-mu))^-1 * mu * (1-mu)^-1,
+              variance = function(mu) -(log(1-mu))^-1 * mu * (1+(log(1-mu))^-1 * mu) * (1-mu)^-2
+          
           ),
             class = c("gamlss.family","family"))
 }
@@ -30,36 +33,41 @@ LG <- function (mu.link = "logit")
 dLG<-function(x, mu = 0.5, log = FALSE)
  { 
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be greater than 0 and less than 1", "\n", ""))
-          if (any(x <= 0) )  stop(paste("x must be >0", "\n", ""))
+       #   if (any(x <= 0) )  stop(paste("x must be >0", "\n", ""))
       ly <- max(length(x),length(mu)) 
        x <- rep(x, length = ly)      
       mu <- rep(mu, length = ly)   
        logfy <- x*log(mu)-log(x)-log(-log(1-mu))
       if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy
+       fy <-ifelse(x < 1, 0, fy) 
+       fy
   }
 #----------------------------------------------------------------------------------------
 pLG <- function(q, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
   {     
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be greater than 0 and less than 1", "\n", ""))
-   if (any(q <= 0) )  stop(paste("q must be >0", "\n", "")) 
+ #  if (any(q <= 0) )  stop(paste("q must be >0", "\n", "")) 
         ly <- max(length(q),length(mu)) 
          q <- rep(q, length = ly)      
         mu <- rep(mu, length = ly)   
-       FFF <- rep(0,ly)                         
+#       FFF <- rep(0,ly)                         
        nmu <- rep(mu, length = ly)                                                       
-         j <- seq(along=q) 
-   for (i in j)                                                          
-      {                                                                 
-        y.y <- q[i]                                                                                      
-         mm <- nmu[i]                                      
-     allval <- seq(1,y.y)
-     pdfall <- dLG(allval, mu = mm, log = FALSE)
-     FFF[i] <- sum(pdfall)                                             
-      }  
-      cdf <- FFF
+#         j <- seq(along=q) 
+   # for (i in j)                                                          
+   #    {                                                                 
+   #      y.y <- q[i]                                                                                      
+   #       mm <- nmu[i]                                      
+   #   allval <- seq(1,y.y)
+   #   pdfall <- dLG(allval, mu = mm, log = FALSE)
+   #   FFF[i] <- sum(pdfall)                                             
+   # } 
+       fn <- function(q, mu) sum(dLG(1:q, mu=mu))
+     Vcdf <- Vectorize(fn)
+      cdf <- Vcdf(q=q, mu=mu)   
+#      cdf <- FFF
       cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-      cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
+      cdf <- if(log.p==FALSE) cdf else log(cdf)    
+      cdf <-ifelse(q < 1, 0, cdf) 
       cdf
   }
 #----------------------------------------------------------------------------------------
@@ -97,6 +105,6 @@ rLG <- function(n, mu = 0.5)
           n <- ceiling(n)
           p <- runif(n)
           r <- qLG(p, mu=mu)
-          r
+          as.integer(r)
   }
 #----------------------------------------------------------------------------------------
