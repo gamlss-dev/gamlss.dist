@@ -75,11 +75,14 @@ rZIBNB(n, mu = 1, sigma = 1, nu = 1, tau = 0.1, max.value = 10000)
 \details{
   The probability function of the \code{BNB} is 
   
-   \deqn{P(Y=y|\mu,\sigma, \nu) = \frac{\Gamma(y+\nu^{-1}) \mbox{\hspace{0.2cm}} B(y+\mu \sigma^{-1} \nu,\sigma^{-1}+\nu^{-1}+1)}
-{\Gamma(y+1) \mbox{\hspace{0.2cm}} \Gamma(\nu^{-1}) \mbox{\hspace{0.2cm}} B(\mu \sigma^{-1} \nu,\sigma^{-1}+1)}}{f(y|\mu,\sigma, \nu)=(\Gamma(y+1/\nu)\Beta(y+(\mu\nu)/\sigma, 1/\sigma+1/\nu +1 )/(\Gamma(y+1) \Gamma(1/\nu) \Beta((\mu\nu)/\sigma, 1/\sigma+1) )}
- for \eqn{y=0,1,2,3,...}, \eqn{\mu>0}, \eqn{\sigma>0} and \eqn{\nu>0}. 
-  
+   \deqn{P(Y=y|\mu,\sigma, \nu) = \frac{\Gamma(y+\nu^{-1})  B(y+\mu \sigma^{-1} \nu,\sigma^{-1}+\nu^{-1}+1)}
+{\Gamma(y+1)  \Gamma(\nu^{-1})  B(\mu \sigma^{-1} \nu,\sigma^{-1}+1)}}{f(y|\mu,\sigma, \nu)=(\Gamma(y+1/\nu)\Beta(y+(\mu\nu)/\sigma, 1/\sigma+1/\nu +1 )/(\Gamma(y+1) \Gamma(1/\nu) \Beta((\mu\nu)/\sigma, 1/\sigma+1) )}
+ for \eqn{y=0,1,2,3,...}, \eqn{\mu>0}, \eqn{\sigma>0} and \eqn{\nu>0}, see pp 502-503 of Rigby \emph{et al.} (2019).    
+
 The distribution has mean \eqn{\mu}.
+
+
+The  definition of the zero adjusted beta negative  binomial distribution, \code{ZABNB} and  the the zero inflated beta negative  binomial  distribution, \code{ZIBNB}, are given in p. 517 and pp. 519 of  of Rigby \emph{et al.} (2019), respectively.
 }
 \value{
 returns a \code{gamlss.family} object which can be used to fit a Poisson distribution in the \code{gamlss()} function.  
@@ -88,16 +91,22 @@ returns a \code{gamlss.family} object which can be used to fit a Poisson distrib
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{https://www.gamlss.com/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\doi{10.1201/b21973}
+
+(see also  \url{https://www.gamlss.com/}).
 }
-\author{ Bob Rigby and Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}}
+\author{ Bob Rigby and Mikis Stasinopoulos \email{d.stasinopoulos@londonmrt.ac.uk}}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

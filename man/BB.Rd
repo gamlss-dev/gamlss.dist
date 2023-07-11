@@ -45,31 +45,31 @@ rBB(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE)
 }
 \details{
   Definition file for beta binomial distribution. 
- \deqn{f(y|\mu,\sigma)=\frac{\Gamma(n+1)} {\Gamma(y+1)\Gamma(n-y+1)} \frac{\Gamma(\frac{1}{\sigma}) \Gamma(y+\frac{\mu}{\sigma}) \Gamma[n+\frac{(1-\mu)}{\sigma}-y]}{\Gamma(n+\frac{1}{\sigma}) \Gamma(\frac{\mu}{\sigma}) \Gamma(\frac{1-\mu}{\sigma})}}{f(y|mu,sigma)=[Gamma(n+1)/Gamma(y+1)/Gamma(n-y+1)]*[Gamma(y+mu/sigma)*Gamma(1/sigma)*Gamma[n+(1-mu)/sigma-y]]/[Gamma(n+(1/sigma)) * Gamma(mu/sigma) * Gamma((1-mu)/sigma)]} 
-
- for \eqn{y=0,1,2,\ldots,n}, \eqn{0<\mu<1} and \eqn{\sigma>0}. For \eqn{\mu=0.5} and \eqn{\sigma=0.5} the distribution is uniform. 
+ \deqn{f(y|\mu,\sigma)=\frac{\Gamma(n+1)} {\Gamma(y+1)\Gamma(n-y+1)} \frac{\Gamma(\frac{1}{\sigma}) \Gamma(y+\frac{\mu}{\sigma}) \Gamma[n+\frac{(1-\mu)}{\sigma}-y]}{\Gamma(n+\frac{1}{\sigma}) \Gamma(\frac{\mu}{\sigma}) \Gamma(\frac{1-\mu}{\sigma})}}{f(y|mu,sigma)=[Gamma(n+1)/Gamma(y+1)/Gamma(n-y+1)]*[Gamma(y+mu/sigma)*Gamma(1/sigma)*Gamma[n+(1-mu)/sigma-y]]/[Gamma(n+(1/sigma)) * Gamma(mu/sigma) * Gamma((1-mu)/sigma)]}
+ for \eqn{y=0,1,2,\ldots,n}, \eqn{0<\mu<1} and \eqn{\sigma>0}, see pp. 523-524   of Rigby \emph{et al}. (2019). . For \eqn{\mu=0.5} and \eqn{\sigma=0.5} the distribution is uniform. 
 }
 
 \value{
  Returns a \code{gamlss.family} object which can be used to fit a Beta Binomial distribution in the \code{gamlss()} function.   
 }
-\references{ 
-
-Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
+\references{
+Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape, (with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R},
+	Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
 
-
+(see also \url{https://www.gamlss.com/}).
 }
-\author{ Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby and Kalliope Akantziliotou }
+\author{ Mikis Stasinopoulos, Bob Rigby and Kalliope Akantziliotou }
 \note{The response variable should be a matrix containing two columns, the first with the count of successes and the second with the count of failures. 
       The parameter \code{mu} represents a probability parameter with limits \eqn{0 < \mu < 1}{0 < mu <1}.
        \eqn{n \mu}{n*mu} is the mean of the distribution where n is the binomial denominator. 

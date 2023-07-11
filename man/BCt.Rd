@@ -14,12 +14,15 @@
 \title{Box-Cox t distribution for fitting a GAMLSS}
 \description{
 The function \code{BCT()}  defines the Box-Cox t distribution, a four parameter distribution, 
-for a \code{gamlss.family} object to be used in GAMLSS fitting using the function \code{gamlss()}. The functions \code{dBCT}, 
+for a \code{gamlss.family} object to be used in GAMLSS fitting using the function \code{gamlss()}. 
+
+The functions \code{dBCT}, 
 \code{pBCT}, \code{qBCT} and \code{rBCT} define the density, distribution function, quantile function and random
 generation for the Box-Cox t distribution.  
-[The function \code{BCTuntr()} is the original version of the function suitable only for the untruncated BCT distribution]. 
- See Rigby and Stasinopoulos (2003) for details. 
-The function \code{BCT} is identical to \code{BCT} but with log link for mu.
+
+[The function \code{BCTuntr()} is the original version of the function suitable only for the untruncated BCT distribution].  See Rigby and Stasinopoulos (2003) for details. 
+
+The function \code{BCTo} is identical to \code{BCT} but with log link for mu.
 }
 \usage{
 BCT(mu.link = "identity", sigma.link = "log", nu.link = "identity", 
@@ -60,7 +63,7 @@ rBCTo(n, mu = 5, sigma = 0.1, nu = 1, tau = 2)
   The probability density function of the untruncated Box-Cox t distribution, \code{BCTuntr}, is given by 
  \deqn{f(y|\mu,\sigma,\nu,\tau)=\frac{y^{\nu-1}}{\mu^{\nu}\sigma} \frac{\Gamma[(\tau+1)/2]}{\Gamma(1/2) \Gamma(\tau/2) \tau^{0.5}} [1+(1/\tau)z^2]^{-(\tau+1)/2}}{f(y|mu,sigma,nu,tau)=(1/(y*sigma))*(\Gamma((tau+1)/2)/(Gamma(1/2)*Gamma(tau/2)*tau^0.5))*(1+z^2/tau)^(-(tau+1)/2)} 
  where if \eqn{\nu \neq 0}{\nu!=0} then  \eqn{z=[(y/\mu)^{\nu}-1]/(\nu \sigma)}{z=[(y/mu)^(nu)-1]/(nu*sigma)} else \eqn{z=\log(y/\mu)/\sigma}{z=log(y/\mu)/\sigma}, 
- for \eqn{y>0}, \eqn{\mu>0}, \eqn{\sigma>0}, \eqn{\nu=(-\infty,+\infty)}{\nu=(-Inf,+Inf)} and \eqn{\tau>0}. 
+ for \eqn{y>0}, \eqn{\mu>0}, \eqn{\sigma>0}, \eqn{\nu=(-\infty,+\infty)}{\nu=(-Inf,+Inf)} and \eqn{\tau>0} see pp. 450-451 of Rigby et al. (2019). 
 
 The Box-Cox \emph{t} distribution,   \code{BCT}, adjusts the above density \eqn{f(y|\mu,\sigma,\nu,\tau)}{f(y|mu,sigma,nu,tau} for the 
 truncation resulting from the condition \eqn{y>0}{y>0}. See Rigby and Stasinopoulos (2003) for details.   
@@ -76,17 +79,20 @@ truncation resulting from the condition \eqn{y>0}{y>0}. See Rigby and Stasinopou
 \references{ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
   
-Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox \emph{t} distribution in GAMLSS to mode skewnees and  and kurtosis.
-to appear in \emph{Statistical Modelling}.
+Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox \emph{t} distribution in GAMLSS to mode skewnees and  and kurtosis. \emph{Statistical Modelling} 6(3):200. \doi{10.1191/1471082X06st122oa}.
 
-Stasinopoulos, D. M. Rigby, R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
- 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC,  \doi{10.1201/9780429298547}.
+	An older version can be found in \url{https://www.gamlss.com/}.
+
+
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.  
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.  
 
-Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., 
+(2017) \emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
+
+(see also  \url{https://www.gamlss.com/}).
 
 }
 

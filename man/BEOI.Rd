@@ -61,10 +61,10 @@ meanBEOI(obj)
   \item{\dots}{ other graphical parameters for plotting}
 }
 \details{ The one-inflated beta distribution is given as
-\deqn{f(y)=\nu}{f(y)=nu} if \eqn{(y=1)}{(y=1)}
-\deqn{f(y|\mu,\sigma)=(1-\nu)\frac{\Gamma(\sigma)}{\Gamma(\mu \sigma)\Gamma((1-\mu) \sigma)} y^{\mu \sigma}(1-y)^{((1-\mu)\sigma)-1}}{f(y|mu,sigma)=(1-nu)*(Gamma(sigma)/Gamma(mu*sigma)*Gamma((1-mu)*sigma))*y^(mu*sigma-1)*(1-y)^(((1-mu)*sigma)-1)
+\deqn{f(y)=\nu \quad \textit{if} \quad y=1}
+\deqn{f(y|\mu,\sigma)=(1-\nu)\frac{\Gamma(\sigma)}{\Gamma(\mu \sigma)\Gamma((1-\mu) \sigma)} y^{\mu \sigma}(1-y)^{((1-\mu)\sigma)-1} \quad  \textit{otherwise}
 }
-if \eqn{y=(0,1)}{y=(0,1)}. The parameters satisfy \eqn{0<\mu<0}{0<mu<1}, \eqn{\sigma>0}{sigma>0} and \eqn{0<\nu< 1}{0<nu<1}.
+The parameters satisfy \eqn{0<\mu<0}{0<mu<1}, \eqn{\sigma>0}{sigma>0} and \eqn{0<\nu< 1}{0<nu<1}.
  
 Here \eqn{E(y)=\nu+(1-\nu)\mu}{E(y)=nu+(1-nu)*mu} and 
 \eqn{Var(y)=(1-\nu)\frac{\mu(1-\mu)}{\sigma+1}+\nu(1-\nu)(1-\mu)^2}{Var(y)=(1-nu)*(mu*(1-mu))/(sigma+1) + nu*(1-nu)*(1-mu)^2}. 
@@ -87,17 +87,17 @@ Generalized additive models for location, scale and shape (with discussion).
 \emph{Applied Statistics}, \bold{54} (3), 507-554.
 
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006).
-Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files
-(see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
-Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., 
+(2017) \emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
+(see also  \url{https://www.gamlss.com/}).
 }
 
 

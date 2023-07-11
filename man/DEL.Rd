@@ -44,12 +44,13 @@ rDEL(n, mu=1, sigma=1, nu=0.5, max.value = 10000)
 The probability function of the Delaporte distribution is given by
 \deqn{f(y|\mu,\sigma,\nu)= \frac{e^{-\mu \nu}}{\Gamma(1/\sigma)}\left[ 1+\mu \sigma (1-\nu)\right]^{-1/\sigma} S }{f(y|mu,sigma,nu)=(exp(-mu*nu)/Gamma(1/sigma))*[1+mu*sigma*(1-nu)]^(-1/sigma) S} 
 where  
-\deqn{S=  \sum_{j=0}^{y} \left( \matrix{ y \cr j } \right) \frac{\mu^y \nu^{y-j}}{y!}\left[\mu + \frac{1}{\sigma(1-\nu)}\right]^{-j} \Gamma\left(\frac{1}{\sigma}+j\right)}{S=Sum(Per(y,j))*((mu^y)*(nu^{y-j})/y!) *[1+(1/(sigma*(1-nu)))]^j Gamma((1/sigma)*j)}
+\deqn{S=  \sum_{j=0}^{y} \left( { y \choose j } \right) \frac{\mu^y \nu^{y-j}}{y!}\left[\mu + \frac{1}{\sigma(1-\nu)}\right]^{-j} \Gamma\left(\frac{1}{\sigma}+j\right)}{S=Sum(Per(y,j))*((mu^y)*(nu^{y-j})/y!) *[1+(1/(sigma*(1-nu)))]^j Gamma((1/sigma)*j)}
 for \eqn{y=0,1,2,...,\infty}{y=0,1,2,...} 
 where  \eqn{\mu>0}{mu>0} , \eqn{\sigma>0}{\sigma>0} and \eqn{0 <
 \nu<1}{0<nu<1}.
  This distribution is a parametrization of the distribution given by Wimmer and Altmann (1999) p 515-516 where 
- \eqn{\alpha=\mu \nu}{a=mu*nu}, \eqn{k=1/\sigma}{1/sigma} and \eqn{\rho=[1+\mu\sigma(1-\nu)]^{-1}}{p=[1+mu*nu*(1-nu)]^(-1)} 
+ \eqn{\alpha=\mu \nu}{a=mu*nu}, \eqn{k=1/\sigma}{1/sigma} and \eqn{\rho=[1+\mu\sigma(1-\nu)]^{-1}}{p=[1+mu*nu*(1-nu)]^(-1)}. 
+For more details  see  pp 506-507 of Rigby \emph{et al.} (2019).     
   
 }
 \value{
@@ -60,24 +61,23 @@ where  \eqn{\mu>0}{mu>0} , \eqn{\sigma>0}{\sigma>0} and \eqn{0 <
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Rigby, R. A., Stasinopoulos D. M. and Akantziliotou, C. (2006) Modelling the parameters of a family of mixed Poisson distributions including the Sichel and Delaptorte.
-Submitted for publication.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2003) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC,\doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
 Wimmer, G. and Altmann, G (1999). \emph{Thesaurus of univariate discrete probability distributions} . Stamn Verlag, Essen, Germany 
 
+(see also  \url{https://www.gamlss.com/}).
+
 }
 \author{Rigby, R. A.,  Stasinopoulos D. M. and Marco Enea}
-\note{ The
-mean of \eqn{Y} is given by \eqn{E(Y)=\mu}{E(Y)=mu} and the variance by \eqn{V(Y)=\mu+\mu^2 \sigma \left( 1-\nu\right)^2}{V(Y)=mu+mu^2*sigma*(1-nu)^2}.
+\note{ The mean of \eqn{Y} is given by \eqn{E(Y)=\mu}{E(Y)=mu} and the variance by \eqn{V(Y)=\mu+\mu^2 \sigma \left( 1-\nu\right)^2}{V(Y)=mu+mu^2*sigma*(1-nu)^2}.
  }
  
 

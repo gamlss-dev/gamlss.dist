@@ -18,7 +18,7 @@ The function \code{BCCG}  defines the Box-Cox Cole and Green distribution (Box-C
 for a \code{gamlss.family} object to be used in GAMLSS fitting using the function \code{gamlss()}. 
 The functions \code{dBCCG}, \code{pBCCG}, \code{qBCCG} and \code{rBCCG} define the density, distribution function, quantile function and random generation for the specific parameterization of the Box-Cox Cole and Green distribution.  
 [The function \code{BCCGuntr()} is the original version of the function suitable only for the untruncated Box-Cox Cole and Green distribution 
-See Cole and Green (1992) and Rigby and Stasinopoulos (2003a,2003b) for details.
+See Cole and Green (1992) and Rigby and Stasinopoulos (2003a, 2003b) for details.
 The function \code{BCCGo} is identical to \code{BCCG} but with log link for mu.
 
 }
@@ -59,8 +59,8 @@ where if \eqn{\nu \neq 0}{\nu!=0} then \eqn{z=[(y/\mu)^{\nu}-1]/(\nu \sigma)}{z=
 \eqn{z=\log(y/\mu)/\sigma}{z=log(y/mu)/sigma}, 
 for \eqn{y>0}, \eqn{\mu>0}, \eqn{\sigma>0} and \eqn{\nu=(-\infty,+\infty)}{\nu=(-Inf,+Inf)}. 
 
-The Box-Cox Cole anf Green distribution,  \code{BCCG}, adjusts the above density \eqn{f(y|\mu,\sigma,\nu)}{f(y|mu,sigma,nu} for the 
-truncation resulting from the condition \eqn{y>0}{y>0}. See Rigby and Stasinopoulos (2003a,2003b) for details.   
+The Box-Cox Cole and Green distribution,  \code{BCCG}, adjusts the above density \eqn{f(y|\mu,\sigma,\nu)}{f(y|mu,sigma,nu} for the 
+truncation resulting from the condition \eqn{y>0}{y>0}. See Rigby and Stasinopoulos (2003a, 2003b) or pp. 439-441 of Rigby et al. (2019) for details.   
 }
 \value{
 \code{BCCG()} returns a \code{gamlss.family} object which can be used to fit a Cole and Green distribution in the \code{gamlss()} function.
@@ -77,21 +77,22 @@ Exponential distribution. \emph{Statistics in Medicine}, \bold{23}: 3053-3076.
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox \emph{t} distribution in GAMLSS to mode skewnees and  and kurtosis.
-to appear in \emph{Statistical Modelling}.
+Rigby, R.A. Stasinopoulos, D.M. (2006).   Using the Box-Cox \emph{t} distribution in GAMLSS to mode skewnees and  and kurtosis. \emph{Statistical Modelling}, 6(3) :209. \doi{10.1191/1471082X06st122oa}
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC. \doi{10.1201/9780429298547}
+	An older version can be found in \url{https://www.gamlss.com/}.
+
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
-
+(see also  \url{https://www.gamlss.com/}).
 }
-\author{ Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby and Kalliope Akantziliotou}
+\author{ Mikis Stasinopoulos, Bob Rigby and Kalliope Akantziliotou}
 \note{\eqn{\mu}{mu} is the median of the distribution \eqn{\sigma}{sigma} is approximately the coefficient of variation (for small values of \eqn{\sigma}{sigma}), 
  and \eqn{\nu}{nu} controls the skewness.
  
