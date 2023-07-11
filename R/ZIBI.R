@@ -48,6 +48,8 @@ mu.initial = expression(mu <- rep(0.5,length(y))),         #(((y + 0.5)/(bd +1))
       mu.valid = function(mu) all(mu > 0 & mu < 1),
    sigma.valid = function(sigma)  all(sigma > 0 & sigma < 1), 
        y.valid = function(y)  all(y >= 0)
+           ,mean = function(bd, mu, sigma) (1 - sigma) * bd * mu,
+       variance = function(bd, mu, sigma) (1 - sigma) * bd * mu * (1 - mu + bd * mu * sigma)
           ),
             class = c("gamlss.family","family"))
 }
@@ -56,7 +58,7 @@ dZIBI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
  { 
           if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))           
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
+      #    if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
              ly <- max(length(x),length(mu),length(sigma),length(bd)) 
               x <- rep(x, length = ly)      
           sigma <- rep(sigma, length = ly)
@@ -65,6 +67,7 @@ dZIBI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
           logfy <- rep(0, length(x))
           logfy <- ifelse((x==0), log(sigma+(1-sigma)*dBI(0,bd,mu)), (log(1-sigma) + dBI(x,bd,mu,log=T) ))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+          fy <- ifelse(x < 0, 0, fy) 
           fy
   }
 #------------------------------------------------------------------------------------------
@@ -72,7 +75,7 @@ pZIBI <- function(q, bd = 1, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = F
   {     
          if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))          
          if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
+ #        if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
           ly <- max(length(q),length(mu),length(sigma)) 
            q <- rep(q, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -82,7 +85,8 @@ pZIBI <- function(q, bd = 1, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = F
          cdf <- pbinom(q, size = bd, prob = mu, lower.tail = TRUE, log.p = FALSE)
          cdf <- sigma + (1-sigma)*cdf
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
+         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
+         cdf <- ifelse(q < 0, 0, cdf) 
          cdf
    }
 #-----------------------------------------------------------------------------------------
@@ -111,6 +115,6 @@ rZIBI <- function(n, bd = 1, mu = 0.5, sigma = 0.1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qZIBI(p, bd = bd, mu = mu, sigma = sigma)
-          r
+          as.integer(r)
   }
 #-----------------------------------------------------------------------------------------

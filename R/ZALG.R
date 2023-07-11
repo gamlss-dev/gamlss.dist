@@ -35,7 +35,15 @@ ZALG <- function (mu.link = "logit", sigma.link = "logit")
    sigma.initial = expression(sigma <-rep(0.3, length(y))), 
       mu.valid = function(mu) all(mu > 0  & mu < 1),
    sigma.valid = function(sigma)  all(sigma > 0 & sigma < 1), 
-       y.valid = function(y)  all(y >= 0)
+       y.valid = function(y)  all(y >= 0),
+          mean = function(mu, sigma) {
+                          alpha <- - 1 / log(1 - mu)
+                          return((1 - sigma) * alpha * mu / (1 - mu))
+                  }, 
+      variance = function(mu, sigma, nu) {
+                          alpha <- - 1 / log(1 - mu)
+                          return((1 - sigma) * alpha * mu * (1 - (1 - sigma) * alpha * mu) / (1 - mu)^2)
+                  }
           ),
             class = c("gamlss.family","family"))
 }
@@ -44,7 +52,7 @@ dZALG<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
  { 
           if (any(mu <= 0) | any(mu >= 1))  stop(paste("mu must be between 0 and 1", "\n", ""))          
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
+     #     if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
            ly <- max(length(x),length(mu),length(sigma)) 
             x <- rep(x, length = ly)      
         sigma <- rep(sigma, length = ly)
@@ -52,6 +60,7 @@ dZALG<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
           logfy <- rep(0, ly)
           logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dLG(ifelse(x==0,1,x),mu,log = TRUE))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+          fy <-ifelse(x < 0, 0, fy) 
           fy
   }
 #------------------------------------------------------------------------------------------
@@ -59,7 +68,7 @@ pZALG <- function(q, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0) | any(mu >= 1))  stop(paste("mu must be between 0 and 1", "\n", ""))           
          if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
+     #    if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
            ly <- max(length(q),length(mu),length(sigma)) 
             q <- rep(q, length = ly)      
         sigma <- rep(sigma, length = ly)
@@ -69,7 +78,8 @@ pZALG <- function(q, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
          cdf2 <- sigma + (1-sigma)*cdf1
           cdf <- ifelse((q==0),sigma,  cdf2)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
+         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
+         cdf <-ifelse(q < 0, 0, cdf) 
          cdf
    }
 #-----------------------------------------------------------------------------------------
@@ -98,6 +108,6 @@ rZALG <- function(n, mu = 0.5, sigma=0.1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qZALG(p, mu = mu, sigma = sigma)
-          r
+          as.integer(r)
   }
 #-----------------------------------------------------------------------------------------

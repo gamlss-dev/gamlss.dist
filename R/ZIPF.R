@@ -35,7 +35,9 @@ ZIPF <- function (mu.link = "log")
          rqres = expression(rqres(pfun="pZIPF", type="Discrete", ymin=1, y=y, mu=mu)), 
          mu.initial =expression({mu <- rep(.1,length(y)) } ),
          mu.valid = function(mu) all(mu > 0), 
-         y.valid = function(y)  all(y >= 1) 
+         y.valid = function(y)  all(y >= 1),
+            mean = function(mu) ifelse(mu > 1, zetaP(mu) / zetaP(mu +1), Inf),
+        variance = function(mu) ifelse(mu > 2, (zetaP(mu + 1) * zetaP(mu - 1) - (zetaP(mu))^2) / (zetaP(mu + 1))^2, Inf)
     ),
     class = c("gamlss.family","family"))
 }
@@ -43,12 +45,13 @@ ZIPF <- function (mu.link = "log")
 dZIPF<- function(x, mu = 1, log = FALSE)
 {
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(x < 1) )  stop(paste("x must be >=1", "\n", ""))
+ # if (any(x < 1) )  stop(paste("x must be >=1", "\n", ""))
      ly <- max(length(x),length(mu)) 
       x <- rep(x, length = ly)      
      mu <- rep(mu, length = ly)   
    logL <- -(mu+1)*log(x)-log(zetaP(mu+1)) # or zeta
     lik <- if (log) logL else exp(logL)
+    lik <-ifelse(x < 1, 0, lik) 
   as.numeric(lik)
 }
 #----------------------------------------------------------------------------------------
@@ -80,7 +83,7 @@ pZIPF <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
   }
   #--------------------------------------------------
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(q < 1) )  stop(paste("y must be >=0", "\n", "")) 
+ # if (any(q < 1) )  stop(paste("y must be >=0", "\n", "")) 
        ly <- max(length(q),length(mu)) 
         q <- rep(q, length = ly)      
        mu <- rep(mu, length = ly)
@@ -102,6 +105,7 @@ pZIPF <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
                                        1)
        }
    cdf <- ans/zetaP(mu + 1)
+   cdf <-ifelse(q < 1, 0, cdf)   
    cdf
 }
 #----------------------------------------------------------------------------------------
@@ -139,7 +143,7 @@ rZIPF <- function(n, mu = 1, max.value = 10000)
   n <- ceiling(n)
   p <- runif(n)
   r <- qZIPF(p, mu = mu, max.value = max.value)
-  r
+  as.integer(r)
 }
 #----------------------------------------------------------------------------------------
 #---------------------------------------------------------------------

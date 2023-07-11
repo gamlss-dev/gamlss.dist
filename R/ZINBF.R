@@ -225,6 +225,6 @@ rZINBF <- function(n, mu=1, sigma=1, nu=2, tau=0.1)
              n <- ceiling(n)
              p <- runif(n)
              r <- qZINBF(p, mu=mu, sigma=sigma, nu=nu)
-             r
+             as.integer(r)
   }
 #----------------------------------------------------------------------------------------

@@ -4,9 +4,9 @@
 # ---------------------------------------------------------------------------------------
 ZAGA <- function (mu.link ="log", sigma.link="log", nu.link ="logit")
 {
-    mstats <- checklink("mu.link", "ZAIG", substitute(mu.link), c("inverse", "log", "identity", "own"))
-    dstats <- checklink("sigma.link", "ZAIG", substitute(sigma.link), c("inverse", "log", "identity", "own"))
-    vstats <- checklink("nu.link", "ZAIG", substitute(nu.link),  c("logit", "probit", "cloglog", "cauchit", "log", "own"))
+    mstats <- checklink("mu.link", "ZAGA", substitute(mu.link), c("inverse", "log", "identity", "own"))
+    dstats <- checklink("sigma.link", "ZAGA", substitute(sigma.link), c("inverse", "log", "identity", "own"))
+    vstats <- checklink("nu.link", "ZAGA", substitute(nu.link),  c("logit", "probit", "cloglog", "cauchit", "log", "own"))
     structure(
           list(family = c("ZAGA", "Zero Adjusted GA"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE), 
@@ -43,7 +43,9 @@ ZAGA <- function (mu.link ="log", sigma.link="log", nu.link ="logit")
               mu.valid = function(mu) TRUE , 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0) && all(nu < 1), 
-               y.valid = function(y)  all(y>=0)
+               y.valid = function(y)  all(y>=0),
+                  mean = function(mu, sigma, nu) (1 - nu) * mu,
+              variance = function(mu, sigma, nu) (1 - nu) * mu^2 * (sigma^2 + nu)
           ),
             class = c("gamlss.family","family"))
 }
@@ -52,9 +54,10 @@ dZAGA<-function(x, mu=1, sigma=1, nu=.1, log=FALSE)
  {        if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))
           if (any(nu < 0)|any(nu > 1))  stop(paste("nu must be between 0 and 1", "\n", ""))     
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+  #        if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
  log.lik <- ifelse(x==0, log(nu), log(1-nu)+(1/sigma^2)*log(x/(mu*sigma^2))-x/(mu*sigma^2)-log(x)-lgamma(1/sigma^2))
      if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
+      fy <- ifelse(x < 0, 0, fy)
       fy 
   }
 #----------------------------------------------------------------------------------------
@@ -62,48 +65,39 @@ pZAGA <- function(q, mu=1, sigma=1, nu=0.1, lower.tail = TRUE, log.p = FALSE)
   {       if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))
           if (any(nu < 0)|any(nu > 1))  stop(paste("nu must be between 0 and 1", "\n", ""))     
-          if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+    #      if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
      cdf <- pgamma(q,shape=1/sigma^2,scale=mu*sigma^2)
      cdf <- ifelse((q==0), nu, nu+(1-nu)*cdf)    
     if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
-    cdf
+     cdf <- ifelse(q < 0, 0, cdf) 
+     cdf
    }
 #---------------------------------------------------------------------------------------- 
-qZAGA <- function(p, mu=1, sigma=1,  nu=0.1, lower.tail = TRUE, log.p = FALSE, 
-                upper.limit = mu+10*sqrt(sigma^2*mu^2))
-  { 
-    #---function--------------------------------------------   
-       h1 <- function(q)
-       { 
-     pZAGA(q , mu = mu[i], sigma = sigma[i], nu = nu[i]) - p[i]  
-       }
-     #-----------------------------------------------------------------
-     #-----------------------------------------------------------------
-    if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))
-    if (any(nu < 0)|any(nu > 1))  stop(paste("nu must be between 0 and 1", "\n", ""))     
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-        # lp <- length(p) 
-         lp <- max(length(p),length(mu),length(sigma),length(nu)) 
-      sigma <- rep(sigma, length = lp)
-          p <- rep(p, length = lp)
-         mu <- rep(mu, length = lp)
-         nu <- rep(nu, length = lp)
-      upper <- rep(upper.limit, length = lp )
-      lower <- rep(0, length = lp )
-          q <- rep(0,lp)    
-         for (i in seq(along=p))
-          {
-           q[i] <- if (nu[i]>=p[i]) 0
-                   else  uniroot(h1, c(lower[i], upper[i]))$root                
-          if (q[i]>=upper[i]) warning("q is at the upper limit, increase the upper.limit")
-         # if (q[i]<=lower[i]) warning("q is at the lower limit, decrease the lower.limit")
-          }                                                                               
-    q
-   }
+qZAGA <- function (p, mu = 1, sigma = 1, nu = 0.1, lower.tail = TRUE, 
+                   log.p = FALSE) 
+{
+  # perform checks and preparations
+  if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
+  if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", ""))
+  if (any(nu < 0) | any(nu > 1)) stop(paste("nu must be between 0 and 1", "\n", ""))
+  ly <- max(length(p), length(mu), length(sigma), length(nu))
+   p <- rep(p, length = ly)
+  if (log.p == TRUE) p <- exp(p)
+     else p <- p
+  if (lower.tail == TRUE) 
+    p <- p
+  else p <- 1 - p
+  if (any(p < 0) | any(p >= 1)) stop(paste("p must be between 0 and 1", "\n", ""))
+  if(!(length(nu) %in% c(1, length(p)))) stop(paste("nu is of length", length(nu), "\n", "Must be of lenght 1 or length(p) =", length(p)))
+  # handle zero quantiles
+  which_zero <- which(p <= nu)
+  if(length(nu) == 1) 
+    p[which_zero] <- nu
+  else p[which_zero] <- nu[which_zero] 
+  # compute quantiles
+  return( qgamma((p-nu)/(1-nu), shape = 1/sigma^2, scale = mu * sigma^2) )
+}
 #-----------------------------------------------------------------------------------------
 rZAGA <- function(n, mu=1, sigma=1, nu=0.1, ...)
   { 
@@ -118,7 +112,8 @@ rZAGA <- function(n, mu=1, sigma=1, nu=0.1, ...)
   }
    
 #----------------------------------------------------------------------------------------
-plotZAGA <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, main=NULL, ...)
+plotZAGA <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, main=NULL,
+                      ...)
 {
   y = seq(from=0.001, to=to, length.out=n )
   pdf<- dZAGA(y, mu = mu ,sigma = sigma, nu = nu) 
@@ -126,7 +121,7 @@ plotZAGA <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, main=
   po<-c(0)
   if (is.null(main)) main = "Zero Adj. Gamma"
   plot(pdf~y, main=main, ylim=c(0,max(pdf,pr0)), type="l", ...)
-  points(po,pr0,type="h")
+  points(po,pr0,type="h", ...)
   points(po,pr0,type="p", col="blue")
 }
 

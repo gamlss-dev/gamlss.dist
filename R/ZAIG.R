@@ -50,18 +50,22 @@ ZAIG <- function (mu.link ="log", sigma.link="log", nu.link ="logit")
 dZAIG<-function(x, mu=1, sigma=1, nu=.1, log=FALSE)
  {        if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
- log.lik <- ifelse(x==0, log(nu), log(1-nu)+(-0.5*log(2*pi)-log(sigma)-(3/2)*log(x)-((x-mu)^2)/(2*sigma^2*(mu^2)*x)))
+ #         if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+      xx <- ifelse(x < 0, 0.001, x)
+ log.lik <- ifelse(xx==0, log(nu), log(1-nu)+(-0.5*log(2*pi)-log(sigma)-(3/2)*log(xx)-((xx-mu)^2)/(2*sigma^2*(mu^2)*xx)))
      if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
+      fy <- ifelse(x < 0, 0, fy)
       fy 
   }
 #----------------------------------------------------------------------------------------
 pZAIG <- function(q, mu=1, sigma=1, nu=0.1, lower.tail = TRUE, log.p = FALSE)
-  {       if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+  {      
+          if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
-    cdf1 <- pnorm(((q/mu)-1)/(sigma*sqrt(q))) 
-    cdf2 <- exp(2/(mu*sigma^2))*pnorm((-((q/mu)+1))/(sigma*sqrt(q)))
+#          if (any(q < 0))  stop(paste("y must be positive", "\n", "")) 
+      qq <- ifelse(q < 0, 0.001, q)       
+    cdf1 <- pnorm(((qq/mu)-1)/(sigma*sqrt(qq))) 
+    cdf2 <- exp(2/(mu*sigma^2))*pnorm((-((qq/mu)+1))/(sigma*sqrt(qq)))
      cdf <- cdf1+ cdf2
      ## the problem with this approximation is that it is not working with 
      ## small sigmas and produce NA's. So here it is a solution
@@ -71,48 +75,43 @@ pZAIG <- function(q, mu=1, sigma=1, nu=0.1, lower.tail = TRUE, log.p = FALSE)
        for (i in index)
           {
         cdf[i] <- integrate(function(x) 
-                 dIG(x, mu = mu[i], sigma = sigma[i], log=FALSE), 0.001, q[i] )$value
+                 dIG(x, mu = mu[i], sigma = sigma[i], log=FALSE), 0.001, qq[i] )$value
           }    
       }
      cdf <- ifelse((q==0), nu, nu+(1-nu)*cdf)    
     if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
+    cdf <- ifelse(q < 0, 0, cdf) 
     cdf
    }
 #---------------------------------------------------------------------------------------- 
-qZAIG <- function(p, mu=1, sigma=1,  nu=0.1, lower.tail = TRUE, log.p = FALSE, 
-                upper.limit = mu+10*sqrt(sigma^2*mu^3))
+qZAIG <- function(p, mu=1, sigma=1,  nu=0.1, lower.tail = TRUE, log.p = FALSE)
   { 
-    #---function--------------------------------------------   
-       h1 <- function(q)
-       { 
-     pZAIG(q , mu = mu[i], sigma = sigma[i], nu = nu[i]) - p[i]  
-       }
-     #-----------------------------------------------------------------
-     #-----------------------------------------------------------------
-    if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))
-    if (any(nu < 0)|any(nu > 1))  stop(paste("nu must be between 0 and 1", "\n", ""))     
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-    #     lp <- length(p) 
-         lp <- max(length(p),length(mu),length(sigma),length(nu)) 
-          p <- rep(p, length = lp)
-      sigma <- rep(sigma, length = lp)
-         mu <- rep(mu, length = lp)
-         nu <- rep(nu, length = lp)
-      upper <- rep(upper.limit, length = lp )
-      lower <- rep(0, length = lp )
-          q <- rep(0,lp)    
-         for (i in seq(along=p))
-          {
-           q[i] <- if (nu[i]>=p[i]) 0
-                   else  uniroot(h1, c(lower[i], upper[i]))$root                
-          if (q[i]>=upper[i]) warning("q is at the upper limit, increase the upper.limit")
-         # if (q[i]<=lower[i]) warning("q is at the lower limit, decrease the lower.limit")
-          }                                                                               
-    q
+   
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))
+if (any(nu < 0)|any(nu > 1))  stop(paste("nu must be between 0 and 1", "\n", ""))     
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
+if (any(p < 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+      lp <- max(length(p),length(mu),length(sigma),length(nu)) 
+       p <- rep(p, length = lp)
+   sigma <- rep(sigma, length = lp)
+      mu <- rep(mu, length = lp)
+      nu <- rep(nu, length = lp)
+       q <- rep(0,lp)    
+    p_nu <- ifelse((p - nu)/(1 - nu) <= 0, 0.5, (p - nu)/(1 - nu))
+       q <- ifelse((p > nu), qIG(p_nu, mu=mu, sigma=sigma), 0)
+       # compute quantiles
+if (lower.tail == TRUE) 
+  q <- q
+else q <- 1 - q
+if (log.p == FALSE) 
+  q <- q
+else q <- log(q)
+q
    }
 #-----------------------------------------------------------------------------------------
 rZAIG <- function(n, mu=1, sigma=1, nu=0.1, ...)
@@ -128,16 +127,31 @@ rZAIG <- function(n, mu=1, sigma=1, nu=0.1, ...)
   }
    
 #----------------------------------------------------------------------------------------
-plotZAIG <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, ...)
- {
-  y = seq(from=0.001, to=to, length.out=n )
-  pdf<- dZAIG(y, mu = mu ,sigma = sigma, nu = nu) 
-  pr0<-c(dZAIG(0, mu=mu ,sigma=sigma,  nu=nu))
-  po<-c(0)
-  plot(pdf~y, main="Zero adjusted IG", ylim=c(0,max(pdf,pr0)), type="l")
-  points(po,pr0,type="h")
-  points(po,pr0,type="p", col="blue")
- }
+# plotZAIG <- function( mu =5 , sigma=1, nu = 0.1, from = 0, to=10, n = 101, ...)
+#  {
+#   y = seq(from=0.001, to=to, length.out=n )
+#   pdf<- dZAIG(y, mu = mu ,sigma = sigma, nu = nu) 
+#   pr0<-c(dZAIG(0, mu=mu ,sigma=sigma,  nu=nu))
+#   po<-c(0)
+#   plot(pdf~y, main="Zero adjusted IG", ylim=c(0,max(pdf,pr0)), type="l")
+#   points(po,pr0,type="h")
+#   points(po,pr0,type="p", col="blue")
+# }
+plotZAIG<-function (mu = 5, sigma = 1, nu = 0.1, from = 0, to = 10, n = 101, 
+                    main = NULL, ...) 
+{
+    y <- seq(from = 0.001, to = to, length.out = n)
+  pdf <- dZAIG(y, mu = mu, sigma = sigma, nu = nu)
+  pr0 <- c(dZAIG(0, mu = mu, sigma = sigma, nu = nu))
+  po <- c(0)
+  if (is.null(main)) 
+    main = "Zero adjusted IG"
+  plot(pdf ~ y, main = main, ylim = c(0, max(pdf, pr0)), 
+       type = "l", ...)
+  points(po, pr0, type = "h", ...)
+  points(po, pr0, type = "p", col = "blue")
+}
+
 #----------------------------------------------------------------------------------------
 meanZAIG <- function(obj)
   {

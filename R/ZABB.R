@@ -72,7 +72,7 @@ dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
           if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))
-          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
+   #       if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
          ly <- max(length(x),length(mu),length(sigma),length(bd) ) 
           x <- rep(x, length = ly)      
       sigma <- rep(sigma, length = ly)
@@ -82,7 +82,8 @@ dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
       logfy <- rep(0, ly)
       logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy
+         fy <- ifelse(x < 0, 0, fy)
+         fy
 
   }
 #------------------------------------------------------------------------------------------
@@ -91,7 +92,7 @@ pZABB <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, lower.tail = TRUE,
          if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
          if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", "")) 
-         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", ""))  
+ #        if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", ""))  
           ly <- max(length(q),length(mu),length(sigma),length(bd) ) 
            q <- rep(q, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -105,7 +106,8 @@ pZABB <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, lower.tail = TRUE,
          cdf <- ifelse((q==0), nu,  cdf3)
          cdf <- ifelse(cdf>1L, 1L , cdf)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
+         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
+         cdf <- ifelse(q < 0, 0, cdf) 
          cdf
    }
 #------------------------------------------------------------------------------------------
@@ -133,6 +135,6 @@ rZABB <- function(n, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qZABB(p, mu = mu, sigma = sigma, nu = nu, bd = bd)
-          r
+          as.integer(r)
   }
 #-----------------------------------------------------------------------------------------

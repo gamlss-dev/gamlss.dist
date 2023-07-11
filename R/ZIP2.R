@@ -61,7 +61,9 @@ sigma.linkinv = dstats$linkinv,
   sigma.initial = expression(sigma <- rep(0.3, length(y))), 
        mu.valid = function(mu) all(mu > 0) , 
     sigma.valid = function(sigma)  all(sigma > 0 & sigma < 1), 
-        y.valid = function(y)  all(y >= 0)
+        y.valid = function(y)  all(y >= 0),
+           mean = function(mu, sigma) mu,
+       variance = function(mu, sigma) mu * (1 +(mu * sigma) / (1-sigma))
           ),
           class = c("gamlss.family","family"))
 }
@@ -70,7 +72,7 @@ dZIP2<-function(x, mu = 5, sigma = 0.1, log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0", "\n", ""))           
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
+   #       if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
            ly <- max(length(x),length(mu),length(sigma)) 
             x <- rep(x, length = ly)      
         sigma <- rep(sigma, length = ly)
@@ -80,6 +82,7 @@ dZIP2<-function(x, mu = 5, sigma = 0.1, log = FALSE)
         logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mus)), 
                                   ((1-x)*log(1-sigma) - mus +x*log(mu) -lgamma(x+1)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+          fy <- ifelse(x < 0, 0, fy) 
           fy
   }
 #------------------------------------------------------------------------------------------
@@ -87,7 +90,7 @@ pZIP2 <- function(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0) )  stop(paste("mu must be greater than 0", "\n", ""))           
          if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-         if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
+     #    if (any(q < 0) )  stop(paste("y must be 0 or greater than 0", "\n", "")) 
           ly <- max(length(q),length(mu),length(sigma)) 
            q <- rep(q, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -97,7 +100,8 @@ pZIP2 <- function(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
          cdf <- ppois(q, lambda = mus, lower.tail = TRUE, log.p = FALSE)
          cdf <- sigma + (1-sigma)*cdf
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
+         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)  
+         cdf <- ifelse(q < 0, 0, cdf) 
          cdf
    }
 #-----------------------------------------------------------------------------------------
@@ -126,6 +130,6 @@ rZIP2 <- function(n, mu=5, sigma=0.1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qZIP2(p, mu = mu, sigma = sigma)
-          r
+          as.integer(r)
   }
 #-----------------------------------------------------------------------------------------
