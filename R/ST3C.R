@@ -307,7 +307,23 @@ ST3C <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
              tau.valid = function(tau) all(tau > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+				mean = function(mu, sigma, nu, tau) {
+				      if (tau > 1) {
+				    EZ <- (2 * sqrt(tau) * (nu - 1/nu)) / ( (tau - 1) * beta(1/2,tau/2))                     
+				    return(mu + sigma * EZ)
+				  } else {
+				    return(NaN)
+				  }
+				},
+				variance = function(mu, sigma, nu, tau) {
+				  if (tau > 2) {
+				    EZ <- (2 * sqrt(tau) * (nu - 1/nu)) / ( (tau - 1) * beta(1/2,tau/2))  
+				    return( sigma^2 * ( tau / (tau-2) * (nu^2 + nu^(-2) - 1) - (EZ)^2 ))
+				  } else {
+				    return(NaN)
+				  }
+				}
           ),
             class = c("gamlss.family","family"))
 }

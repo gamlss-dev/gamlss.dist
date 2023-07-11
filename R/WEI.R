@@ -33,7 +33,9 @@ WEI <- function (mu.link="log", sigma.link="log")
                                     sigma <-  rep(s.Y.s,length(y))}),
               mu.valid = function(mu) all(mu > 0) , 
            sigma.valid = function(sigma)  all(sigma > 0), 
-               y.valid = function(y)  all(y > 0)
+               y.valid = function(y)  all(y > 0),
+                  mean = function(mu, sigma) mu * gamma(1/sigma + 1),
+              variance = function(mu, sigma) mu^2 * (gamma(2/sigma + 1) - (gamma(1/sigma + 1))^2)
           ),
             class = c("gamlss.family","family"))
 }
@@ -42,8 +44,9 @@ dWEI<-function(x, mu=1, sigma=1, log=FALSE)
  { 
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+    #      if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
       fy <- dweibull(x, scale=mu, shape=sigma, log =log)
+      fy <-ifelse(x <= 0, 0, fy)
       fy 
   }
 #----------------------------------------------------------------------------------------
@@ -51,7 +54,7 @@ pWEI <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+  #        if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
     cdf <- pweibull(q, scale=mu, shape=sigma, lower.tail = lower.tail, log.p = log.p)
     cdf
    }

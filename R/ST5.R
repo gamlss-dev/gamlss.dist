@@ -187,9 +187,29 @@ ST5<- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.l
    sigma.valid = function(sigma)  all(sigma > 0),
       nu.valid = function(nu) TRUE , 
      tau.valid = function(tau) all(tau > 0), 
-       y.valid = function(y)  TRUE
-          ),
-            class = c("gamlss.family","family"))
+       y.valid = function(y)  TRUE,
+          mean = function(mu, sigma, nu, tau) {
+                          a <- (1 + nu * (2*tau + nu^2)^(-1/2)) / tau
+                          b <- (1 - nu * (2*tau + nu^2)^(-1/2)) / tau
+                          if (a > 0.5 & b > 0.5) {
+                            EZ <- (sqrt(a + b) * (a - b) * gamma(a - 0.5) * gamma(b - 0.5)) / (2 * gamma(a) * gamma(b))
+                            return(mu + sigma * EZ)
+                          } else {
+                            return(NaN)
+                          }
+                       }, 
+      variance = function(mu, sigma, nu, tau) {
+                          a <- (1 + nu * (2 * tau + nu ^ 2) ^ (-1 / 2)) / tau
+                          b <- (1 - nu * (2 * tau + nu ^ 2) ^ (-1 / 2)) / tau
+                          if (a > 1 & b > 1){
+                            EZ1 <- (sqrt(a + b) * (a - b) * gamma(a - 0.5) * gamma(b - 0.5)) / (2 * gamma(a) * gamma(b))
+                            EZ2 <- ((a + b) * ((a - b) ^ 2 + a + b - 2))  / (4 * (a - 1) * (b - 1))
+                            return(sigma ^ 2 * (EZ2 - EZ1 ^2))
+                          } else {
+                            return(NaN)
+                          }
+                        }
+          ), class = c("gamlss.family","family"))
 }
 #----------------------------------------------------------------------------------------
 dST5<- function(x, mu = 0, sigma = 1, nu = 0, tau = 1, log = FALSE)

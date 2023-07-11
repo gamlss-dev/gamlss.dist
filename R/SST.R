@@ -294,7 +294,10 @@ SST<-function (mu.link = "identity", sigma.link = "log", nu.link = "log",
        sigma.valid = function(sigma) all(sigma > 0), 
           nu.valid = function(nu) all(nu > 0), 
          tau.valid = function(tau) all(tau > 0), 
-           y.valid = function(y) TRUE), 
+           y.valid = function(y) TRUE,
+              mean = function(mu, sigma, nu, tau) mu,
+          variance = function(mu, sigma, nu, tau) sigma^2
+            ), 
              class = c("gamlss.family", "family"))
 }
 #-----------------------------------------------------------------------------------------

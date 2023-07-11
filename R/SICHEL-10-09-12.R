@@ -127,7 +127,15 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
               mu.valid = function(mu) all(mu > 0) , 
            sigma.valid = function(sigma)  all(sigma > 0), 
               nu.valid = function(nu) TRUE,  
-               y.valid = function(y)  all(y >= 0)
+               y.valid = function(y)  all(y >= 0),
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) {
+                                  K1      <- besselK(1 / sigma, nu + 1)
+                                  K2      <- besselK(1 / sigma, nu)
+                                  b       <- K1 / K2
+                                  g       <- 2 * sigma * (nu+1) / b + 1 / b^2 - 1
+                                  return(mu + mu^2 * g)
+                         }
           ),
             class = c("gamlss.family","family"))
 }
@@ -165,20 +173,20 @@ SICHEL <-function (mu.link ="log", sigma.link="log", nu.link="identity")
 #----------------------------------------------------------------------------------------
 tofySICHEL <- function (y, mu, sigma, nu)
    {
-  ly <- max(length(y),length(mu),length(sigma),length(nu)) 
-  y <- rep(y, length = ly)    
+     ly <- max(length(y),length(mu),length(sigma),length(nu)) 
+      y <- rep(y, length = ly)    
   sigma <- rep(sigma, length = ly)
-  mu <- rep(mu, length = ly)   
-  nu <- rep(nu, length = ly) 
-  cvec <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
-  #cvec is  c=R_nu(1/sigma) where R_lambda(t)=K_{lambda+1}(t)/K_{lambda}(t) page 10
+     mu <- rep(mu, length = ly)   
+     nu <- rep(nu, length = ly) 
+   cvec <- exp(log(besselK((1/sigma),nu+1))-log(besselK((1/sigma),nu)))
+#cvec is  c=R_nu(1/sigma) where R_lambda(t)=K_{lambda+1}(t)/K_{lambda}(t) page 10
   alpha <- sqrt(1+2*sigma*(mu/cvec))/sigma # alpha^2=sigma^-2+(2*mu)/(c*sigma)
-  lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu)) #R_nu(alpha) page 30
-  sumlty <- as.double(.C("tofySICHEL1", as.double(y), as.double(mu), 
+   lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu)) #R_nu(alpha) page 30
+ sumlty <- as.double(.C("tofySICHEL1", as.double(y), as.double(mu), 
                as.double(sigma), as.double(nu), as.double(lbes),
                as.double(cvec), ans=double(length(y)),as.integer(length(y)),
                as.integer(max(y)+1), PACKAGE="gamlss.dist")$ans)
-   sumlty
+  sumlty
    }
 #----------------------------------------------------------------------------------------
 # this function is using tofySNN
@@ -208,9 +216,10 @@ dSICHEL<-function(x, mu=1, sigma=1, nu=-0.5, log=FALSE)
   { 
    if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
    if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+#   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
     ly <- max(length(x),length(mu),length(sigma),length(nu)) 
-     x <- rep(x, length = ly)      
+     x <- rep(x, length = ly)   
+    xx <- ifelse(x < 0, 0, x) 
  sigma <- rep(sigma, length = ly)
     mu <- rep(mu, length = ly)   
     nu <- rep(nu, length = ly) 
@@ -218,16 +227,17 @@ dSICHEL<-function(x, mu=1, sigma=1, nu=-0.5, log=FALSE)
  alpha <- sqrt(1+2*sigma*(mu/cvec))/sigma
   lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu))
  #cat("mu, sigma and nu", mu[1], sigma[1], nu[1], "\n")
-sumlty <- as.double(.C("tofySICHEL2", as.double(x), as.double(mu), 
+sumlty <- as.double(.C("tofySICHEL2", as.double(xx), as.double(mu), 
                        as.double(sigma), as.double(nu), as.double(lbes),
                        as.double(cvec), ans=double(length(x)),as.integer(length(x)),
                        as.integer(max(x)+1), PACKAGE="gamlss.dist")$ans)
-logfy <- -lgamma(x+1)-nu*log(sigma*alpha)+sumlty+log(besselK(alpha,nu))-log(besselK((1/sigma),nu))
+logfy <- -lgamma(xx+1)-nu*log(sigma*alpha)+sumlty+log(besselK(alpha,nu))-log(besselK((1/sigma),nu))
   
   if(log==FALSE) fy <- exp(logfy) else fy <- logfy
-  if (length(sigma)>1) fy <- ifelse((sigma>10000)&(nu>0), dNBI(x, mu = mu, sigma= 1/nu, log = log) ,fy)
-        else fy <- if ((sigma>10000)&(nu>0)) dNBI(x, mu = mu, sigma= 1/nu, log = log)  
+  if (length(sigma)>1) fy <- ifelse((sigma>10000)&(nu>0), dNBI(x, mu = mu, sigma= abs(1/nu), log = log) ,fy)
+        else fy <- if ((sigma>10000)&(nu>0)) dNBI(x, mu = mu, sigma= abs(1/nu), log = log)  
                    else  fy
+  fy <- ifelse(x < 0, 0, fy) 
   fy
   }
 #----------------------------------------------------------------------------------------     
@@ -271,17 +281,19 @@ pSICHEL <- function(q, mu=1, sigma=1, nu=-0.5, lower.tail = TRUE, log.p = FALSE)
 {  
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
+ # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
      ly <- max(length(q),length(mu),length(sigma),length(nu)) 
-      q <- rep(q,length = ly)       
+      q <- rep(q,length = ly) 
+     qq <- ifelse(q < 0, 0, q)
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly)   
      nu <- rep(nu, length = ly)   
-    cdf <- as.double(.C("cdfSICHEL", as.double(q), as.double(mu),as.double(sigma), as.double(nu), 
+    cdf <- as.double(.C("cdfSICHEL", as.double(qq), as.double(mu),as.double(sigma), as.double(nu), 
             ans=double(ly), as.integer(ly), PACKAGE="gamlss.dist")$ans)
   # as.integer(max(q)+1))#
   if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
-  if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)                                                                    
+  if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)  
+  cdf <-ifelse(q < 0, 0, cdf)   
   cdf
 }
 #----------------------------------------------------------------------------------------
@@ -339,7 +351,7 @@ rSICHEL <- function(n, mu=1, sigma=1, nu=-0.5, max.value = 10000)
           n <- ceiling(n)
           p <- runif(n)
           r <- qSICHEL(p, mu=mu, sigma=sigma, nu=nu, max.value = max.value )
-          r
+          as.integer(r)
   }
 #----------------------------------------------------------------------------------------
 VSICHEL<- function(obj)

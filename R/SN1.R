@@ -133,14 +133,21 @@ SN1<- function (mu.link = "identity", sigma.link = "log", nu.link = "identity")
             dldv <- (exp(lpdf - lcdf)) * dwdv
             d2ldddv <- -(dldd * dldv)
             d2ldddv
-        }, G.dev.incr = function(y, mu, sigma, nu, ...) {
-            -2 * dSN1(y, mu, sigma, nu, log = TRUE)
-        }, rqres = expression(rqres(pfun = "pSN1", type = "Continuous", 
-            y = y, mu = mu, sigma = sigma, nu = nu)), 
-        mu.initial = expression(mu <- (y + mean(y))/2), sigma.initial = expression(sigma <- rep(sd(y)/4, 
-            length(y))), nu.initial = expression(nu <- rep(0.1, 
-            length(y))), mu.valid = function(mu) TRUE, sigma.valid = function(sigma) all(sigma > 
-            0), nu.valid = function(nu) TRUE, y.valid = function(y) TRUE), class = c("gamlss.family", 
+        }, 
+        G.dev.incr = function(y, mu, sigma, nu, ...) {
+                   -2 * dSN1(y, mu, sigma, nu, log = TRUE)}, 
+             rqres = expression(rqres(pfun = "pSN1", type = "Continuous", 
+                            y = y, mu = mu, sigma = sigma, nu = nu)), 
+        mu.initial = expression(mu <- (y + mean(y))/2), 
+     sigma.initial = expression(sigma <- rep(sd(y)/4, length(y))), 
+        nu.initial = expression(nu <- rep(0.1, length(y))), 
+          mu.valid = function(mu) TRUE, sigma.valid = function(sigma) all(sigma > 0), 
+          nu.valid = function(nu) TRUE, 
+           y.valid = function(y) TRUE,
+              mean = function(mu, sigma, nu) mu + sigma * nu * sqrt(2/((1+nu^2)*pi)),
+          variance = function(mu, sigma, nu) sigma^2 * (1 - (2*nu^2)/((1+nu^2)*pi))
+     ), 
+     class = c("gamlss.family", 
         "family"))
 }
                    

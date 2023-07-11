@@ -73,7 +73,9 @@ TF <- function (mu.link="identity", sigma.link="log", nu.link ="log")
               mu.valid = function(mu) TRUE , 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma, nu) ifelse(nu>1, mu, NaN),
+              variance = function(mu, sigma, nu) ifelse(nu>2, (sigma^2*nu)/(nu-2), Inf) 
           ),
             class = c("gamlss.family","family"))
 }

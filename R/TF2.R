@@ -92,7 +92,9 @@ TF2 <- function(mu.link="identity", sigma.link="log", nu.link ="logshiftto2")
               mu.valid = function(mu) TRUE , 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) sigma^2
           ),
             class = c("gamlss.family","family"))
 }

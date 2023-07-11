@@ -209,7 +209,26 @@ SHASHo <- function (mu.link = "identity", sigma.link = "log",
         sigma.valid = function(sigma) all(sigma > 0), 
         nu.valid = function(nu) TRUE, 
         tau.valid = function(tau) all(tau > 0), 
-        y.valid = function(y) TRUE), 
+        y.valid = function(y) TRUE,
+        mean = function(mu, sigma, nu, tau) {
+                        q     <- 1 / tau
+                        K1    <- besselK(0.25,(q+1) / 2)
+                        K2    <- besselK(0.25,(q-1) / 2)
+                        P     <- exp(1/4) / (8*pi)^(1/2) * (K1 + K2)
+                        return( mu + sigma * sinh(nu/tau) * P)
+                        },
+        variance = function(mu, sigma, nu, tau) {
+                            q1    <- 1 / tau
+                            K1    <- besselK(0.25, (q1+1) / 2)
+                            K2    <- besselK(0.25, (q1-1) / 2)
+                            P1    <- exp(1/4) / (8*pi)^(1/2) * (K1 + K2)
+                            q2    <- 2 / tau
+                            K3    <- besselK(0.25, (q2+1) / 2)
+                            K4    <- besselK(0.25, (q2-1) / 2)
+                            P2    <- exp(1/4) / (8*pi)^(1/2) * (K3 + K4)
+                            return( sigma^2 / 2 * (cosh(2*nu/tau) * P2 -1) - sigma^2 * (sinh(nu/tau) * P1)^2)
+                            }
+     ), 
         class = c("gamlss.family", "family"))
 }
 #--------------------------------------------------------------------------------
