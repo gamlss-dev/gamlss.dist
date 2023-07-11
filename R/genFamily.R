@@ -22,7 +22,7 @@ Family.d <-function(family = "NO", type = c("log", "logit"), ...)
 fun <- if (type=="log")  
        function(x, log = FALSE, ...)
         {
-        if (any(x < 0)) stop(paste("x must be positive", "\n", ""))
+      #  if (any(x < 0)) stop(paste("x must be positive", "\n", ""))
         dfun <- pdf(log(x),log = TRUE,...)-log(x)
         dfun <- if (log == TRUE) dfun else exp(dfun)
         dfun
@@ -30,8 +30,8 @@ fun <- if (type=="log")
      else if (type=="logit")
       function(x, log = FALSE, ...)
        {
-        if (any(x < 0) | any(x > 1)) 
-        stop(paste("x must be between 0 and 1", "\n", "")) 
+      #  if (any(x < 0) | any(x > 1)) 
+      #  stop(paste("x must be between 0 and 1", "\n", "")) 
         dfun <-  pdf(log(x/(1-x)), log=TRUE, ...)-log(x)-log(1-x)
         dfun <- if (log == TRUE) dfun else exp(dfun)
         dfun
@@ -54,15 +54,15 @@ Family.p <-function(family = "NO", type = c("log", "logit"), ...)
 fun <- if (type=="log")  
        function(q, ...)
         {
-        if (any(q < 0)) stop(paste("q must be positive", "\n", ""))
+      #  if (any(q < 0)) stop(paste("q must be positive", "\n", ""))
         pfun <- cdf(log(q),...)
         pfun
        }
      else if (type=="logit")
       function(q,  ...)
        {
-        if (any(q < 0) | any(q > 1)) 
-        stop(paste("q must be between 0 and 1", "\n", "")) 
+      #  if (any(q < 0) | any(q > 1)) 
+     #   stop(paste("q must be between 0 and 1", "\n", "")) 
         pfun <- cdf(log(q/(1-q)),...)
         pfun
        } 
@@ -246,13 +246,13 @@ body(fam1)[[nopar+2]][[2]]$G.dev.incr <- fam$G.dev.incr
        body(fam$d2ldm2) <- parse(text=yval)[[1]] 
        body(fam1)[[nopar+2]][[2]]$d2ldm2  <- fam$d2ldm2
   #residuals
-       sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
+       sres <- gsub(porfun, pfun,   deparse(fam$rqres[[1]])) 
        sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
   body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres  
   # initial mu fam$mu.initial
-      inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-      inimu <- gsub("expression", "",  inimu)
+      inimu <- gsub("y", yvar,  deparse(fam$mu.initial[[1]]))
+      #inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
   body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial
   #y.valid           
@@ -288,18 +288,18 @@ body(fam1)[[nopar+2]][[2]]$G.dev.incr <- fam$G.dev.incr
      body(fam$d2ldmdd) <- parse(text=yval)[[1]]
      body(fam1)[[nopar+2]][[2]]$d2ldmdd  <- fam$d2ldmdd
   #residuals
-     sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
-     sres <- gsub("expression", "",  sres)
+     sres <- gsub(porfun, pfun,  deparse(fam$rqres[[1]])) # mikis pick up only first
+     #sres <- gsub("expression", "",  sres)
      fam$rqres <- parse(text=sres)
      body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres  
   # initial mu fam$mu.initial
-    inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-    inimu <- gsub("expression", "",  inimu)
+    inimu <- gsub("y", yvar,  deparse(fam$mu.initial[[1]]))
+    #inimu <- gsub("expression", "",  inimu)
     fam$mu.initial <- parse(text=inimu)
     body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial  
   # initial sigma fam$sigma.initial
- inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
- inisigma <- gsub("expression", "",  inisigma)
+ inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial[[1]]))
+ #inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
   body(fam1)[[nopar+2]][[2]]$sigma.initial <- fam$sigma.initial 
   #y.valid           
@@ -356,23 +356,23 @@ body(fam1)[[nopar+2]][[2]]$G.dev.incr <- fam$G.dev.incr
   body(fam$d2ldddv) <- parse(text=yval)[[1]]
   body(fam1)[[nopar+2]][[2]]$d2ldddv  <- fam$d2ldddv
   #residuals
-  sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
+  sres <- gsub(porfun, pfun,   deparse(fam$rqres[[1]])) 
   sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
   body(fam1)[[nopar+2]][[2]]$rqres <- fam$rqres 
   # initial mu fam$mu.initial
-  inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-  inimu <- gsub("expression", "",  inimu)
+  inimu <- gsub("y", yvar,  deparse(fam$mu.initial[[1]]))
+  #inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
   body(fam1)[[nopar+2]][[2]]$mu.initial <- fam$mu.initial 
   # initial sigma fam$sigma.initial
-  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
-  inisigma <- gsub("expression", "",  inisigma)
+  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial[[1]]))
+  #inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
   body(fam1)[[nopar+2]][[2]]$sigma.initial <- fam$sigma.initial
-  # initial nu fam$sigma.initial
-  ininu <- gsub("y", yvar,  deparse(fam$nu.initial))
-  ininu <- gsub("expression", "",  ininu)
+  # initial nu fam$nu.initial
+  ininu <- gsub("y", yvar,  deparse(fam$nu.initial[[1]]))
+  #ininu <- gsub("expression", "",  ininu)
   fam$nu.initial <- parse(text=ininu)
   body(fam1)[[nopar+2]][[2]]$nu.initial <- fam$nu.initial 
   #y.valid           
@@ -453,28 +453,28 @@ body(fam1)[[nopar+2]][[2]]$G.dev.incr <- fam$G.dev.incr
   body(fam$d2ldvdt) <- parse(text=yval)[[1]]
   body(fam1)[[nopar+2]][[2]]$d2ldvdt  <- fam$d2ldvdt
   #residuals
-  sres <- gsub(porfun, pfun,  deparse(fam$rqres)) 
+  sres <- gsub(porfun, pfun,   deparse(fam$rqres[[1]])) 
   sres <- gsub("expression", "",  sres)
   fam$rqres <- parse(text=sres)
   body(fam1)[[nopar+2]][[2]]$rqres   <- fam$rqres 
   # initial mu fam$mu.initial
-  inimu <- gsub("y", yvar,  deparse(fam$mu.initial))
-  inimu <- gsub("expression", "",  inimu)
+  inimu <- gsub("y", yvar,  deparse(fam$mu.initial[[1]]))
+  #inimu <- gsub("expression", "",  inimu)
   fam$mu.initial <- parse(text=inimu)
   body(fam1)[[nopar+2]][[2]]$mu.initial  <- fam$mu.initial
   # initial sigma fam$sigma.initial
-  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial))
-  inisigma <- gsub("expression", "",  inisigma)
+  inisigma <- gsub("y", yvar,  deparse(fam$sigma.initial[[1]]))
+  #inisigma <- gsub("expression", "",  inisigma)
   fam$sigma.initial <- parse(text=inisigma) 
   body(fam1)[[nopar+2]][[2]]$sigma.initial  <- fam$sigma.initial
   # initial nu fam$nu.initial
-  ininu <- gsub("y", yvar,  deparse(fam$nu.initial))
-  ininu <- gsub("expression", "",  ininu)
+  ininu <- gsub("y", yvar,  deparse(fam$nu.initial[[1]]))
+  #ininu <- gsub("expression", "",  ininu)
   fam$nu.initial <- parse(text=ininu)
   body(fam1)[[nopar+2]][[2]]$nu.initial <- fam$nu.initial
   # initial tau fam$tau.initial
-  initau <- gsub("y", yvar,  deparse(fam$tau.initial))
-  initau <- gsub("expression", "",  initau)
+  initau <- gsub("y", yvar,  deparse(fam$tau.initial[[1]]))
+  #initau <- gsub("expression", "",  initau)
   fam$tau.initial <- parse(text=initau)
   body(fam1)[[nopar+2]][[2]]$tau.initial  <- fam$tau.initial
   #y.valid           

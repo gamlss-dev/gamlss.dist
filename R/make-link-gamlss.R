@@ -23,6 +23,9 @@
 # logshiftto2 - Slog
 # own
 # inverse
+# [-1,1]
+# [0,2]
+# [0,5]
 
 
  make.link.gamlss<-function (link) 
@@ -138,7 +141,88 @@ if (is.character(link) && length(grep("^power", link) > 0))
        linkinv <- function(eta){ 1e-05 + pmax(.Machine$double.eps, exp(eta))}
         mu.eta <- function(eta) pmax(.Machine$double.eps, exp(eta))
       valideta <- function(eta) TRUE
-}, 
+}, "[-1,1]" =
+{  
+  linkfun <- function(mu)
+  {
+    delta <- 1e-10
+    shift <- c(-1-delta, 1+delta)
+    log((mu-shift[1])/(shift[2]-mu))
+  }
+  linkinv <- function(eta){
+    delta <- 1e-10
+    shift <- c(-1-delta, 1+delta)
+   thresh <- -log(.Machine$double.eps)
+      eta <- pmin(thresh, pmax(eta, -thresh))
+    (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+  }
+  mu.eta <- function(eta){
+    delta <- 1e-10
+    shift <- c(-1-delta, 1+delta)
+   thresh <- -log(.Machine$double.eps)
+      res <- rep(.Machine$souble.eps, length(eta))
+    res[abs(eta) < thresh] <- 
+      (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+      (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+      ((1 + exp(eta))^2)[abs(eta) < thresh]
+    res
+  }
+  valideta <- function(eta) TRUE
+ }, "(0,2]" =
+ {  
+   linkfun <- function(mu)
+   {
+     delta <- 1e-10
+     shift <- c(0, 2+delta)
+     log((mu-shift[1])/(shift[2]-mu))
+   }
+   linkinv <- function(eta){
+     delta <- 1e-10
+     shift <- c(0, 2+delta)
+     thresh <- -log(.Machine$double.eps)
+     eta <- pmin(thresh, pmax(eta, -thresh))
+     (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+   }
+   mu.eta <- function(eta){
+     delta <- 1e-10
+     shift <- c(0, 2+delta)
+     thresh <- -log(.Machine$double.eps)
+     res <- rep(.Machine$souble.eps, length(eta))
+     res[abs(eta) < thresh] <- 
+       (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+       (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+       ((1 + exp(eta))^2)[abs(eta) < thresh]
+     res
+   }
+   valideta <- function(eta) TRUE
+ }, "(0,5]" =
+   {  
+     linkfun <- function(mu)
+     {
+       delta <- 1e-10
+       shift <- c(0, 5+delta)
+       log((mu-shift[1])/(shift[2]-mu))
+     }
+     linkinv <- function(eta){
+       delta <- 1e-10
+       shift <- c(0, 5+delta)
+       thresh <- -log(.Machine$double.eps)
+       eta <- pmin(thresh, pmax(eta, -thresh))
+       (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+     }
+     mu.eta <- function(eta){
+       delta <- 1e-10
+       shift <- c(0, 5+delta)
+       thresh <- -log(.Machine$double.eps)
+       res <- rep(.Machine$souble.eps, length(eta))
+       res[abs(eta) < thresh] <- 
+         (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+         (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+         ((1 + exp(eta))^2)[abs(eta) < thresh]
+       res
+     }
+     valideta <- function(eta) TRUE
+   }, 
        #logitshift.5 = { # MS Saturday, February 19, 2005 depreciated 
        #linkfun <- function(mu, shift = par )           
        #                  log((mu-shift[1])/(shift[2]-mu))
@@ -212,4 +296,47 @@ for (i in 1:npar)
    }
 link.list
  }
-#---------------------------------------------------------------------------------------- 
+#----------------------------------------------------------- 
+############################################################
+############################################################
+# this a general link for any parameter say theta defined 
+# on a  finite range [a, b]
+# i.e:  a <= theta <= b
+# by setting delta=0 we have 
+#   a < theta < b
+# to create say (0,2] change line 
+# '[0,2]' = function(a=0, b=2, delta=1e-10)
+# and lines 
+#  shift <- c(a-delta, b+delta) to
+#  shift <- c(a, b+delta)
+#---------------------------------
+# a to b
+# '[a,b]' = function(a=0, b=2, delta=1e-10)
+# {
+#   linkfun <- function(mu)
+#   {
+#     shift <- c(a-delta, b+delta)
+#     log((mu-shift[1])/(shift[2]-mu))
+#   }
+#   linkinv <- function(eta){
+#     shift <- c(a-delta, b+delta)
+#     thresh <- -log(.Machine$double.eps)
+#     eta <- pmin(thresh, pmax(eta, -thresh))
+#     (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+#   }
+#   mu.eta <- function(eta){
+#     shift <- c(a-delta, b+delta)
+#     thresh <- -log(.Machine$double.eps)
+#     res <- rep(.Machine$souble.eps, length(eta))
+#     res[abs(eta) < thresh] <- 
+#       (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+#       (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+#       ((1 + exp(eta))^2)[abs(eta) < thresh]
+#     res
+#   }
+#   valideta <- function(eta) TRUE
+#   link<-'[a,b]'
+#   structure(list(linkfun = linkfun, linkinv = linkinv, mu.eta = mu.eta,
+#                  valideta = valideta, name = link), class = "link-gamlss")  
+# }
+# ################################################################

@@ -20,7 +20,9 @@ PO <- function (mu.link = "log")
                 rqres = expression(rqres(pfun="pPO", type="Discrete", ymin=0, y=y, mu=mu)), 
             mu.initial =expression({mu <- (y +mean(y))/2 } ),
               mu.valid = function(mu) all(mu > 0), 
-               y.valid = function(y)  all(y >= 0) 
+               y.valid = function(y)  all(y >= 0),
+                  mean = function(mu) mu,
+              variance = function(mu) mu
           ),
             class = c("gamlss.family","family"))
 }
@@ -28,8 +30,9 @@ PO <- function (mu.link = "log")
 dPO<-function(x, mu = 1, log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+       #   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
           fy <- dpois(x = x, lambda = mu, log = log)
+          fy <-ifelse(x < 0, 0, fy)
           fy
   }
   
@@ -37,8 +40,9 @@ dPO<-function(x, mu = 1, log = FALSE)
 pPO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
   {     
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
+       #   if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
           cdf <- ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+          cdf <-ifelse(q < 0, 0, cdf) 
           cdf
    }
 #----------------------------------------------------------------------------------------
@@ -55,6 +59,6 @@ rPO <- function(n, mu = 1)
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))  
           r <- rpois(n, lambda = mu)
-          r
+          as.integer(r)
   }
 #----------------------------------------------------------------------------------------

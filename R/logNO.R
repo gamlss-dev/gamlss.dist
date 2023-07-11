@@ -34,7 +34,9 @@ LOGNO <- function (mu.link="identity", sigma.link="log")
          sigma.initial = expression({sigma <- rep(sd(log(y)),length(y)) }),  
               mu.valid = function(mu) all(mu > 0), 
            sigma.valid = function(sigma)  all(sigma > 0),
-               y.valid = function(y)  all(y > 0)
+               y.valid = function(y)  all(y > 0),
+                  mean = function(mu, sigma) exp(mu+sigma^2/2),
+              variance = function(mu, sigma) exp(2*mu+sigma^2)*(exp(sigma^2)-1)
           ),
             class = c("gamlss.family","family"))
 }
@@ -43,8 +45,9 @@ LOGNO <- function (mu.link="identity", sigma.link="log")
 dLOGNO <- function(x, mu=0, sigma=1,  log = FALSE)
  {
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+        #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
           fy <- dlnorm(x=x, meanlog = mu, sdlog = sigma, log = log) 
+          fy <-ifelse(x <= 0, 0, fy)
           fy
   }    
 #----------------------------------------------------------------------------------------
@@ -52,7 +55,7 @@ pLOGNO <- function(q, mu=0, sigma=1,  lower.tail = TRUE, log.p = FALSE)
  {  
     #      if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
+    #      if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
           cdf <- plnorm(q=q, meanlog = mu, sdlog = sigma, lower.tail = lower.tail, log.p = log.p)
           cdf
  }
