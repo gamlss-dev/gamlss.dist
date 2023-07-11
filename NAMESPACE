@@ -18,6 +18,7 @@ export(WEI3, dWEI3, pWEI3, qWEI3, rWEI3,
        BEOI, dBEOI, pBEOI, qBEOI, rBEOI, plotBEOI, meanBEOI,
        BEZI, dBEZI, pBEZI, qBEZI, rBEZI, plotBEZI, meanBEZI,
        NOF, dNOF, pNOF, qNOF, rNOF,
+       GAF, dGAF, pGAF, qGAF, rGAF,
        GG, dGG, pGG, qGG, rGG,
        GIG, dGIG, pGIG, qGIG, rGIG,
        EXP, dEXP, pEXP, qEXP, rEXP,
@@ -71,9 +72,10 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        dLOGNO, pLOGNO, qLOGNO, rLOGNO, LOGNO,
        dLOGNO2, pLOGNO2, qLOGNO2, rLOGNO2, LOGNO2,
        dLOGITNO, pLOGITNO, qLOGITNO, rLOGITNO, LOGITNO,
+       dSIMPLEX, pSIMPLEX, qSIMPLEX, rSIMPLEX, SIMPLEX,
        dNO2, pNO2, qNO2, rNO2, NO2,
        dLQNO, pLQNO, qLQNO, rLQNO, LQNO,
-       dNET, pNET, NET,
+       dNET, pNET, qNET, rNET, NET, 
        dNO, pNO, qNO, rNO, NO,
        dPE, pPE, qPE, rPE, PE,
        dPE2, pPE2, qPE2, rPE2, PE2,
@@ -95,6 +97,7 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        SEP, dSEP, pSEP, qSEP, rSEP,
        ZIP, dZIP, pZIP, qZIP, rZIP,
        PIG, dPIG, pPIG, qPIG, rPIG,
+       PIG2, dPIG2, pPIG2, qPIG2, rPIG2,
        SI, dSI, pSI, qSI, rSI, tofyS,
        ZAIG, dZAIG, pZAIG, qZAIG, rZAIG, plotZAIG, meanZAIG,
        ZAGA, dZAGA, pZAGA, qZAGA, rZAGA, plotZAGA, meanZAGA,
@@ -102,29 +105,70 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
        IGAMMA, dIGAMMA, pIGAMMA, qIGAMMA,rIGAMMA,
        PARETO2, dPARETO2, pPARETO2, qPARETO2, rPARETO2,
        PARETO2o, dPARETO2o, pPARETO2o, qPARETO2o, rPARETO2o,
+       PARETO, dPARETO, pPARETO, qPARETO, rPARETO,
+       PARETO1, dPARETO1, pPARETO1, qPARETO1, rPARETO1,
+       PARETO1o, dPARETO1o, pPARETO1o, qPARETO1o, rPARETO1o,
       WARING, dWARING, pWARING, qWARING, rWARING,
       YULE, dYULE, pYULE, qYULE, rYULE,
       GPO, dGPO, pGPO, qGPO, rGPO,
       GEOM, dGEOM, pGEOM, qGEOM, rGEOM,
+      DBURR12, dDBURR12, pDBURR12, qDBURR12, rDBURR12,
       MN3, dMN3, pMN3, qMN3, rMN3,
       MN4, dMN4, pMN4, qMN4, rMN4,
       MN5, dMN5, pMN5, qMN5, rMN5,
       MULTIN, fittedMN,
       hazardFun, gen.hazard,
       Family, Family.d, Family.p, Family.q, Family.r, gen.Family,
-      flexDist
+      flexDist, count_1_31, count_1_22, count_2_32,
+      count_2_32R, count_2_33, count_3_32, count_3_33,
+      binom_1_31, binom_2_33, binom_3_33,
+      contR_2_12, contR_3_11, contR_4_13,
+      contRplus_2_11, contRplus_3_13, contRplus_4_33, contR01_2_13,
+      contR01_4_33, momentSK, centileSK, centileSkew, centileKurt, 
+      theoCentileSK, plotCentileSK, checkMomentSK, checkCentileSK 
 )
 # needed for gamlss family
 export(as.family, gamlss.family, gamlss.family.default, as.gamlss.family,
        checklink, make.link.gamlss, show.link)
+
+#export(fJSU, fSHASHo, fSEP3, fST3_1, fST3_2, fEGB2_1, fEGB2_2  )
+
 importFrom("methods", "is")
+#importFrom("base", "requireNamespace")
 import(MASS)
 import(graphics)
+importFrom("graphics", "lines")
+import(grDevices)
 import(stats)
+
+
+#importFrom("graphics", "lines")
+#importFrom("graphics", "abline", "axis", "curve", "legend", "lines",
+#             "par", "plot", "points", "title")
+#importFrom("grDevices", "gray")
 # documented but unexported methods
 
 S3method(gamlss.family, default)
 S3method(print, gamlss.family)
+
+
+## distributions3 class GAMLSS, encapsulating all gamlss.dist distributions
+export(GAMLSS)
+S3method(format,GAMLSS)
+S3method(print,GAMLSS)
+S3method(mean,GAMLSS)
+S3method(distributions3::variance,GAMLSS)
+S3method(distributions3::skewness,GAMLSS)
+S3method(distributions3::kurtosis,GAMLSS)
+S3method(distributions3::pdf,GAMLSS)
+S3method(distributions3::log_pdf,GAMLSS)
+S3method(distributions3::cdf,GAMLSS)
+S3method(quantile,GAMLSS)
+S3method(distributions3::random,GAMLSS)
+S3method(distributions3::is_continuous,GAMLSS)
+S3method(distributions3::is_discrete,GAMLSS)
+S3method(distributions3::support,GAMLSS)
+
 
 # the following commands has to be used for creating the c file 
 # to register the c functions
