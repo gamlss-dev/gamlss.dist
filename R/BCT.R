@@ -99,7 +99,7 @@ dBCT <- dBCTo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
           if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
-          if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
+       #   if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
           if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
           else   if (nu != 0) z <- (((x/mu)^nu-1)/(nu*sigma)) else z <- log(x/mu)/sigma
           loglik <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
@@ -109,6 +109,7 @@ dBCT <- dBCTo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
           if (length(tau)>1) loglik <- ifelse(tau>1000000, dBCCG(x,mu,sigma,nu,log=TRUE), loglik) # MS Wednesday, April 12, 2006
           else if (tau>1000000) loglik <- dBCCG(x,mu,sigma,nu,log=TRUE)
              ft <- if(log==FALSE) exp(loglik) else loglik 
+             ft <-ifelse(x <= 0, 0, ft)
        ft
   }    
 #-----------------------------------------------------------------  
@@ -117,7 +118,7 @@ pBCT <- pBCTo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, lo
           if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-          if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+     #     if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
          if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
          else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
          FYy1 <- pt(z,tau)
@@ -127,6 +128,7 @@ pBCT <- pBCTo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, lo
          FYy  <- (FYy1-FYy2)/FYy3
          if(lower.tail==TRUE) FYy  <- FYy else  FYy <- 1-FYy 
          if(log.p==FALSE) FYy  <- FYy else  FYy<- log(FYy) 
+         FYy <-ifelse(q <= 0, 0, FYy)
          FYy     
  }
 #-----------------------------------------------------------------  

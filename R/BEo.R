@@ -49,7 +49,9 @@ BEo <- function (mu.link = "log", sigma.link = "log")
         sigma.initial = expression({sigma <- rep(2,length(y))}) ,
              mu.valid = function(mu) all(mu > 0 & mu < 1) , 
           sigma.valid = function(sigma)  all(sigma > 0 & sigma < 1), 
-              y.valid = function(y)  all(y > 0 & y < 1)
+              y.valid = function(y)  all(y > 0 & y < 1),
+                 mean = function(mu, sigma) mu/(mu+sigma),
+             variance = function(mu, sigma) (mu*sigma)/((mu+sigma)^2 *(mu+sigma+1))
           ),
                 class = c("gamlss.family","family"))
 }
@@ -58,7 +60,7 @@ dBEo<-function(x, mu = 0.5, sigma = 0.2, log = FALSE)
  { 
           if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
-          if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
+      #    if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
           fy <- dbeta(x, shape1=mu, shape2=sigma, ncp=0, log=log)
           fy
   }
@@ -67,7 +69,7 @@ pBEo <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
-         if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
+ #        if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
           cdf <- pbeta(q, shape1=mu, shape2=sigma, ncp=0, lower.tail=lower.tail, log.p=log.p)
           cdf
    }

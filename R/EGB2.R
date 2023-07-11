@@ -121,7 +121,9 @@ EGB2 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link
    sigma.valid = function(sigma) TRUE,
       nu.valid = function(nu) all(nu > 0), 
      tau.valid = function(tau) all(tau > 0), 
-       y.valid = function(y)  TRUE
+       y.valid = function(y)  TRUE,
+          mean = function(mu, sigma, nu, tau) mu + sigma * (digamma(nu) - digamma(tau)),
+      variance = function(mu, sigma, nu, tau) sigma^2 * (trigamma(nu) + trigamma(tau))
           ),
             class = c("gamlss.family","family"))
 }

@@ -184,13 +184,14 @@ dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
           if (any(mu < 0))  stop(paste("mu must be positive", "\n", ""))  
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-          if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
+  #        if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
           if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
           else   if (nu != 0) z <- (((x/mu)^nu-1)/(nu*sigma)) else z <- log(x/mu)/sigma
         logfZ <- f.T(z,log=TRUE)-log(F.T(1/(sigma*abs(nu))))
        logder <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
        loglik <- logder+logfZ
        if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+       ft <- ifelse(x <= 0, 0, ft) 
        ft
   }    
 #-----------------------------------------------------------------  
@@ -206,7 +207,7 @@ pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
          if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
          if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-         if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+ #        if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
          
          if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
          else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma

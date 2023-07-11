@@ -101,10 +101,10 @@ dBEINF1<-function(x, mu = 0.5, sigma = 0.1, nu = 0.1,  log = FALSE)
               stop(paste("sigma must be between 0 and 1", "\n", "")) 
           if (any(nu <= 0) )  
              stop(paste("nu must greated than 0", "\n", ""))            
-          if (any(x <= 0) | any(x > 1))
-          {
-             stop(paste("x must be 0< x<=1, i.e. (0 to 1] inclusively", "\n", ""))  
-          } 
+          # if (any(x <= 0) | any(x > 1))
+          # {
+          #    stop(paste("x must be 0< x<=1, i.e. (0 to 1] inclusively", "\n", ""))  
+          # } 
               a <- mu*(1-sigma^2)/(sigma^2)
               b <- a*(1-mu)/mu
           logfy <- rep(0, length(x))
@@ -112,6 +112,7 @@ dBEINF1<-function(x, mu = 0.5, sigma = 0.1, nu = 0.1,  log = FALSE)
           logfy <- ifelse((x==1), log(nu), logfy)          
           logfy <- logfy - log(1+nu)          
           if(log==FALSE) fy <- exp(logfy) else fy <- logfy
+          fy <- ifelse( x <= 0 | x > 1, 0, fy)
           fy
   }
 #------------------------------------------------------------------------------------------
@@ -124,8 +125,8 @@ pBEINF1 <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1,
              stop(paste("sigma must be between 0 and 1", "\n", "")) 
          if (any(nu <= 0) )  
              stop(paste("nu must greated than 0", "\n", ""))           
-         if (any(q < 0) | any(q > 1))  
-             stop(paste("y must be 0<=y<=1, i.e. 0 to 1 inclusively", "\n", ""))  
+         # if (any(q < 0) | any(q > 1))  
+         #     stop(paste("y must be 0<=y<=1, i.e. 0 to 1 inclusively", "\n", ""))  
             a <- mu*(1-sigma^2)/(sigma^2)
             b <- a*(1-mu)/mu
            cdf <- ifelse((q>0 & q<1),  pbeta(q, shape1=a, shape2=b, ncp=0, 
@@ -133,7 +134,9 @@ pBEINF1 <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1,
            cdf <- ifelse((q==1), 1+nu , cdf)
            cdf <- cdf/(1+nu)               
           if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
-          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
+          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)
+          cdf <- ifelse( q<= 0, 0, cdf)
+          cdf <- ifelse( q > 01, 01, cdf)
           cdf
    }
 #------------------------------------------------------------------------------------------

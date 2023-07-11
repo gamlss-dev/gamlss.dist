@@ -122,8 +122,8 @@ dBEOI = function (x, mu = 0.5, sigma = 1, nu = 0.1, log = FALSE)
         stop(paste("sigma must be positive", "\n", ""))
     if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
         stop(paste("nu must be beetwen 0 and 1 ", "\n", ""))
-    if (any(x <= 0)|any(x >1) ) 
-        stop(paste("x must be beetwen (0, 1]", "\n", ""))
+    # if (any(x <= 0)|any(x >1) ) 
+    #     stop(paste("x must be beetwen (0, 1]", "\n", ""))
 
     a = mu * sigma
     b = (1 - mu) * sigma
@@ -134,6 +134,7 @@ dBEOI = function (x, mu = 0.5, sigma = 1, nu = 0.1, log = FALSE)
     if (log == FALSE) 
         fy <- exp(log.lik)
     else fy <- log.lik
+    fy <- ifelse( x <= 0 | x > 1, 0, fy)
     fy
 }
 
@@ -164,6 +165,8 @@ pBEOI = function (q, mu = 0.5, sigma = 1, nu = 0.1, lower.tail = TRUE, log.p = F
     if (log.p == FALSE) 
         cdf <- cdf
     else cdf <- log(cdf)
+    cdf <- ifelse( q<= 0, 0, cdf)
+    cdf <- ifelse( q > 01, 01, cdf)
     cdf
 }
 

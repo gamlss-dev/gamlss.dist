@@ -167,7 +167,7 @@ dDPO <- function(x, mu = 1, sigma = 1, log = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+ # if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
   ly <- max(length(x),length(mu),length(sigma)) 
       x <- rep(x, length = ly)      
   sigma <- rep(sigma, length = ly)
@@ -175,11 +175,12 @@ dDPO <- function(x, mu = 1, sigma = 1, log = FALSE)
   # maxV <- max(max(x)*3,500)
   #y <- 0:maxV
   #theC <- .C("dDPOgetC5_C",as.double(mu),as.double(sigma),as.integer(ly),as.integer(maxV+1),ans=double(ly))$ans
-  logofx <- ifelse(x==0,1,log(x))
+  logofx <- ifelse(x<= 0,1,log(x))
   lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(x+1)+x*logofx-x+
     (x*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(x, mu, sigma)#log(theC)        
   if(log==FALSE) fy <- exp(lh) else fy <- lh 
-  fy
+   fy <-ifelse(x < 0, 0, fy) 
+   fy
 }
 
 #-------------------------------------------------------------------------------
@@ -189,19 +190,21 @@ pDPO<-function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
+  #if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
       ly <- max(length(q),length(mu),length(sigma)) 
-       q <- rep(q, length = ly)      
+       q <- rep(q, length = ly) 
+      qq <- ifelse(q < 0, 0, q)
    sigma <- rep(sigma, length = ly)
       mu <- rep(mu, length = ly) 
     maxV <- max(max(q)*3,500)
   #y <- 0:maxV
   den <- unlist(lapply(1:ly,function(x)
-         .C("dDPOgetC5_C",as.double(mu[x]),as.double(sigma[x]),as.integer(1), as.integer(q[x]+1),ans=double(1 ))$ans))
+         .C("dDPOgetC5_C",as.double(mu[x]),as.double(sigma[x]),as.integer(1), as.integer(qq[x]+1),ans=double(1 ))$ans))
   num <- .C("dDPOgetC5_C",as.double(mu),   as.double(sigma),   as.integer(ly),as.integer(maxV+1),ans=double(ly))$ans;
   cdf <- num/den
   cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-  cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
+  cdf <- if(log.p==FALSE) cdf else log(cdf) 
+  cdf <- ifelse(q < 0, 0, cdf) 
   cdf
 }
 #-------------------------------------------------------------------------------
@@ -251,7 +254,7 @@ rDPO <- function(n, mu=1, sigma=1, max.value = 10000)
   n <- ceiling(n)
   p <- runif(n)
   r <- qDPO(p, mu=mu, sigma=sigma, max.value = max.value )
-  r
+  as.integer(r)
 }
 
 #-------------------------------------------------------------------------------

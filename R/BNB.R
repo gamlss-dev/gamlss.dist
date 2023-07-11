@@ -82,8 +82,9 @@ BNB <-function (mu.link ="log", sigma.link="log", nu.link="log")
                     n <- (mu*nu)/sigma
                     k <- 1/nu
                  dldv <- -(1/nu^2)*digamma(y+k) + (mu/sigma)*digamma(y+n) -
-                         (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
-                         (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n)
+                      (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
+                      (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n) -
+                      ((mu/sigma)-(1/nu^2))*digamma(y+n+m+k)
                d2ldv2 <- -dldv*dldv
                d2ldv2 <- ifelse(d2ldv2 < -1e-15, d2ldv2,-1e-15)  
                     d2ldv2},
@@ -107,8 +108,9 @@ BNB <-function (mu.link ="log", sigma.link="log", nu.link="log")
              dldm <- (nu/sigma)*digamma(y+n) +  (nu/sigma)*digamma(n+m)-
                       (nu/sigma)*digamma(n) -  (nu/sigma)*digamma(y+n+m+k) 
              dldv <- -(1/nu^2)*digamma(y+k) + (mu/sigma)*digamma(y+n) -
-                      (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
-                      (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n)
+                     (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
+                     (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n) -
+                      ((mu/sigma)-(1/nu^2))*digamma(y+n+m+k)
           d2ldmdv <- -dldm *dldv
           d2ldmdv}, 
           d2ldddv = function(y,mu,sigma,nu)#------------------------------- 
@@ -120,8 +122,9 @@ BNB <-function (mu.link ="log", sigma.link="log", nu.link="log")
                     (1/sigma^2)*(mu*nu+1)*digamma(n+m)+(mu*nu/sigma^2)*digamma(n)+
                     (1/sigma^2)*digamma(m)+(1/sigma^2)*(mu*nu+1)*digamma(y+n+m+k)  
             dldv <- -(1/nu^2)*digamma(y+k) + (mu/sigma)*digamma(y+n) -
-                    (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
-                    (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n)      
+                     (1/nu^2)*digamma(m+k)+(mu/sigma)*digamma(n+m)+
+                      (1/nu^2)*digamma(k)-(mu/sigma)*digamma(n) -
+                      ((mu/sigma)-(1/nu^2))*digamma(y+n+m+k)     
               d2ldddv <- -dldd *dldv
               d2ldddv
                                  },               
@@ -137,7 +140,9 @@ BNB <-function (mu.link ="log", sigma.link="log", nu.link="log")
               mu.valid = function(mu) all(mu > 0) , 
            sigma.valid = function(sigma)  all(sigma > 0), 
               nu.valid = function(nu) TRUE,  
-               y.valid = function(y)  all(y >= 0)
+               y.valid = function(y)  all(y >= 0),
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) ifelse(sigma < 1, mu * (1 + mu * nu) * (1 + sigma / nu) / (1 - sigma), Inf)
           ),
             class = c("gamlss.family","family"))
 }
@@ -150,7 +155,7 @@ dBNB<-function(x, mu=1, sigma=1, nu=1, log=FALSE)
    if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
    if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
    if (any(nu <= 0) )  stop(paste("nu must be greater than 0 ", "\n", "")) 
-   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+  # if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
     ly <- max(length(x),length(mu),length(sigma),length(nu)) 
      x <- rep(x, length = ly)      
  sigma <- rep(sigma, length = ly)
@@ -160,7 +165,8 @@ dBNB<-function(x, mu=1, sigma=1, nu=1, log=FALSE)
     n <- (mu*nu)/sigma
     k <- 1/nu
   logL <- lbeta(x+n, m+k)-lbeta(n,m)-lgamma(x+1)-lgamma(k)+lgamma(x+k)
-   lik <- if (log) logL else exp(logL)
+  lik <- if (log) logL else exp(logL)
+  lik <- ifelse(x < 0, 0, lik)  
   lik
   }
 #----------------------------------------------------------------------------------------     
@@ -170,31 +176,19 @@ pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
   if (any(nu <= 0) )  stop(paste("nu must be greater than 0 ", "\n", "")) 
-  if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))
+ # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))
      ly <- max(length(q),length(mu),length(sigma),length(nu)) 
       q <- rep(q, length = ly)      
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly)   
      nu <- rep(nu, length = ly) 
-    FFF <- rep(0,ly)                         
- nsigma <- rep(sigma, length = ly)
-    nmu <- rep(mu, length = ly) 
-    nnu <- rep(nu, length = ly)                                                        
-      j <- seq(along=q) 
-  for (i in j)                                                          
-  {                                                                 
-     y.y <- q[i]                                                   
-      nn <- nnu[i]                                                  
-      mm <- nmu[i]
-    nsig <- nsigma[i]                                                     
-  allval <- seq(0,y.y)
-  pdfall <- dBNB(allval, mu = mm, sigma = nsig, nu = nn, log = FALSE)
-  FFF[i] <- sum(pdfall)                                             
-  }  
-     cdf <- FFF
-     cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-     cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
-     cdf
+     fn <- function(q, mu, sigma, nu) sum(dBNB(0:q, mu=mu, sigma=sigma, nu=nu))
+   Vcdf <- Vectorize(fn)
+    cdf <- Vcdf(q=q, mu=mu, sigma=sigma, nu=nu)
+    cdf <- if(lower.tail==TRUE) cdf else 1-cdf
+    cdf <- if(log.p==FALSE) cdf else log(cdf)    
+    cdf <- ifelse(q < 0, 0, cdf) 
+    cdf
 }
 #----------------------------------------------------------------------------------------
 qBNB <- function(p, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE,  
@@ -237,6 +231,6 @@ rBNB <- function(n, mu=1, sigma=1, nu=1, max.value = 10000)
           n <- ceiling(n)
           p <- runif(n)
           r <- qBNB(p, mu=mu, sigma=sigma, nu=nu, max.value = max.value )
-          r
+          as.integer(r)
   }
 #----------------------------------------------------------------------------------------

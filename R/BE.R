@@ -59,7 +59,9 @@ BE <- function (mu.link = "logit", sigma.link = "logit")
         sigma.initial = expression({sigma <- rep(0.5,length(y))}) ,
              mu.valid = function(mu) all(mu > 0 & mu < 1) , 
           sigma.valid = function(sigma)  all(sigma > 0 & sigma < 1), 
-              y.valid = function(y)  all(y > 0 & y < 1)
+              y.valid = function(y)  all(y > 0 & y < 1),
+                 mean = function(mu, sigma) mu,
+             variance = function(mu, sigma) sigma^2 * mu * (1 - mu)
           ),
                 class = c("gamlss.family","family"))
 }
@@ -68,7 +70,7 @@ dBE<-function(x, mu = 0.5, sigma = 0.2, log = FALSE)
  { 
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
           if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
+      #    if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
           a <- mu*(1-sigma^2)/(sigma^2)
           b <- a*(1-mu)/mu
           fy <- dbeta(x, shape1=a, shape2=b, ncp=0, log=log)
@@ -79,7 +81,7 @@ pBE <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
   {     
          if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-         if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
+   #      if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
           a <- mu*(1-sigma^2)/(sigma^2)
           b <- a*(1-mu)/mu
           cdf <- pbeta(q, shape1=a, shape2=b, ncp=0, lower.tail=lower.tail, log.p=log.p)

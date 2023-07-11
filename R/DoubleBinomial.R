@@ -127,7 +127,7 @@ GetBI_C <- function(mu, sigma, bd)
 dDBI <- function(x, mu = .5, sigma = 1, bd=2,  log = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
+#  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
   if (any(bd < x))  stop(paste("x  must be <=  than the binomial denominator", bd, "\n")) 
   if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
   if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
@@ -144,6 +144,7 @@ logofbd_x <- ifelse(bd==x,1,log(bd-x))
                   (bd/sigma)*log(bd) + (x/sigma)*log(mu)+((bd-x)/sigma)*log(1-mu)-
                   (x/sigma)*logofx - ((bd-x)/sigma)*logofbd_x+res)
   if(log==FALSE) fy <- exp(ll) else fy <- ll 
+  fy <- ifelse(x < 0, 0, fy)      
   fy
 }
 #-------------------------------------------------------------------------------
@@ -154,32 +155,36 @@ pDBI<-function(q, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
+ # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
      ly <- max(length(q),length(mu),length(sigma)) 
       q <- rep(q, length = ly)      
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly) 
      bd <- rep(bd, length = ly)  
-     ly <- length(q)
-    FFF <- rep(0,ly)
- nsigma <- rep(sigma, length = ly)
-    nmu <- rep(mu, length = ly)
-     nbd <- rep(bd, length = ly)
-     j <- seq(along=q)
-     for (i in j)
-     {
-       y.y <- q[i]
-        nn <- bd[i]
-        mm <- mu[i]
-      nsig <- sigma[i]
-    allval <- seq(0,y.y)
-    pdfall <- dDBI(allval, mu = mm, sigma = nsig, bd = nn, log = FALSE)
-    FFF[i] <- sum(pdfall)
-     }
-       cdf <- FFF
+ #     ly <- length(q)
+ #    FFF <- rep(0,ly)
+ # nsigma <- rep(sigma, length = ly)
+ #    nmu <- rep(mu, length = ly)
+ #     nbd <- rep(bd, length = ly)
+ #     j <- seq(along=q)
+ #     for (i in j)
+ #     {
+ #       y.y <- q[i]
+ #        nn <- bd[i]
+ #        mm <- mu[i]
+ #      nsig <- sigma[i]
+ #    allval <- seq(0,y.y)
+ #    pdfall <- dDBI(allval, mu = mm, sigma = nsig, bd = nn, log = FALSE)
+ #    FFF[i] <- sum(pdfall)
+ #     }
+      # cdf <- FFF
+        fn <- function(q, mu, sigma, bd) sum(dDBI(0:q, mu=mu, sigma=sigma, bd=bd))
+      Vcdf <- Vectorize(fn)
+       cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)     
        cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-       cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
-  cdf
+       cdf <- if(log.p==FALSE) cdf else log(cdf)   
+       cdf <- ifelse(q < 0, 0, cdf) 
+       cdf
 }
 #-------------------------------------------------------------------------------
 # the q function
@@ -227,7 +232,7 @@ rDBI <- function(n,mu = .5, sigma = 1, bd=2)
   n <- ceiling(n)
   p <- runif(n)
   r <- qDBI(p, mu=mu, sigma=sigma, bd = bd )
-  r
+  as.integer(r)
 }
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
