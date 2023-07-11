@@ -48,7 +48,7 @@ The probability density function of the ex-Gaussian distribution, (\code{exGAUS}
 \deqn{f(y|\mu,\sigma,\nu)=\frac{1}{\nu} e^{\frac{\mu-y}{\nu}+\frac{\sigma^2}{2 \nu^2}} \Phi(\frac{y-\mu}{\sigma}-\frac{\sigma}{\nu})}{f(y|mu,sigma,nu)=(1/nu)*exp(((mu-y)/nu)+(sigma^2/(2*nu^2)))*Phi(((y-mu)/sigma)+(sigma/tau))}
 
 where \eqn{\Phi}{Phi} is the cdf of the standard normal distribution, 
-for \eqn{-\infty<y<\infty}{-Inf<y<Inf}, \eqn{-\infty<\mu<\infty}{-Inf<mu<Inf}, \eqn{\sigma>0} and \eqn{\nu>0}.   
+for \eqn{-\infty<y<\infty}{-Inf<y<Inf}, \eqn{-\infty<\mu<\infty}{-Inf<mu<Inf}, \eqn{\sigma>0} and \eqn{\nu>0} see pp. 372-373 of Rigby et al. (2019).   
 }
 \value{
 \code{exGAUS()}  returns a \code{gamlss.family} object which can be used to fit ex-Gaussian distribution in the \code{gamlss()} function. 
@@ -65,15 +65,16 @@ Cousineau, D. Brown, S. and Heathecote A. (2004) Fitting distributions using max
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC,\doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973} 
 
+(see also  \url{https://www.gamlss.com/}).
  }
 \author{Mikis Stasinopoulos and Bob Rigby  }
 \note{ The mean of the ex-Gaussian is \eqn{\mu+\nu}{mu+nu} and the variance is \eqn{\sigma^2+\nu^2}{sigma^2+nu^2}.

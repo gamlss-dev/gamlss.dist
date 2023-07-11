@@ -40,6 +40,7 @@ as.family(object)
   Box-Cox Power Exponential    \tab \code{\link{BCPE}()}    \tab  4  \cr
   Box-Cox-t                    \tab \code{\link{BCT}()}     \tab  4  \cr
   Delaport                     \tab \code{\link{DEL}()}     \tab  3  \cr
+  Discrete Burr XII            \tab \code{\link{DBURR12}()} \tab  3  \cr
   Double Poisson               \tab \code{\link{DPO}()}     \tab  2  \cr
   Double binomial              \tab \code{\link{DBI}()}     \tab  2  \cr
   Exponential                  \tab \code{\link{EXP}()}     \tab  1  \cr
@@ -59,6 +60,7 @@ as.family(object)
   Johnson's SU                 \tab \code{\link{JSU}()}     \tab  4  \cr   
   Logarithmic                  \tab \code{\link{LG}()}      \tab  1  \cr
   Logistic                     \tab \code{\link{LO}()}      \tab  2  \cr
+  Logit-Normal                 \tab \code{\link{LOGITNO}()} \tab  2  \cr
   log-Normal                   \tab \code{\link{LOGNO}()}   \tab  2  \cr
   log-Normal  (Box-Cox)        \tab \code{\link{LNO}()}     \tab  3 (1 fixed)  \cr
   Negative Binomial type I     \tab \code{\link{NBI}()}     \tab  2  \cr
@@ -86,6 +88,7 @@ as.family(object)
   Shash  original 2            \tab \code{\link{SHASH}()}   \tab  4  \cr
   Sichel  (original)           \tab \code{\link{SI}()}      \tab  3  \cr
   Sichel  (mu as the maen)     \tab \code{\link{SICHEL}()}  \tab  3  \cr
+  Simplex                      \tab \code{\link{SIMPLEX}()} \tab  2  \cr
   Skew t  type 1               \tab \code{\link{ST1}()}     \tab  3  \cr 
   Skew t  type 2               \tab \code{\link{ST2}()}     \tab  3  \cr 
   Skew t  type 3               \tab \code{\link{ST3}()}     \tab  3  \cr 
@@ -136,17 +139,20 @@ as.family(object)
 \references{Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
-
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+	
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 
 }
-\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby and Calliope Akantziliotou}
+\author{Mikis Stasinopoulos \email{d.stasinopoulos@londonmet.ac.uk}, Bob Rigby and Calliope Akantziliotou}
 
 
 \note{More distributions will be documented in later GAMLSS releases. Further user defined distributions can 

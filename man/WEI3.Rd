@@ -41,7 +41,7 @@ rWEI3(n, mu = 1, sigma = 1)
 \details{
  The parameterization of the function \code{WEI3} is given by
  \deqn{f(y|\mu,\sigma)= \frac{\sigma}{\beta}  \left(\frac{y}{\beta}\right)^{\sigma-1} e^{-\left(\frac{y}{\beta}\right)^{\sigma}}}{f(y|mu,sigma)= (sigma/beta)*(y/beta)^(sigma-1)exp(-(y/beta)^sigma)}
- where \eqn{\beta=\frac{\mu}{\Gamma((1/\sigma)+1)}}{mu/(Gamma((1/sigma)+1))} for \eqn{y>0}, \eqn{\mu>0} and \eqn{\sigma>0}.
+ where \eqn{\beta=\frac{\mu}{\Gamma((1/\sigma)+1)}}{mu/(Gamma((1/sigma)+1))} for \eqn{y>0}, \eqn{\mu>0} and \eqn{\sigma>0} see pp. 437-438 of Rigby et al. (2019).
 The GAMLSS functions \code{dWEI3}, \code{pWEI3}, \code{qWEI3}, and \code{rWEI3} can be used to provide the pdf, the cdf, the quantiles and
 random generated numbers for the Weibull distribution with argument \code{mu}, and \code{sigma}.
 [See the GAMLSS function \code{WEI} for a different parameterization of the Weibull.] 
@@ -57,20 +57,23 @@ random generated numbers for the Weibull distribution with argument \code{mu}, a
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}). 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
  }
 
-\author{ Bob Rigby  and Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}}
+\author{ Bob Rigby  and Mikis Stasinopoulos}
 
 \note{ The mean in \code{WEI3} is given by \eqn{\mu}{mu} and the variance 
-\eqn{\mu^2 \left\{\Gamma(2/\sigma +1)/ \left[ \Gamma(1/\sigma +1)\right]^2 -1\right\}}{mu^2(Gamma(1/sigma +1)/Gamma(1/sigma+1)^2 -1)}
+\eqn{\mu^2 \left\{\Gamma(2/\sigma +1)/ \left[ \Gamma(1/\sigma +1)\right]^2 -1\right\}}{mu^2(Gamma(1/sigma +1)/Gamma(1/sigma+1)^2 -1)} see pp. 438 of Rigby et al. (2019)
 }
  \section{Warning }{In \code{WEI3} the estimated parameters \code{mu} and \code{sigma} can be highly correlated so it is advisable to use the 
 \code{CG()} method for fitting  [as the RS() method can be very slow in this situation.] }

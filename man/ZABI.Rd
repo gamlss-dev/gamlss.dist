@@ -59,7 +59,7 @@ rZIBI(n, bd = 1, mu = 0.5, sigma = 0.1)
 }
 
 \details{
-For the definition of the distributions see   Rigby and Stasinopoulos (2010) below.
+The  definition of the zero adjusted binomial distribution, \code{ZABI} and  the the zero inflated binomial  distribution, \code{ZIBI}, are given in p. 526 and p. 527 of  of Rigby \emph{et al.} (2019), respectively.
 }
 
 
@@ -72,17 +72,18 @@ For the definition of the distributions see   Rigby and Stasinopoulos (2010) bel
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
-Rigby, R. A.  and Stasinopoulos D. M. (2010) The gamlss.family distributions, (distributed with this package or see 
-\url{http://www.gamlss.org/}) 
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 }
 \author{Mikis Stasinopoulos, Bob Rigby}
 \note{

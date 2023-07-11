@@ -36,21 +36,23 @@
 \alias{rSST}
 
 \title{The skew t distributions, type 1 to 5 }
+
 \description{There are 5 different skew t distributions implemented in GAMLSS.
 
-The Skew t type 1 distribution,  \code{ST1}, is based on Azzalini (1986).
+The Skew t type 1 distribution,  \code{ST1}, is based on Azzalini (1986), see pp. 411-412 of Rigby et al. (2019).
 
-The skew t type 2 distribution, \code{ST2}, is based on Azzalini and Capitanio (2003).
+The skew t type 2 distribution, \code{ST2}, is based on Azzalini and Capitanio (2003) see pp. 412-414 of Rigby et al. (2019). 
 
-The skew t type 3 , \code{ST3} and  \code{ST3C}, distribution is based Fernande and Steel (1998).
-The difference betwwen the  \code{ST3} and \code{ST3C} is that the first is written entirely in  \code{R} while 
-the second is in \code{C}.
+The skew t type 3 , \code{ST3} and  \code{ST3C}, distribution is based Fernande and Steel (1998) see pp 413-415 of Rigby et al. (2019).
+The difference betwwen the  \code{ST3} and \code{ST3C} is that the first is written entirely in  \code{R} while the second is in \code{C}.
 
-The skew t type 4 distribution , \code{ST4}, is a spliced-shape distribution.
+The skew t type 4 distribution , \code{ST4}, is a spliced-shape distribution see 
+see pp 413-415 of Rigby et al. (2019).
+
 
 The skew t type 5 distribution , \code{ST5}, is  Jones and Faddy (2003).
 
-The \code{SST} is a reparametrised version of  \code{dST3} where \code{sigma} is the standard deviation of the distribution.
+The \code{SST} is a reparametrised version of  \code{ST3} where \code{sigma} is the standard deviation of the distribution.
 }
 \usage{
 ST1(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link="log")
@@ -115,43 +117,13 @@ rST5(n, mu = 0, sigma = 1, nu = 0, tau = 1)
   \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],
           otherwise, P[X > x] }
   \item{p}{vector of probabilities. }
-  \item{n}{ number of observations. If \code{length(n) > 1}, the length is
-          taken to be the number required}
-  \item{\dots}{for extra arguments}
+  \item{n}{ number of observations. If \code{length(n) > 1}, the length is taken to be the number required}
 }
 \details{
+The definitions of all Skew \emph{t} distributions is given in pp.409-420 of  of Rigby et al. (2019). 
 
-\deqn{f(y|\mu,\sigma,\nu,\frac{z}{\sigma} \mbox{\hspace{0.1cm}} f_{z_1}(z) \mbox{\hspace{0.1cm}} F_{z_2}(w) \tau)=}{f(y|mu,sigma,nu,tau)=z/sigma f_z1(z)F_z2(w)}
 
-for \eqn{-\infty<y<\infty}{-Inf<y<Inf}, where \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma}, 
-\eqn{w=\nu \lambda^{1/2}z}{w=nu*sqrt(lambda)*z}, \eqn{\lambda=(\tau+1)/(\tau+z^2)}{lambda=(tau+1)/(tau+z*z)} and 
-\eqn{z_1 \sim TF(0,1,\tau)}{z_1 ~ TF(01,1,tau)} and \eqn{z_2 \sim TF(0,1, \tau+1)}{z_2 ~ TF(0,1,tau+1)}.
 
-The probability density function of the skew t distribution type q, (\code{ST3}), is defined in Chapter 10 of the 
-GAMLSS manual.  
-  
-The probability density function of the skew t distribution type q, (\code{ST4}), is defined in Chapter of the 
-GAMLSS manual.  
-
-The probability density function of the skew t distribution type 5, (\code{ST5}), is defined as 
-\deqn{f(y|\mu,\sigma,\nu, \tau)=\frac{1}{c} \left[ 1+ \frac{z}{(a+b +z^2)^{1/2}} \right]^{a+1/2} \left[ 1- \frac{z}{(a+b+z^2)^{1/2}}\right]^{b+1/2}}{f(y|mu,sigma,nu,tau)=(1/c)*(1+(z/(a+b+z^2)^0.5))^(a+0.5)*(1-(a+b+z^2)^0.5)^(b+0.5)}
-
-where \eqn{c=2^{a +b-1} (a+b)^{1/2} B(a,b)}{c=2^(a+b-1)*(a+b)^0.5 *B(a,b)}, and 
-\eqn{B(a,b)=\Gamma(a)\Gamma(b)/ \Gamma(a+b)}{Gamma(a)*Gamma(b)/Gamma(a+b)} and 
-\eqn{z=(y-\mu)/\sigma}{(y-mu)/sigma} and 
-\eqn{\nu=(a-b)/\left[ab(a+b) \right]^{1/2}}{nu=(a-b)/(a*b*(a+b))^0.5}
-and
-\eqn{\tau=2/(a+b)}{tau=2/(a+b)} 
-for \eqn{-\infty<y<\infty}{-Inf<y<Inf}, \eqn{-\infty<\mu<\infty}{-Inf<mu<Inf}, \eqn{\sigma>0}, 
- \eqn{-\infty<\nu>\infty}{-Inf<nu<Inf} and \eqn{\tau>0}{tau>0}.   
-}
-\value{
-  \code{ST1()}, \code{ST2()}, \code{ST3()}, \code{ST4()} and \code{ST5()}  return a \code{gamlss.family} object 
-    which can be used to fit the skew t type 1-5 distribution in the \code{gamlss()} function. 
-  \code{dST1()}, \code{dST2()}, \code{dST3()}, \code{dST4()} and \code{dST5()} give the density functions, 
-  \code{pST1()}, \code{pST2()}, \code{pST3()}, \code{pST4()} and \code{pST5()}  give the cumulative distribution  functions, 
-  \code{qST1()}, \code{qST2()}, \code{qST3()}, \code{qST4()} and \code{qST5()} give the quantile function, and 
-  \code{rST1()}, \code{rST2()}, \code{rST3()}, \code{rST4()} and \code{rST3()}  generates random deviates. 
 }
 \references{
 
@@ -168,11 +140,19 @@ Fernandez, C. and Steel, M. F. (1998) On Bayesian modeling of fat tails and skew
 
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion),  \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
+
+
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\doi{10.1201/b21973}
+
+(see also  \url{https://www.gamlss.com/}).
 
  }
 \author{Bob Rigby and Mikis Stasinopoulos  }

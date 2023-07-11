@@ -36,15 +36,7 @@ rZIP2(n, mu = 5, sigma = 0.1)
           otherwise, P[X > x]}  
 }
 \details{
-  Let \eqn{Y=0} with probability \eqn{\sigma} and \eqn{Y \sim Po(\mu/\left[1-\sigma \right])}{Po(mu/(1-sigma))} 
-  with probability \eqn{(1-\sigma)} then Y has
-a Zero inflated Poisson type 2 distribution given by
-
-\deqn{f(y|\mu,\sigma)=\sigma +(1-\sigma)e^{-\mu/(1-\sigma)} \hspace{2mm} \mbox{if $y=0$} }{sigma+(1-sigma)e^(-(mu/(1-sigma))) if y=0}
-\deqn{f(y|\mu,\sigma)=(1-\sigma)\frac{e^{-\mu/(1-\sigma)} \left[\mu/(1-\sigma)\right]^y}{y!}  \hspace{2mm} \mbox{if $y=1,2,3,\ldots$}}{f(y)=(1-sigma)exp(-(mu/(1-sigma)))* (mu/(1-sigma))^y/y!  if y=0,1,2,...}
-
-
-The mean of the distribution in this parameterization is \code{mu}.
+The parametrization used for this version of the zero inflated Poison distribution \code{ZIP2}  can be found  in pp 500-501 of Rigby \emph{et al.} (2019).  Note that     the mean of the distribution in this parameterization is \eqn{\mu}.
 }
 \value{
   returns a \code{gamlss.family} object which can be used to fit a zero inflated poisson distribution in the \code{gamlss()} function.  
@@ -57,14 +49,18 @@ Lambert, D. (1992), Zero-inflated Poisson Regression with an application to defe
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).  
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 
 }
 \author{ Bob Rigby, Gillian Heller and Mikis Stasinopoulos }

@@ -52,9 +52,12 @@ rZAZIPF(n, mu = 0.5, sigma = 0.1, max.value = 10000)
 \details{
  The probability density for the zipf distribution, \code{ZIPF}, is: 
  \deqn{f(y|\mu)=\frac{y^{-(\mu+1)}}{\zeta(\mu+1)}}{f(y|mu)= y^{-(\mu+1)}/\zeta(\mu+1)} 
- for \eqn{y=1,2,\ldots,\infty}{y=1,2, ...,Inf}, \eqn{\mu>0} and where \eqn{\zeta()} is the (Reimann) zeta function.
+ for \eqn{y=1,2,\ldots,\infty}{y=1,2, ...,Inf}, \eqn{\mu>0} and where 
+ \eqn{\zeta() = \sum_i^n i^{-b}} is the (Reimann) zeta function.
  
-The distribution has mean \eqn{\zeta(\mu)/\zeta(\mu+1)} and variance \eqn{{\zeta(\mu+1)\zeta(\mu-1)-[\zeta(\mu)]^2 }/ [\zeta(\mu+1)]^2.} 
+The distribution has mean \eqn{\zeta(\mu)/\zeta(\mu+1)} and variance \eqn{{\zeta(\mu+1)\zeta(\mu-1)-[\zeta(\mu)]^2 }/ [\zeta(\mu+1)]^2}, see  pp 479-480 of Rigby et al. (2019) 
+
+For more details about the zero-adjusted Zipf distributions, \code{ZAZIPF}, see see pp 496-498 of Rigby \emph{et al.} (2019).    
 }  
   
 \value{
@@ -72,11 +75,17 @@ Thomas W. Yee (2017). VGAM: Vector Generalized Linear and Additive Models. R
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 }
 \author{Mikis Stasinopoulos and Bob Rigby}
 \note{Because the zipf distrbution  has very long tails the \code{max.value} in the \code{q} and \code{r}, may  need to increase.}

@@ -50,10 +50,19 @@ rTF2(n, mu = 0, sigma = 1, nu = 10)
           taken to be the number required}
 }
 \details{
-  Definition file for t family distribution. 
-\deqn{f(y|\mu,\sigma, \nu)=\frac{\Gamma((\nu+1)/2)}{\sigma \Gamma(1/2) \Gamma(\nu/2) \nu^{0.5}} \left[1+\frac{(y-\mu)^2}{\nu \sigma^2}\right]^{-(\nu+1)/2}}{f(y|mu,sigma,nu)=((Gamma((nu+1)/2)/(sigma*Gamma(1/2)*Gamma(nu/2))*nu^0.5 )*(1+(y-mu)^2/(nu*sigma^2))^(-(nu+1)/2)} 
- \eqn{y=(-\infty,+\infty)}{y=(-Inf,+Inf)}, \eqn{\mu=(-\infty,+\infty)}{\mu=(-Inf,+Inf)}, \eqn{\sigma>0} and \eqn{\nu>0}. 
-Note that \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma} has a standard t distribution with degrees of freedom \eqn{\nu}{nu}.
+  Definition file for t family distribution \code{TF()}:
+  
+\deqn{f(y|\mu,\sigma, \nu)=\frac{1}{\sigma B(1/2,\nu/2)) \nu^{0.5}} \left[1+\frac{(y-\mu)^2}{\nu \sigma^2}\right]^{-(\nu+1)/2}}{f(y|mu,sigma,nu)=((Gamma((nu+1)/2)/(sigma*Gamma(1/2)*Gamma(nu/2))*nu^0.5 )*(1+(y-mu)^2/(nu*sigma^2))^(-(nu+1)/2)} 
+
+for  \eqn{-\infty<y<+\infty}{y=(-Inf,+Inf)}, \eqn{-\infty<\mu<+\infty}{\mu=(-Inf,+Inf)}, \eqn{\sigma>0} and \eqn{\nu>0}  see pp. 382-383 of Rigby et al. (2019). 
+Note that \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma} has a standard t distribution with degrees of freedom \eqn{\nu}{nu} see pp. 382-383 of Rigby et al. (2019).
+
+ Definition file for t family distribution \code{TF2()}:
+ 
+\deqn{f(y|\mu,\sigma, \nu)=\frac{1}{\sigma B(1/2, \nu/2)  (\nu-2)^{0.5}} \left[1+\frac{(y-\mu)^2}{(\nu-2) \sigma^2}\right]^{-(\nu+1)/2}}{f(y|mu,sigma,nu)=((Gamma((nu+1)/2)/(sigma*Gamma(1/2)*Gamma(nu/2))*nu^0.5 )*(1+(y-mu)^2/(nu*sigma^2))^(-(nu+1)/2)} 
+for  \eqn{-\infty<y<+\infty}{y=(-Inf,+Inf)}, \eqn{-\infty<\mu<+\infty}{\mu=(-Inf,+Inf)}, \eqn{\sigma>0} and \eqn{\nu>2}  see pp. 382-383 of Rigby et al. (2019). 
+Note that \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma} has a standard t distribution with degrees of freedom \eqn{\nu}{nu} see pp. 383-384 of Rigby et al. (2019).
+
 }
 \value{
  \code{TF()} returns a \code{gamlss.family} object which can be used to fit a t distribution in the \code{gamlss()} function.
@@ -64,17 +73,18 @@ Note that \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma} has a standard t distribution w
 \references{ Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
 \emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\doi{10.1201/b21973}
 
  }
-\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby  and Kalliope Akantziliotou }
+\author{Mikis Stasinopoulos, Bob Rigby  and Kalliope Akantziliotou }
 \note{\eqn{\mu}{mu} is the mean and \eqn{\sigma [\nu/(\nu-2)]^{0.5}}{sigma*(nu/(nu-2))^0.5} is the standard deviation of the t family distribution.
 \eqn{\nu>0}{nu>0} is a positive real valued parameter. 
 }

@@ -34,9 +34,9 @@ rWARING(n, mu = 2, sigma = 2)
   \item{max.value}{constant; generates a sequence of values for the cdf function.}
 }
 \details{
-The Waring distribution has density,
-\deqn{f(y|\mu, \sigma)= \frac{(1+\sigma)\,\Gamma(y+\frac{\mu}{\sigma})\,\Gamma(\frac{\mu+\sigma+1}{\sigma})}{\sigma \, \Gamma(y+\frac{\mu+1}{\sigma}+2)\,\Gamma(\frac{\mu}{\sigma})}}{f(y|mu, sigma)= ((1+sigma) Gamma(y+mu/sigma) Gamma((mu+sigma+1)/sigma))/(sigma Gamma(y+(mu+1)/sigma+2) Gamma(mu/sigma))}
-for \eqn{y=0,1,2,\ldots}, \eqn{mu>0} and \eqn{sigma>0}.  
+The Waring distribution, \code{WARING},  has density,
+\deqn{f(y|\mu, \sigma)= \frac{B(y+\mu \sigma^{-1}, \sigma^{-1}+2)}{B(\mu \sigma^{-1}, \sigma^{-1}+1)}}
+for \eqn{y=0,1,2,\ldots}, \eqn{\mu>0} and \eqn{\sigma>0} see  pp. 490-492  of Rigby \emph{et al}. (2019).  
 }
 \value{
 Returns a \code{gamlss.family} object which can be used to fit a Waring distribution in the \code{gamlss()} function.
@@ -44,8 +44,14 @@ Returns a \code{gamlss.family} object which can be used to fit a Waring distribu
 \references{ 
 Wimmer, G. and Altmann, G. (1999) \emph{Thesaurus of univariate discrete probability distributions.} Stamm.
 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 }
 \author{
 Fiona McElduff, Bob Rigby and Mikis Stasinopoulos.

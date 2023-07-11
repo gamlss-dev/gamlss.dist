@@ -37,7 +37,9 @@ rZAP(n, mu = 5, sigma = 0.1)
           otherwise, P[X > x]}  
 }
 \details{
-For the definition of the distribution see   Rigby and Stasinopoulos (2010) below.
+Details about  the zero adjusted Poison, \code{ZAP} can be found  pp 494-496 of Rigby \emph{et al.} (2019).
+
+
 }
 \value{
 The function \code{ZAP} returns a \code{gamlss.family} object which can be used to fit a zero inflated poisson distribution in the \code{gamlss()} function.  
@@ -46,20 +48,21 @@ The function \code{ZAP} returns a \code{gamlss.family} object which can be used 
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).  
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
-Rigby, R. A.  and Stasinopoulos D. M. (2010) The gamlss.family distributions, (distributed with this package or see 
-\url{http://www.gamlss.org/}) 
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/})..
 }
 \author{
-Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby}
+Mikis Stasinopoulos, Bob Rigby}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
