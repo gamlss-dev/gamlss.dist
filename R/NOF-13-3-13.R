@@ -65,7 +65,9 @@ NOF <- function (mu.link="identity", sigma.link="log", nu.link ="identity")
               mu.valid = function(mu)  TRUE, #all(mu > 0), 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) TRUE, 
-               y.valid = function(y)  TRUE # all(y>0)
+               y.valid = function(y)  TRUE, # all(y>0)
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) sigma^2 * mu^nu 
           ),
             class = c("gamlss.family","family"))
 }

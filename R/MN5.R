@@ -169,5 +169,5 @@ rMN5 <- function(n, mu=1, sigma=1, nu=1, tau=1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qMN5(p, mu=mu, sigma=sigma, nu=nu, tau=tau)
-          r
+          as.integer(r)
   }

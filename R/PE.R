@@ -40,7 +40,7 @@ PE <- function (mu.link="identity", sigma.link="log", nu.link ="log")
                            dldm <- (sign(z)*nu)/(2*sigma*abs(z)) 
                            dldm <- dldm*((abs(z/c))^nu) 
                          d2ldm2 <- -(nu*nu*gamma(2-(1/nu))*gamma(3/nu))/((sigma*gamma(1/nu))^2) 
-                         d2ldm2 <- if (any(nu<1.05)) -dldm*dldm else d2ldm2
+                         d2ldm2 <- ifelse(nu<1.05, -dldm*dldm, d2ldm2)
                                    },
                  dldd = function(y,mu,sigma,nu) {
                           log.c <- 0.5*(-(2/nu)*log(2)+lgamma(1/nu)-lgamma(3/nu))
@@ -89,7 +89,9 @@ PE <- function (mu.link="identity", sigma.link="log", nu.link ="log")
               mu.valid = function(mu) TRUE , 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) sigma^2
           ),
             class = c("gamlss.family","family"))
 }

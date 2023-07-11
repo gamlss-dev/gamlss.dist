@@ -35,7 +35,7 @@ PE2 <- function (mu.link="identity", sigma.link="log", nu.link ="log")
                                z <- (y-mu)/sigma
                            dldm <- (sign(z)*nu*(abs(z)^(nu-1)))/sigma
                          d2ldm2 <- -(nu*nu*gamma(2-(1/nu))*gamma(1/nu))/(sigma^2) 
-                         d2ldm2 <- if (any(nu<1.05)) -dldm*dldm else d2ldm2
+                         d2ldm2 <- ifelse(nu<1.05, -dldm*dldm, d2ldm2)
                          d2ldm2
                                    },
                  dldd = function(y,mu,sigma,nu) {
@@ -75,7 +75,9 @@ PE2 <- function (mu.link="identity", sigma.link="log", nu.link ="log")
               mu.valid = function(mu) TRUE , 
            sigma.valid = function(sigma)  all(sigma > 0),
               nu.valid = function(nu) all(nu > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma, nu) mu,
+              variance = function(mu, sigma, nu) sigma^2 / (gamma(1/nu)/gamma(3/nu))
           ),
             class = c("gamlss.family","family"))
 }

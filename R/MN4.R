@@ -127,5 +127,5 @@ rMN4 <- function(n, mu=1, sigma=1, nu=1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qMN4(p, mu=mu, sigma=sigma, nu=nu)
-          r
+          as.integer(r)
   }

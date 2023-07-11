@@ -57,7 +57,9 @@ dLOGITNO<-function(x, mu=0.5, sigma=1, log=FALSE)
  { 
         if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
         if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+  
      z <- log(x/(1-x))
+     
     loglik <- dnorm(z, mean=log(mu/(1-mu)), sd=sigma, log=TRUE)-log(x)-log(1-x)
     if(log==FALSE) fy  <- exp(loglik) else fy <- loglik 
     fy

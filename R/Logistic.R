@@ -27,7 +27,9 @@ LO <- function (mu.link ="identity", sigma.link="log")
          sigma.initial = expression(sigma <- rep( (sqrt(3)*sd(y))/sqrt(pi) ,length(y) )),
               mu.valid = function(mu) TRUE, 
            sigma.valid = function(sigma)  all(sigma > 0), 
-               y.valid = function(y)  TRUE
+               y.valid = function(y)  TRUE,
+                  mean = function(mu, sigma) mu,
+              variance = function(mu, sigma) (pi^2 * sigma^2) / 3
           ),
             class = c("gamlss.family","family"))
 }
