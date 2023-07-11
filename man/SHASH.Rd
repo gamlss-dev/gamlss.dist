@@ -77,7 +77,7 @@ rSHASHo2(n, mu = 0, sigma = 1, nu = 0, tau = 1)
 }
 \details{   
 
-The probability density function of the Sinh-Arcsinh distribution, (\code{SHASH}), Jones(2005), is defined as 
+The probability density function of the Sinh-Arcsinh distribution, \code{SHASH}, Jones(2005), is defined as 
   
 \deqn{f(y|\mu,\sigma\,\nu,\tau) = \frac{c}{\sqrt{2 \pi} \sigma (1+z^2)^{1/2}} e^{-r^2/2}}{f(y|mu,sigma,nu,tau)=c/(sqrt(2*pi)*sigma*(1+z^2)^(1/2)) exp(-(r^2)/2)}
 
@@ -91,10 +91,10 @@ and
 
 and  \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma}
 for \eqn{ -\infty < y < \infty }{0<y<0},
-\eqn{\mu=(-\infty,+\infty)}{mu=(-Inf,+Inf)},
+\eqn{-\infty<\mu<\infty}{mu=(-Inf,Inf)},
 \eqn{\sigma>0}{sigma>0},
 \eqn{\nu>0}{nu>0} and
-\eqn{\tau>0}{tau>0}. 
+\eqn{\tau>0}{tau>0}, see pp. 396-397 of Rigby et al. (2019).
 
 The parameters \eqn{\mu}{mu} and \eqn{\sigma}{sigma} are the location  and scale of the distribution.
 The parameter \eqn{\nu}{nu} determines the left hand tail of the distribution with \eqn{\nu>1}{nu>1} indicating a lighter tail  than the normal 
@@ -103,22 +103,22 @@ and
 
 The second form of the Sinh-Arcsinh distribution can be found in Jones and Pewsey (2009, p.2) denoted by \code{SHASHo} and the probability density function is defined as,
 
-\deqn{f(y|\mu,\sigma,\nu,\tau)= \frac{\tau}{\sigma} \frac{c}{\sqrt{2 \pi}}  \frac{1}{2\,\sqrt{1+z^2}} \exp{(-\frac{r^2}{2})}}{f(y|mu,sigma,nu,tau)= (tau/sigma)* (c/sqrt(2*pi)) 1/(2*(1+z^2)^(1/2)) exp(-(r^2/2))}
+\deqn{f(y|\mu,\sigma,\nu,\tau)= \frac{\tau c}{\sigma \sqrt{2 \pi} (1+z^2)^{1/2}} \exp{(-\frac{1}{2} r^2)}}
 
 where 
 
-\deqn{r= \sinh(\tau \, \arcsin(z)-\nu)}{r= sinh(tau*asinh(z)-nu)}
+\deqn{r= \sinh(\tau \, \sinh^{-1}(z)-\nu)}{r= sinh(tau*asinh(z)-nu)}
 
 and 
 
-\deqn{c= \cosh(\tau \arcsin(z)-\nu)}{c= cosh(\tau asinh(z)-\nu)}
+\deqn{c= \cosh(\tau \sinh^{-1}(z)-\nu)}{c= cosh(\tau asinh(z)-\nu)}
 
 and  \eqn{z=(y-\mu)/\sigma}{z=(y-mu)/sigma}
 for \eqn{ -\infty < y < \infty }{0<y<0},
-\eqn{\mu=(-\infty,+\infty)}{mu=(-Inf,+Inf)},
+\eqn{-\infty<\mu<+\infty}{mu=(-Inf,+Inf)},
 \eqn{\sigma>0}{sigma>0},
-\eqn{\nu=(-\infty,+\infty)}{nu=(-Inf,+Inf)} and
-\eqn{\tau>0}{tau>0}. 
+\eqn{-\infty<\nu<+\infty}{nu=(-Inf,+Inf)} and
+\eqn{\tau>0}{tau>0}, see pp. 398-400 of Rigby et al. (2019)
 
 The third form of the Sinh-Arcsinh distribution (Jones and Pewsey, 2009, p.8) divides the distribution by sigma for the density of the unstandardized variable. This distribution is denoted by \code{SHASHo2} and has pdf
 
@@ -148,17 +148,18 @@ Jones and Pewsey (2009) Sinh-arcsinh distributions. \emph{Biometrika.} \bold{96}
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).  
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.  
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC.
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
+(see also  \url{https://www.gamlss.com/}).
 }
-\author{Bob Rigby, Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} and Fiona McElduff}
+\author{Bob Rigby, Mikis Stasinopoulos and Fiona McElduff}
 
 
 \section{Warning}{The qSHASH and rSHASH are slow since they are relying on golden section for finding the quantiles} 

@@ -15,10 +15,10 @@ generation for the the Johnson's Su distribution.
 }
 \usage{
 JSU(mu.link = "identity", sigma.link = "log", nu.link = "identity", tau.link = "log")
-dJSU(x, mu = 0, sigma = 1, nu = 1, tau = 0.5, log = FALSE)
-pJSU(q, mu = 0, sigma = 1, nu = 1, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
-qJSU(p, mu = 0, sigma = 1, nu = 0, tau = 0.5, lower.tail = TRUE, log.p = FALSE)
-rJSU(n, mu = 0, sigma = 1, nu = 0, tau = 0.5)
+dJSU(x, mu = 0, sigma = 1, nu = 1, tau = 1, log = FALSE)
+pJSU(q, mu = 0, sigma = 1, nu = 1, tau = 1, lower.tail = TRUE, log.p = FALSE)
+qJSU(p, mu = 0, sigma = 1, nu = 1, tau = 1, lower.tail = TRUE, log.p = FALSE)
+rJSU(n, mu = 0, sigma = 1, nu = 1, tau = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -43,13 +43,18 @@ rJSU(n, mu = 0, sigma = 1, nu = 0, tau = 0.5)
 
   The probability density function of the Jonhson's SU distribution, (\code{JSU}), is defined as 
   
-\deqn{f(y|n,\mu,\sigma\,\nu,\tau)==\frac{1}{c \sigma} \frac{1}{\tau(z^2+1)^{\frac{1}{2}}} \frac{1}{\sqrt{2\pi}} \hspace{1mm} \exp{\left[ -\frac{1}{2} r^2 \right]}}{f(y|mu,sigma,nu,tau)=1/(c*sigma*2*pi)*(1/(tau*(z^2+1)^.5))exp(-.5r^2)}
+\deqn{f(y|\mu,\sigma\,\nu,\tau)=\frac{\tau}{c \sigma(s^2+1)^{\frac{1}{2}}\sqrt{2\pi}}  \hspace{1mm} \exp{\left[ -\frac{1}{2} z^2 \right]}}{f(y|mu,sigma,nu,tau)=1/(c*sigma*2*pi)*(1/(tau*(z^2+1)^.5))exp(-.5z^2)}
 
-for \eqn{ -\infty < y < \infty }{0<y<0}, \eqn{\mu=(-\infty,+\infty)}{mu=(-Inf,+Inf)}, 
-\eqn{\sigma>0}{sigma>0}, \eqn{\nu=(-\infty,+\infty)}{nu=(-Inf,+Inf)} and \eqn{\tau>0}{tau>0}. 
-where \eqn{r=-\nu+\frac{1}{\tau} \sinh^{-1}(z)}{r=-nu+sinh^-1(z)/tau}, \eqn{z = \frac{y-(\mu+c\sigma w^{\frac{1}{2}}\sinh{\Omega})}{c\sigma}}{z=(y-(mu+c*sigma*w^(.5) sinh(omega)))/(c*sigma)},
-\eqn{c = [ \frac{1}{2}(w-1)(w \cosh{2 \Omega} +1) ]^{\frac{1}{2}}}{c=(.5*(w-1)*(w*cosh(2*omega)+1))^(-.5)},
-\eqn{w=e^{\tau^2}}{w=exp{tau^2}} and \eqn{\Omega = -\nu\tau}{ omega= -nu*tau}.
+for \eqn{ -\infty < y < \infty }, \eqn{-\infty<\mu< \infty}{mu=(-Inf,+Inf)}, 
+\eqn{\sigma>0}{sigma>0}, \eqn{-\infty<\nu<\infty)}{nu=(-Inf,+Inf)} and \eqn{\tau>0}{tau>0} and  where 
+
+\deqn{z=-\nu+\tau \sinh^{-1}(s)}, 
+\deqn{s = \frac{y-\mu+c \sigma w^{\frac{1}{2}} \sinh(\nu/\tau)}{c\sigma}},
+
+\deqn{c =  \left\{ \frac{1}{2} (w-1) \left[w \cosh(2\nu/\tau) +1) \right] \right\}^{-\frac{1}{2}}} and 
+\deqn{w=e^{1/\tau^2}} see pp. 393-394 of Rigby et al. (2019).
+
+
 
 This is a reparameterization of the original Johnson Su distribution, Johnson (1954), 
 so the parameters \code{mu} and \code{sigma} are the mean and the standard deviation of the distribution.
@@ -73,14 +78,20 @@ Johnson, N. L. (1954). Systems of frequency curves derived from the first law of
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Accompanying documentation in the current GAMLSS  help files, (see also  \url{https://www.gamlss.com/}).
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
+(see also \url{https://www.gamlss.com/}).
 
 }
 

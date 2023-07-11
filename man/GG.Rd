@@ -49,10 +49,10 @@ rGG(n, mu=1, sigma=0.5, nu=1)
 }
 \details{
    The specific parameterization of the generalized gamma distribution used in GG is 
-\deqn{f(y|\mu,\sigma,\nu)= \frac{\theta^\theta z^\theta \nu e^(-\theta z)}{(\Gamma(\theta)y)}}{f(y|mu,sigma,nu)=theta^theta*z^theta*nu*e^(-theta*z)/(Gamma(theta)*y)}
+\deqn{f(y|\mu,\sigma,\nu)= \frac{\theta^\theta z^\theta |\nu| e^(-\theta z)}{(\Gamma(\theta)y)}}{f(y|mu,sigma,nu)=theta^theta*z^theta*nu*e^(-theta*z)/(Gamma(theta)*y)}
 where \eqn{z =(y/\mu)^\nu}{z =(y/mu)^nu}, 
 \eqn{\theta = 1/(\sigma^2|\nu|^2)}{theta = 1/(sigma^2*abs(nu)^2)}
-for y>0, \eqn{\mu>0}{mu>0}, \eqn{\sigma>0}{sigma>0} and \eqn{-\infty<\nu<+\infty}{-Inf>nu>Inf}. Note that for 
+for y>0, \eqn{\mu>0}{mu>0}, \eqn{\sigma>0}{sigma>0} and \eqn{-\infty<\nu<+\infty}{-Inf>nu>Inf} see pp. 443-444 of Rigby et al. (2019). Note that for 
 \eqn{\nu=0}{nu=0} the distribution is log normal.
 
 }
@@ -68,15 +68,16 @@ and rGG() generates random deviates.
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}). 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
+(see also  \url{https://www.gamlss.com/}).
 }
 \author{ Mikis Stasinopoulos, Bob Rigby and Nicoleta Motpan}
 

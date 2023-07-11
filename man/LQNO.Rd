@@ -37,6 +37,9 @@ logical; if \code{TRUE}, probabilities \code{p} are given as \code{log(p)}}
 The function \code{LQNO} returns a \code{gamlss.family} object which can be used to fit this specific form of the  normal distribution family in the gamlss() function.
 }
 \references{
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
+
 Argyropoulos C, Etheridge A, Sakhanenko N, Galas D. (2017) Modeling bias and
 variation in the stochastic processes of small RNA sequencing. \emph{Nucleic Acids Res.}
 2017 Mar 27. doi: 10.1093/nar/gkx199. [Epub ahead of print] PubMed PMID:

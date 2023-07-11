@@ -66,7 +66,7 @@ rZISICHEL(n, mu = 1, sigma = 1, nu = -0.5, tau = 0.1,
 \arguments{
   \item{mu.link}{ Defines the \code{mu.link}, with "log" link as the default for the \code{mu} parameter}
   \item{sigma.link}{Defines the  \code{sigma.link}, with "log" link as the default for the \code{sigma} parameter}
-  \item{nu.link}{ Defines the \code{nu.link}, with "identity" link as the default for the \code{nuu} parameter }
+  \item{nu.link}{ Defines the \code{nu.link}, with "identity" link as the default for the \code{nu} parameter }
     \item{tau.link}{Defines the \code{tau.link}, with "logit" link as the default for the \code{tau} parameter }
   \item{x}{ vector of (non-negative integer) quantiles}
   \item{mu}{vector of positive \code{mu}}
@@ -84,8 +84,8 @@ rZISICHEL(n, mu = 1, sigma = 1, nu = -0.5, tau = 0.1,
   \item{y}{the y variable,  the \code{tofySICHEL()} should not be used on its own.}
 }
 \details{
-The probability function of the Sichel distribution is given by
-\deqn{f(y|\mu,\sigma,\nu)= \frac{\mu^y K_{y+\nu}(\alpha)}{y!(\alpha \sigma)^{y+\nu} K_\nu(\frac{1}{\sigma})}}{f(y|\mu,\sigma,\nu)=[\mu^y K_{y+n}(\alpha)] / [y! (\alpha \sigma)^(y+\nu)  K_\nu(1/\sigma)]} 
+The probability function of the Sichel distribution \code{SICHEL} is given by
+\deqn{f(y|\mu,\sigma,\nu)= \frac{(\mu/b)^y K_{y+\nu}(\alpha)}{y!(\alpha \sigma)^{y+\nu} K_\nu(\frac{1}{\sigma})}}{f(y|\mu,\sigma,\nu)=[\mu^y K_{y+n}(\alpha)] / [y! (\alpha \sigma)^(y+\nu)  K_\nu(1/\sigma)]} 
 
 for \eqn{y=0,1,2,...,\infty}{y=0,1,2,...},   \eqn{\mu>0}{mu>0} , \eqn{\sigma>0}{\sigma>0} and \eqn{-\infty <\nu<\infty}{-Inf<\nu<Inf} where 
 
@@ -93,11 +93,14 @@ for \eqn{y=0,1,2,...,\infty}{y=0,1,2,...},   \eqn{\mu>0}{mu>0} , \eqn{\sigma>0}{
  
 \deqn{c=K_{\nu+1}(1/\sigma) / K_{\nu}(1/\sigma)}{c=K_{\nu+1} (1/\sigma)/K_{\nu}(1/\sigma)}
 and \eqn{K_{\lambda}(t)}{K_{lambda}(t)} 
-is the modified Bessel function of the third kind.
+is the modified Bessel function of the third kind see pp 508-510 of Rigby \emph{et al.} (2019).
 Note that the above parametrization is different from Stein, Zucchini and Juritz (1988) who use the above probability function 
 but treat
 \eqn{\mu}{mu}, \eqn{\alpha}{alpha}  and \eqn{\nu}{nu} as the parameters. 
- 
+
+
+The  definition of the zero adjusted Sichel distribution, \code{ZASICHEL} and  the the zero inflated Sichel  distribution, \code{ZISICHEL}, are given in pp. 517-518 and pp. 519-520 of  of Rigby \emph{et al.} (2019), respectively.
+
 }
 \value{
   Returns a \code{gamlss.family} object which can be used to fit a Sichel distribution in the \code{gamlss()} function. 
@@ -107,21 +110,25 @@ but treat
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Rigby, R. A., Stasinopoulos D. M. and Akantziliotou, C. (2006) Modelling the parameters of a family of mixed Poisson distributions including the Sichel and Delaptorte.
-Submitted for publication.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2003) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
+Rigby, R. A., Stasinopoulos, D. M., & Akantziliotou, C. (2008). A framework for modelling overdispersed count data, including the Poisson-shifted generalized inverse Gaussian distribution. \emph{Computational Statistics & Data Analysis}, 53(2), 381-393.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
-Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017) \emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
+
 
 Stein, G. Z., Zucchini, W. and Juritz, J. M. (1987). Parameter
 Estimation of the Sichel Distribution and its Multivariate Extension.
 \emph{Journal of American Statistical Association}, \bold{82}, 938-944.
+
+(see also \url{https://www.gamlss.com/}).
 }
 \author{Rigby, R. A.,  Stasinopoulos D. M.,  Akantziliotou C and Marco Enea. }
 \note{The mean of the above Sichel distribution is \eqn{\mu}{mu} and the variance is 

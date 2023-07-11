@@ -45,9 +45,9 @@ rGIG(n, mu=1, sigma=1, nu=1, ...)
 }
 \details{
    The specific parameterization of the generalized inverse gaussian distribution used in GIG is 
-\eqn{f(y|\mu,\sigma,\nu)=(\frac{c}{\mu})^\nu(\frac{y^(\nu-1)}{2 K(\frac{1}{\sigma},\nu)})(\exp((\frac{-1}{2\sigma})(\frac{cy}{\mu}+\frac{\mu}{cy})))}{f(y|mu,sigma,nu)=((c/mu)^nu)*(y^(nu-1))/(2*besselK(1/sigma,nu))*exp(-1/(2*sigma)*(c*y/mu+mu/(c*y)))}
-where \eqn{c = \frac{K(\frac{1}{\sigma},\nu+1)}{K(\frac{1}{\sigma},\nu)}}{c = besselK(1/sigma,nu+1)/besselK(1/sigma,nu)}, 
-for y>0, \eqn{\mu>0}{mu>0}, \eqn{\sigma>0}{sigma>0} and \eqn{-\infty<\nu<+\infty}{-Inf>nu>Inf}. 
+\deqn{f(y|\mu,\sigma,\nu)= (\frac{b}{\mu})^\nu \left[ \frac{y^{\nu-1}}{2 K_{\nu}(\sigma^{-2}) }\right] \exp \left[-\frac{1}{2\sigma^2} \left(\frac{b y }{\mu}+\frac{\mu}{ b y} \right)\right]}
+where \eqn{b = \frac{K_{\nu+1}(\frac{1}{\sigma^2})}{K_{\nu}(\frac{1}{\sigma^{-2}})}}{c = besselK(1/sigma,nu+1)/besselK(1/sigma,nu)}, 
+for y>0, \eqn{\mu>0}{mu>0}, \eqn{\sigma>0}{sigma>0} and \eqn{-\infty<\nu<+\infty}{-Inf>nu>Inf} see pp 445-446 of Rigby et al. (2019). 
 }
 \value{
   GIG() returns a gamlss.family object which can be used to fit a generalized inverse gaussian distribution in 
@@ -57,20 +57,22 @@ and rGIG() generates random deviates.
 \references{Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).  
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}. 
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
 \emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
-
+\doi{10.1201/b21973}
 
 Jorgensen B. (1982) Statistical properties of the generalized inverse Gaussian distribution, Series: Lecture notes in statistics; 9, New York : Springer-Verlag. 
 
+(see also  \url{https://www.gamlss.com/}).
+
 }
-\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby 
+\author{Mikis Stasinopoulos, Bob Rigby 
         and Nicoleta Motpan}
 
 \seealso{ \code{\link{gamlss.family}}, \code{\link{IG}}}

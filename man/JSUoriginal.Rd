@@ -41,14 +41,14 @@ rJSUo(n, mu = 0, sigma = 1, nu = 0, tau = 1)
   
 \details{
 
-  The probability density function of the orininal Jonhson's SU distribution, (\code{JSU}), is defined as 
+  The probability density function of the orininal Jonhson's SU distribution, (\code{JSUo}), is defined as 
   
-\deqn{f(y|n,\mu,\sigma\,\nu,\tau)=\frac{\tau}{\sigma}\frac{1}{(z^{2}+1)^{\frac{1}{2}}}\frac{1}{\sqrt{2\pi}}\hspace{1mm} \exp{\left[ -\frac{1}{2} r^2 \right]}}{f(y|mu,sigma,nu,tau)=tau/(sigma)*(1/(z^2+1)^.5)*(1/2*Pi)^(.5)exp(-.5r^2)}
+\deqn{f(y|\mu,\sigma\,\nu,\tau)=\frac{\tau}{\sigma (z^{2}+1)^{\frac{1}{2}} \sqrt{2\pi}}\hspace{1mm} \exp{\left[ -\frac{1}{2} r^2 \right]}}{f(y|mu,sigma,nu,tau)=tau/(sigma)*(1/(z^2+1)^.5)*(1/2*Pi)^(.5)exp(-.5r^2)}
 
 for \eqn{ -\infty < y < \infty }{0<y<0}, \eqn{\mu=(-\infty,+\infty)}{mu=(-Inf,+Inf)}, 
 \eqn{\sigma>0}{sigma>0}, \eqn{\nu=(-\infty,+\infty)}{nu=(-Inf,+Inf)} and \eqn{\tau>0}{tau>0}. 
 where \eqn{z = \frac{(y-\mu)}{\sigma}}{z=(y-mu)/sigma},
-\eqn{r = \nu + \tau sinh^{-1}(z)}{nu + tau* asinh(z)}.
+\eqn{r = \nu + \tau \sinh^{-1}(z)}{nu + tau* asinh(z)}, see pp. 389-390 of Rigby et al. (2019).
 
 
   
@@ -66,18 +66,19 @@ Johnson, N. L. (1954). Systems of frequency curves derived from the first law of
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
 
+(see also  \url{https://www.gamlss.com/}).
 }
 
-\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} and Bob Rigby}
+\author{Mikis Stasinopoulos and Bob Rigby}
 
 \section{Warning }{The function \code{JSU} uses first derivatives square in the fitting procedure so 
 standard errors should be interpreted with caution. It is recomented to be used only with \code{method=mixed(2,20)}} 

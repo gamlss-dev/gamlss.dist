@@ -48,13 +48,12 @@ rGB1(n, mu = 0.5, sigma = 0.4, nu = 1, tau = 1)
 \details{   
  The probability density function of the Generalized Beta type 1, (\code{GB1}), is defined as 
   
-\deqn{f(y|\mu,\sigma\,\nu,\tau)= \frac{\tau \nu^\beta y^{\tau\alpha-1} (1-y^\tau)^{\beta-1}}{B(\alpha,\beta)[\nu+(1-\nu) y^\tau]^{\alpha+\beta}}}{f(y|mu,sigma,nu,tau)=(tau*nu^beta*y^(tau*alpha-1)(1-y^tau))^(beta-1)/(Beta(alpha,beta)*(nu+(1-nu)*y^tau))^(alpha*beta))}
+\deqn{f(y|\mu,\sigma\,\nu,\tau)= \frac{\tau \nu^\beta y^{\tau \alpha-1} \left( 1-y^\tau\right)^{\beta-1}}{B(\alpha,\beta)[\nu+(1-\nu) y^\tau]^{\alpha+\beta}}}{f(y|mu,sigma,nu,tau)=(tau*nu^beta*y^(tau*alpha-1)(1-y^tau))^(beta-1)/(Beta(alpha,beta)*(nu+(1-nu)*y^tau))^(alpha*beta))}
 
-where  \eqn{ 0 < y < 1 }{0<y<1}, \eqn{\alpha = \mu(1-\sigma^2)/\sigma^2}{alpha=mu*(1-sigma^2)/sigma^2}
+where  \eqn{ 0 < y < 1 }{0<y<1}, \eqn{0<\mu<1}, \eqn{0<\sigma<1}, \eqn{\nu>0}, \eqn{\tau>0} and where   \eqn{\alpha = \mu(1-\sigma^2)/\sigma^2}{alpha=mu*(1-sigma^2)/sigma^2}
 and \eqn{\beta=(1-\mu)(1-\sigma^2)/\sigma^2}{(1-mu)*(1-sigma^2)/sigma^2}, and 
 \eqn{\alpha>0}{alpha>0}, \eqn{\beta>0}{beta>0}. Note the \eqn{\mu=\alpha /(\alpha+\beta)}{alpha/(alpha+beta)},
-\eqn{\sigma = (\alpha+\beta+1)^{-1/2}}{sigma=(alpha+beta+1)^(-1/2)}. 
-. 
+\eqn{\sigma = (\alpha+\beta+1)^{-1/2}}{sigma=(alpha+beta+1)^(-1/2)} see pp. 464-465 of Rigby et al. (2019).
 
 
 }
@@ -71,17 +70,20 @@ and \eqn{\beta=(1-\mu)(1-\sigma^2)/\sigma^2}{(1-mu)*(1-sigma^2)/sigma^2}, and
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M. Rigby R. A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}). 
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC,\doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}
+
+(see also  \url{https://www.gamlss.com/}).
 
  }
-\author{Bob Rigby and Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org} }
+\author{Bob Rigby and Mikis Stasinopoulos}
 
 \section{Warning}{The qSHASH and rSHASH are slow since they are relying on golden section for finding the quantiles} 
 

@@ -51,16 +51,17 @@ rPE2(n, mu = 0, sigma = 1, nu = 2)
           taken to be the number required}
 }
 \details{
-Power Exponential distribution (PE) is defined as 
-\deqn{f(y|\mu,\sigma,\nu)=\frac{\nu \exp[-(\frac{1}{2})|\frac{z}{c}|^{\nu}]}{\sigma c 2^{(1+1/\nu)}\Gamma(\frac{1}{\nu})}}{f(y|mu,sigma,nu)=(1/sigma)*(nu*exp(-0.5*|z/c|^nu))/(c*2^(1+1/nu)*Gamma(1/nu))}
-where \eqn{c=[2^{-2/\nu}\Gamma(1/\nu)/\Gamma(3/\nu) ]^{0.5}}{c=[2^(-2/nu)Gamma(1/nu)/Gamma(3/nu)]^0.5},
+Power Exponential distribution (PE) is defined as:
+
+\deqn{f(y|\mu,\sigma,\nu)=\frac{\nu \exp[- |z|^{\nu}]}{2 c \sigma  \Gamma(\frac{1}{\nu})}}{f(y|mu,sigma,nu)=(1/sigma)*(nu*exp(-0.5*|z/c|^nu))/(c*2^(1+1/nu)*Gamma(1/nu))}
+where  \eqn{z=(y-\mu)/ c \sigma}{z=(y-mu)/(c sigma)} and \eqn{c^2=\Gamma(1/\nu)\left[/\Gamma(3/\nu) \right]^{-1}}{c=[2^(-2/nu)Gamma(1/nu)/Gamma(3/nu)]^0.5},
 for \eqn{y=(-\infty,+\infty)}{y=(-Inf,+Inf)}, \eqn{\mu=(-\infty,+\infty)}{\mu=(-Inf,+Inf)}, \eqn{\sigma>0} and \eqn{\nu>0}. 
 This parametrization was used by Nelson (1991) and ensures \eqn{\mu}{mu} is the mean and \eqn{\sigma}{sigma} is the standard deviation of y 
-(for all parameter values of \eqn{\mu}{mu}, \eqn{\sigma}{sigma} and \eqn{\nu}{nu} within the rages above)
+(for all parameter values of \eqn{\mu}{mu}, \eqn{\sigma}{sigma} and \eqn{\nu}{nu} within the ranges above), see p. 374 of Rigby et al. (2019)
 
 Thw Power Exponential distribution (PE2) is defined as 
 \deqn{f(y|\mu,\sigma,\nu)=\frac{\nu \exp[-\left|z\right|^\nu]} {2\sigma \Gamma\left(\frac{1}{\nu}\right)}}{f(y|mu,sigma,nu)=(nu *exp(-abs(z)^2))/(2*sigma*Gamma(1/nu))}
-
+see p. 376 of Rigby et al. (2019)
 }
 \value{
   returns a \code{gamlss.family} object which can be used to fit a Power Exponential distribution in the \code{gamlss()} function.   
@@ -71,17 +72,19 @@ Nelson, D.B. (1991) Conditional heteroskedasticity in asset returns: a new appro
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	Distributions for modeling location, scale, and shape: Using GAMLSS in R, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
 Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
+\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \doi{10.18637/jss.v023.i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. \doi{10.1201/b21973}
+
+(see also  \url{https://www.gamlss.com/}).
 
 }
-\author{Mikis Stasinopoulos \email{mikis.stasinopoulos@gamlss.org}, Bob Rigby}
+\author{Mikis Stasinopoulos, Bob Rigby}
 \note{\eqn{\mu}{mu} is the mean and \eqn{\sigma}{sigma} is the standard deviation of the Power Exponential distribution}
 
 

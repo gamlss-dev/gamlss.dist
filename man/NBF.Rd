@@ -19,7 +19,7 @@ The functions \code{dNBF}, \code{pNBF}, \code{qNBF} and \code{rNBF} define the d
 The functions \code{dZINBF}, \code{pZINBF}, \code{qZINBF} and \code{rZINBF} define the density, distribution function, quantile function and random generation for the zero inflated negative binomial family, \code{ZINBF()}, distribution a four parameter distribution.
 }
 \usage{
-NBF(mu.link = "log", sigma.link = "log", nu.link = "identity")
+NBF(mu.link = "log", sigma.link = "log", nu.link = "log")
 
 dNBF(x, mu = 1, sigma = 1, nu = 2, log = FALSE)
 
@@ -64,6 +64,9 @@ rZINBF(n, mu = 1, sigma = 1, nu = 2, tau = 0.1)
 \details{
  The definition for Negative Binomial Family distribution , \code{NBF}, is similar to the Negative Binomial type I. The probability function of the \code{NBF} can be obtained by replacing \eqn{\sigma} with  \eqn{\sigma \mu^{\nu-2}} where \eqn{\nu} is a power parameter.
 The distribution has mean \eqn{\mu} and variance \eqn{\mu+\sigma \mu^{\nu}.} 
+For more details see pp 507-508 of Rigby \emph{et al.} (2019).   
+
+The zero inflated negative binomial family \code{ZINBF} is defined as an inflated at zero \code{NBF}.
 }
 \value{
   returns a \code{gamlss.family} object which can be used to fit a Negative Binomial Family distribution in the \code{gamlss()} function. 
@@ -74,17 +77,15 @@ Anscombe, F. J. (1950) Sampling theory of the negative binomial and logarithmic 
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
-Stasinopoulos D. M., Rigby R.A. and Akantziliotou C. (2006) Instructions on how to use the GAMLSS package in R.
-Accompanying documentation in the current GAMLSS  help files, (see also  \url{http://www.gamlss.org/}).  
+Rigby, R. A., Stasinopoulos, D. M.,  Heller, G. Z.,  and De Bastiani, F. (2019)
+	\emph{Distributions for modeling location, scale, and shape: Using GAMLSS in R}, Chapman and Hall/CRC, \doi{10.1201/9780429298547}. An older version can be found in \url{https://www.gamlss.com/}.
 
-Stasinopoulos D. M. Rigby R.A. (2007) Generalized additive models for location scale and shape (GAMLSS) in R.
-\emph{Journal of Statistical Software}, Vol. \bold{23}, Issue 7, Dec 2007, \url{http://www.jstatsoft.org/v23/i07}.
 
 Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  
+Chapman and Hall/CRC. \doi{10.1201/b21973}  
 
-Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2017)
-\emph{Flexible Regression and Smoothing: Using GAMLSS in R},  Chapman and Hall/CRC. 
+(see also \url{https://www.gamlss.com/}).
 
 }
 \author{Bob Rigby and Mikis Stasinopoulos}
