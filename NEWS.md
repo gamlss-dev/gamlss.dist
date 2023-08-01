@@ -1,5 +1,8 @@
 # Version 6.1-0
 
+* The package is now hosted on GitHub at
+  <https://github.com/mstasinopoulos/GAMLSS-Distibutions/>.
+
 * Add an S3 class `GAMLSS` and corresponding methods encompassing all
   distributions from the `gamlss.dist` package using the workflow from the
   [distributions3](https://CRAN.R-project.org/package=distributions3) package
