@@ -42,6 +42,13 @@ GAMLSS(family, mu, sigma, tau, nu)
 }
 
 \details{
+The S3 class \code{GAMLSS} provides a unified workflow based on the
+\pkg{distributions3} package (see Zeileis et al. 2022) for all distributions
+from the \pkg{gamlss.dist} package. The idea is that from fitted
+\code{\link[gamlss]{gamlss}} model objects predicted probability distributions
+can be obtained for which moments (mean, variance, etc.), probabilities,
+quantiles, etc. can be obtained with corresponding generic functions.
+
 The constructor function \code{GAMLSS} sets up a distribution
 object, representing a distribution from the GAMLSS (generalized additive
 model of location, scale, and shape) framework by the corresponding parameters
@@ -79,6 +86,13 @@ See the examples below for an illustration of the workflow for the class and met
 
 \value{
 A \code{GAMLSS} object, inheriting from \code{distribution}.
+}
+
+\references{
+Zeileis A, Lang MN, Hayes A (2022).
+\dQuote{distributions3: From Basic Probability to Probabilistic Regression.}
+Presented at \emph{useR! 2022 - The R User Conference}.
+Slides, video, vignette, code at \url{https://www.zeileis.org/news/user2022/}.
 }
 
 \seealso{
