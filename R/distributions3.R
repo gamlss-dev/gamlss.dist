@@ -20,8 +20,7 @@ GAMLSS <- function(family, mu, sigma, tau, nu) {
 }
 
 ## auxiliary functions for getting family and d/p/q/r function
-## from gamlss.dist namespace (FIXME: where to get() for user-defined
-## family?
+## from gamlss.dist namespace (FIXME: where to get() for user-defined family?)
 .gamlss_family <- function(x) get(if(is.character(x)) x else attr(x, "family")[1L], asNamespace("gamlss.dist"))()
 .gamlss_dpqr <- function(x, type) get(paste0(type, attr(x, "family")[1L]), asNamespace("gamlss.dist"))
 
@@ -37,15 +36,15 @@ print.GAMLSS <- function(x, digits = pmax(3L, getOption("digits") - 3L), ...) {
 }
 
 mean.GAMLSS <- function(x, ...) {
-  stopifnot(requireNamespace("gamlss.dist"))
   f <- .gamlss_family(x)
+  if (is.null(f$mean)) stop(sprintf("the mean is not implemented for the %s family", attr(x, "family")[1L]))
   m <- do.call(f$mean, as.list(x))
   setNames(m, names(x))
 }
 
 variance.GAMLSS <- function(x, ...) {
-  stopifnot(requireNamespace("gamlss.dist"))
   f <- .gamlss_family(x)
+  if (is.null(f$variance)) stop(sprintf("the variance is not implemented for the %s family", attr(x, "family")[1L]))
   m <- do.call(f$variance, as.list(x))
   setNames(m, names(x))
 }
@@ -98,10 +97,12 @@ support.GAMLSS <- function(d, drop = TRUE, ...) {
 
 is_discrete.GAMLSS <- function(d, ...) {
   f <- .gamlss_family(d)
+  if (is.null(f$type)) stop(sprintf("the type is not implemented for the %s family", attr(d, "family")[1L]))
   setNames(rep.int(f$type == "Discrete", length(d)), names(d))
 }
 
 is_continuous.GAMLSS <- function(d, ...) {
   f <- .gamlss_family(d)
+  if (is.null(f$type)) stop(sprintf("the type is not implemented for the %s family", attr(d, "family")[1L]))
   setNames(rep.int(f$type == "Continuous", length(d)), names(d))
 }
