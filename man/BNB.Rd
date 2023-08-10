@@ -106,7 +106,7 @@ Stasinopoulos D. M., Rigby R.A., Heller G., Voudouris V., and De Bastiani F., (2
 
 (see also  \url{https://www.gamlss.com/}).
 }
-\author{ Bob Rigby and Mikis Stasinopoulos \email{d.stasinopoulos@londonmrt.ac.uk}}
+\author{ Bob Rigby and Mikis Stasinopoulos}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
