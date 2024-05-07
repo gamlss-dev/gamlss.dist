@@ -35,8 +35,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)/s1)^2
            dsq2 <- ((y-mu)/s2)^2
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldm <- ifelse(y < mu, (w1*(y-mu))/(s1^2) , (w2*(y-mu))/(s2^2))
            dldm
          },
@@ -45,8 +45,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <-((y-mu)^2)/(s2^2) 
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldm <- ifelse(y < mu, (w1*(y-mu))/(s1^2) , (w2*(y-mu))/(s2^2) )
            d2ldm2 <- -dldm*dldm
            d2ldm2 <- ifelse(d2ldm2 < -1e-15, d2ldm2,-1e-15)  # NOTE this was added afrer testing
@@ -57,8 +57,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldd <- ifelse(y < mu, (w1*dsq1-1)/(sigma) , (w2*dsq2-1)/(sigma) )
            dldd
          } ,
@@ -67,8 +67,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldd <- ifelse(y < mu, (w1*dsq1-1)/(sigma) , (w2*dsq2-1)/(sigma) )
            d2ldd2 <- -dldd*dldd
            d2ldd2 <- ifelse(d2ldd2 < -1e-15, d2ldd2,-1e-15)  
@@ -79,8 +79,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldv <- ifelse(y < mu, -(w1*dsq1-1)/(nu) , (w2*dsq2+1)/(nu) )
            dldv <- dldv - 2*nu/(1+nu^2)
            dldv
@@ -90,8 +90,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldv <- ifelse(y < mu, -(w1*dsq1-1)/(nu) , (w2*dsq2+1)/(nu) )
            dldv <- dldv - 2*nu/(1+nu^2)
            d2ldv2 <- -dldv*dldv
@@ -104,8 +104,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldta <- -0.5*log(1+dsq1/tau)+(w1*dsq1-1)/(2*tau)
            dldtb <- -0.5*log(1+dsq2/tau)+(w2*dsq2-1)/(2*tau)
            dldt <- ifelse(y < mu, dldta , dldtb)
@@ -117,8 +117,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldta <- -0.5*log(1+dsq1/tau)+(w1*dsq1-1)/(2*tau)
            dldtb <- -0.5*log(1+dsq2/tau)+(w2*dsq2-1)/(2*tau)
            dldt <- ifelse(y < mu, dldta , dldtb)
@@ -133,8 +133,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)/s1)^2
            dsq2 <- ((y-mu)/s2)^2
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldm <- ifelse(y < mu, (w1*(y-mu))/(s1^2) , (w2*(y-mu))/(s2^2))
            dldd <- ifelse(y < mu, (w1*dsq1-1)/(sigma) , (w2*dsq2-1)/(sigma) )                
            d2ldmdd <- -(dldm*dldd)
@@ -146,8 +146,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)/s1)^2
            dsq2 <- ((y-mu)/s2)^2
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldm <- ifelse(y < mu, (w1*(y-mu))/(s1^2) , (w2*(y-mu))/(s2^2))
            dldv <- ifelse(y < mu, -(w1*dsq1-1)/(nu) , (w2*dsq2+1)/(nu) )
            dldv <- dldv - 2*nu/(1+nu^2)                       
@@ -160,8 +160,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)/s1)^2
            dsq2 <- ((y-mu)/s2)^2
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldm <- ifelse(y < mu, (w1*(y-mu))/(s1^2) , (w2*(y-mu))/(s2^2))                      
            dldta <- -0.5*log(1+dsq1/tau)+(w1*dsq1-1)/(2*tau)
            dldtb <- -0.5*log(1+dsq2/tau)+(w2*dsq2-1)/(2*tau)
@@ -176,8 +176,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldd <- ifelse(y < mu, (w1*dsq1-1)/(sigma) , (w2*dsq2-1)/(sigma) )
            dldv <- ifelse(y < mu, -(w1*dsq1-1)/(nu) , (w2*dsq2+1)/(nu) )
            dldv <- dldv - 2*nu/(1+nu^2)         
@@ -190,8 +190,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldd <- ifelse(y < mu, (w1*dsq1-1)/(sigma) , (w2*dsq2-1)/(sigma) )      
            dldta <- -0.5*log(1+dsq1/tau)+(w1*dsq1-1)/(2*tau)
            dldtb <- -0.5*log(1+dsq2/tau)+(w2*dsq2-1)/(2*tau)
@@ -206,8 +206,8 @@ ST3 <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link=
            s2 <- sigma*nu
            dsq1 <- ((y-mu)^2)/(s1^2)
            dsq2 <- ((y-mu)^2)/(s2^2)
-           w1 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq1),1)
-           w2 <- ifelse(tau < 1000000, (tau+1)/(tau+dsq2),1)
+           w1 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq1),1)
+           w2 <- ifelse(rep(tau, length(y)) < 1000000, (tau+1)/(tau+dsq2),1)
            dldv <- ifelse(y < mu, -(w1*dsq1-1)/(nu) , (w2*dsq2+1)/(nu) )
            dldv <- dldv - 2*nu/(1+nu^2)
            dldta <- -0.5*log(1+dsq1/tau)+(w1*dsq1-1)/(2*tau)
