@@ -91,7 +91,7 @@ pBE <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
 qBE <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
   {      if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", ""))   
-         if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
+         # if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
           a <- mu*(1-sigma^2)/(sigma^2)
           b <- a*(1-mu)/mu
           q <- qbeta(p, shape1=a, shape2=b, lower.tail=lower.tail, log.p=log.p)
