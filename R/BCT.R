@@ -138,7 +138,7 @@ qBCT <- qBCTo <- function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, lo
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+#    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if(length(nu)>1) 
          {
