@@ -161,29 +161,13 @@ pDBI<-function(q, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE)
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly) 
      bd <- rep(bd, length = ly)  
- #     ly <- length(q)
- #    FFF <- rep(0,ly)
- # nsigma <- rep(sigma, length = ly)
- #    nmu <- rep(mu, length = ly)
- #     nbd <- rep(bd, length = ly)
- #     j <- seq(along=q)
- #     for (i in j)
- #     {
- #       y.y <- q[i]
- #        nn <- bd[i]
- #        mm <- mu[i]
- #      nsig <- sigma[i]
- #    allval <- seq(0,y.y)
- #    pdfall <- dDBI(allval, mu = mm, sigma = nsig, bd = nn, log = FALSE)
- #    FFF[i] <- sum(pdfall)
- #     }
-      # cdf <- FFF
         fn <- function(q, mu, sigma, bd) sum(dDBI(0:q, mu=mu, sigma=sigma, bd=bd))
       Vcdf <- Vectorize(fn)
        cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)     
        cdf <- if(lower.tail==TRUE) cdf else 1-cdf
        cdf <- if(log.p==FALSE) cdf else log(cdf)   
        cdf <- ifelse(q < 0, 0, cdf) 
+       cdf <- ifelse(q > 0, 1, cdf) 
        cdf
 }
 #-------------------------------------------------------------------------------
@@ -193,7 +177,7 @@ qDBI <- function(p, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE  
 {      
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
+  # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
   if (log.p==TRUE) p <- exp(p) else p <- p
   if (lower.tail==TRUE) p <- p else p <- 1-p 
          ly <- max(length(p),length(mu),length(sigma)) 
@@ -219,7 +203,11 @@ qDBI <- function(p, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE  
       } 
     }
   }          
-  QQQ   
+       QQQ <- ifelse(p==0, 0, QQQ)
+       QQQ <- ifelse(p==1, bd, QQQ)
+       QQQ <- ifelse(p<0, NaN, QQQ)
+       QQQ <- ifelse(p>1, NaN,  QQQ)    
+       QQQ       
 } 
 #-------------------------------------------------------------------------------
 # the r function 

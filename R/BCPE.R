@@ -244,7 +244,7 @@ qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE,
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+    # if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if(length(nu)>1){ 
                 za <- ifelse(nu<0, 
@@ -258,6 +258,10 @@ qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE,
                     }    
      if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*za+1)^(1/nu),mu*exp(sigma*za))
        else   if (nu != 0) ya <- mu*(nu*sigma*za+1)^(1/nu) else ya <- mu*exp(sigma*za)
+   ya <- ifelse(p==0, 0, ya)
+   ya <- ifelse(p==1, Inf, ya)
+   ya <- ifelse(p<0, NaN, ya)
+   ya <- ifelse(p>1, NaN,  ya)
      ya   
  }
 #-----------------------------------------------------------------  

@@ -145,11 +145,15 @@ qBCT <- qBCTo <- function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, lo
          z <- ifelse((nu<=0),qt(p*pt(1/(sigma*abs(nu)),tau),tau),qt(1-(1-p)*pt(1/(sigma*abs(nu)),tau),tau)) 
          }
     else {
-    z <- if (nu<=0) qt(p*pt(1/(sigma*abs(nu)),tau),tau)
+         z <- if (nu<=0) qt(p*pt(1/(sigma*abs(nu)),tau),tau)
          else       qt(1-(1-p)*pt(1/(sigma*abs(nu)),tau),tau)                     
          }                 
-       if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*z+1)^(1/nu),mu*exp(sigma*z))
+  if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*z+1)^(1/nu),mu*exp(sigma*z))
        else   if (nu != 0) ya <- mu*(nu*sigma*z+1)^(1/nu) else ya <- mu*exp(sigma*z)
+       ya <- ifelse(p==0, 0, ya)
+       ya <- ifelse(p==1, Inf, ya)
+       ya <- ifelse(p<0, NaN, ya)
+       ya <- ifelse(p>1, NaN,  ya)
        ya
  }
 #-----------------------------------------------------------------  

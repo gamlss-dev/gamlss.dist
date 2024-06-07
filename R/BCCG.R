@@ -109,8 +109,7 @@ qBCCG <- qBCCGo <- function(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p 
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
-    #browser()
+    # if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))
     if(length(nu)>1) 
          {
     z <- ifelse((nu<=0),qnorm(p*pnorm(1/(sigma*abs(nu)))),qnorm(1-(1-p)*pnorm(1/(sigma*abs(nu))))) #l<- mu*nu*sigma*qt(p,tau+1)^(1/nu))
@@ -121,6 +120,10 @@ qBCCG <- qBCCGo <- function(p, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE, log.p 
          }                 
        if(length(nu)>1)  ya <- ifelse(nu != 0,mu*((nu*sigma*z+1)^(1/nu)),mu*exp(sigma*z))
        else   if (nu != 0) ya <- mu*((nu*sigma*z+1)^(1/nu)) else ya <- mu*exp(sigma*z)
+       ya <- ifelse(p==0, 0, ya)
+       ya <- ifelse(p==1, Inf, ya)
+       ya <- ifelse(p<0, NaN, ya)
+       ya <- ifelse(p>1, NaN,  ya)
        ya
  }
 #--------------------------------------------------------------

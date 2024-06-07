@@ -126,7 +126,8 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
   {      
           if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
+          # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be
+          #     between 0 and 1", "\n", "")) 
           if (log.p==TRUE) p <- exp(p) else p <- p
           if (lower.tail==TRUE) p <- p else p <- 1-p
         ly <- max(length(p),length(mu),length(sigma)) 
@@ -154,6 +155,10 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
                                           qBI(p, mu = mu, bd=bd, lower.tail=TRUE))
         else invcdf2 <- if (sigma<0.0001) qBI(p, mu = mu, bd=bd, lower.tail=TRUE)
                    else invcdf
+           invcdf2 <- ifelse(p==0, 0, invcdf2)
+           invcdf2 <- ifelse(p==1, 1, invcdf2)
+           invcdf2 <- ifelse(p<0, NaN, invcdf2)
+           invcdf2 <- ifelse(p>1, NaN, invcdf2)
      invcdf2    
    }
 #------------------------------------------------------------------------------------------

@@ -147,8 +147,8 @@ qBEINF0 <- function(p, mu = 0.5, sigma = 0.1, nu = 0.1, tau = 0.1,
             stop(paste("sigma must be between 0 and 1", "\n", ""))   
          if (any(nu <= 0) )  
             stop(paste("nu must greated than 0", "\n", ""))           
-         if (any(p <= 0) | any(p >= 1))  
-            stop(paste("p must be between 0 and 1", "\n", ""))    
+         # if (any(p <= 0) | any(p >= 1))  
+         #    stop(paste("p must be between 0 and 1", "\n", ""))    
          if (log.p==TRUE) p <- exp(p) else p <- p
          if (lower.tail==TRUE) p <- p else p <- 1-p
           a <- mu*(1-sigma^2)/(sigma^2)
@@ -156,7 +156,10 @@ qBEINF0 <- function(p, mu = 0.5, sigma = 0.1, nu = 0.1, tau = 0.1,
           suppressWarnings(
           q <- ifelse((p<=(nu/(1+nu))),0, qbeta((p-(nu/(1+nu)))/(1/(1+nu)), shape1=a, 
                                             shape2=b, lower.tail=TRUE, log.p=FALSE)))
-          #q <- ifelse((p>=((1+nu)/(1+nu))), 1, q)        
+          q <- ifelse(p==0, 0, q)
+          q <- ifelse(p==1, Inf, q)
+          q <- ifelse(p<0, NaN, q)
+          q <- ifelse(p>1, NaN,  q)    
           q
    }
 #------------------------------------------------------------------------------------------

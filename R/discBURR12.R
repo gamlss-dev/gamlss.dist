@@ -176,7 +176,7 @@ qDBURR12 <- function(p, mu = 5, sigma = 2, nu = 2,  lower.tail = TRUE, log.p = F
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
   if (any(nu <= 0))  stop(paste("nu must be greater than 0 ", "\n", ""))  
-  if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
+  # if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
   if (log.p==TRUE) p <- exp(p) else p <- p
   if (lower.tail==TRUE) p <- p else p <- 1-p 
      ly <- max(length(p),length(mu),length(sigma),length(nu)) 
@@ -186,6 +186,10 @@ qDBURR12 <- function(p, mu = 5, sigma = 2, nu = 2,  lower.tail = TRUE, log.p = F
      nu <- rep(nu, length = ly) 
       q <- round(mu*(exp(-(log(1-p))/nu)-1)^(1/sigma)-1L)
       q <- ifelse(q<0,0,q)
+      q <- ifelse(p==0, 0, q)
+      q <- ifelse(p==1, Inf, q)
+      q <- ifelse(p<0, NaN, q)
+      q <- ifelse(p>1, NaN,  q)
       q
 }
  

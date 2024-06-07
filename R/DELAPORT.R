@@ -278,7 +278,7 @@ qDEL <- function(p, mu=1, sigma=1, nu=0.5,  lower.tail = TRUE, log.p = FALSE,
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(nu <= 0) | any(nu >= 1))  stop(paste("nu must be between 0 and 1", "\n", "")) 
-          if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
+          # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
           if (log.p==TRUE) p <- exp(p) else p <- p
           if (lower.tail==TRUE) p <- p else p <- 1-p    
            ly <- length(p)                                                       
@@ -301,7 +301,11 @@ qDEL <- function(p, mu=1, sigma=1, nu=0.5,  lower.tail = TRUE, log.p = FALSE,
             } 
         }
       }          
-          QQQ   
+          QQQ <- ifelse(p==0, 0, QQQ)
+          QQQ <- ifelse(p==1, Inf, QQQ)
+          QQQ <- ifelse(p<0, NaN, QQQ)
+          QQQ <- ifelse(p>1, NaN,  QQQ)    
+          QQQ     
    } 
 #----------------------------------------------------------------------------------------
 rDEL <- function(n, mu=1, sigma=1, nu=0.5, max.value = 10000)

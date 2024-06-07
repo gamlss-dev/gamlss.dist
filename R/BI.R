@@ -30,8 +30,7 @@ BI <- function (mu.link = "logit")
 #------------------------------------------------------------------------------------------
 dBI<-function(x, bd = 1, mu = 0.5, log = FALSE)
 { 
-  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-#  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
+  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", ""))
   if (any(bd < x))  stop(paste("x  must be <=  than the binomial denominator", bd, "\n"))   
   fy <- dbinom(x, size = bd, prob = mu, log = log)
   fy <- ifelse(x < 0, 0, fy)
@@ -40,8 +39,7 @@ dBI<-function(x, bd = 1, mu = 0.5, log = FALSE)
 #------------------------------------------------------------------------------------------
 pBI <- function(q, bd=1, mu=0.5, lower.tail = TRUE, log.p = FALSE)
 {     
-  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-#  if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))
+  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", ""))
   if (any(bd < q))  stop(paste("q  must be <=  than the binomial denominator", bd, "\n"))   
   cdf <- pbinom(q, size = bd, prob = mu, lower.tail=lower.tail, log.p=log.p)
   cdf <- ifelse(q < 0, 0, cdf) 
@@ -50,10 +48,9 @@ pBI <- function(q, bd=1, mu=0.5, lower.tail = TRUE, log.p = FALSE)
 #------------------------------------------------------------------------------------------
 qBI <- function(p, bd = 1, mu = 0.5,  lower.tail = TRUE, log.p = FALSE)
 {      
-  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-  if (any( p < 0) | any(p >  1))  stop(paste(" p must be between 0 and 1", "\n", ""))    
-  q <- qbinom(p, size = bd, prob = mu, lower.tail = lower.tail, log.p = log.p)
-  q
+  if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", ""))
+   qfun <- qbinom(p, size = bd, prob = mu, lower.tail = lower.tail, log.p = log.p)
+   qfun
 }
 #------------------------------------------------------------------------------------------
 rBI <- function(n, bd = 1, mu = 0.5)
