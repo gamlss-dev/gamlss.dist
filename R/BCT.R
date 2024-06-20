@@ -132,30 +132,39 @@ pBCT <- pBCTo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, lo
          FYy     
  }
 #-----------------------------------------------------------------  
-qBCT <- qBCTo <- function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
+qBCT <- qBCTo <- function(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)
  { 
+    ## check whether parameters are within range
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-    if (log.p==TRUE) p <- exp(p) else p <- p
-#    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    if(length(nu)>1) 
-         {
-         z <- ifelse((nu<=0),qt(p*pt(1/(sigma*abs(nu)),tau),tau),qt(1-(1-p)*pt(1/(sigma*abs(nu)),tau),tau)) 
-         }
-    else {
-         z <- if (nu<=0) qt(p*pt(1/(sigma*abs(nu)),tau),tau)
-         else       qt(1-(1-p)*pt(1/(sigma*abs(nu)),tau),tau)                     
-         }                 
-  if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*z+1)^(1/nu),mu*exp(sigma*z))
-       else   if (nu != 0) ya <- mu*(nu*sigma*z+1)^(1/nu) else ya <- mu*exp(sigma*z)
-       ya <- ifelse(p==0, 0, ya)
-       ya <- ifelse(p==1, Inf, ya)
-       ya <- ifelse(p<0, NaN, ya)
-       ya <- ifelse(p>1, NaN,  ya)
-       ya
- }
+
+    ## extra arguments
+    if (log.p) p <- exp(p)
+    if (!lower.tail) p <- 1 - p
+
+    ## length of return value
+    n <- max(length(p), length(mu), length(sigma), length(nu), length(tau))
+    p <- rep_len(p, n)
+    mu <- rep_len(mu, n)
+    sigma <- rep_len(sigma, n)
+    nu <- rep_len(nu, n)
+    tau <- rep_len(tau, n)
+
+    ## compute quantile
+    zp <- pt(1/(sigma * abs(nu)), tau)
+    z <- qt(1 - (1 - p) * zp, tau), tau)
+    z[nu <= 0] <- qt(p[nu <= 0] * zp[nu <= 0], tau[nu <= 0])
+    ya <- mu * (nu * sigma * z + 1)^(1/nu)
+    ya[nu == 0] <- mu[nu == 0] * exp(sigma[nu == 0] * z[nu == 0])
+
+    ## catch edge cases and return
+    ya[p == 0] <- 0
+    ya[p == 1] <- Inf
+    ya[p <  0] <- NaN
+    ya[p >  1] <- NaN
+    return(ya)
+}
 #-----------------------------------------------------------------  
 rBCT <- rBCTo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
   {
