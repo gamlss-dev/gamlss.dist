@@ -153,7 +153,7 @@ qBCT <- qBCTo <- function(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = 
 
     ## compute quantile
     zp <- pt(1/(sigma * abs(nu)), tau)
-    z <- qt(1 - (1 - p) * zp, tau), tau)
+    z <- qt(1 - (1 - p) * zp, tau)
     z[nu <= 0] <- qt(p[nu <= 0] * zp[nu <= 0], tau[nu <= 0])
     ya <- mu * (nu * sigma * z + 1)^(1/nu)
     ya[nu == 0] <- mu[nu == 0] * exp(sigma[nu == 0] * z[nu == 0])
