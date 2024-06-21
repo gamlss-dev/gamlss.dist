@@ -96,12 +96,15 @@ BCT <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.
 #-----------------------------------------------------------------  
 dBCT <- dBCTo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
  {
-          if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-          if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
-       #   if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
-          if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
-          else   if (nu != 0) z <- (((x/mu)^nu-1)/(nu*sigma)) else z <- log(x/mu)/sigma
+## check whether parameters are within range  
+if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
+#  
+if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
+          else   if (nu != 0) 
+                      z <- (((x/mu)^nu-1)/(nu*sigma)) 
+                 else z <- log(x/mu)/sigma
           loglik <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
              fTz <-  lgamma((tau+1)/2)-lgamma(tau/2)-0.5*log(tau)-lgamma(0.5)
              fTz <- fTz-((tau+1)/2)* log(1+(z*z)/tau)
@@ -114,56 +117,69 @@ dBCT <- dBCTo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
   }    
 #-----------------------------------------------------------------  
 pBCT <- pBCTo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
- {  
-          if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-          if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-     #     if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
-         if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
-         else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
-         FYy1 <- pt(z,tau)
-         if(length(nu)>1)  FYy2 <- ifelse(nu > 0, pt(-1/(sigma*abs(nu)),df=tau) ,0)
-         else   if (nu>0)  FYy2 <-  pt(-1/(sigma*abs(nu)),df=tau) else FYy2 <- 0
-         FYy3 <- pt(1/(sigma*abs(nu)),df=tau)
-         FYy  <- (FYy1-FYy2)/FYy3
-         if(lower.tail==TRUE) FYy  <- FYy else  FYy <- 1-FYy 
-         if(log.p==FALSE) FYy  <- FYy else  FYy<- log(FYy) 
-         FYy <-ifelse(q <= 0, 0, FYy)
+ {
+## check whether parameters are within range  
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+## length of return value
+      n <- max(length(q), length(mu), length(sigma), length(nu), length(tau))
+      q <- rep_len(q, n)
+     mu <- rep_len(mu, n)
+  sigma <- rep_len(sigma, n)
+     nu <- rep_len(nu, n)
+    tau <- rep_len(tau, n)
+      z <- rep_len(0, n)
+    FYy <- rep_len(0, n)  
+##  calculate the cdf 
+ #  z[nu==0] <- log(q)
+ #  z[nu!=0] <- ((q^nu)-1)/nu   
+              z  <-  ifelse(nu != 0, (((q/mu)^nu-1)/(nu*sigma)), log(q/mu)/sigma)
+      FYy[nu<=0] <- pt(z,tau)/  pt(1/(sigma * abs(nu)), tau)
+      FYy[nu>0]  <- (pt(z,tau)-pt(-1/(sigma*abs(nu)),df=tau)) / 
+                     pt(1/(sigma * abs(nu)), tau)   
+#   if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
+#       else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
+# FYy1 <- pt(z,tau)
+# if(length(nu)>1)  FYy2 <- ifelse(nu > 0, pt(-1/(sigma*abs(nu)),df=tau) ,0)
+# else   if (nu>0)  FYy2 <-  pt(-1/(sigma*abs(nu)),df=tau) else FYy2 <- 0
+# FYy3 <- pt(1/(sigma*abs(nu)),df=tau)
+# FYy  <- (FYy1-FYy2)/FYy3
+if(lower.tail==TRUE) FYy  <- FYy else  FYy <- 1-FYy 
+if(log.p==FALSE)     FYy  <- FYy else  FYy<- log(FYy) 
+               FYy[q<=0]  <- 0 
+##          
          FYy     
  }
 #-----------------------------------------------------------------  
 qBCT <- qBCTo <- function(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, lower.tail = TRUE, log.p = FALSE)
  { 
-    ## check whether parameters are within range
+## check whether parameters are within range
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-
-    ## extra arguments
+## extra arguments
     if (log.p) p <- exp(p)
     if (!lower.tail) p <- 1 - p
-
-    ## length of return value
-    n <- max(length(p), length(mu), length(sigma), length(nu), length(tau))
-    p <- rep_len(p, n)
-    mu <- rep_len(mu, n)
-    sigma <- rep_len(sigma, n)
-    nu <- rep_len(nu, n)
-    tau <- rep_len(tau, n)
-
-    ## compute quantile
-    zp <- pt(1/(sigma * abs(nu)), tau)
-    z <- qt(1 - (1 - p) * zp, tau), tau)
-    z[nu <= 0] <- qt(p[nu <= 0] * zp[nu <= 0], tau[nu <= 0])
-    ya <- mu * (nu * sigma * z + 1)^(1/nu)
-    ya[nu == 0] <- mu[nu == 0] * exp(sigma[nu == 0] * z[nu == 0])
-
-    ## catch edge cases and return
+## length of return value
+       n <- max(length(p), length(mu), length(sigma), length(nu), length(tau))
+       p <- rep_len(p, n)
+      mu <- rep_len(mu, n)
+   sigma <- rep_len(sigma, n)
+      nu <- rep_len(nu, n)
+     tau <- rep_len(tau, n)
+## compute quantile
+         zp <- pt(1/(sigma * abs(nu)), tau)
+          z <- qt(1 - (1 - p) * zp, tau)
+ z[nu <= 0] <- qt(p[nu <= 0] * zp[nu <= 0], tau[nu <= 0])
+         ya <- mu * (nu * sigma * z + 1)^(1/nu)
+ya[nu == 0] <- mu[nu == 0] * exp(sigma[nu == 0] * z[nu == 0])
+## catch edge cases and return
     ya[p == 0] <- 0
     ya[p == 1] <- Inf
     ya[p <  0] <- NaN
     ya[p >  1] <- NaN
-    return(ya)
+return(ya)
 }
 #-----------------------------------------------------------------  
 rBCT <- rBCTo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)

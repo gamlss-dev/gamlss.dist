@@ -157,12 +157,16 @@ qEGB2 <-  function(p, mu=0, sigma=1, nu=1, tau=.5, lower.tail = TRUE, log.p = FA
     if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+ #   if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if (length(sigma)>1)  p <- ifelse(sigma<0,1-p,p)
     else p <- if (sigma<0) 1-p else p
     w <- qf(p,2*nu,2*tau)   
     q <- mu+sigma*log((nu/tau)*w)  
+    q <- ifelse(p==0, -Inf, q)
+    q <- ifelse(p==1, Inf, q)
+    q <- ifelse(p<0, NaN, q)
+    q <- ifelse(p>1, NaN,  q)
     q
  }
 #-----------------------------------------------------------------  

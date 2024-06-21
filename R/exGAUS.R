@@ -163,7 +163,8 @@ qexGAUS <- function(p, mu = 5, sigma = 1, nu = 1,  lower.tail = TRUE,  log.p = F
     if (any(nu <= 0))  stop(paste("nu must be positive", "\n", "")) 
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+       
+   # if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
          lp <-  max(length(p),length(mu),length(sigma),length(nu))
           p <- rep(p, length = lp)                                                                   
       sigma <- rep(sigma, length = lp)
@@ -193,7 +194,12 @@ qexGAUS <- function(p, mu = 5, sigma = 1, nu = 1,  lower.tail = TRUE,  log.p = F
         q[i] <- uniroot(h1, interval)$root
         #interval <- c(.Machine$double.xmin, 20)
          }
-    q
+          
+          q <- ifelse(p==0, -Inf, q)
+          q <- ifelse(p==1, Inf, q)
+          q <- ifelse(p<0, NaN, q)
+          q <- ifelse(p>1, NaN,  q)
+          q
    }
 #----------------------------------------------------------------------------------------
 rexGAUS <- function(n, mu=5, sigma=1, nu=1, ...)
