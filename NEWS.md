@@ -1,3 +1,11 @@
+
+# Version 6.1-3
+
+* `BCT` has new `d`, `p` and `q` functions
+
+
+
+
 # Version 6.1-2
 
 * The GitHub repository is now hosted under the new `gamlss-dev` organization:
