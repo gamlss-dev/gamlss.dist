@@ -103,17 +103,34 @@ dBCT <- dBCTo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
 if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
 if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
 if (any(tau <= 0))  stop(paste("tau must be positive", "\n", ""))  
-#  
-if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
-          else   if (nu != 0) 
-                      z <- (((x/mu)^nu-1)/(nu*sigma)) 
-                 else z <- log(x/mu)/sigma
-          loglik <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
-             fTz <-  lgamma((tau+1)/2)-lgamma(tau/2)-0.5*log(tau)-lgamma(0.5)
-             fTz <- fTz-((tau+1)/2)* log(1+(z*z)/tau)
-          loglik <- loglik+fTz-log(pt(1/(sigma*abs(nu)),df=tau))
-          if (length(tau)>1) loglik <- ifelse(tau>1000000, dBCCG(x,mu,sigma,nu,log=TRUE), loglik) # MS Wednesday, April 12, 2006
-          else if (tau>1000000) loglik <- dBCCG(x,mu,sigma,nu,log=TRUE)
+  
+## length of return value
+    n <- max(length(x), length(mu), length(sigma), length(nu), length(tau))
+    x <- rep_len(x, n)
+   mu <- rep_len(mu, n)
+sigma <- rep_len(sigma, n)
+   nu <- rep_len(nu, n)
+  tau <- rep_len(tau, n)
+    z <- rep_len(0, n)
+  FYy <- rep_len(0, n)    
+
+# calculating pdf
+     z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
+loglik <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
+   fTz <-  lgamma((tau+1)/2)-lgamma(tau/2)-0.5*log(tau)-lgamma(0.5)
+   fTz <- fTz-((tau+1)/2)* log(1+(z*z)/tau)
+loglik <- loglik+fTz-log(pt(1/(sigma*abs(nu)),df=tau))
+loglik <- ifelse(tau>1000000, dBCCG(x,mu,sigma,nu,log=TRUE), loglik) 
+# if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
+#           else   if (nu != 0) 
+#                       z <- (((x/mu)^nu-1)/(nu*sigma)) 
+#                  else z <- log(x/mu)/sigma
+#           loglik <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
+#              fTz <-  lgamma((tau+1)/2)-lgamma(tau/2)-0.5*log(tau)-lgamma(0.5)
+#              fTz <- fTz-((tau+1)/2)* log(1+(z*z)/tau)
+#           loglik <- loglik+fTz-log(pt(1/(sigma*abs(nu)),df=tau))
+#           if (length(tau)>1) loglik <- ifelse(tau>1000000, dBCCG(x,mu,sigma,nu,log=TRUE), loglik) # MS Wednesday, April 12, 2006
+#           else if (tau>1000000) loglik <- dBCCG(x,mu,sigma,nu,log=TRUE)
              ft <- if(log==FALSE) exp(loglik) else loglik 
              ft <-ifelse(x <= 0, 0, ft)
        ft
@@ -157,7 +174,10 @@ if(log.p==FALSE)     FYy  <- FYy else  FYy<- log(FYy)
 ##          
          FYy     
  }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qBCT <- qBCTo <- function(p, mu = 5, sigma = 0.1, nu = 1, tau = 2, 
                           lower.tail = TRUE, log.p = FALSE)
  { 
@@ -188,7 +208,10 @@ ya[nu == 0] <- mu[nu == 0] * exp(sigma[nu == 0] * z[nu == 0])
     ya[p >  1] <- NaN
 return(ya)
 }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rBCT <- rBCTo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
   {
     if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
@@ -200,7 +223,10 @@ rBCT <- rBCTo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
     r <- qBCT(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
     r
   }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 BCTuntr <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink("mu.link", "Box Cox t ", substitute(mu.link), c("1/mu^2", "log", "identity"))
