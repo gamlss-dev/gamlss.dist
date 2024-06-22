@@ -110,7 +110,7 @@ pBCCG <- pBCCGo <- function(q, mu=1, sigma=0.1, nu=1,  lower.tail = TRUE,
 if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
 if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
 ## length of return value
-         n <- max(length(x), length(mu), length(sigma), length(nu))
+         n <- max(length(q), length(mu), length(sigma), length(nu))
          q <- rep_len(q, n)
         mu <- rep_len(mu, n)
      sigma <- rep_len(sigma, n)

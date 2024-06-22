@@ -35,7 +35,10 @@ The functions \code{PARETO1()} defines the one parameter Pareto distribution for
 The functions \code{PARETOo1()} defines the one parameter Pareto distribution for \code{y>mu} therefor requires \code{mu} to be fixed.
 
 The functions \code{PARETO2()} and  \code{PARETO2o()} define the Pareto Type 2 distribution, for \code{y>0}, a two parameter distribution, for a \code{gamlss.family} object to be used in GAMLSS fitting using the function \code{gamlss()}.
-The parameters are  \code{mu} and \code{sigma} in both functions but the parameterasation different.  The \code{mu} is identical for both \code{PARETO2()} and  \code{PARETO2o()}. The \code{sigma} in  \code{PARETO2o()} is the inverse of the \code{sigma} in code{PARETO2()} and coresponse to the usual parameter \code{alpha} of the Patreto distribution. The functions \code{dPARETO2}, \code{pPARETO2}, \code{qPARETO2} and \code{rPARETO2} define the density, distribution function, quantile function and random generation for the \code{PARETO2} parameterization of the Pareto type 2 distribution while the functions \code{dPARETO2o}, \code{pPARETO2o}, \code{qPARETO2o} and \code{rPARETO2o} define the density, distribution function, quantile function and random generation for the original \code{PARETO2o} parameterization of the Pareto type 2 distribution
+The parameters are  \code{mu} and \code{sigma} in both functions but the parameterasation different.  The \code{mu} is identical for both \code{PARETO2()} and  \code{PARETO2o()}. The \code{sigma} in  \code{PARETO2o()} is the inverse of the \code{sigma} in \code{PARETO2()} and coresponse to the usual parameter \code{alpha} of the Pareto distribution. 
+
+
+The functions \code{dPARETO2}, \code{pPARETO2}, \code{qPARETO2} and \code{rPARETO2} define the density, distribution function, quantile function and random generation for the \code{PARETO2} parameterization of the Pareto type 2 distribution while the functions \code{dPARETO2o}, \code{pPARETO2o}, \code{qPARETO2o} and \code{rPARETO2o} define the density, distribution function, quantile function and random generation for the original \code{PARETO2o} parameterization of the Pareto type 2 distribution.
 }
 \usage{
 PARETO(mu.link = "log")

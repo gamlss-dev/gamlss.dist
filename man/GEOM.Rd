@@ -53,7 +53,7 @@ for \eqn{y=0,1,2,3,...} and \eqn{\mu>0}, see pp 472-473 of Rigby et al. (2019).
 
 The parameterization of the original geometric distribution, \code{GEOMo}  is
 \deqn{f(y|\mu) = (1-\mu)^y\, \mu}{f(y|\mu) = (1-\mu)^y \mu}
-for eqn{y=0,1,2,3,...} and \eqn{\mu>0},   see pp 473-474 of Rigby et al. (2019).
+for \eqn{y=0,1,2,3,...} and \eqn{\mu>0},   see pp 473-474 of Rigby et al. (2019).
 
 }
 \value{

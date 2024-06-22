@@ -1,10 +1,7 @@
 
 # Version 6.1-3
 
-* `BCT` has new `d`, `p` and `q` functions
-
-
-
+* `BCT` the `BCPE` and the `BCCG` have new `d`, `p` and `q` functions
 
 # Version 6.1-2
 

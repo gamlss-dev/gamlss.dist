@@ -66,7 +66,7 @@ rMN5(n, mu = 1, sigma = 1, nu = 1, tau = 1)
   \item{model}{a gamlss multinomial fitted model}
 }
 \details{GAMLSS is in general not suitable for multinomial regression. Nevertheless multinomial regression can be fitted within GAMLSS if the response variable y has less than five categories. The function here provide the facilities to do so. The functions \code{MN3()}, \code{MN4()} and \code{MN5()} fit multinomial responses with 3, 4 and 5 categories respectively. 
-The function \code{MULTIN()} can be used instead of code{MN3()}, \code{MN4()} and \code{MN5()} by specifying the number of levels of the response. Note that \code{MULTIN(2)} will produce a binomial fit. 
+The function \code{MULTIN()} can be used instead of \code{MN3()}, \code{MN4()} and \code{MN5()} by specifying the number of levels of the response. Note that \code{MULTIN(2)} will produce a binomial fit. 
 }
 \value{
 returns a \code{gamlss.family} object which can be used to fit a binomial distribution in the \code{gamlss()} function.   

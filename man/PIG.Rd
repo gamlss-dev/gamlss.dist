@@ -28,7 +28,7 @@ in GAMLSS fitting using the function \code{gamlss()}.   The \code{PIG2()} functi
 
 
 The functions \code{dPIG}, \code{pPIG}, \code{qPIG} and \code{rPIG} define the density, distribution function, quantile function and random
-generation for the Poisson-inverse Gaussian \code{PIG()}, distribution.  Also code{dPIG2}, \code{pPIG2}, \code{qPIG2} and \code{rPIG2} are the equivalent functions for code{PIG2()}
+generation for the Poisson-inverse Gaussian \code{PIG()}, distribution.  Also \code{dPIG2}, \code{pPIG2}, \code{qPIG2} and \code{rPIG2} are the equivalent functions for \code{PIG2()}
 
 The functions \code{ZAPIG()} and \code{ZIPIG()} are the zero adjusted (hurdle) and zero inflated versions of the  Poisson-inverse Gaussian distribution, respectively. That is three  parameter distributions. 
 
