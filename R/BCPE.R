@@ -1,5 +1,9 @@
-#----------------------------------------------------------------------------------------
-# last change MS Wednesday, September 17, 2003 at 08:43 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+# last change MS Fri 21 June 2024
+# privously last change MS Wednesday, September 17, 2003 at 08:43 
 BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Box Cox Power Exponential", substitute(mu.link), 
@@ -163,17 +167,33 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
           ),
             class = c("gamlss.family","family"))
 }
-#-----------------------------------------------------------------
-
-#-----------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
  {
+## check whether parameters are within range  
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", ""))  
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+## length of return value
+     n <- max(length(x), length(mu), length(sigma), length(nu), length(tau))
+     x <- rep_len(x, n)
+    mu <- rep_len(mu, n)
+ sigma <- rep_len(sigma, n)
+    nu <- rep_len(nu, n)
+   tau <- rep_len(tau, n)
+     z <- rep_len(0, n)
+   FYy <- rep_len(0, n)  
+################################################################################      
      f.T <- function(t,log=FALSE){
          log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
              c <- exp(log.c)
        log.lik <- log(tau)-log.c-(0.5*(abs(t/c)^tau))-(1+(1/tau))*log(2)-lgamma(1/tau)
        if(log==FALSE) fT  <- exp(log.lik) else fT <- log.lik
            fT                    }
+################################################################################   
      F.T <- function(t){
         log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
             c <- exp(log.c) 
@@ -181,22 +201,22 @@ dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
           F.s <- pgamma(s,shape = 1/tau, scale = 1)
           cdf <- 0.5*(1+F.s*sign(t))        
                 cdf   }      
-          if (any(mu < 0))  stop(paste("mu must be positive", "\n", ""))  
-          if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-  #        if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
-          if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
-          else   if (nu != 0) z <- (((x/mu)^nu-1)/(nu*sigma)) else z <- log(x/mu)/sigma
+################################################################################
+            z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
         logfZ <- f.T(z,log=TRUE)-log(F.T(1/(sigma*abs(nu))))
        logder <- (nu-1)*log(x)-nu*log(mu)-log(sigma)
        loglik <- logder+logfZ
-       if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
-       ft <- ifelse(x <= 0, 0, ft) 
-       ft
+if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+                ft <- ifelse(x <= 0, 0, ft) 
+       return(ft)
   }    
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
  {  
+################################################################################  
         F.T <- function(t,tau){
              log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
                  c <- exp(log.c) 
@@ -204,26 +224,52 @@ pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
                F.s <- pgamma(s,shape = 1/tau, scale = 1)
                cdf <- 0.5*(1+F.s*sign(t))        
                cdf       }  
-         if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-         if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-         if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
- #        if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
-         
-         if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
-         else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
-          FYy1 <- F.T(z,tau)
-         if(length(nu)>1)  FYy2 <- ifelse(nu > 0, F.T( -1/(sigma*abs(nu)),tau),0)
-         else   if (nu>0)  FYy2 <-  F.T(-1/(sigma*abs(nu)),tau) else FYy2 <- 0
-         FYy3 <- F.T(1/(sigma*abs(nu)),tau)
-         FYy  <- (FYy1-FYy2)/FYy3
-         if(lower.tail==TRUE) FYy  <- FYy else  FYy <- 1-FYy 
-         if(log.p==FALSE) FYy  <- FYy else  FYy<- log(FYy) 
-         FYy     
+#################################################################################        ## check whether parameters are within range  
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+        if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+        if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+## length of return value
+         n <- max(length(q), length(mu), length(sigma), length(nu), length(tau))
+         q <- rep_len(q, n)
+        mu <- rep_len(mu, n)
+     sigma <- rep_len(sigma, n)
+        nu <- rep_len(nu, n)
+       tau <- rep_len(tau, n)
+         z <- rep_len(0, n)
+       FYy2 <- rep_len(0, n)  
+##  calculate the cdf  
+         z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma) 
+      FYy1 <- F.T(z,tau)
+      FYy2[nu>0] <-  F.T( -1/(sigma*abs(nu)),tau)
+ #    FYy2 <- ifelse(nu > 0, F.T( -1/(sigma*abs(nu)),tau),0)    
+      FYy3 <- F.T(1/(sigma*abs(nu)),tau)
+      FYy  <- (FYy1-FYy2)/FYy3
+# FYy[nu<=0] <- pPE(z,tau)/ pPE(1/(sigma * abs(nu)), tau)
+#  FYy[nu>0] <- (pPE(z,tau)-pPE(-1/(sigma*abs(nu)),tau)) / 
+#           pPE(1/(sigma * abs(nu)), tau)     
+# if(length(nu)>1)  
+#     z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
+#     else   
+#   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
+#           FYy1 <- F.T(z,tau)
+# if(length(nu)>1)  
+#           FYy2 <- ifelse(nu > 0, F.T( -1/(sigma*abs(nu)),tau),0)
+#         else   if (nu>0)  FYy2 <-  F.T(-1/(sigma*abs(nu)),tau) else FYy2 <- 0
+#          FYy3 <- F.T(1/(sigma*abs(nu)),tau)
+#          FYy  <- (FYy1-FYy2)/FYy3
+ if(lower.tail==TRUE) FYy  <- FYy else  FYy <- 1-FYy 
+ if(log.p==FALSE)     FYy  <- FYy else  FYy<- log(FYy) 
+ FYy[q<=0]  <- 0 
+   return(FYy)     
  }
-#-----------------------------------------------------------------  
-
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
- {   F.T <- function(t,tau) # cdf of PE(0,1,tau)
+{  
+################################################################################  
+  F.T <- function(t,tau) # cdf of PE(0,1,tau)
         {
      log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
          c <- exp(log.c) 
@@ -231,38 +277,58 @@ qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE,
        F.s <- pgamma(s,shape = 1/tau, scale = 1)
        cdf <- 0.5*(1+F.s*sign(t))        
       cdf   
-       } 
-   q.T <- function(p, tau, lower.tail = TRUE, log.p = FALSE)# inverse of PE(0,1,tau)
+  }
+################################################################################  
+   q.T <- function(p, tau, weights, lower.tail = TRUE, log.p = FALSE)# inverse of PE(0,1,tau)
        {  
    log.c <- 0.5*(-(2/tau)*log(2)+lgamma(1/tau)-lgamma(3/tau))
        c <- exp(log.c)
-       s <- qgamma((2*p-1)*sign(p-0.5),shape=(1/tau),scale=1)
-       z <- sign(p-0.5)*((2*s)^(1/tau))*c
+       s <- qgamma((2*p[weights]-1)*sign(p[weights]-0.5),shape=(1/tau),scale=1)
+       z <- sign(p[weights]-0.5)*((2*s)^(1/tau))*c
        z  
-      }   
-    if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-    if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-    if (log.p==TRUE) p <- exp(p) else p <- p
+   }
+################################################################################
+## check whether parameters are within range
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+## extra arguments
+   if (log.p) p <- exp(p)
+   if (!lower.tail) p <- 1 - p   
+## length of return value
+      n <- max(length(p), length(mu), length(sigma), length(nu), length(tau))
+      p <- rep_len(p, n)
+     mu <- rep_len(mu, n)
+  sigma <- rep_len(sigma, n)
+     nu <- rep_len(nu, n)
+    tau <- rep_len(tau, n)
+    za  <- rep_len(tau, n)
+    ya <-  rep_len(tau, n)
+## compute quantile   
     # if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    if(length(nu)>1){ 
-                za <- ifelse(nu<0, 
-                             q.T(p*F.T(1/(sigma*abs(nu)),tau),tau),
-                             q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau))
-                za <- ifelse(nu==0, q.T(p,tau), za)                  
-                    } 
-               else { if (nu<0)  {za <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau)}
-                      if (nu==0) {za <- q.T(p,tau)} 
-                      if (nu>0)  {za <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau)}
-                    }    
-     if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*za+1)^(1/nu),mu*exp(sigma*za))
-       else   if (nu != 0) ya <- mu*(nu*sigma*za+1)^(1/nu) else ya <- mu*exp(sigma*za)
-   ya <- ifelse(p==0, 0, ya)
-   ya <- ifelse(p==1, Inf, ya)
-   ya <- ifelse(p<0, NaN, ya)
-   ya <- ifelse(p>1, NaN,  ya)
-     ya   
+# if(length(nu)>1){ 
+#                 za <- ifelse(nu<0, 
+#                              q.T(p*F.T(1/(sigma*abs(nu)),tau),tau),
+#                              q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau))
+#                 za <- ifelse(nu==0, q.T(p,tau), za)                  
+#                     } 
+#                else { if (nu<0)  {za <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau)}
+#                       if (nu==0) {za <- q.T(p,tau)} 
+#                       if (nu>0)  {za <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau)}
+#                     }   
+       za[nu<0] <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau, weights=nu<0)
+      za[nu==0] <- q.T(p,tau, weights=nu==0)
+       za[nu>0] <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau,  weights=nu>0)
+    ya[nu != 0] <- mu*(nu*sigma*za+1)^(1/nu)
+    ya[nu == 0] <- mu*exp(sigma*za)
+     # if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*za+1)^(1/nu),mu*exp(sigma*za))
+     #   else   if (nu != 0) ya <- mu*(nu*sigma*za+1)^(1/nu) else ya <- mu*exp(sigma*za)
+## catch edge cases and return
+     ya[p == 0] <- 0
+     ya[p == 1] <- Inf
+     ya[p <  0] <- NaN
+     ya[p >  1] <- NaN
+return(ya)
  }
 #-----------------------------------------------------------------  
 rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)

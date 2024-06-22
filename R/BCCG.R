@@ -86,22 +86,16 @@ dBCCG <-dBCCGo <- function(x, mu=1, sigma=0.1, nu=1,  log = FALSE)
 if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
 if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
 ## length of return value
-  n <- max(length(x), length(mu), length(sigma), length(nu))
-  x <- rep_len(x, n)
-  mu <- rep_len(mu, n)
+      n <- max(length(x), length(mu), length(sigma), length(nu))
+      x <- rep_len(x, n)
+     mu <- rep_len(mu, n)
   sigma <- rep_len(sigma, n)
-  nu <- rep_len(nu, n)
-  # z <- rep_len(0, n)
-  # FYy <- rep_len(0, n)      
-## calcutaing the pdf
+     nu <- rep_len(nu, n)
+## calcutating the pdf
         z <- ifelse(nu != 0,((((x/mu)^nu)-1)/(nu*sigma)),log(x/mu)/sigma)
    loglik <- nu*log(x/mu)-log(sigma)-(z*z)/2 -log(x) -(log(2*pi))/2 
    loglik <- loglik-log(pnorm(1/(sigma*abs(nu))))
-# if(length(nu)>1)  z <- ifelse(nu != 0,(((x/mu)^nu-1)/(nu*sigma)),log(x/mu)/sigma)
-#   else   if (nu != 0) z <- (((x/mu)^nu-1)/(nu*sigma)) else z <- log(x/mu)/sigma
-        # loglik <- nu*log(x/mu)-log(sigma)-(z*z)/2 -log(x) -(log(2*pi))/2
-        # loglik <- loglik-log(pnorm(1/(sigma*abs(nu))))
-       if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
        ft <- ifelse(x <= 0, 0, ft)
        ft
   }    
@@ -117,7 +111,7 @@ if (any(mu <= 0))  stop(paste("mu must be positive", "\n", ""))
 if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
 ## length of return value
          n <- max(length(x), length(mu), length(sigma), length(nu))
-         x <- rep_len(x, n)
+         q <- rep_len(q, n)
         mu <- rep_len(mu, n)
      sigma <- rep_len(sigma, n)
         nu <- rep_len(nu, n)   
