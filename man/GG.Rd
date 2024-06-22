@@ -12,8 +12,7 @@
 \description{
   The function GG defines the generalized gamma distribution, a three parameter distribution, 
 for a gamlss.family object to be used in GAMLSS fitting using the function gamlss(). 
-The parameterization used has the mean of the distribution equal to mu and the variance 
-equal to \eqn{(\sigma^2)(\mu^2)}{(sigma^2)*(mu^2)}. The functions dGG, pGG, qGG and rGG define the density, 
+The parameterization used has a rather compicated mean function  which is depends on all the paramneters of the distribution,  \code{mu}, \code{sigma} and \code{nu}, see page 444 of Rigby \emph{et al.} (2019). The functions `dGG`, `pGG`, `qGG` and `rGG` define the density, 
 distribution function, quantile function and random generation for the specific parameterization 
 of the generalized gamma distribution defined by function GG.
 
@@ -49,9 +48,9 @@ rGG(n, mu=1, sigma=0.5, nu=1)
 }
 \details{
    The specific parameterization of the generalized gamma distribution used in GG is 
-\deqn{f(y|\mu,\sigma,\nu)= \frac{\theta^\theta z^\theta |\nu| e^(-\theta z)}{(\Gamma(\theta)y)}}{f(y|mu,sigma,nu)=theta^theta*z^theta*nu*e^(-theta*z)/(Gamma(theta)*y)}
+\deqn{f(y|\mu,\sigma,\nu)= \frac{\theta^\theta z^\theta |\nu| e^{-\theta z}}{(\Gamma(\theta)y)}}{f(y|mu,sigma,nu)=theta^theta*z^theta*nu*e^(-theta*z)/(Gamma(theta)*y)}
 where \eqn{z =(y/\mu)^\nu}{z =(y/mu)^nu}, 
-\eqn{\theta = 1/(\sigma^2|\nu|^2)}{theta = 1/(sigma^2*abs(nu)^2)}
+\eqn{\theta = 1/(\sigma^2\nu^2)}{theta = 1/(sigma^2*abs(nu)^2)}
 for y>0, \eqn{\mu>0}{mu>0}, \eqn{\sigma>0}{sigma>0} and \eqn{-\infty<\nu<+\infty}{-Inf>nu>Inf} see pp. 443-444 of Rigby et al. (2019). Note that for 
 \eqn{\nu=0}{nu=0} the distribution is log normal.
 
