@@ -197,11 +197,11 @@ qBEOI = function (p, mu = 0.5, sigma = 1, nu = 0.1, lower.tail = TRUE,
     b = (1 - mu) * sigma
     suppressWarnings(q <- ifelse( p <= 1-nu, qbeta(p/(1-nu), 
             shape1 = a, shape2 = b, lower.tail = TRUE, log.p = FALSE),1))
-    q <- ifelse(p==0, -Inf, q)
-    q <- ifelse(p==1, 1, q)
-    q <- ifelse(p<0, NaN, q)
-    q <- ifelse(p>1, NaN,  q)
-    q
+    q[p == 0] <- -Inf
+    q[p == 1] <- 1
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
 }
 
 

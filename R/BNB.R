@@ -194,20 +194,19 @@ pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
 qBNB <- function(p, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE,  
                  max.value = 10000)
   {      
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
-          if (log.p==TRUE) p <- exp(p) else p <- p
-          if (lower.tail==TRUE) p <- p else p <- 1-p  
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p  
            ly <- max(length(p),length(mu),length(sigma),length(nu)) 
             p <- rep(p, length = ly)                                                         
           QQQ <- rep(0,length = ly)                         
        nsigma <- rep(sigma, length = ly)
           nmu <- rep(mu, length = ly)                
           nnu <- rep(nu, length = ly)    
-       for (i in seq(along=p))                                                          
+for (i in seq(along=p))                                                          
       {
-       cumpro <- 0                                                                         
+      cumpro <- 0                                                                         
      if (p[i]+0.000000001 >= 1) QQQ[i] <- Inf
      else  
         {  
@@ -219,12 +218,12 @@ qBNB <- function(p, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE,
        if  (p[i] <= cumpro ) break 
             } 
         }
-       }  
-          QQQ <- ifelse(p==0, 0, QQQ)
-          QQQ <- ifelse(p==1, Inf, QQQ)
-          QQQ <- ifelse(p<0, NaN, QQQ)
-          QQQ <- ifelse(p>1, NaN,  QQQ)    
-          QQQ   
+}  
+          QQQ[p == 0] <- 0
+          QQQ[p == 1] <- Inf
+          QQQ[p <  0] <- NaN
+          QQQ[p >  1] <- NaN
+          return(QQQ)
    }
 #----------------------------------------------------------------------------------------
 rBNB <- function(n, mu=1, sigma=1, nu=1, max.value = 10000)

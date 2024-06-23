@@ -3,6 +3,18 @@
 
 * `BCT` the `BCPE` and the `BCCG` have new `d`, `p` and `q` functions
 
+*  the `q` dunctions for all distributions are up dated so the limits are defined properly for example for the BEINF
+
+     -- `q[p == 0] <- 0`
+     
+     --     `q[p == 1] <- 1`
+     
+     --      `q[p <  0] <- NaN`
+     
+     --       `q[p >  1] <- NaN`
+          
+   
+
 # Version 6.1-2
 
 * The GitHub repository is now hosted under the new `gamlss-dev` organization:

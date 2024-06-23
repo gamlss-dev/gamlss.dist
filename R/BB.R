@@ -155,11 +155,11 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
                                           qBI(p, mu = mu, bd=bd, lower.tail=TRUE))
         else invcdf2 <- if (sigma<0.0001) qBI(p, mu = mu, bd=bd, lower.tail=TRUE)
                    else invcdf
-           invcdf2 <- ifelse(p==0, 0, invcdf2)
-           invcdf2 <- ifelse(p==1, 1, invcdf2)
-           invcdf2 <- ifelse(p<0, NaN, invcdf2)
-           invcdf2 <- ifelse(p>1, NaN, invcdf2)
-     invcdf2    
+          invcdf2[p == 0] <- 0
+          invcdf2[p == 1] <- bd
+          invcdf2[p <  0] <- NaN
+          invcdf2[p >  1] <- NaN
+     return(invcdf2)    
    }
 #------------------------------------------------------------------------------------------
 rBB <- function(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE )

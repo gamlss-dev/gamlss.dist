@@ -189,16 +189,17 @@ qBEZI = function (p, mu = 0.5, sigma = 1, nu = 0.1, lower.tail = TRUE,
     if (lower.tail == TRUE) 
         p <- p
     else p <- 1 - p
-    if (any(p < 0) | any(p > 1)) 
-        stop(paste("p must be between 0 and 1", "\n", ""))
-
     a = mu * sigma
     b = (1 - mu) * sigma
 
     suppressWarnings(q <- ifelse((nu >= p), 
         0, qbeta((p - nu)/(1-nu), 
             shape1 = a, shape2 = b, lower.tail = TRUE, log.p = FALSE)))
-    q
+    q[p == 0] <- 0
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
 }
 
 #----------------------------------------------------------------------------------------

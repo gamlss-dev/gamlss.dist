@@ -185,12 +185,11 @@ qDBURR12 <- function(p, mu = 5, sigma = 2, nu = 2,  lower.tail = TRUE, log.p = F
      mu <- rep(mu, length = ly)   
      nu <- rep(nu, length = ly) 
       q <- round(mu*(exp(-(log(1-p))/nu)-1)^(1/sigma)-1L)
-      q <- ifelse(q<0,0,q)
-      q <- ifelse(p==0, 0, q)
-      q <- ifelse(p==1, Inf, q)
-      q <- ifelse(p<0, NaN, q)
-      q <- ifelse(p>1, NaN,  q)
-      q
+      q[p == 0] <- 0
+      q[p == 1] <- Inf
+      q[p <  0] <- NaN
+      q[p >  1] <- NaN
+      return(q)
 }
  
 rDBURR12 <- function(n, mu = 5, sigma = 2, nu = 2) 

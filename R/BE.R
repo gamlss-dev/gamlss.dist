@@ -95,7 +95,11 @@ qBE <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
           a <- mu*(1-sigma^2)/(sigma^2)
           b <- a*(1-mu)/mu
           q <- qbeta(p, shape1=a, shape2=b, lower.tail=lower.tail, log.p=log.p)
-          q
+          q[p == 0] <- 0
+          q[p == 1] <- 1
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 #------------------------------------------------------------------------------------------
 rBE <- function(n, mu=0.5, sigma=0.2)

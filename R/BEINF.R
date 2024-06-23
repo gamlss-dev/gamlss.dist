@@ -194,11 +194,11 @@ qBEINF <- function(p, mu = 0.5, sigma = 0.1, nu = 0.1, tau = 0.1,
           suppressWarnings(
           q <- ifelse((p<=(nu/(1+nu+tau))),0, qbeta((p-(nu/(1+nu+tau)))/(1/(1+nu+tau)), shape1=a, shape2=b, lower.tail=TRUE, log.p=FALSE)))
           q <- ifelse((p>=((1+nu)/(1+nu+tau))), 1, q) 
-          q <- ifelse(p==0, 0, q)
-          q <- ifelse(p==1, q, q)
-          q <- ifelse(p<0, NaN, q)
-          q <- ifelse(p>1, NaN,  q)
-          q
+          q[p == 0] <- 0
+          q[p == 1] <- 1
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 #------------------------------------------------------------------------------------------
 rBEINF <- function(n, mu = 0.5, sigma = 0.1, nu = 0.1, tau = 0.1)

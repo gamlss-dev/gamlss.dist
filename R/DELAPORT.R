@@ -301,11 +301,11 @@ qDEL <- function(p, mu=1, sigma=1, nu=0.5,  lower.tail = TRUE, log.p = FALSE,
             } 
         }
       }          
-          QQQ <- ifelse(p==0, 0, QQQ)
-          QQQ <- ifelse(p==1, Inf, QQQ)
-          QQQ <- ifelse(p<0, NaN, QQQ)
-          QQQ <- ifelse(p>1, NaN,  QQQ)    
-          QQQ     
+          QQQ[p == 0] <- 0
+          QQQ[p == 1] <- Inf
+          QQQ[p <  0] <- NaN
+          QQQ[p >  1] <- NaN
+          return(QQQ)  
    } 
 #----------------------------------------------------------------------------------------
 rDEL <- function(n, mu=1, sigma=1, nu=0.5, max.value = 10000)
