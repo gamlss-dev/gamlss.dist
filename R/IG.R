@@ -87,12 +87,12 @@ qIG <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
 ################################################################################         
      pIG(q , mu = mu[i], sigma = sigma[i])   
        }
-     #-------------------------------------------------------
-    if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+#-------------------------------------------------------
+if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
+#if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
         lp <-  max(length(p),length(mu),length(sigma))
           p <- rep(p, length = lp)                                                                      
       sigma <- rep(sigma, length = lp)
@@ -115,13 +115,14 @@ qIG <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
            }
         q[i] <- uniroot(h1, interval)$root
          }
-          q[p == 0] <- -Inf
+          q[p == 0] <- 0
           q[p == 1] <- Inf
           q[p <  0] <- NaN
           q[p >  1] <- NaN
           return(q)
     
    }
+################################################################################
 ################################################################################
 ################################################################################
 ################################################################################
@@ -135,3 +136,7 @@ rIG <- function(n, mu=1, sigma=1, ...)
     r <- qIG(p,mu=mu,sigma=sigma, ...)
     r
   }
+################################################################################
+################################################################################
+################################################################################
+################################################################################
