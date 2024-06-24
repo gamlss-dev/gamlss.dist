@@ -1,6 +1,8 @@
 #-------------------------------------------------------------------------------
 # Bob Rigby  Mikis Stsinopoulos Marco Enea and  Fernanda de Bastiani
 # last change Monday, 10  August 2017
+# checked 24th of June 2024
+# there is a problem with the cdf and conseqntly with the q=fun
 # the Double Binomial  distribution 
 # needs C code to calculate the constance of summation
 #------------------------------------------------------------------------------
@@ -203,11 +205,11 @@ qDBI <- function(p, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE  
       } 
     }
   }          
-       QQQ <- ifelse(p==0, 0, QQQ)
-       QQQ <- ifelse(p==1, bd, QQQ)
-       QQQ <- ifelse(p<0, NaN, QQQ)
-       QQQ <- ifelse(p>1, NaN,  QQQ)    
-       QQQ       
+       QQQ[p == 0] <- 0
+       QQQ[p == 1] <- bd
+       QQQ[p <  0] <- NaN
+       QQQ[p >  1] <- NaN
+       return(QQQ)    
 } 
 #-------------------------------------------------------------------------------
 # the r function 
