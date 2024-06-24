@@ -184,11 +184,16 @@ qJSUo <-  function(p, mu=0, sigma=1, nu=0, tau=1, lower.tail = TRUE, log.p = FAL
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+#    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
     if (lower.tail==TRUE) p <- p else p <- 1-p
     r <- qNO(p,0,1)
     z <- sinh((r-nu)/tau)     
     q <- mu+sigma*z   
+    q[p == 0] <- -Inf
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
     q
  }
 #-----------------------------------------------------------------  
