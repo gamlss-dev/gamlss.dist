@@ -1,15 +1,19 @@
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 # amended 1/12/2007
 GB2 <- function (mu.link="log", sigma.link="log", nu.link ="log", tau.link="log")
 {
-    mstats <- checklink(   "mu.link", "Generalized beta 2 (i.e. of the second kind)", substitute(mu.link), 
-                           c("1/mu^2", "log", "identity"))
-    dstats <- checklink("sigma.link", "Generalized beta 2 (i.e. of the second kind)", substitute(sigma.link), 
-                           c("inverse", "log", "identity"))
-    vstats <- checklink(   "nu.link", "Generalized beta 2 (i.e. of the second kind)", substitute(nu.link),    
-                           c("1/nu^2", "log", "identity"))
-    tstats <- checklink(  "tau.link", "Generalized beta 2 (i.e. of the second kind)", substitute(tau.link),   
-                           c("1/tau^2", "log", "identity")) 
-    structure(
+mstats <- checklink(   "mu.link", "Generalized beta 2 (i.e. of the second kind)", 
+                    substitute(mu.link), c("1/mu^2", "log", "identity"))
+dstats <- checklink("sigma.link", "Generalized beta 2 (i.e. of the second kind)", 
+                    substitute(sigma.link), c("inverse", "log", "identity"))
+vstats <- checklink(   "nu.link", "Generalized beta 2 (i.e. of the second kind)", 
+                       substitute(nu.link), c("1/nu^2", "log", "identity"))
+tstats <- checklink(  "tau.link", "Generalized beta 2 (i.e. of the second kind)", 
+                      substitute(tau.link), c("1/tau^2", "log", "identity")) 
+  structure(
           list(family = c("GB2", "Generalized beta 2 (i.e. of the second kind)"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
@@ -128,7 +132,10 @@ GB2 <- function (mu.link="log", sigma.link="log", nu.link ="log", tau.link="log"
           ),
             class = c("gamlss.family","family"))
 }
-#-----------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dGB2 <- function(x, mu = 1, sigma = 1, nu = 1, tau = .5, log = FALSE)
  {
           if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
@@ -141,7 +148,10 @@ dGB2 <- function(x, mu = 1, sigma = 1, nu = 1, tau = .5, log = FALSE)
        ft <- ifelse(x <= 0, 0, ft)
        ft
   }    
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################  
 pGB2 <- function(q, mu = 1, sigma = 1, nu = 1, tau = .5, lower.tail = TRUE, log.p = FALSE)
  {  
       if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
@@ -156,23 +166,32 @@ pGB2 <- function(q, mu = 1, sigma = 1, nu = 1, tau = .5, lower.tail = TRUE, log.
       if(log.p==FALSE) p  <- p else  p <- log(p) 
       p
  }
-#-----------------------------------------------------------------  
-
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qGB2 <-  function(p, mu=1, sigma=1, nu=1, tau=.5, lower.tail = TRUE, log.p = FALSE)
  {   
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+#    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
     if (lower.tail==TRUE) p <- p else p <- 1-p
     if (length(sigma)>1)  p <- ifelse(sigma<0,1-p,p)
     else p <- if (sigma<0) 1-p else p
     w <- qf(p,2*nu,2*tau)   
     q <- mu*(((nu/tau)*w)^(1/sigma))
-    q
+    q[p == 0] <- 0
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
  }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rGB2 <- function(n, mu=1, sigma=1, nu=1, tau=.5)
   {
     if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
@@ -183,4 +202,7 @@ rGB2 <- function(n, mu=1, sigma=1, nu=1, tau=.5)
     r <- qGB2(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
     r
   }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
