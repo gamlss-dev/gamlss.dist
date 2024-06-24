@@ -1,3 +1,7 @@
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 SIMPLEX <- function (mu.link = "logit", sigma.link = "log") 
 {
      mstats <- checklink("mu.link", "SIMPLEX", substitute(mu.link), 
@@ -49,7 +53,10 @@ SIMPLEX <- function (mu.link = "logit", sigma.link = "log")
           ),
             class = c("gamlss.family","family"))
 }
-#----------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dSIMPLEX <- function (x, mu=0.5, sigma=1, log = FALSE) 
 {
    if (any(mu <= 0) || any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))
@@ -62,7 +69,7 @@ dSIMPLEX <- function (x, mu=0.5, sigma=1, log = FALSE)
      logpdf <- ifelse( x<= 0 | x>=1, 0, logpdf)
      logpdf
 }
-#----------------------------------------------------------------------------------------
+################################################################################
 # pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE) 
 # {
 #     if (any(q <= 0) || any(q >= 1)) stop(paste("q must be between 0 and 1", "\n", ""))
@@ -82,6 +89,10 @@ dSIMPLEX <- function (x, mu=0.5, sigma=1, log = FALSE)
 #          if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
 #          cdf    
 # }
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE) 
 {
  # if (any(q <= 0) || any(q >= 1)) stop(paste("q must be between 0 and 1", "\n", ""))
@@ -106,7 +117,10 @@ pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
   cdf <- ifelse( q<= 0 | q>=1, 0, cdf)   
   cdf    
 }
-
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 #----------------------------------------------------------------------------------------
 # qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE) 
@@ -143,7 +157,7 @@ qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
     if (any(mu <= 0) || any(mu >= 1))   stop(paste("mu must be between 0 and 1", "\n", ""))     
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+ #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
      lp <-  max(length(p),length(mu),length(sigma))
       p <- rep(p, length = lp)                                                                     
   sigma <- rep(sigma, length = lp)
@@ -153,13 +167,18 @@ qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
   h1 <- function(x,mu,sigma,p) pSIMPLEX(x , mu, sigma ) - p  
  uni <- function(mu, sigma, p)
      {
-      val <- uniroot(h1, c(0.001,.999), mu=mu, sigma=sigma, p=p)
+      val <- uniroot(h1, c(0,1.0001), mu=mu, sigma=sigma, p=p)
       val$root
      }
 UNI <- Vectorize(uni)
   q <- UNI( mu=mu, sigma=sigma, p=p)  
   q
   }
+  q[p == 0] <- 0
+  q[p == 1] <- 1
+  q[p <  0] <- NaN
+  q[p >  1] <- NaN
+  return(q)
 }
 #---------------------------------------------------------------------------
  rSIMPLEX <- function (n = 1,  mu=0.5, sigma=1) 
