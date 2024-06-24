@@ -163,11 +163,11 @@ qEGB2 <-  function(p, mu=0, sigma=1, nu=1, tau=.5, lower.tail = TRUE, log.p = FA
     else p <- if (sigma<0) 1-p else p
     w <- qf(p,2*nu,2*tau)   
     q <- mu+sigma*log((nu/tau)*w)  
-    q <- ifelse(p==0, -Inf, q)
-    q <- ifelse(p==1, Inf, q)
-    q <- ifelse(p<0, NaN, q)
-    q <- ifelse(p>1, NaN,  q)
-    q
+    q[p == 0] <- 0
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
  }
 #-----------------------------------------------------------------  
 rEGB2 <- function(n, mu=0, sigma=1, nu=1, tau=.5)
