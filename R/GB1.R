@@ -1,3 +1,7 @@
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 #   27_11_2007
 GB1 <- function (mu.link="logit", sigma.link="logit", nu.link ="log", tau.link="log")
 {
@@ -164,56 +168,74 @@ GB1 <- function (mu.link="logit", sigma.link="logit", nu.link ="log", tau.link="
           ),
             class = c("gamlss.family","family"))
 }
-#-----------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dGB1 <- function(x,  mu = 0.5, sigma = 0.4, nu = 1, tau = 1, log = FALSE)
  {
-          if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
-          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
-          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-             xx <- ifelse( x<= 0 | x>=1, 0.5 ,  x) 
-  #        if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
-              a <- mu*((1/sigma^2)-1)
-              b <- a*(1-mu)/mu
+if (any(mu <= 0) | any(mu >= 1) )  
+  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (any(sigma <= 0) | any(sigma >= 1))  
+  stop(paste("sigma must be between 0 and 1", "\n", "")) 
+if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+           xx <- ifelse( x<= 0 | x>=1, 0.5 ,  x) 
+#if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
+            a <- mu*((1/sigma^2)-1)
+             b <- a*(1-mu)/mu
         loglik <- log(tau) + b*log(nu) + (tau*a-1)*log(xx) + (b-1)*log(1-xx^tau)
         loglik <- loglik -lgamma(a)-lgamma(b)+lgamma(a+b) - (a+b)*log(nu+(1-nu)*(xx^tau))
-        if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
-        ft <- ifelse( x<= 0 | x>=1, 0, ft)
-        ft
+if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+               ft <- ifelse( x<= 0 | x>=1, 0, ft)
+               ft
   }    
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################ 
 pGB1 <- function(q, mu = 0.5, sigma = 0.4, nu = 1, tau = 1, lower.tail = TRUE, log.p = FALSE)
  {  
-          if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
-          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
-          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-#          if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
-                      a <- mu*((1/sigma^2)-1)
-                      b <- a*(1-mu)/mu
-                      z <- (q^tau)/(nu+(1-nu)*(q^tau))
-                      p <- pbeta(z,a,b)
-      if(lower.tail==TRUE) p  <- p else  p <- 1-p 
-      if(log.p==FALSE) p  <- p else  p <- log(p) 
-      p <- ifelse( q<= 0 | q>=1, 0, p)
-      p
+if (any(mu <= 0) | any(mu >= 1) )  
+  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (any(sigma <= 0) | any(sigma >= 1))  
+  stop(paste("sigma must be between 0 and 1", "\n", "")) 
+if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+            a <- mu*((1/sigma^2)-1)
+            b <- a*(1-mu)/mu
+            z <- (q^tau)/(nu+(1-nu)*(q^tau))
+            p <- pbeta(z,a,b)
+if(lower.tail==TRUE) p  <- p else  p <- 1-p 
+if(log.p==FALSE) p  <- p else  p <- log(p) 
+            p <- ifelse( q<= 0 | q>=1, 0, p)
+            p
  }
-#-----------------------------------------------------------------  
-
-qGB1 <-  function(p,mu = 0.5, sigma = 0.4, nu = 1, tau = 1, lower.tail = TRUE, log.p = FALSE)
+################################################################################
+################################################################################
+################################################################################
+################################################################################ 
+qGB1 <-  function(p,mu = 0.5, sigma = 0.4, nu = 1, tau = 1, lower.tail = TRUE, 
+                  log.p = FALSE)
  {   
-          if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
-          if (any(sigma <= 0) | any(sigma >= 1))  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-          if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
-          if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
-    if (lower.tail==TRUE) p <- p else p <- 1-p
+if (any(mu <= 0) | any(mu >= 1) )  
+  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (any(sigma <= 0) | any(sigma >= 1))  
+  stop(paste("sigma must be between 0 and 1", "\n", "")) 
+if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
                       a <- mu*((1/sigma^2)-1)
                       b <- a*(1-mu)/mu
                       z <- qbeta(p,a,b)
                       q <- (nu/((1/z)-(1-nu)))^(1/tau)
-                      q
+              q[p == 0] <- 0
+              q[p == 1] <- 1
+              q[p <  0] <- NaN
+              q[p >  1] <- NaN
+              return(q)
  }
 #-----------------------------------------------------------------  
 rGB1 <- function(n, mu = 0.5, sigma = 0.4, nu = 1, tau = 1)
