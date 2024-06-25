@@ -9,7 +9,7 @@
 Normal distribution with a specific mean and variance relationship for fitting a GAMLSS
 model}
 \description{
-The function \code{LQNO()} defines a normal distribution family, which has a specific  mean and variance relationship. The distribution can be used in a GAMLSS fitting using the function gamlss(). The mean of LQNO is equal to \code{mu}. The variance is equal to \code{mu*(1+sigma*mu)}  so the standard deviation is \code{sqrt(mu*(1+sigma*mu))}. The function is found useful in modelling  small RNA sequencing experiments. The functions \code{dLQNO}, \code{pLQNO}, \code{qLQNO} and \code{rLQNO} define the density, distribution function, quantile function (inverse cdf) and random generation for the \code{LQNO()} parametrization of the normal distribution.
+The function \code{LQNO()} defines a normal distribution family, which has a specific  mean and variance relationship. The distribution can be used in a GAMLSS fitting using the function gamlss(). The mean of LQNO is equal to \code{mu}. The variance is equal to \code{mu*(1+sigma*mu)}  so the standard deviation is \code{sqrt(mu*(1+sigma*mu))}. The function is found useful in modelling  small RNA sequencing experiments see Argyropoulos \emph{et al.} (2017. The functions \code{dLQNO}, \code{pLQNO}, \code{qLQNO} and \code{rLQNO} define the density, distribution function, quantile function (inverse cdf) and random generation for the \code{LQNO()} parametrization of the normal distribution.
 }
 \usage{
 LQNO(mu.link = "log", sigma.link = "log")

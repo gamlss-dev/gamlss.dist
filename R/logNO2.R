@@ -83,8 +83,8 @@ qLOGNO2 <- function(p, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
     if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
     qz <- qnorm(p, mean=log(mu), sd=sigma, lower.tail = lower.tail )
     qy=exp(qz)
-    qy[p == 0] <- 0
-    qy[p == 1] <- 1
+    qy[p == 0] <- -Inf
+    qy[p == 1] <- Inf
     qy[p <  0] <- NaN
     qy[p >  1] <- NaN
     return(qy)

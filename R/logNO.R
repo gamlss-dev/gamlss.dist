@@ -77,8 +77,8 @@ qLOGNO <- function(p, mu=0, sigma=1,  lower.tail = TRUE, log.p = FALSE )
           #   stop(paste("p must be between 0 and 1", "\n", ""))    
           q <-qlnorm(p=p, meanlog = mu, sdlog = sigma, lower.tail = lower.tail, 
                      log.p = log.p)
-          q[p == 0] <- 0
-          q[p == 1] <- 1
+          q[p == 0] <- -Inf
+          q[p == 1] <- Inf
           q[p <  0] <- NaN
           q[p >  1] <- NaN
           return(q)
