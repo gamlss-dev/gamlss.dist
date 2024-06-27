@@ -115,7 +115,11 @@ qMN4 <- function(p, mu=1, sigma=1, nu=1, lower.tail = TRUE, log.p = FALSE)
           q <- ifelse((p>=(mu/(1+mu+sigma+nu))), 2, q) 
           q <- ifelse((p>=((mu+sigma)/(1+mu+sigma+nu))), 3, q)          
           q <- ifelse((p>=((mu+sigma+nu)/(1+mu+sigma+nu))), 4, q)          
-          q
+          q[p == 0] <- -Inf
+          q[p == 1] <- Inf
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 
 rMN4 <- function(n, mu=1, sigma=1, nu=1)

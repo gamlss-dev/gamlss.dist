@@ -1,4 +1,7 @@
-#-------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 # MS + BR last change Thursday, April 13, 2006
 NBF <- function (mu.link="log", sigma.link="log", nu.link ="log")
 {
@@ -99,27 +102,31 @@ NBF <- function (mu.link="log", sigma.link="log", nu.link ="log")
     ),
     class = c("gamlss.family","family"))
 }
-#----------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dNBF<-function(x, mu=1, sigma=1, nu=2, log=FALSE)
 {  
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
  # if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-    ly <- max(length(x),length(mu), length(sigma)) 
+      ly <- max(length(x),length(mu), length(sigma)) 
        x <- rep(x, length = ly)      
       mu <- rep(mu, length = ly) 
    sigma <- rep(sigma, length = ly) 
      mu1 <- mu
   sigma1 <- sigma*mu^(nu-2)
   if (length(sigma1)>1) 
-       fy <- ifelse(sigma1>0.0001, dnbinom(x, size=1/sigma1, mu = mu1, log = log), dPO(x, mu = mu1, log = log) )
-  else 
-      fy <- if (sigma1<0.0001) dPO(x, mu = mu1, log = log) 
-            else dnbinom(x, size=1/sigma1, mu = mu1, log = log)
-  fy <- ifelse(x < 0, 0, fy) 
+ fy[sigma1>0.0001] <-  dnbinom(x, size=1/sigma1, mu = mu1, log = log)
+fy[sigma1<=0.0001] <-  dPO(x, mu = mu1, log = log) 
+  fy[x < 0] <- 0 
   fy
 }
-#---------------------------------------------------------------------------------------- 
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pNBF <- function(q, mu=1, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -129,16 +136,19 @@ pNBF <- function(q, mu=1, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
        q <- rep(q, length = ly)      
       mu <- rep(mu, length = ly) 
    sigma <- rep(sigma, length = ly)
+     cdf <- rep(0,length = ly) 
      mu1 <- mu
   sigma1 <- sigma*mu^(nu-2)
-  if (length(sigma1)>1) cdf <- ifelse(sigma1>0.0001, pnbinom(q, size=1/sigma1, mu=mu1, lower.tail=lower.tail,log.p=log.p), 
-                                      ppois(q, lambda = mu1, lower.tail = lower.tail, log.p = log.p) )
-  else cdf <- if (sigma1<0.0001) ppois(q, lambda = mu1, lower.tail = lower.tail, log.p = log.p)
-              else pnbinom(q, size=1/sigma1, mu=mu1, lower.tail=lower.tail,log.p=log.p)
-  cdf <-ifelse(q < 0, 0, cdf) 
+ cdf[sigma1>0.0001] <- pnbinom(q, size=1/sigma1, mu=mu1, lower.tail=lower.tail,log.p=log.p)
+cdf[sigma1<=0.0001] <-  ppois(q, lambda = mu1, lower.tail = lower.tail, log.p = log.p) 
+
+  cdf[q < 0] <- 0 
   cdf
 }
-#----------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qNBF <- function(p, mu=1, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -152,7 +162,10 @@ qNBF <- function(p, mu=1, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
             else qnbinom(p, size=1/sigma1, mu=mu1, lower.tail=lower.tail, log.p=log.p)
   q
 }
-#----------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rNBF <- function(n, mu=1, sigma=1, nu=2)
 {
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -163,3 +176,7 @@ rNBF <- function(n, mu=1, sigma=1, nu=2)
   r <- qNBF(p, mu=mu, sigma=sigma, nu=nu)
   as.integer(r)
 }
+################################################################################
+################################################################################
+################################################################################
+################################################################################

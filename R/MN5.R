@@ -156,7 +156,11 @@ qMN5 <- function(p, mu=1, sigma=1, nu=1, tau=1, lower.tail = TRUE, log.p = FALSE
           q <- ifelse((p>=((mu+sigma)/(1+mu+sigma+nu+tau))), 3, q)          
           q <- ifelse((p>=((mu+sigma+nu)/(1+mu+sigma+nu+tau))), 4, q)          
           q <- ifelse((p>=((mu+sigma+nu+tau)/(1+mu+sigma+nu+tau))), 5, q)          
-          q
+          q[p == 0] <- -Inf
+          q[p == 1] <- Inf
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 
 rMN5 <- function(n, mu=1, sigma=1, nu=1, tau=1)
