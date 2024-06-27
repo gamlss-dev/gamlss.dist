@@ -99,11 +99,15 @@ qNOF <- function(p, mu=0, sigma=1, nu=0, lower.tail = TRUE, log.p = FALSE)
   { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))
   #  if (any(mu <= 0))  stop(paste("mu must be positive", "\n", ""))  
     #if (any(nu <= 0))  stop(paste("nu must be positive", "\n", ""))  
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
+  #  if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
       mu1 <- mu
             sigma1 <- sigma*abs(mu)^(nu/2)
     q <- qnorm(p, mean=mu1, sd=sigma1, lower.tail = lower.tail )
-    q
+    q[p == 0] <- -Inf
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
    }
 #----------------------------------------------------------------------------------------
 rNOF <- function(n, mu=0, sigma=1, nu=0)
