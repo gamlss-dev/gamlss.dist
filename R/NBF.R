@@ -115,8 +115,10 @@ dNBF<-function(x, mu=1, sigma=1, nu=2, log=FALSE)
        x <- rep(x, length = ly)      
       mu <- rep(mu, length = ly) 
    sigma <- rep(sigma, length = ly) 
+   fy <- rep_len(0, ly)
      mu1 <- mu
   sigma1 <- sigma*mu^(nu-2)
+    
   if (length(sigma1)>1) 
  fy[sigma1>0.0001] <-  dnbinom(x, size=1/sigma1, mu = mu1, log = log)
 fy[sigma1<=0.0001] <-  dPO(x, mu = mu1, log = log) 

@@ -152,33 +152,32 @@ pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
 
 qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE) 
 {
-  { 
+ 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(mu <= 0) || any(mu >= 1))   stop(paste("mu must be between 0 and 1", "\n", ""))     
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
- #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-     lp <-  max(length(p),length(mu),length(sigma))
-      p <- rep(p, length = lp)                                                                     
-  sigma <- rep(sigma, length = lp)
-     mu <- rep(mu, length = lp)
-      q <- rep(0,lp) 
-  # local functions    
-  h1 <- function(x,mu,sigma,p) pSIMPLEX(x , mu, sigma ) - p  
- uni <- function(mu, sigma, p)
-     {
-      val <- uniroot(h1, c(0,1.0001), mu=mu, sigma=sigma, p=p)
+    #    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+    lp <-  max(length(p),length(mu),length(sigma))
+    p <- rep(p, length = lp)                                                                     
+    sigma <- rep(sigma, length = lp)
+    mu <- rep(mu, length = lp)
+    q <- rep(0,lp) 
+    # local functions    
+    h1 <- function(x,mu,sigma,p) pSIMPLEX(x , mu, sigma ) - p  
+    uni <- function(mu, sigma, p)
+    {
+      val <- uniroot(h1, c(0.001,.999), mu=mu, sigma=sigma, p=p)
       val$root
-     }
-UNI <- Vectorize(uni)
-  q <- UNI( mu=mu, sigma=sigma, p=p)  
-  q
-  }
-  q[p == 0] <- 0
-  q[p == 1] <- 1
-  q[p <  0] <- NaN
-  q[p >  1] <- NaN
-  return(q)
+    }
+    UNI <- Vectorize(uni)
+    q <- UNI( mu=mu, sigma=sigma, p=p)
+    q[p == 0] <- 0
+    q[p == 1] <- 1
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
+    
 }
 #---------------------------------------------------------------------------
  rSIMPLEX <- function (n = 1,  mu=0.5, sigma=1) 
