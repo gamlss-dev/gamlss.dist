@@ -185,7 +185,7 @@ qNET <- function(p,  mu=0, sigma=1, nu=1.5, tau=2,  lower.tail = TRUE, log.p = F
   if (any(tau < nu))  stop(paste(" tau must greater or equal than  nu", "\n", ""))     
   if (log.p==TRUE) p <- exp(p) else p <- p
   if (lower.tail==TRUE) p <- p else p <- 1-p
-  if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))
+ # if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))
   #if (any(any(p > 0.993))  stop(paste("p must be between 0 and 1", "\n", "")) 
      lp <-  max(length(p),length(mu),length(sigma),length(nu), length(tau))
       p <- rep(p, length = lp)                                                                      
@@ -207,7 +207,11 @@ qNET <- function(p,  mu=0, sigma=1, nu=1.5, tau=2,  lower.tail = TRUE, log.p = F
            ((p1>b+(ct/nu)*exp(-(nu^2)/2)) & (p1<0.5))*z3
      q <- ifelse(p<=0.5,q1,-q1) 
      q <- mu+sigma*q
-q
+     q[p == 0] <- -Inf
+     q[p == 1] <- Inf
+     q[p <  0] <- NaN
+     q[p >  1] <- NaN
+     return(q)
 }
 #----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------
