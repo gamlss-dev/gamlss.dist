@@ -42,12 +42,16 @@ qPARETO1o <- function(p, mu = 1, sigma = 0.5, lower.tail = TRUE, log.p = FALSE)
 #    if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
     if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))  
     if (log.p==TRUE) p <- exp(p) else p <- p
-    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+#    if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
     if (lower.tail==TRUE) p <- p else p <- 1-p
    # w <- qf(p,2,2/sigma)   
    #  q1 <- mu*(((sigma)*w))
     q <-  mu*((1-p)^(-(1/sigma)))   
-    q
+    q[p == 0] <- 0
+    q[p == 1] <- Inf
+    q[p <  0] <- NaN
+    q[p >  1] <- NaN
+    return(q)
 }
 #--------------------------------------------------------------------------------
 #Random generation 

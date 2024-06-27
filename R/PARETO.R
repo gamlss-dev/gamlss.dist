@@ -65,10 +65,14 @@ pPARETO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
 qPARETO  <- function(p, mu = 1, lower.tail = TRUE, log.p = FALSE)
 {      
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
+#  if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
   if (log.p==TRUE) p <- exp(p) else p <- p
   q <- 1/(1-p)^(1/mu)
-  q
+  q[p == 0] <- 0
+  q[p == 1] <- Inf
+  q[p <  0] <- NaN
+  q[p >  1] <- NaN
+  return(q)
 }
 #----------------------------------------------------------------------------------------
 rPARETO <- function(n, mu = 1)
