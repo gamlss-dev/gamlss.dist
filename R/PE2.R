@@ -117,11 +117,16 @@ pPE2<- function(q, mu=0, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
    if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
    if (log.p==TRUE) p <- exp(p) else p <- p
    if (lower.tail==TRUE) p <- p else p <- 1-p
-   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+ #  if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
         suppressWarnings(s <- qgamma((2*p-1)*sign(p-0.5),shape=(1/nu),scale=1))
        z <- sign(p-0.5)*((s)^(1/nu))
       ya <- mu + sigma*z  
-      ya
+      ya <- mu + sigma*z  
+      ya[p == 0] <- -Inf
+      ya[p == 1] <- Inf
+      ya[p <  0] <- NaN
+      ya[p >  1] <- NaN
+      return(ya)
    }                               
 #----------------------------------------------------------------------------------------
 rPE2 <- function(n, mu=0, sigma=1, nu=2)
