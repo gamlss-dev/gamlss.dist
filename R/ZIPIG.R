@@ -1,7 +1,13 @@
 # 3/3/10  
-# ---------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 # zero inflated Poisson inverse Gaussian (with probability y=0 is nu) 20/04/10
-# ---------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 ZIPIG = function (mu.link = "log", sigma.link = "log", nu.link = "logit") 
 {
     mstats <- checklink("mu.link", "ZIPIG", substitute(mu.link), 
@@ -92,13 +98,16 @@ variance = function(mu, sigma, nu)  mu * (1 - nu) + mu^2 * (1 - nu) * (sigma + n
           ),
             class = c("gamlss.family","family"))
 }
-#-------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dZIPIG<-function(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
  { 
-        if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-        if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-        if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
-  #      if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
+#      if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
           ly <- max(length(x),length(mu),length(sigma),length(nu)) 
            x <- rep(x, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -114,7 +123,10 @@ dZIPIG<-function(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
           fy2 <- ifelse(x < 0, 0, fy2) 
           fy2
   }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pZIPIG <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE)
   {     
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -137,17 +149,19 @@ pZIPIG <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
          cdf <- ifelse(q < 0, 0, cdf) 
          cdf
    }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qZIPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE,
                    max.value = 10000)
   {      
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
-          if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
+if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
                      stop(paste("nu must be between 0 and 1 ", "\n", ""))
-          if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
-          if (log.p == TRUE) p <- exp(p)   else p <- p
-          if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+if (log.p == TRUE) p <- exp(p)   else p <- p
+if (lower.tail == TRUE)  p <- p  else p <- 1 - p
           ly <- max(length(p),length(mu),length(sigma),length(nu)) 
            p <- rep(p, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -161,9 +175,16 @@ qZIPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FA
                    else qPIG(pnew, mu = mu, sigma=sigma, lower.tail=TRUE, log.p = FALSE, max.value = max.value)
            # q2 <- suppressWarnings(ifelse((pnew > 0 ), q, 0))
 #          suppressWarnings(q <- ifelse((pnew > 0 ), qpois(pnew, lambda = mu, ), 0))
-          q
+          q[p == 0] <- 0
+          q[p == 1] <- Inf
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)  
    }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rZIPIG <- function(n, mu = 1, sigma = 1, nu = 0.3, max.value = 10000)
   {
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
