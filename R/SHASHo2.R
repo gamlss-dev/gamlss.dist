@@ -279,7 +279,7 @@ qSHASHo2 <- function(p, mu=0, sigma=1, nu=0, tau=1, lower.tail = TRUE,
    if (lower.tail==TRUE) p <- p else p <- 1-p
    
    q <- mu + (tau*sigma)*sinh((1/tau)*asinh(qnorm(p))+(nu/tau))
-   q[p == 0] <- 0
+   q[p == 0] <- -Inf
    q[p == 1] <- Inf
    q[p <  0] <- NaN
    q[p >  1] <- NaN

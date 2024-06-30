@@ -269,7 +269,7 @@ qSEP3 <- function(p, mu=0, sigma=1, nu=2, tau=2, lower.tail = TRUE, log.p = FALS
     suppressWarnings(q2 <- mu + 
     (sigma*nu*(2^(1/tau)))*((qgamma( (-1/k)*(1-p*(1+k)), shape=1/tau, scale=1))^(1/tau)))
     q <- ifelse(p < (1/(1+k)), q1, q2)
-    q[p == 0] <- 0
+    q[p == 0] <- -Inf
     q[p == 1] <- Inf
     q[p <  0] <- NaN
     q[p >  1] <- NaN

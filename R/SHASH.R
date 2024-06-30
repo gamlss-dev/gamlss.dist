@@ -330,7 +330,7 @@ qSHASH <-  function(p, mu=0, sigma=1, nu=.5, tau=.5, lower.tail = TRUE, log.p = 
          nu <- rep(nu, length = lp)
          tau <- rep(tau, length = lp)
            q <- rep(0,lp)
-   q[p == 0] <- 0
+   q[p == 0] <- -Inf
    q[p == 1] <- Inf
    q[p <  0] <- NaN
    q[p >  1] <- NaN           

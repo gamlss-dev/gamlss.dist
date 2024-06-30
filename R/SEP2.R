@@ -249,7 +249,7 @@ qSEP2 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
          nu <- rep(nu, length = lp)
          tau <- rep(tau, length = lp)
           q <- rep(0,lp)  
-  q[p == 0] <- 0
+  q[p == 0] <- -Inf
   q[p == 1] <- Inf
   q[p <  0] <- NaN
   q[p >  1] <- NaN
