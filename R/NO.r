@@ -32,7 +32,7 @@ NO <-function (mu.link ="identity", sigma.link="log")
               d2ldmdd = function(y) rep(0,length(y)),
           G.dev.incr  = function(y,mu,sigma,...) -2*dNO(y,mu,sigma,log=TRUE),                 
                 rqres = expression(rqres(pfun="pNO", type="Continuous", y=y, mu=mu, 
-                                         igma=sigma)),
+                                         sigma=sigma)),
            mu.initial = expression({ mu <- (y+mean(y))/2 }),
         sigma.initial = expression({sigma <- rep(sd(y),length(y))}), 
              mu.valid = function(mu) TRUE , 
