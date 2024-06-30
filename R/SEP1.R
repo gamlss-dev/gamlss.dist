@@ -304,7 +304,7 @@ qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+ #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
          lp <-  max(length(p),length(mu),length(sigma),length(nu), length(tau))
           p <- rep(p, length = lp)                                                                      
       sigma <- rep(sigma, length = lp)
@@ -335,7 +335,11 @@ qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
         q[i] <- uniroot(h1, interval)$root
         #interval <- c(.Machine$double.xmin, 20)
          }
-    q
+          q[p == 0] <- 0
+          q[p == 1] <- Inf
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 #----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------

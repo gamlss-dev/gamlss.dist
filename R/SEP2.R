@@ -261,7 +261,11 @@ qSEP2 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
         q[i] <- uniroot(h1, interval)$root
         #interval <- c(.Machine$double.xmin, 20)
          }
-    q
+          q[p == 0] <- 0
+          q[p == 1] <- Inf
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
+          return(q)
    }
 #----------------------------------------------------------------------------------------
 rSEP2 <- function(n, mu=0, sigma=1, nu=0, tau=2)
