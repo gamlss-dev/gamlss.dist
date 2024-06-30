@@ -281,16 +281,20 @@ pSEP1 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.
        for (i in 1:lp)
           {
          cdf[i] <- integrate(function(x) 
-                 dSEP1(x, mu = 0, sigma = 1, nu = nu[i], tau = tau[i]), -Inf, (q[i]-mu[i])/sigma[i] )$value #DS BR 7-10-11
+   dSEP1(x, mu = 0, sigma = 1, nu = nu[i], tau = tau[i]), -Inf, 
+         (q[i]-mu[i])/sigma[i] )$value #DS BR 7-10-11
           }    
     if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
     cdf
  }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
   { 
-    #---functions--------------------------------------------   
+#---functions--------------------------------------------   
        h1 <- function(q)
        { 
      pSEP1(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) - p[i] 
@@ -299,21 +303,28 @@ qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
        { 
      pSEP1(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) 
        }
-     #-----------------------------------------------------------------
+#-----------------------------------------------------------------
     #if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
  #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
          lp <-  max(length(p),length(mu),length(sigma),length(nu), length(tau))
-          p <- rep(p, length = lp)                                                                      
+          p <- rep(p, length = lp)                                                     
       sigma <- rep(sigma, length = lp)
          mu <- rep(mu, length = lp)
          nu <- rep(nu, length = lp)
         tau <- rep(tau, length = lp)
-          q <- rep(0,lp)  
-         for (i in  seq(along=p)) 
-         {
+          q <- rep(0,lp) 
+  q[p == 0] <- 0
+  q[p == 1] <- Inf
+  q[p <  0] <- NaN
+  q[p >  1] <- NaN          
+for (i in  seq(along=p)) 
+ {
+   if ((p[i]<=0)|(p[i]>=1)) p[i] <= p[i]
+   else 
+   {
          if (h(mu[i])<p[i]) 
           { 
            interval <- c(mu[i], mu[i]+sigma[i])
@@ -334,15 +345,14 @@ qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
            }
         q[i] <- uniroot(h1, interval)$root
         #interval <- c(.Machine$double.xmin, 20)
-         }
-          q[p == 0] <- 0
-          q[p == 1] <- Inf
-          q[p <  0] <- NaN
-          q[p >  1] <- NaN
+   }
+  }
           return(q)
    }
-#----------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rSEP1 <- function(n, mu=0, sigma=1, nu=0, tau=2)
   {
  
@@ -352,4 +362,7 @@ rSEP1 <- function(n, mu=0, sigma=1, nu=0, tau=2)
     r <- qSEP1(p, mu = mu,sigma = sigma, nu = nu,tau = tau)
     r
   }
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################

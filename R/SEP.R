@@ -287,7 +287,7 @@ qSEP <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.
                                 lower = lower[i])
           if (q[i]>=upper[i]) warning("q is at the upper limit, increase the upper.limit")
           if (q[i]<=lower[i]) warning("q is at the lower limit, decrease the lower.limit")
-          }                                                                               
+          }                                                                             
           q[p == 0] <- 0
           q[p == 1] <- Inf
           q[p <  0] <- NaN
@@ -300,7 +300,6 @@ qSEP <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.
 ################################################################################
 rSEP <- function(n, mu=0, sigma=1, nu=0, tau=2)
   {
- 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     n <- ceiling(n)
     p <- runif(n)
