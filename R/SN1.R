@@ -238,7 +238,7 @@ qSN1<-function (p, mu = 0, sigma = 1, nu = 0, lower.tail = TRUE,
        mu <- rep(mu, length = lp)
        nu <- rep(nu, length = lp)
         q <- rep(0, lp)
-q[p == 0] <- 0
+q[p == 0] <- -Inf
 q[p == 1] <- Inf
 q[p <  0] <- NaN
 q[p >  1] <- NaN
