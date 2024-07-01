@@ -1,3 +1,7 @@
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 # 27_11_2007
 ST2 <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
@@ -205,7 +209,10 @@ d2ldvdt
           ),
             class = c("gamlss.family","family"))
 }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dST2 <- function(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
  {
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -224,7 +231,10 @@ dST2 <- function(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
        if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
        ft
   }    
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pST2 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
  {   if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
      if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))    
@@ -244,12 +254,16 @@ pST2 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
     cdf
  }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 #functions to find the inverse cdf numericaly
 # for cdf in -Inf to +Inf
-qST2 <- function(p, mu=1, sigma=1, nu = 0, tau = 2,  lower.tail = TRUE, log.p = FALSE)
-  { 
-    #---functions--------------------------------------------   
+qST2 <- function(p, mu=1, sigma=1, nu = 0, tau = 2,  lower.tail = TRUE, 
+                 log.p = FALSE)
+{ 
+#---functions--------------------------------------------   
        h1 <- function(q)
        { 
      pST2(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) - p[i] 
@@ -258,21 +272,28 @@ qST2 <- function(p, mu=1, sigma=1, nu = 0, tau = 2,  lower.tail = TRUE, log.p = 
        { 
      pST2(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) 
        }
-     #-----------------------------------------------------------------
+#-----------------------------------------------------------------
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
     if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))    
     if (log.p==TRUE) p <- exp(p) else p <- p
     if (lower.tail==TRUE) p <- p else p <- 1-p
-    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
+#    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
          lp <-  max(length(p),length(mu),length(sigma),length(nu), length(tau))
-          p <- rep(p, length = lp)                                                                     
+          p <- rep(p, length = lp)                                                      
       sigma <- rep(sigma, length = lp)
          mu <- rep(mu, length = lp)
          nu <- rep(nu, length = lp)
          tau <- rep(tau, length = lp)
           q <- rep(0,lp)  
-         for (i in  seq(along=p)) 
-         {
+  q[p == 0] <- -Inf
+  q[p == 1] <- Inf
+  q[p <  0] <- NaN
+  q[p >  1] <- NaN          
+for (i in  seq(along=p)) 
+{
+  if ((p[i]<=0)|(p[i]>=1)) p[i] <= p[i]
+  else 
+  {
          if (h(mu[i])<p[i]) 
           { 
            interval <- c(mu[i], mu[i]+sigma[i])
@@ -293,9 +314,10 @@ qST2 <- function(p, mu=1, sigma=1, nu = 0, tau = 2,  lower.tail = TRUE, log.p = 
            }
         q[i] <- uniroot(h1, interval)$root
         #interval <- c(.Machine$double.xmin, 20)
-         }
+  }
+}
     q
-   }
+}
 #----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------
 rST2 <- function(n, mu=0, sigma=1, nu=0, tau=2)
