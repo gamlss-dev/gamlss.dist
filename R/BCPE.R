@@ -2,8 +2,8 @@
 ################################################################################
 ################################################################################
 ################################################################################
-# last change MS Fri 21 June 2024
-# privously last change MS Wednesday, September 17, 2003 at 08:43 
+# last change MS 4-07-2024 Mikis
+# previously last change MS Wednesday, September 17, 2003 at 08:43 
 BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Box Cox Power Exponential", substitute(mu.link), 
@@ -226,8 +226,8 @@ pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
                cdf       }  
 #################################################################################        ## check whether parameters are within range  
 if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-        if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-        if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
 ## length of return value
          n <- max(length(q), length(mu), length(sigma), length(nu), length(tau))
          q <- rep_len(q, n)
@@ -293,9 +293,6 @@ qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE,
 if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
 if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-## extra arguments
-   if (log.p) p <- exp(p)
-   if (!lower.tail) p <- 1 - p   
 ## length of return value
       n <- max(length(p), length(mu), length(sigma), length(nu), length(tau))
       p <- rep_len(p, n)
@@ -304,27 +301,18 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
      nu <- rep_len(nu, n)
     tau <- rep_len(tau, n)
     za  <- rep_len(tau, n)
-    ya <-  rep_len(tau, n)
+     ya <-  rep_len(tau, n)
+## extra arguments
+    if (log.p) p <- exp(p)
+    if (!lower.tail) p <- 1 - p  
 ## compute quantile   
-    # if (any(p <= 0)|any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
-# if(length(nu)>1){ 
-#                 za <- ifelse(nu<0, 
-#                              q.T(p*F.T(1/(sigma*abs(nu)),tau),tau),
-#                              q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau))
-#                 za <- ifelse(nu==0, q.T(p,tau), za)                  
-#                     } 
-#                else { if (nu<0)  {za <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau)}
-#                       if (nu==0) {za <- q.T(p,tau)} 
-#                       if (nu>0)  {za <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau)}
-#                     }   
-       za[nu<0] <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau, weights=nu<0)
-      za[nu==0] <- q.T(p,tau, weights=nu==0)
-       za[nu>0] <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau,  weights=nu>0)
-    ya[nu != 0] <- mu*(nu*sigma*za+1)^(1/nu)
-    ya[nu == 0] <- mu*exp(sigma*za)
-     # if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*za+1)^(1/nu),mu*exp(sigma*za))
-     #   else   if (nu != 0) ya <- mu*(nu*sigma*za+1)^(1/nu) else ya <- mu*exp(sigma*za)
-## catch edge cases and return
+                za <- ifelse(nu<0,
+                             q.T(p*F.T(1/(sigma*abs(nu)),tau),tau),
+                             q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau))
+                za <- ifelse(nu==0, q.T(p,tau), za)
+                ya <- ifelse(nu != 0, mu*(nu*sigma*za+1)^(1/nu),
+                                     mu*exp(sigma*za))
+# catch edge cases and return
      ya[p == 0] <- 0
      ya[p == 1] <- Inf
      ya[p <  0] <- NaN
