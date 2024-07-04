@@ -4,7 +4,7 @@
 ################################################################################
 # last change MS Fri 21 June 2024
 # privously last change MS Wednesday, September 17, 2003 at 08:43 
-BCPE_T <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
+BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Box Cox Power Exponential", substitute(mu.link), 
                            c("inverse", "log", "identity", "own"))
@@ -15,7 +15,7 @@ BCPE_T <- function (mu.link="identity", sigma.link="log", nu.link ="identity", t
     tstats <- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
                            c("logshiftto1", "log", "identity", "own")) 
     structure(
-          list(family = c("BCPE_T", "Box-Cox Power Exponential"),
+          list(family = c("BCPE", "Box-Cox Power Exponential"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
                  type = "Continuous",
@@ -152,8 +152,8 @@ BCPE_T <- function (mu.link="identity", sigma.link="log", nu.link ="identity", t
     d2ldvdt
                         },
  G.dev.incr  = function(y,mu,sigma,nu,tau,...) 
-                       -2*dBCPE_T(y,mu,sigma,nu,tau,log=TRUE),                     
-         rqres = expression(rqres(pfun="pBCPE_T", type="Continuous", y=y, mu=mu, 
+                       -2*dBCPE(y,mu,sigma,nu,tau,log=TRUE),                     
+         rqres = expression(rqres(pfun="pBCPE", type="Continuous", y=y, mu=mu, 
                                               sigma=sigma, nu=nu, tau=tau) ),
     mu.initial = expression(mu <- (y+mean(y))/2), #
  sigma.initial = expression(sigma<- rep(0.1, length(y))),
@@ -171,7 +171,7 @@ BCPE_T <- function (mu.link="identity", sigma.link="log", nu.link ="identity", t
 ################################################################################
 ################################################################################
 ################################################################################
-dBCPE_T <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
+dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
  {
 ## check whether parameters are within range  
 if (any(mu < 0))  stop(paste("mu must be positive", "\n", ""))  
@@ -214,7 +214,7 @@ if(log==FALSE) ft  <- exp(loglik) else ft <- loglik
 ################################################################################
 ################################################################################
 ################################################################################
-pBCPE_T <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
+pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
  {  
 ################################################################################  
         F.T <- function(t,tau){
@@ -267,7 +267,7 @@ browser()
 ################################################################################
 ################################################################################
 ################################################################################
-qBCPE_T <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
+qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
                              log.p = FALSE)
 {  
 ################################################################################  
@@ -333,7 +333,7 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
 return(ya)
  }
 #-----------------------------------------------------------------  
-rBCPE_T <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
+rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
   {
     if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -341,7 +341,7 @@ rBCPE_T <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
     if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))    
     n <- ceiling(n)
     p <- runif(n)
-    r <- qBCPE_T(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
+    r <- qBCPE(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
     r
   }
 
