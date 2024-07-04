@@ -91,13 +91,13 @@ qNBI <- function(p, mu = 1, sigma = 1,  lower.tail = TRUE, log.p = FALSE)
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
               n <- max(length(p), length(mu), length(sigma))
-              p <- rep_len(p, n)
+             # p <- rep_len(p, n)
              mu <- rep_len(mu, n)
           sigma <- rep_len(sigma, n)
               q <- rep_len(0,n)
 q[sigma>0.0001] <- qnbinom(p, size=1/sigma, mu=mu, 
                            lower.tail=lower.tail, log.p=log.p)
-q[sigma<0.0001] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+q[sigma<=0.0001] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
       q[p == 0] <- 0
       q[p == 1] <- Inf
       q[p <  0] <- NaN
