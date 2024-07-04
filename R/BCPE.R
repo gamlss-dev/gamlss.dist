@@ -4,7 +4,7 @@
 ################################################################################
 # last change MS Fri 21 June 2024
 # privously last change MS Wednesday, September 17, 2003 at 08:43 
-BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
+BCPE_T <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Box Cox Power Exponential", substitute(mu.link), 
                            c("inverse", "log", "identity", "own"))
@@ -15,7 +15,7 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
     tstats <- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
                            c("logshiftto1", "log", "identity", "own")) 
     structure(
-          list(family = c("BCPE", "Box-Cox Power Exponential"),
+          list(family = c("BCPE_T", "Box-Cox Power Exponential"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
                  type = "Continuous",
@@ -152,8 +152,8 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
     d2ldvdt
                         },
  G.dev.incr  = function(y,mu,sigma,nu,tau,...) 
-                       -2*dBCPE(y,mu,sigma,nu,tau,log=TRUE),                     
-         rqres = expression(rqres(pfun="pBCPE", type="Continuous", y=y, mu=mu, 
+                       -2*dBCPE_T(y,mu,sigma,nu,tau,log=TRUE),                     
+         rqres = expression(rqres(pfun="pBCPE_T", type="Continuous", y=y, mu=mu, 
                                               sigma=sigma, nu=nu, tau=tau) ),
     mu.initial = expression(mu <- (y+mean(y))/2), #
  sigma.initial = expression(sigma<- rep(0.1, length(y))),
@@ -171,7 +171,7 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
 ################################################################################
 ################################################################################
 ################################################################################
-dBCPE <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
+dBCPE_T <- dBCPEo <- function(x, mu=5, sigma=0.1, nu=1, tau=2, log=FALSE)
  {
 ## check whether parameters are within range  
 if (any(mu < 0))  stop(paste("mu must be positive", "\n", ""))  
@@ -214,7 +214,7 @@ if(log==FALSE) ft  <- exp(loglik) else ft <- loglik
 ################################################################################
 ################################################################################
 ################################################################################
-pBCPE <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
+pBCPE_T <- pBCPEo <- function(q, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, log.p = FALSE)
  {  
 ################################################################################  
         F.T <- function(t,tau){
@@ -238,6 +238,7 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
          z <- rep_len(0, n)
        FYy2 <- rep_len(0, n)  
 ##  calculate the cdf  
+browser()
          z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma) 
       FYy1 <- F.T(z,tau)
       FYy2[nu>0] <-  F.T( -1/(sigma*abs(nu)),tau)
@@ -266,7 +267,7 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
 ################################################################################
 ################################################################################
 ################################################################################
-qBCPE <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
+qBCPE_T <- qBCPEo <-  function(p, mu=5, sigma=0.1, nu=1, tau=2, lower.tail = TRUE, 
                              log.p = FALSE)
 {  
 ################################################################################  
@@ -300,8 +301,8 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
   sigma <- rep_len(sigma, n)
      nu <- rep_len(nu, n)
     tau <- rep_len(tau, n)
-    za  <- rep_len(tau, n)
-    ya <-  rep_len(tau, n)
+    za  <- rep_len(0, n)
+    ya <-  rep_len(0, n)
 ## extra arguments
     if (log.p) p <- exp(p)
     if (!lower.tail) p <- 1 - p  
@@ -317,11 +318,11 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
 #                       if (nu==0) {za <- q.T(p,tau)} 
 #                       if (nu>0)  {za <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau)}
 #                     }   
-       za[nu<0] <- q.T(p*F.T(1/(sigma*abs(nu)),tau),tau, weights=nu<0)
-      za[nu==0] <- q.T(p,tau, weights=nu==0)
-       za[nu>0] <- q.T((1-(1-p)*F.T(1/(sigma*abs(nu)),tau)),tau,  weights=nu>0)
-    ya[nu != 0] <- mu*(nu*sigma*za+1)^(1/nu)
-    ya[nu == 0] <- mu*exp(sigma*za)
+       za[nu<0] <- q.T(p[nu<0]*F.T(1/(sigma[nu<0]*abs(nu[nu<0])),tau[nu<0]),tau[nu<0])
+      za[nu==0] <- q.T(p[nu==0],tau[nu==0])
+       za[nu>0] <- q.T((1-(1-p[nu>0])*F.T(1/(sigma[nu>0]*abs(nu[nu>0])),tau[nu>0])),tau[nu>0])
+    ya[nu != 0] <- mu[nu != 0]*(nu[nu != 0]*sigma[nu != 0]*za[nu != 0]+1)^(1/nu[nu != 0])
+    ya[nu == 0] <- mu[nu == 0]*exp(sigma[nu == 0]*za[nu == 0])
      # if(length(nu)>1)  ya <- ifelse(nu != 0,mu*(nu*sigma*za+1)^(1/nu),mu*exp(sigma*za))
      #   else   if (nu != 0) ya <- mu*(nu*sigma*za+1)^(1/nu) else ya <- mu*exp(sigma*za)
 ## catch edge cases and return
@@ -332,7 +333,7 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
 return(ya)
  }
 #-----------------------------------------------------------------  
-rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
+rBCPE_T <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
   {
     if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
@@ -340,7 +341,7 @@ rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
     if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))    
     n <- ceiling(n)
     p <- runif(n)
-    r <- qBCPE(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
+    r <- qBCPE_T(p,mu=mu,sigma=sigma,nu=nu,tau=tau)
     r
   }
 
