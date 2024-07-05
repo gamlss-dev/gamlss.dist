@@ -213,7 +213,7 @@ logpy0 <- -mu*nu-(1/sigma)*(log(1+mu*sigma*(1-nu)))
                           ans=double(ly), as.integer(length(y)),
                           as.integer(max(y)+1), PACKAGE="gamlss.dist")$ans)
    
-   sumlty
+   return(sumlty)
  }
  #-------------------------------------------------------------------------------
 # tofyDELPORT <- function (y, mu, sigma, nu, what=1) 
@@ -269,7 +269,7 @@ pDEL <- function(q, mu = 1, sigma = 1, nu = .5, lower.tail = TRUE, log.p = FALSE
       cdf <- if(lower.tail==TRUE) cdf else 1-cdf
       cdf <- if(log.p==FALSE) cdf else log(cdf) 
       cdf <- ifelse(q < 0, 0, cdf)
-      cdf
+      return(cdf)
   }
 #----------------------------------------------------------------------------------------
 qDEL <- function(p, mu=1, sigma=1, nu=0.5,  lower.tail = TRUE, log.p = FALSE,  
@@ -317,7 +317,7 @@ rDEL <- function(n, mu=1, sigma=1, nu=0.5, max.value = 10000)
           n <- ceiling(n)
           p <- runif(n)
           r <- qDEL(p, mu=mu, sigma=sigma, nu=nu, max.value = max.value )
-          as.integer(r)
+          return(as.integer(r))
   }
   
   
