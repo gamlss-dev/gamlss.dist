@@ -65,7 +65,7 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
         fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
        # fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
         fy[x < 0]  <- 0 
-        fy
+        return(fy)
   }
 #------------------------------------------------------------------------------------------
 pNBI <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
@@ -83,7 +83,7 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
 #cdf[sigma<=0.0001] <-  ppois(q, lambda = mu, lower.tail = lower.tail, 
 #                              log.p = log.p)
         cdf[q < 0] < 0
-        cdf
+        return(cdf)
    }
 #------------------------------------------------------------------------------------------
 qNBI <- function(p, mu = 1, sigma = 1,  lower.tail = TRUE, log.p = FALSE)
@@ -112,6 +112,6 @@ rNBI <- function(n, mu = 1, sigma = 1)
           n <- ceiling(n)
           p <- runif(n)
           r <- qNBI(p, mu=mu, sigma=sigma)
-          as.integer(r)
+          return(as.integer(r))
   }
 #------------------------------------------------------------------------------------------
