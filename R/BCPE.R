@@ -238,7 +238,6 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
          z <- rep_len(0, n)
        FYy2 <- rep_len(0, n)  
 ##  calculate the cdf  
-browser()
          z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma) 
       FYy1 <- F.T(z,tau)
       FYy2[nu>0] <-  F.T( -1/(sigma*abs(nu)),tau)
