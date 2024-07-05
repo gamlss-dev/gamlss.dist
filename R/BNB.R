@@ -170,7 +170,7 @@ dBNB<-function(x, mu=1, sigma=1, nu=1, log=FALSE)
   logL <- lbeta(x+n, m+k)-lbeta(n,m)-lgamma(x+1)-lgamma(k)+lgamma(x+k)
   lik <- if (log) logL else exp(logL)
   lik <- ifelse(x < 0, 0, lik)  
-  lik
+  return(lik)
   }
 ################################################################################
 ################################################################################
@@ -193,7 +193,7 @@ pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
     cdf <- if(lower.tail==TRUE) cdf else 1-cdf
     cdf <- if(log.p==FALSE) cdf else log(cdf)    
     cdf <- ifelse(q < 0, 0, cdf) 
-    cdf
+    return(cdf)
 }
 ################################################################################
 ################################################################################
@@ -246,7 +246,7 @@ rBNB <- function(n, mu=1, sigma=1, nu=1, max.value = 10000)
           n <- ceiling(n)
           p <- runif(n)
           r <- qBNB(p, mu=mu, sigma=sigma, nu=nu, max.value = max.value )
-          as.integer(r)
+          return(as.integer(r))
   }
 ################################################################################
 ################################################################################
