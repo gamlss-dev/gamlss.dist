@@ -10,11 +10,11 @@ dGEOM<-function (x, mu = 2, log = FALSE)
     if (any(mu < 0))
         stop(paste("mu must be > 0)", "\n", ""))
   #  if (any(x < 0)) stop(paste("x must be >=0", "\n", ""))
-    lx <- max(length(x), length(mu))
-    mu <- rep(mu, length = lx) 
+     lx <- max(length(x), length(mu))
+     mu <- rep(mu, length = lx) 
    prob <- 1/(mu+1)
-    fy <- dgeom(x = x, prob = prob, log = log)
-    fy <-ifelse(x < 0, 0, fy) 
+     fy <- dgeom(x = x, prob = prob, log = log)
+     fy <-ifelse(x < 0, 0, fy) 
     fy #logfx  
 }
 ################################################################################

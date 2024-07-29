@@ -6,9 +6,6 @@
 \alias{rBB}
 
 
-
-
-
 \title{Beta Binomial Distribution For Fitting a GAMLSS Model}
 \description{
 This function defines the beta binomial distribution, a two parameter distribution, for a \code{gamlss.family} object to be used in a

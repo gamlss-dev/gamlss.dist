@@ -1,3 +1,8 @@
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 # MS , RAR, KA amended 21_04_2010
 BB <- function (mu.link = "logit", sigma.link = "log") 
 {
@@ -18,27 +23,33 @@ BB <- function (mu.link = "logit", sigma.link = "log")
         sigma.linkinv = dstats$linkinv,
                 mu.dr = mstats$mu.eta, 
              sigma.dr = dstats$mu.eta, 
-                 dldm = function(y,mu,sigma,bd) (1/sigma)*(digamma(y+(mu/sigma))
+                 dldm = function(y,mu,sigma,bd) 
+                                    (1/sigma)*(digamma(y+(mu/sigma))
                                     -digamma(bd+((1-mu)/sigma)-y)
                                     -digamma(mu/sigma)
                                     +digamma((1-mu)/sigma)),
-               d2ldm2 = function(y,mu,sigma,bd) (1/(sigma)^2)*(trigamma(y+(mu/sigma))
-                                                  +trigamma(bd+((1-mu)/sigma)-y)
-                                                  -trigamma(mu/sigma)
-                                                  -trigamma((1-mu)/sigma)),
-                 dldd = function(y,mu,sigma,bd) {k <- 1/sigma
-                                 dldd <- -(k^2)*(digamma(k)+mu*digamma(y+mu*k)+(1-mu)*
-                                         digamma(bd+(1-mu)*k-y)-mu*digamma(mu*k)-(1-mu)*
-                                         digamma((1-mu)*k)-digamma(bd+k))
-                                 dldd 
-                                   }, 
-               d2ldd2 = function(y,mu,sigma,bd) {k <- 1/sigma
-                                dldd <- -(k^2)*(digamma(k)+mu*digamma(y+mu*k)+(1-mu)*
-                                         digamma(bd+(1-mu)*k-y)-mu*digamma(mu*k)-(1-mu)*
-                                         digamma((1-mu)*k)-digamma(bd+k))
-                              d2ldd2 <- -dldd^2
-                              d2ldd2 
-                                   }, 
+               d2ldm2 = function(y,mu,sigma,bd) 
+                                     (1/(sigma)^2)*(trigamma(y+(mu/sigma))
+                                     +trigamma(bd+((1-mu)/sigma)-y)
+                                     -trigamma(mu/sigma)
+                                     -trigamma((1-mu)/sigma)),
+                 dldd = function(y,mu,sigma,bd) 
+                   {
+                          k <- 1/sigma
+                       dldd <- -(k^2)*(digamma(k)+mu*digamma(y+mu*k)+(1-mu)*
+                                digamma(bd+(1-mu)*k-y)-mu*digamma(mu*k)-(1-mu)*
+                                digamma((1-mu)*k)-digamma(bd+k))
+                  dldd 
+                    }, 
+               d2ldd2 = function(y,mu,sigma,bd) 
+                    {
+                          k <- 1/sigma
+                       dldd <- -(k^2)*(digamma(k)+mu*digamma(y+mu*k)+(1-mu)*
+                                digamma(bd+(1-mu)*k-y)-mu*digamma(mu*k)-(1-mu)*
+                                digamma((1-mu)*k)-digamma(bd+k))
+                     d2ldd2 <- -dldd^2
+                     d2ldd2 
+                    }, 
               d2ldmdd = function(y) rep(0,length(y)),
            G.dev.incr = function(y,mu,sigma,bd,...) -2*dBB(y,mu,sigma,bd, log = TRUE), 
                 rqres = expression(
@@ -54,7 +65,10 @@ BB <- function (mu.link = "logit", sigma.link = "log")
           ),
             class = c("gamlss.family","family"))
 }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
  { 
     if (any(mu < 0) | any(mu > 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
@@ -72,15 +86,20 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
                   +lgamma((1/sigma))+lgamma(x+mu*(1/sigma))
                   +lgamma(bd+((1-mu)/sigma)-x)-lgamma(mu*(1/sigma))
                   -lgamma((1-mu)/sigma)-lgamma(bd+(1/sigma)))
-        if (length(sigma)>1) logfy2 <- ifelse(sigma>0.0001, logfy, 
-                                          dBI(x, mu = mu, bd=bd, log = TRUE) )
-        else logfy2 <- if (sigma<0.0001)  dBI(x, mu = mu, bd=bd, log = TRUE) 
-                   else logfy
+        if (length(sigma)>1) 
+          logfy2 <- ifelse(sigma>0.0001, logfy, 
+                                        dBI(x, mu = mu, bd=bd, log = TRUE))
+        else logfy2 <- 
+             if (sigma<0.0001)  dBI(x, mu = mu, bd=bd, log = TRUE) 
+             else logfy
           fy <- if(log == FALSE) exp(logfy2) else logfy2
           fy <- ifelse(x < 0, 0, fy) 
           fy
   }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALSE)
   {     
     if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
@@ -108,20 +127,22 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
    #   pdfall <- dBB(allval, mu = mm, sigma = nsig, bd = nn, log = FALSE)
    #   FFF[i] <- sum(pdfall)                                             
    # }  
-   #       
        fn <- function(q, mu, sigma, bd) sum(dBB(0:q, mu=mu, sigma=sigma, bd=bd))
      Vcdf <- Vectorize(fn)
       cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)
       cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-      cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
-      if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf, 
-                                          pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p) )
+      cdf <- if(log.p==FALSE) cdf else log(cdf)                                           
+if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf, 
+                  pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p))
       else cdf2 <- if (sigma<0.0001) pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
                    else cdf
       cdf2 <- ifelse(q < 0, 0, cdf2) 
       cdf2
   }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fast = FALSE)
   {      
           if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
@@ -151,7 +172,7 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
             } 
       }           
           invcdf <- QQQ
-         if (length(sigma)>1) invcdf2 <- ifelse(sigma>0.0001, invcdf, 
+        if (length(sigma)>1) invcdf2 <- ifelse(sigma>0.0001, invcdf, 
                                           qBI(p, mu = mu, bd=bd, lower.tail=TRUE))
         else invcdf2 <- if (sigma<0.0001) qBI(p, mu = mu, bd=bd, lower.tail=TRUE)
                    else invcdf
@@ -161,7 +182,10 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
           invcdf2[p >  1] <- NaN
      return(invcdf2)    
    }
-#------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 rBB <- function(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE )
   { 
           if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
@@ -172,4 +196,7 @@ rBB <- function(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE )
           r <- qBB(p, mu=mu, sigma=sigma, bd=bd, fast=fast)
           as.integer(r)
   }
-#-------------------------------------------------------------------------------------------
+################################################################################
+################################################################################
+################################################################################
+################################################################################

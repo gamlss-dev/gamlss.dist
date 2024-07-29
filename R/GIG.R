@@ -48,7 +48,8 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
                         {
        c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))  
     dcdd <- (c*(sigma^2)*(2*nu+1)+1-c*c)/((sigma^2)*(sigma^2))
-    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
+    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+
+                             dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
     dldd <- dldd*(2*sigma)
     dldd
                          },
@@ -57,7 +58,8 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
 #     this uses the squared first derivative
         c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))  
      dcdd <- (c*(sigma^2)*(2*nu+1)+1-c*c)/((sigma^2)*(sigma^2))
-    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
+    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+
+                             dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
     dldd <- dldd*(2*sigma)
     d2ldd2 <- -dldd*dldd
    d2ldd2 <- ifelse(d2ldd2 < -1e-6, d2ldd2,-1e-6)  
@@ -82,7 +84,8 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
         c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))  
      dldm <- -nu/mu+c*y/(2*(sigma^2)*mu^2)-1/(2*(sigma^2)*c*y)
      dcdd <- (c*(sigma^2)*(2*nu+1)+1-c*c)/((sigma^2)*(sigma^2))
-    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
+     dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+
+                             dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
     dldd <- dldd*(2*sigma)
   d2ldmdd <- -dldm*dldd
   d2ldmdd
@@ -100,7 +103,8 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
                         {
        c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))   
     dcdd <- (c*(sigma^2)*(2*nu+1)+1-c*c)/((sigma^2)*(sigma^2))
-    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))+dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
+    dldd <- (1/(sigma^2))*(nu-(c/(sigma^2))+(1/(2*(sigma^2)))*((c*y/mu)+(mu/(c*y)))
+                           +dcdd*((sigma^2)*nu/c-(1/2)*((y/mu)-(mu/(c^2*y)))))    
     dldd <- dldd*(2*sigma)
       nd <- numeric.deriv(dGIG(y, mu, sigma, nu, log=TRUE), "nu", delta=0.01)
     dldv <- as.vector(attr(nd, "gradient"))
@@ -109,7 +113,8 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
                         },
           G.dev.incr  = function(y,mu,sigma,nu,...) 
                      -2*dGIG(y,mu=mu,sigma=sigma,nu=nu,log=TRUE), 
-             rqres = expression(rqres(pfun="pGIG", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu)),
+             rqres = expression(rqres(pfun="pGIG", type="Continuous", y=y,
+                                      mu=mu, sigma=sigma, nu=nu)),
         mu.initial = expression( mu <- (y+mean(y))/2), 
      sigma.initial = expression( sigma <- sd(y)/mean(y)), 
         nu.initial = expression( nu <- rep(-0.5, length(y))),  
@@ -118,25 +123,26 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
           nu.valid = function(nu) TRUE , 
            y.valid = function(y) all(y>0),
               mean = function(mu, sigma, nu) mu,
-          variance = function(mu, sigma, nu) {
-                                                t          <- 1 / sigma^2 
-                                                lambda1    <- nu + 1
-                                                lambda2    <- nu
-                                                integrand1 <- function(x) { 
-                                                  x^(lambda1-1) * exp(-0.5*t*(x+1/x)) 
-                                                }
-                                                integrand2 <- function(x) { 
-                                                  x^(lambda2-1) * exp(-0.5*t*(x+1/x)) 
-                                                }
-                                                K1     <- integrate(integrand1,0,Inf)$value*0.5
-                                                K2     <- integrate(integrand2,0,Inf)$value*0.5
-                                                
-                                                b      <- K1 / K2
-                                                
-                                                return(
-                                                       mu^2 * ( (2*sigma^2 * (nu + 1)) / b + b^(-2) - 1 )
+          variance = function(mu, sigma, nu) 
+                  {
+                                 t  <- 1 / sigma^2 
+                            lambda1 <- nu + 1
+                            lambda2 <- nu
+                         integrand1 <- function(x) 
+                                       { 
+                                      x^(lambda1-1) * exp(-0.5*t*(x+1/x)) 
+                                       }
+                         integrand2 <- function(x) 
+                                      { 
+                                     x^(lambda2-1) * exp(-0.5*t*(x+1/x)) 
+                                      }
+                                K1 <- integrate(integrand1,0,Inf)$value*0.5
+                                K2 <- integrate(integrand2,0,Inf)$value*0.5
+                                b  <- K1 / K2
+                            return(
+                         mu^2 * ( (2*sigma^2 * (nu + 1)) / b + b^(-2) - 1 )
                                                       )
-                                              }
+                    }
           ),
             class = c("gamlss.family","family"))
 }
@@ -146,12 +152,14 @@ GIG <- function (mu.link="log", sigma.link="log", nu.link ="identity")
 ################################################################################
 dGIG <- function(x, mu=1, sigma=1, nu=1,  log = FALSE)
  {
-          if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-          if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     #      if (any(x < 0))  stop(paste("x must be positive", "\n", "")) 
-               c <- exp(log(besselK(1/(sigma^2),nu+1))-log(besselK(1/(sigma^2),nu)))  
-          loglik <- nu*log(c)-nu*log(mu)+(nu-1)*log(x)-log(2)-log(besselK(1/(sigma^2),nu))-1/(2*(sigma^2))*(c*x/mu+mu/(c*x))
-          if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+               c <- exp(log(besselK(1/(sigma^2),nu+1))-
+                          log(besselK(1/(sigma^2),nu)))  
+          loglik <- nu*log(c)-nu*log(mu)+(nu-1)*log(x)-log(2)-
+                 log(besselK(1/(sigma^2),nu))-1/(2*(sigma^2))*(c*x/mu+mu/(c*x))
+  if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
           ft <-ifelse(x <= 0, 0, ft)
           ft
   }    
@@ -172,10 +180,10 @@ pGIG <- function(q, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE)
        for (i in 1:lq)
           {
         cdf[i] <- integrate(function(x) 
-                 dGIG(x, mu = 1, sigma = sigma[i], nu = nu[i]), 0.001, q[i]/mu[i] )$value #md br 7-10-11
+      dGIG(x, mu = 1, sigma = sigma[i], nu = nu[i]), 0.001, q[i]/mu[i] )$value #md br 7-10-11
           }    
-    if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
-    if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
+if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
+if(log.p==FALSE)     cdf  <- cdf else  cdf <- log(cdf) 
     cdf
  }
 ################################################################################
