@@ -1,4 +1,8 @@
 
+# Version 6.1-4
+
+- The `dPO`, `pPO` and `qPO` are updated do the length of y is equal to the length of `mu` 
+
 # Version 6.1-3
 
 * `BCT` the `BCPE` and the `BCCG` have new `d`, `p` and `q` functions
