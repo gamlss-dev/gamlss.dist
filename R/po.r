@@ -42,6 +42,9 @@ dPO<-function(x, mu = 1, log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
        #   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
+           n <- max(length(x), length(mu))
+           x <- rep_len(x, n)
+          mu <- rep_len(mu, n)
           fy <- dpois(x = x, lambda = mu, log = log)
           fy <-ifelse(x < 0, 0, fy)
           fy
@@ -55,6 +58,9 @@ pPO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
   {     
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
        #   if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
+            n <- max(length(q), length(mu))
+            q <- rep_len(q, n)
+           mu <- rep_len(mu, n)
           cdf <- ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
           cdf <-ifelse(q < 0, 0, cdf) 
           cdf
@@ -67,6 +73,9 @@ qPO <- function(p, mu = 1, lower.tail = TRUE, log.p = FALSE)
   {      
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
  #if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))
+          n <- max(length(p), length(mu))
+          p <- rep_len(p, n)
+         mu <- rep_len(mu, n)
           q <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
           q[p == 0] <- 0
           q[p == 1] <- Inf

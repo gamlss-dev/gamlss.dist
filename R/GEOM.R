@@ -90,7 +90,7 @@ structure(list(family = c("GEOM", "Geometric"),
         mu.linkfun = mstats$linkfun,
         mu.linkinv = mstats$linkinv,
         mu.dr = mstats$mu.eta,
-        dldm = function(y, mu){
+        dldm <- function(y, mu){
           dldm <- (y - mu)/(mu + (mu^2))
           dldm
         },                                             
