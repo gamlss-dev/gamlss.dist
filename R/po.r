@@ -62,7 +62,8 @@ pPO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
             q <- rep_len(q, n)
            mu <- rep_len(mu, n)
           cdf <- ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
-          cdf <-ifelse(q < 0, 0, cdf) 
+          cdf[q < 0] <- 0 
+          cdf[q > Inf] <- 1 
           cdf
    }
 ################################################################################
