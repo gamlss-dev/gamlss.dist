@@ -46,7 +46,7 @@ dPO<-function(x, mu = 1, log = FALSE)
            x <- rep_len(x, n)
           mu <- rep_len(mu, n)
           fy <- dpois(x = x, lambda = mu, log = log)
-          fy <-ifelse(x < 0, 0, fy)
+          fy[x < 0] <- 0
           fy
   }
   
@@ -76,12 +76,12 @@ if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", ""))
           n <- max(length(p), length(mu))
           p <- rep_len(p, n)
          mu <- rep_len(mu, n)
-          q <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
-          q[p == 0] <- 0
-          q[p == 1] <- Inf
-          q[p <  0] <- NaN
-          q[p >  1] <- NaN
-          return(q)  
+          qq <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+          qq[abs(p-0)<1e-15] <- 0
+          qq[abs(p-1)<1e-15] <- Inf
+          qq[p <  0] <- NaN
+          qq[p >  1] <- NaN
+          return(qq)  
    }
 ################################################################################
 ################################################################################
