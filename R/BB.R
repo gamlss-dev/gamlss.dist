@@ -76,7 +76,7 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
     if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
         sigma <- ifelse((sigma < 1e-10),1e-10,sigma)
   #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-    if (any(bd < x))  stop(paste("x  must be <=  than the binomial denominator", bd, "\n"))
+    if (any(bd < x))  warning(paste("x  must be <=  than the binomial denominator", bd, "\n"))
           ly <- max(length(x),length(mu),length(sigma),length(bd)) 
            x <- rep(x, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -105,7 +105,7 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
     if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
  #   if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
-    if (any(bd < q))  stop(paste("y  must be <=  than the binomial denominator", bd, "\n"))    
+    if (any(bd < q))  warning(paste("y  must be <=  than the binomial denominator", bd, "\n"))    
         ly <- max(length(q),length(mu),length(sigma),length(bd)) 
          q <- rep(q, length = ly)      
      sigma <- rep(sigma, length = ly)
@@ -136,7 +136,6 @@ if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf,
                   pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p))
       else cdf2 <- if (sigma<0.0001) pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
                    else cdf
-      cdf2 <- ifelse(q < 0, 0, cdf2) 
       cdf2[q<0] <- 0
       cdf2[q>bd] <- 1
       cdf2
@@ -149,8 +148,6 @@ qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fas
   {      
           if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be
-          #     between 0 and 1", "\n", "")) 
           if (log.p==TRUE) p <- exp(p) else p <- p
           if (lower.tail==TRUE) p <- p else p <- 1-p
         ly <- max(length(p),length(mu),length(sigma)) 

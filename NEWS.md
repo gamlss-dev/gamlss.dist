@@ -9,9 +9,9 @@
 
 *  the `q` functions for all distributions are updated so the limits are defined properly for example for the BEINF we have;
 
-     -- `q[p == 0] <- 0`
+     --   `q[abs(p-0)<1e-15] <- 0`
      
-     --   `q[p == 1] <- 1`
+     --   `q[abs(p-1)<1e-15] <- Inf`
      
      --   `q[p <  0] <- NaN`
      
