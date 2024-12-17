@@ -58,7 +58,6 @@ dYULE<-function (x, mu = 2, log = FALSE)
    lambda <- (mu+1)/mu
     logfx <- lbeta(lambda+1, x+1) - lbeta(lambda, 1)
     if (log==FALSE) logfx <- exp(logfx)
-    logfx <-ifelse(x < 0, 0, logfx) 
     logfx[x < 0] <- 0
     logfx
 }
@@ -85,9 +84,9 @@ pYULE<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
     else cdf = 1 - cdf
     if (log.p == TRUE) cdf <- -(lgamma(2+(1/mu))+lgamma(2+q) -
                               gamma(3+(1/mu)+q))
-    cdf[q < 0] <- 0 
-    cdf[q > 1] <- 1 
-    cdf
+       cdf[q < 0] <- 0 
+       cdf[q > Inf] <- 1 
+       cdf
 }
 ################################################################################
 ################################################################################
@@ -100,7 +99,9 @@ qYULE<-function (p, mu = 2, lower.tail = TRUE, log.p = FALSE, max.value = 10000)
     #     stop(paste("p must be in [0,1]", "\n", ""))
     if (any(mu < 0))
         stop(paste("mu must be > 0)", "\n", ""))
-
+       n <- max(length(p), length(mu))
+       p <- rep_len(p, n)
+      mu <- rep_len(mu, n)
 if (lower.tail) p <- p
 else p <- 1 - p
     ly <- max(length(p), length(mu))

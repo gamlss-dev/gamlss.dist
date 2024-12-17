@@ -59,7 +59,7 @@ dZIPF<- function(x, mu = 1, log = FALSE)
      mu <- rep(mu, length = ly)   
    logL <- -(mu+1)*log(x)-log(zetaP(mu+1)) # or zeta
     lik <- if (log) logL else exp(logL)
-    lik <-ifelse(x < 1, 0, lik) 
+    lik[x <= 0] <- 0
   as.numeric(lik)
 }
 ################################################################################
@@ -116,7 +116,8 @@ pZIPF <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
                                        1)
        }
    cdf <- ans/zetaP(mu + 1)
-   cdf <-ifelse(q < 1, 0, cdf)   
+   cdf[q <= 0] <- 0 
+   cdf[q > Inf] <- 1 
    cdf
 }
 ################################################################################
@@ -130,7 +131,11 @@ qZIPF <- function(p, mu = 1, lower.tail = TRUE, log.p = FALSE, max.value = 10000
   if (lower.tail==TRUE) p <- p else p <- 1-p    
       ly <- length(p)                                                       
      QQQ <- rep(0,ly)                         
-     nmu <- rep(mu, length = ly)                
+     nmu <- rep(mu, length = ly)     
+      ly <- max(length(p),length(mu)) 
+       p <- rep(p, length = ly)      
+      mu <- rep(mu, length = ly) 
+     
   for (i in seq(along=p))                                                          
   {
     cumpro <- 0                                                                         
