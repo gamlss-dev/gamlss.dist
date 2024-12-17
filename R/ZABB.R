@@ -89,9 +89,9 @@ dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
       logfy <- rep(0, ly)
       logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-         fy <- ifelse(x < 0, 0, fy)
-         fy
-
+      fy[x < 0] <- 0 
+      fy[x > bd] <- 0 
+      fy
   }
 ################################################################################
 ################################################################################
@@ -117,7 +117,8 @@ pZABB <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, lower.tail = TRUE,
          cdf <- ifelse(cdf>1L, 1L , cdf)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-         cdf <- ifelse(q < 0, 0, cdf) 
+         cdf[q<0] <- 0
+         cdf[q>bd] <- 1
          cdf
    }
 ################################################################################
@@ -140,7 +141,7 @@ if (lower.tail == TRUE)  p <- p  else p <- 1 - p
           q[p == 1] <- bd
           q[p <  0] <- NaN
           q[p >  1] <- NaN
-          return(q)    
+          return(q) 
    }
 ################################################################################
 ################################################################################
