@@ -79,10 +79,13 @@ qBEo <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", ""))  
          # if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
           q <- qbeta(p, shape1=mu, shape2=sigma, lower.tail=lower.tail, log.p=log.p)
-          q[p == 0] <- -Inf
-          q[p == 1] <- Inf
-          q[p <  0] <- NaN
-          q[p >  1] <- NaN
+          # q[p-0 < abs(1e-10)]  <- 0
+          # q[1-p < abs(1e-10)]  <- 1
+          # q[p <  0] <- NaN
+          # q[p >  1] <- NaN
+          q[p <= 0] <- -Inf
+          q[p >= 1] <- Inf
+   q[p < 0 | p > 1] <- NaN
           return(q)
    }
 #------------------------------------------------------------------------------------------

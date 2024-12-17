@@ -93,7 +93,7 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
              if (sigma<0.0001)  dBI(x, mu = mu, bd=bd, log = TRUE) 
              else logfy
           fy <- if(log == FALSE) exp(logfy2) else logfy2
-          fy <- ifelse(x < 0, 0, fy) 
+          fy[x < 0] <- 0 
           fy
   }
 ################################################################################
@@ -137,6 +137,8 @@ if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf,
       else cdf2 <- if (sigma<0.0001) pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
                    else cdf
       cdf2 <- ifelse(q < 0, 0, cdf2) 
+      cdf2[q<0] <- 0
+      cdf2[q>bd] <- 1
       cdf2
   }
 ################################################################################
