@@ -12,7 +12,8 @@ dGEOMo<-function (x, mu = .5, log = FALSE)
         lx <- max(length(x), length(mu))
         mu <- rep(mu, length = lx)
         fy <- dgeom(x = x, prob = mu, log = log)
-        fy <- ifelse(x < 0, 0, fy) 
+        fy[x < 0] <- 0
+        fy[x == Inf] <- 0
         fy #logfx
 }
 ################################################################################
@@ -28,7 +29,8 @@ pGEOMo<-function (q, mu = .5, lower.tail = TRUE, log.p = FALSE)
       q <- rep(q, length = ly)
      mu <- rep(mu, length = ly)
     cdf <-  pgeom(q, prob=mu, lower.tail = lower.tail, log.p =log.p)
-    cdf <- ifelse(q < 0, 0, cdf) 
+    cdf[q < 0] <- 0
+    cdf[q ==Inf] <- 1
     cdf
 }
 ################################################################################

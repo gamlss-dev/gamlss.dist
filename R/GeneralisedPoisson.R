@@ -97,7 +97,8 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
                                           dPO(x, mu = mu, log = log))
         else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = log) 
                    else Lik
-        fy <-ifelse(x < 0, 0, fy) 
+        fy[x < 0] <- 0
+        fy[x >= Inf] <- 0
         fy
 }
 ################################################################################
@@ -108,17 +109,19 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   {     
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-#      if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-      ly <- length(q)                                                       
+      ly <- max(length(q),length(mu),length(sigma)) 
+       q <- rep(q, length = ly)      
+   sigma <- rep(sigma, length = ly)   
+      mu <- rep(mu, length = ly)   
      FFF <- rep(0,ly)                         
   nsigma <- rep(sigma, length = ly)
      nmu <- rep(mu, length = ly) 
     j <- seq(along=q) 
     for (i in j)                                                          
     {                                                                 
-         y.y <- q[i]                                                   
-          mm <- nmu[i]
+         y.y <- ifelse(q[i]==Inf, 10000, q[i]) # Mikis: here we assume that mu is not very large   
+         mm <- nmu[i]
         nsig <- nsigma[i]                                                     
       allval <- seq(0,y.y)
       pdfall <- dGPO(allval, mu = mm, sigma = nsig,  log = FALSE)
@@ -134,6 +137,7 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
     else cdf <- if (sigma<0.0001)   pPO(q, mu = mu, log.p = log.p, lower.tail=lower.tail) 
     else cdf 
         cdf <-ifelse(q < 0, 0, cdf) 
+        
         cdf
    }
 ################################################################################

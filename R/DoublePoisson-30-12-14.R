@@ -167,19 +167,16 @@ dDPO <- function(x, mu = 1, sigma = 1, log = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
- # if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-  ly <- max(length(x),length(mu),length(sigma)) 
-      x <- rep(x, length = ly)      
-  sigma <- rep(sigma, length = ly)
-     mu <- rep(mu, length = ly) 
-  # maxV <- max(max(x)*3,500)
-  #y <- 0:maxV
-  #theC <- .C("dDPOgetC5_C",as.double(mu),as.double(sigma),as.integer(ly),as.integer(maxV+1),ans=double(ly))$ans
+      ly <- max(length(x),length(mu),length(sigma)) 
+       x <- rep(x, length = ly) 
+       x[x>=Inf] <- 10000 # mikis his is to prevent Inf values and assumed that mu is relative small
+   sigma <- rep(sigma, length = ly)
+      mu <- rep(mu, length = ly) 
   logofx <- ifelse(x<= 0,1,log(x))
-  lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(x+1)+x*logofx-x+
-    (x*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(x, mu, sigma)#log(theC)        
+      lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(x+1)+x*logofx-x+
+    (x*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(x, mu, sigma)        
   if(log==FALSE) fy <- exp(lh) else fy <- lh 
-   fy <-ifelse(x < 0, 0, fy) 
+   fy[x < 0] <- 0
    fy
 }
 
@@ -193,6 +190,7 @@ pDPO<-function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   #if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
       ly <- max(length(q),length(mu),length(sigma)) 
        q <- rep(q, length = ly) 
+       q[q>=Inf] <- 10000 # mikis his is to prevent Inf values and assumed that mu is relative small
       qq <- ifelse(q < 0, 0, q)
    sigma <- rep(sigma, length = ly)
       mu <- rep(mu, length = ly) 
@@ -204,7 +202,8 @@ pDPO<-function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   cdf <- num/den
   cdf <- if(lower.tail==TRUE) cdf else 1-cdf
   cdf <- if(log.p==FALSE) cdf else log(cdf) 
-  cdf <- ifelse(q < 0, 0, cdf) 
+  cdf[q < 0] <- 0 
+  cdf[q > Inf] <- 1 
   cdf
 }
 #-------------------------------------------------------------------------------

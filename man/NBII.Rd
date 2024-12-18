@@ -41,7 +41,7 @@ rNBII(n, mu = 1, sigma = 1)
 \frac{\Gamma(y+\frac{\mu}{\sigma}) \sigma^y }{\Gamma(\frac{\mu}{\sigma})\Gamma(y+1) (1+\sigma)^{y+\mu/\sigma}}}{P(Y=y|\mu,\sigma)=
 \Gamma(y+\mu/\sigma) \sigma^y / \Gamma(\mu/\sigma)\Gamma(y+1) (1+\sigma)^{y+\mu/\sigma}} 
  for \eqn{y=0,1,2,...,\infty}{y=0,1,2, ...,Inf}, \eqn{\mu>0} and \eqn{\sigma>0}. 
- This parameterization was used by Evans (1953)  and also by Johnson \emph{et al.} (1993) p 200, see also pp. 485-487  of Rigby \emph{et al}. (2019).
+ This parameterization was used by Evans (1953)  and also by Johnson \emph{et al.} (1993) p 200, see also pp. 485-487  of Rigby \emph{et al}. (2019). Note that in this parameterization \eqn{E(y)=\mu} and \eqn{Var(y)=\mu(1+\sigma\mu)}.  
 }
 \value{
   returns a \code{gamlss.family} object which can be used to fit a Negative Binomial type II distribution in the \code{gamlss()} function.   

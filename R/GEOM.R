@@ -14,8 +14,9 @@ dGEOM<-function (x, mu = 2, log = FALSE)
      mu <- rep(mu, length = lx) 
    prob <- 1/(mu+1)
      fy <- dgeom(x = x, prob = prob, log = log)
-     fy <-ifelse(x < 0, 0, fy) 
-    fy #logfx  
+     fy[x < 0] <- 0
+     fy[x == Inf] <- 0
+     fy 
 }
 ################################################################################
 ################################################################################
@@ -32,7 +33,9 @@ pGEOM<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
      mu <- rep(mu, length = ly)
    prob <- 1/(mu+1)
     cdf <-  pgeom(q, prob=prob, lower.tail = lower.tail, log.p =log.p)
-    cdf <-ifelse(q < 0, 0, cdf)
+    cdf 
+    cdf[q < 0] <- 0
+    cdf[q ==Inf] <- 1
     cdf    
     
 }

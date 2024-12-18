@@ -129,8 +129,7 @@ GetBI_C <- function(mu, sigma, bd)
 dDBI <- function(x, mu = .5, sigma = 1, bd=2,  log = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-#  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
-  if (any(bd < x))  stop(paste("x  must be <=  than the binomial denominator", bd, "\n")) 
+  if (any(bd < x))  warning(paste("x  must be <=  than the binomial denominator", bd, "\n")) 
   if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
   if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
        ly <- max(length(x),length(bd),length(mu),length(sigma)) 
@@ -146,8 +145,8 @@ logofbd_x <- ifelse(bd==x,1,log(bd-x))
                   (bd/sigma)*log(bd) + (x/sigma)*log(mu)+((bd-x)/sigma)*log(1-mu)-
                   (x/sigma)*logofx - ((bd-x)/sigma)*logofbd_x+res)
   if(log==FALSE) fy <- exp(ll) else fy <- ll 
-  fy <- ifelse(x < 0, 0, fy)      
-  fy
+fy[x < 0] <- 0 
+       fy     
 }
 #-------------------------------------------------------------------------------
 #  The p function  
@@ -157,7 +156,6 @@ pDBI<-function(q, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
- # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
      ly <- max(length(q),length(mu),length(sigma)) 
       q <- rep(q, length = ly)      
   sigma <- rep(sigma, length = ly)
@@ -168,8 +166,8 @@ pDBI<-function(q, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE)
        cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)     
        cdf <- if(lower.tail==TRUE) cdf else 1-cdf
        cdf <- if(log.p==FALSE) cdf else log(cdf)   
-       cdf <- ifelse(q < 0, 0, cdf) 
-       cdf <- ifelse(q > 0, 1, cdf) 
+  cdf[q<0] <- 0
+ cdf[q>bd] <- 1
        cdf
 }
 #-------------------------------------------------------------------------------

@@ -65,6 +65,7 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
         fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
        # fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
         fy[x < 0]  <- 0 
+        fy[x == Inf]  <- 0 
         return(fy)
   }
 #------------------------------------------------------------------------------------------
@@ -82,7 +83,8 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
                               lower.tail=lower.tail,log.p=log.p)
 #cdf[sigma<=0.0001] <-  ppois(q, lambda = mu, lower.tail = lower.tail, 
 #                              log.p = log.p)
-        cdf[q < 0] < 0
+        cdf[q < 0] <- 0
+        cdf[q == Inf] <- 1
         return(cdf)
    }
 #------------------------------------------------------------------------------------------

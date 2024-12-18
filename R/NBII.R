@@ -94,7 +94,8 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
            fy <- rep_len(0,n)        
            fy <- dnbinom(x, size=mu/sigma, mu=mu, log=log) 
   #fy[sigma<=0.0001] <-  dpois(x = x, lambda = mu, log = log)
-  fy[x < 0]  <- 0 
+           fy[x < 0]  <- 0 
+           fy[x == Inf]  <- 0 
   return(fy)  
   }
 ################################################################################
@@ -117,7 +118,8 @@ pNBII <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
         #             ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p))
         # else cdf <- if (sigma<0.0001) ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
         # else  pnbinom(q, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p)
-        cdf <-ifelse(q < 0, 0, cdf)
+           cdf[q < 0] <- 0
+           cdf[q == Inf] <- 1
         return(cdf)
    }
 ################################################################################
@@ -143,7 +145,6 @@ qNBII <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
            q[p == 1] <- Inf
            q[p <  0] <- NaN
            q[p >  1] <- NaN
-           return(q)
            return(q)
    }
 ################################################################################

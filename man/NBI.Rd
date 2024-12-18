@@ -44,7 +44,7 @@ rNBI(n, mu = 1, sigma = 1)
 \Gamma(y+1/\sigma)/\Gamma(1/\sigma) \Gamma(y+1) ((\sigma \mu)/ (1+\sigma
 \mu))^y(1/(1+\sigma \mu))^{1/\sigma}} 
  for \eqn{y=0,1,2,\ldots,\infty}{y=0,1,2, ...,Inf}, \eqn{\mu>0} and \eqn{\sigma>0}. This
-parameterization is equivalent to that used by Anscombe (1950) except he used \eqn{\alpha=1/\sigma}{alpha=1/sigma} instead of \eqn{\sigma}{sigma}, see also pp. 483-485 of Rigby \emph{et al}. (2019).
+parameterization is equivalent to that used by Anscombe (1950) except he used \eqn{\alpha=1/\sigma}{alpha=1/sigma} instead of \eqn{\sigma}{sigma}, see also pp. 483-485 of Rigby \emph{et al}. (2019). The expected value is \eqn{E(y)=\mu} and the variance  \eqn{E(y)=\mu+\sigma \mu^2}.
 }
 \value{
   returns a \code{gamlss.family} object which can be used to fit a Negative Binomial type I distribution in the \code{gamlss()} function.   

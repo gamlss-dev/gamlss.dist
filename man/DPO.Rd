@@ -35,9 +35,9 @@ get_C(x, mu, sigma)
     \item{n}{how many random values  to  generate}
 }
 \details{
- The definition for the Double Poisson distribution first introduced by Efron (1986) is:   
+ The definition for the Double Poisson distribution first introduced by Efron (1986)   [ see also Rigby et al (2019) page 480] is:   
  
- \deqn{f(y|\mu,\sigma)=\left( \frac{1}{\sigma} \right)^{1/2} e^{- \mu / \sigma} \left( \frac{e^{-y} y^{y}}{y!}\right)  \left(\frac{e \mu}{y} \right)^{y/\sigma} C}{f(y|mu,sigma)=(1/sigma)^{1/2} [(e^{-y} y^y)/y!] [(e mu)/y]^{y/sigma} C} 
+ \deqn{f(y|\mu,\sigma)= \left( \frac{1}{\sigma} \right)^{1/2} e^{- \mu / \sigma} \left( \frac{\mu}{y} \right)^{y/\sigma}  \left(\frac{e^{y/\sigma -y y^y}}{y!} \right) C(\mu, \sigma)}{f(y|mu,sigma)=(1/sigma)^{1/2} [(e^{-y} y^y)/y!] [(e mu)/y]^{y/sigma} C} 
 for \eqn{y=0,1,2,\ldots,\infty}{y=0,1,2, ...,Inf}, \eqn{\mu>0} and \eqn{\sigma>0} where \eqn{C}{C} is the constant of proportinality which is calculated numerically using the function \code{get_C}.  
 
 }
