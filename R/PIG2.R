@@ -27,38 +27,11 @@ PIG2 <- function (mu.link = "log", sigma.link = "log")
                           dldm <- (y/mu)-1+(mu-y)/sqrt(mu*mu+sigma*sigma)
                           dldm
                               },
-               # dldm = function(y, mu, sigma) {   
-               #   nd <- numeric.deriv(dPIG2(y, mu, sigma, log=TRUE), "mu", delta=0.001)
-               # dldm <- as.vector(attr(nd, "gradient"))
-               # dldm
-               #  },
-               #  d2ldv2 = function(y,mu,sigma){
-               #     nd <- numeric.deriv(dPIG2(y, mu, sigma, log=TRUE), "mu", delta=0.001)
-               #   dldm <- as.vector(attr(nd, "gradient"))
-               # d2ldm2 <- -dldm*dldm
-               # d2ldm2 <- ifelse(d2ldm2 < -1e-15, d2ldm2,-1e-15)  
-               #  d2ldv2},
                d2ldm2 = function(y,mu,sigma) {
-                          #  dldm <- (y/mu)-1+ (mu-y)/sqrt(mu*mu+sigma*sigma)
                           d2ldm2 <- -(1/mu) +  (mu*mu + sigma*sigma)^(-0.5)
                           d2ldm2 <- ifelse(d2ldm2 < -1e-15, d2ldm2,-1e-15)
                           d2ldm2
                                     },
-               #   dldd = function(y,mu,sigma) {
-               #            alpha <- 1/(((mu*mu+sigma*sigma)^0.5)-mu)
-               #            dlda <- PIG()$dldd(y,mu,alpha)
-               #            dadd <- -sigma*((mu*mu+sigma*sigma)^(-0.5))/(alpha*alpha)
-               #            dldd <- dlda*dadd
-               #            dldd          
-               #                      },
-               # d2ldd2 = function(y,mu,sigma){
-               #            alpha <- 1/(((mu*mu+sigma*sigma)^0.5)-mu)
-               #            dlda <- PIG()$dldd(y,mu,alpha)
-               #            dadd <- -sigma*((mu*mu+sigma*sigma)^(-0.5))/(alpha*alpha)
-               #            dldd <- dlda*dadd
-               #            d2ldd2 <- -dldd*dldd
-               #            d2ldd2 <- ifelse(d2ldd2 < -1e-15, d2ldd2,-1e-15)  
-               #            d2ldd2
                 dldd = function(y,mu,sigma) {                           
                   nd <- numeric.deriv(dPIG2(y, mu, sigma, log=TRUE), "sigma", delta=0.001)
                 dldd <- as.vector(attr(nd, "gradient"))
@@ -96,24 +69,27 @@ PIG2 <- function (mu.link = "log", sigma.link = "log")
 ################################################################################
 ################################################################################
 ################################################################################
-dPIG2<-function(x, mu = 0.5, sigma = 0.02 , log = FALSE)
+dPIG2<-function(x, mu = 1, sigma = 1 , log = FALSE)
  { 
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-   #       if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-          ly <- length(x)                                                                    
+  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+          ly <- max(length(x),length(mu), length(sigma)) 
+          xx <- rep(x, length = ly)      
       nsigma <- rep(sigma, length = ly)
          nmu <- rep(mu, length = ly)
+   xx[x < 0] <- 0
+xx[x == Inf] <- 10000 # 
        alpha <- 1/(((nmu*nmu+nsigma*nsigma)^0.5)-nmu)
-          fy <- dPIG(x,nmu,alpha,log=log)
-          fy <-ifelse(x < 0, 0, fy) 
+          fy <- dPIG(xx,mu=nmu,sigma=alpha,log=log)
+   fy[x < 0] <- 0
+  fy[x==Inf] <- 0
           fy
   }
 ################################################################################
 ################################################################################
 ################################################################################
 ################################################################################ 
-pPIG2 <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
+pPIG2 <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
@@ -123,14 +99,15 @@ pPIG2 <- function(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
      nmu <- rep(mu, length = lq)   
    alpha <- 1/(((nmu*nmu+nsigma*nsigma)^0.5)-nmu)
      cdf <- pPIG(q,nmu,alpha,lower.tail=lower.tail,log.p=log.p)
-     cdf <- ifelse(q < 0, 0, cdf) 
+     cdf[q < 0] <- 0
+     cdf[q == Inf] <- 1
      cdf
    }
 ################################################################################
 ################################################################################
 ################################################################################
 ################################################################################
-qPIG2 <- function(p, mu = 0.5, sigma = 0.02,  lower.tail = TRUE, log.p = FALSE, 
+qPIG2 <- function(p, mu = 1, sigma = 1,  lower.tail = TRUE, log.p = FALSE, 
                  max.value = 10000)
   {      
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
@@ -153,7 +130,7 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
 ################################################################################
 ################################################################################
 ################################################################################
-rPIG2 <- function(n, mu = 0.5, sigma = 0.02)
+rPIG2 <- function(n, mu = 1, sigma = 1)
   { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 

@@ -123,18 +123,19 @@ dPIG<-function(x, mu = 1, sigma = 1 , log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  #        if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
           ly <- max(length(x),length(mu), length(sigma)) 
-           x <- rep(x, length = ly)      
+          xx <- rep(x, length = ly)      
       nsigma <- rep(sigma, length = ly)
          nmu <- rep(mu, length = ly)
-          xx <- ifelse(x < 0, 0, x)
+          xx[x < 0] <- 0
+       xx[x == Inf] <- 10000 # 
       sumlty <- as.double(.C("tofyPIG2", as.double(xx), as.double(nmu), as.double(nsigma),
                              ans=double(ly), as.integer(length(x)), 
-                             as.integer(max(x)+1), PACKAGE="gamlss.dist")$ans)
+                             as.integer(max(xx)+1), PACKAGE="gamlss.dist")$ans)
        logfy <- -lgamma(x+1)+(1-sqrt(1+2*sigma*mu))/sigma +sumlty
           if(log==FALSE) fy <- exp(logfy) else fy <- logfy
-          fy <-ifelse(x < 0, 0, fy)
+       fy[x<0] <- 0
+       fy[x==Inf] <- 0
           fy
   }
 ################################################################################
@@ -147,17 +148,20 @@ pPIG <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   ## function to calculate the cdf
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-#  if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
-  lq <- length(q)                                                                    
-  nsigma <- rep(sigma, length = lq)
-  nmu <- rep(mu, length = lq) 
-   qq <- ifelse(q < 0, 0, q)
+        ly <- max(length(q),length(mu), length(sigma)) 
+        qq <- rep(q, length = ly)      
+    nsigma <- rep(sigma, length = ly)
+       nmu <- rep(mu, length = ly)
+   qq[q<0] <- 0
+qq[q==Inf] <- 10000 # 
   cdf <-as.double(.C("tocdf", as.double(qq), as.double(nmu), as.double(nsigma),
-           ans=double(lq), as.integer(lq), PACKAGE="gamlss.dist")$ans)
+           ans=double(ly), as.integer(ly), PACKAGE="gamlss.dist")$ans)
   if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
   if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)    
   cdf <-ifelse(q < 0, 0, cdf)
-  cdf
+   cdf[q < 0] <- 0
+cdf[q == Inf] <- 1
+          cdf
    }
 ################################################################################
 ################################################################################

@@ -46,11 +46,11 @@ qPIG(p, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE,
 rPIG(n, mu = 1, sigma = 1, max.value = 10000)
 
 PIG2(mu.link = "log", sigma.link = "log")
-dPIG2(x, mu=0.5, sigma=0.02, log = FALSE)
-pPIG2(q, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE)
-qPIG2(p, mu=0.5, sigma=0.02, lower.tail = TRUE, log.p = FALSE, 
+dPIG2(x, mu=1, sigma=1, log = FALSE)
+pPIG2(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
+qPIG2(p, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE, 
      max.value = 10000)
-rPIG2(n, mu=0.5, sigma=0.02)
+rPIG2(n, mu=1, sigma=1)
 
 ZIPIG(mu.link = "log", sigma.link = "log", nu.link = "logit")
 dZIPIG(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
@@ -88,16 +88,17 @@ rZAPIG(n, mu = 1, sigma = 1, nu = 0.3, max.value = 10000)
 \details{
  The probability function of the Poisson-inverse Gaussian distribution \code{PIG}, is given by
  
-\deqn{f(y|\mu,\sigma)=\left( \frac{2 \alpha}{\pi}^{\frac{1}{2}}\right)\frac{\mu^y e^{\frac{1}{\sigma}} K_{y-\frac{1}{2}}(\alpha)}{(\alpha \sigma)^y y!}}{f(y|mu,sigma)=(2*alpha/pi)^.5  mu^y e^(1/sigma) K(alpha)/(alpha*sigma)^y y!} 
+\deqn{f(y|\mu,\sigma)=\left( \frac{2 \alpha}{\pi} \right)^{\frac{1}{2}} \frac{\mu^y e^{\frac{1}{\sigma}} K_{y-\frac{1}{2}}(\alpha)}{(\alpha \sigma)^y y!}}{f(y|mu,sigma)=(2*alpha/pi)^.5  mu^y e^(1/sigma) K(alpha)/(alpha*sigma)^y y!} 
 where  \eqn{\alpha^2=\frac{1}{\sigma^2}+\frac{2\mu}{\sigma}}, for  \eqn{y=0,1,2,...,\infty} where   \eqn{\mu>0} and  \eqn{\sigma>0} and \eqn{
 K_{\lambda}(t)=\frac{1}{2}\int_0^{\infty} x^{\lambda-1} \exp\{-\frac{1}{2}t(x+x^{-1})\}dx} is the modified Bessel function of the third kind, see also pp. 487-489 of Rigby \emph{et al}. (2019).
-[Note that the above parameterization was used by Dean, Lawless and Willmot(1989). It is also a special case of the Sichel distribution \code{SI()} when  \eqn{\nu=-\frac{1}{2}}.]
+[Note that the above parameterization was used by Dean, Lawless and Willmot(1989). It is also a special case of the Sichel distribution \code{SI()} when  \eqn{\nu=-\frac{1}{2}}.] In this parameterization \eqn{E(y)= \mu} and \eqn{Var(y)=\mu+\sigma \mu^2}.  
+
 
 The probability function of the Poisson-inverse Gaussian distribution \code{PIG2}, see Heller, Couturier and Heritier (2018), is given by
  
-\deqn{f(y|\mu,\sigma)=\left( \frac{2 \sigma}{\pi}^{\frac{1}{2}}\right) 
-\frac{\mu^y e^{\frac{1}{\sigma}} K_{y-\frac{1}{2}}(\sigma)}{(\alpha \sigma)^y y!}}{f(y|mu,sigma)=(2*alpha/pi)^.5  mu^y e^(1/sigma) K(alpha)/(alpha*sigma)^y y!} 
-for    \eqn{y=0,1,2,...,\infty},  \eqn{\mu>0} and  \eqn{\sigma>0}  and \eqn{\alpha = \left[(\mu^2+\sigma^2)^{0.5}-\mu \right]^{-1}}, \eqn{K_{\lambda}(t)=\frac{1}{2}\int_0^{\infty} x^{\lambda-1} \exp\{-\frac{1}{2}t(x+x^{-1})\}dx} is the modified Bessel function of the third kind, see  pp. 487-489 of Rigby \emph{et al}. (2019).
+\deqn{f(y|\mu,\sigma)=\left( \frac{2 \sigma}{\pi} \right)^{\frac{1}{2}} 
+\frac{\mu^y e^{\frac{1}{\alpha}} K_{y-\frac{1}{2}}(\sigma)}{(\alpha \sigma)^y y!}}{f(y|mu,sigma)=(2*alpha/pi)^.5  mu^y e^(1/sigma) K(alpha)/(alpha*sigma)^y y!} 
+for    \eqn{y=0,1,2,...,\infty},  \eqn{\mu>0} and  \eqn{\sigma>0}  and \eqn{\alpha = \left[(\mu^2+\sigma^2)^{0.5}-\mu \right]^{-1}}, \eqn{K_{\lambda}(t)=\frac{1}{2}\int_0^{\infty} x^{\lambda-1} \exp\{-\frac{1}{2}t(x+x^{-1})\}dx} is the modified Bessel function of the third kind, see  pp. 487-489 of Rigby \emph{et al}. (2019).  In this parameterization \eqn{E(y)= \mu} and \eqn{\sigma} is a despertion parameter.  
 
 
 The  definition of the zero adjusted Poison inverse Gaussian  distribution, \code{ZAPIG} and  the the zero inflated Poison inverse Gaussian  distribution, \code{ZIPIG}, are given in p. 513 and pp. 514-515 of  of Rigby \emph{et al.} (2019), respectively.
