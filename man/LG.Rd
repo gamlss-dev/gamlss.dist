@@ -57,7 +57,7 @@ The parameterization of the logarithmic distribution in the function \code{LG} i
 \deqn{P(Y=y | \mu) = \alpha \mu^y / y}{f(y|mu) = \alpha \mu^y / y }
 where
 for \eqn{y=1,2,3,...} with \eqn{0<\mu<1} and \deqn{\alpha = - [\log(1-\mu)]^{-1}.
-}{\alpha= [log(1-\mu)]^{-1}}
+}{\alpha= [log(1-\mu)]^{-1}.} with \eqn{E(y)=\alpha \mu(1-\mu)^{-1}}
 see pp 474-475 of Rigby \emph{et al.} (2019).
 
 For  the zero adjusted logarithmic distribution \code{ZALG} which is defined 

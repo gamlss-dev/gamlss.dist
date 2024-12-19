@@ -41,12 +41,13 @@ dLG<-function(x, mu = 0.5, log = FALSE)
  { 
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be greater than 0 and less than 1", "\n", ""))
        #   if (any(x <= 0) )  stop(paste("x must be >0", "\n", ""))
-      ly <- max(length(x),length(mu)) 
-       x <- rep(x, length = ly)      
-      mu <- rep(mu, length = ly)   
+          ly <- max(length(x),length(mu)) 
+           x <- rep(x, length = ly)      
+          mu <- rep(mu, length = ly)   
        logfy <- x*log(mu)-log(x)-log(-log(1-mu))
       if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-       fy <-ifelse(x < 1, 0, fy) 
+       fy[x < 1] <- 0
+       fy[x==Inf] <- 0
        fy
   }
 ################################################################################
@@ -58,26 +59,17 @@ pLG <- function(q, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be greater than 0 and less than 1", "\n", ""))
  #  if (any(q <= 0) )  stop(paste("q must be >0", "\n", "")) 
         ly <- max(length(q),length(mu)) 
-         q <- rep(q, length = ly)      
+        qq <- rep(q, length = ly)      
         mu <- rep(mu, length = ly)   
-#       FFF <- rep(0,ly)                         
+        qq[q==Inf] <- 10000 
        nmu <- rep(mu, length = ly)                                                       
-#         j <- seq(along=q) 
-   # for (i in j)                                                          
-   #    {                                                                 
-   #      y.y <- q[i]                                                                                      
-   #       mm <- nmu[i]                                      
-   #   allval <- seq(1,y.y)
-   #   pdfall <- dLG(allval, mu = mm, log = FALSE)
-   #   FFF[i] <- sum(pdfall)                                             
-   # } 
-       fn <- function(q, mu) sum(dLG(1:q, mu=mu))
+       fn <- function(q, mu) sum(dLG(1:qq, mu=mu))
      Vcdf <- Vectorize(fn)
       cdf <- Vcdf(q=q, mu=mu)   
-#      cdf <- FFF
       cdf <- if(lower.tail==TRUE) cdf else 1-cdf
       cdf <- if(log.p==FALSE) cdf else log(cdf)    
-      cdf <-ifelse(q < 1, 0, cdf) 
+      cdf[q<1] <- 0 
+      cdf[q==Inf] <- 1
       cdf
   }
 ################################################################################
