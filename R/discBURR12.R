@@ -130,6 +130,8 @@ dDBURR12 <- function(x, mu = 5, sigma = 2, nu = 2, log = FALSE)
   prob <- Sur(x)-Sur(x+1) #(1+(x/mu)^sigma)^(-nu)-(1+((x+1)/mu)^sigma)^(-nu)
   prob <- if(log ) log(prob) else prob
   prob <- ifelse(x < 0, 0, prob) 
+  prob[x < 0] <- 0
+  prob[x == Inf] <- 0
   return(prob)
 }
 
@@ -146,12 +148,11 @@ sigma <- rep(sigma, length = ly)
    mu <- rep(mu, length = ly)   
    nu <- rep(nu, length = ly) 
   cdf <- 1 - (1+((q+1)/mu)^sigma)^(-nu) 
-#  Sur <- function(x) (1+(x/mu)^sigma)^(-nu)
-# cdf1 <- 1- Sur(q+1) 
  if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
  if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
- cdf <- ifelse(q < 0, 0, cdf)   
- cdf
+  cdf[q < 0] <- 0 
+  cdf[q == Inf] <- 1     
+  cdf
 }
 
 # qDBURR12 <- function(p, mu = 5, sigma = 2, nu = 2,  lower.tail = TRUE, log.p = FALSE) 
