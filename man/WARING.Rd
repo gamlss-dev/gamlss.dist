@@ -36,7 +36,7 @@ rWARING(n, mu = 2, sigma = 2)
 \details{
 The Waring distribution, \code{WARING},  has density,
 \deqn{f(y|\mu, \sigma)= \frac{B(y+\mu \sigma^{-1}, \sigma^{-1}+2)}{B(\mu \sigma^{-1}, \sigma^{-1}+1)}}
-for \eqn{y=0,1,2,\ldots}, \eqn{\mu>0} and \eqn{\sigma>0} see  pp. 490-492  of Rigby \emph{et al}. (2019).  
+for \eqn{y=0,1,2,\ldots}, \eqn{\mu>0} and \eqn{\sigma>0} with \eqn{E(y)=\mu}, see  pp. 490-492  of Rigby \emph{et al}. (2019).
 }
 \value{
 Returns a \code{gamlss.family} object which can be used to fit a Waring distribution in the \code{gamlss()} function.

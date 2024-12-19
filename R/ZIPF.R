@@ -92,9 +92,8 @@ pZIPF <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
     }
     ifelse(aa - 1 <= qq, ans, rep(0, length(ans)))
   }
-  #--------------------------------------------------
+################################################################################
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
- # if (any(q < 1) )  stop(paste("y must be >=0", "\n", "")) 
        ly <- max(length(q),length(mu)) 
         q <- rep(q, length = ly)      
        mu <- rep(mu, length = ly)

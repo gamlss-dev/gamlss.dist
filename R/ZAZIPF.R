@@ -56,7 +56,7 @@ ZAZIPF <- function (mu.link = "log", sigma.link = "logit")
                   },
       variance = function(mu, sigma) {
                          b <- zetaP(mu) / zetaP(mu + 1)
-                         return( ifelse(mu > 2, (1 - sigma) * (zetaP(mu - 1) / zetaP(mu + 1)) - (1 - sigma)^2 * b^2, Inf) )
+      return( ifelse(mu > 2, (1 - sigma) * (zetaP(mu - 1) / zetaP(mu + 1)) - (1 - sigma)^2 * b^2, Inf) )
                   }
           ),
             class = c("gamlss.family","family"))
@@ -77,7 +77,7 @@ dZAZIPF<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
            logfy <- rep(0, ly)
            logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dZIPF(ifelse(x==0,1,x),mu,log = TRUE))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy <-ifelse(x < 0, 0, fy)  
+          fy[x < 0] <- 0  
           fy
   }
 ################################################################################
@@ -94,12 +94,13 @@ pZAZIPF <- function(q, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
         sigma <- rep(sigma, length = ly)
            mu <- rep(mu, length = ly) 
           cdf <- rep(0,ly)
-         cdf1 <- ifelse((q==0),0,pZIPF(ifelse(q==0,1,q), mu, log.p = FALSE))
+         cdf1 <- ifelse((q==0),0, pZIPF(ifelse(q==0,1,q), mu, log.p = FALSE))
          cdf2 <- sigma + (1-sigma)*cdf1
           cdf <- ifelse((q==0),sigma,  cdf2)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-         cdf <-ifelse(q < 0, 0, cdf)
+         cdf[q <= 0] <- 0 
+         cdf[q > Inf] <- 1 
          cdf
    }
 ################################################################################

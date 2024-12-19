@@ -169,7 +169,8 @@ dBNB<-function(x, mu=1, sigma=1, nu=1, log=FALSE)
     k <- 1/nu
   logL <- lbeta(x+n, m+k)-lbeta(n,m)-lgamma(x+1)-lgamma(k)+lgamma(x+k)
   lik <- if (log) logL else exp(logL)
-  lik <- ifelse(x < 0, 0, lik)  
+  lik[x < 0] <- 0
+  lik[x == Inf] <- 0
   return(lik)
   }
 ################################################################################
@@ -183,16 +184,18 @@ pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
   if (any(nu <= 0) )  stop(paste("nu must be greater than 0 ", "\n", "")) 
  # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))
      ly <- max(length(q),length(mu),length(sigma),length(nu)) 
-      q <- rep(q, length = ly)      
+     qq <- rep(q, length = ly)      
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly)   
      nu <- rep(nu, length = ly) 
-     fn <- function(q, mu, sigma, nu) sum(dBNB(0:q, mu=mu, sigma=sigma, nu=nu))
+  qq[q==Inf] <- 1000
+     fn <- function(q, mu, sigma, nu) sum(dBNB(0:qq, mu=mu, sigma=sigma, nu=nu))
    Vcdf <- Vectorize(fn)
-    cdf <- Vcdf(q=q, mu=mu, sigma=sigma, nu=nu)
+    cdf <- Vcdf(q=qq, mu=mu, sigma=sigma, nu=nu)
     cdf <- if(lower.tail==TRUE) cdf else 1-cdf
     cdf <- if(log.p==FALSE) cdf else log(cdf)    
-    cdf <- ifelse(q < 0, 0, cdf) 
+cdf[q < 0] <- 0 
+cdf[q == Inf] <- 1     
     return(cdf)
 }
 ################################################################################

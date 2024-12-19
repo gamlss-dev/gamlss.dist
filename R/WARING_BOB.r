@@ -18,7 +18,8 @@ dWARING<-function (x, mu=2, sigma=2, log = FALSE)
      #fx <- lbeta(n+x, b+1)-lbeta(n,b)
      fx <- lbeta(x+(mu/sigma), (1/sigma)+2)-lbeta(mu/sigma,(1/sigma+1))
      fx <- if(log) fx else exp(fx) 
-     fx <-ifelse(x < 0, 0, fx) 
+     fx[x < 0] <- 0
+     fx[x == Inf] <- 0
      fx
 }
 ################################################################################
@@ -31,25 +32,23 @@ pWARING<-function (q,  mu=2, sigma=2,  lower.tail = TRUE, log.p = FALSE)
     if (any(mu < 0)) stop(paste("mu must be > 0", "\n", ""))
     if (any(sigma < 0)) stop(paste("sigma must be > 0", "\n", ""))
   #  if (any(q < 0)) stop(paste("q must be >=0", "\n", ""))
-     ly <- max(length(q), length(mu), length(sigma))
-      q <- rep(q, length = ly)
-      p <- rep(0, length = ly)
-     mu <- rep(mu, length = ly)
-  sigma <- rep(sigma, length = ly)
-    #s1<- seq(0, max(q))
-    #cdf<- cumsum(dWARING(s1, mu=mu, sigma=sigma))
-    #s2<-match(q,s1,nomatch=0)
-    #cdf<- cdf[s2]
-     fn <- function(q, mu, sigma) sum(dWARING(0:q, mu=mu, sigma=sigma))
+        ly <- max(length(q), length(mu), length(sigma))
+        qq <- rep(q, length = ly)
+qq[q==Inf] <- 1000
+         p <- rep(0, length = ly)
+        mu <- rep(mu, length = ly)
+     sigma <- rep(sigma, length = ly)
+     fn <- function(q, mu, sigma) sum(dWARING(0:qq, mu=mu, sigma=sigma))
    Vcdf <- Vectorize(fn)
-    cdf <- Vcdf(q=q, mu=mu, sigma=sigma)
+    cdf <- Vcdf(q=qq, mu=mu, sigma=sigma)
     # cdf <- 1- ((gamma((1+mu+sigma)/sigma)*gamma(1+(mu/sigma)+q))/
     #       (gamma(mu/sigma)*gamma(2+((1+mu)/sigma)+q)))
     if (lower.tail == TRUE) 
         cdf <- cdf
     else cdf = 1 - cdf
-    cdf <-ifelse(q < 0, 0, cdf)
     if (log.p==TRUE) cdf <- log(cdf)
+    cdf[q < 0] <- 0 
+    cdf[q == Inf] <- 1   
     cdf
 }
 ################################################################################

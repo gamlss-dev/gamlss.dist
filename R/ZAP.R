@@ -71,7 +71,8 @@ dZAP<-function(x, mu = 5, sigma = 0.1, log = FALSE)
           logfy <- rep(0, ly)
           logfy <- ifelse((x==0), log(sigma), log(1-sigma) + dPO(x,mu,log=T) - log(1-dPO(0,mu)) )          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy <-ifelse(x < 0, 0, fy) 
+          fy[x < 0] <- 0
+          fy[x == Inf] <- 0
           fy
   }
 ################################################################################
@@ -94,7 +95,8 @@ pZAP <- function(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
           cdf <- ifelse((q==0),sigma,  cdf3)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-         cdf <-ifelse(q < 0, 0, cdf)   
+  cdf[q < 0] <- 0 
+cdf[q > Inf] <- 1 
          cdf
    }
 ################################################################################
