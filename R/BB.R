@@ -74,25 +74,21 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
     if (any(mu < 0) | any(mu > 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
     if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
-        sigma <- ifelse((sigma < 1e-10),1e-10,sigma)
-    if (any(bd < x))  warning(paste("x  must be <=  than the binomial denominator", bd, "\n"))
           ly <- max(length(x),length(mu),length(sigma),length(bd)) 
-           x <- rep(x, length = ly)      
+          xx <- rep(x, length = ly) 
+    xx[x>bd] <- 0
        sigma <- rep(sigma, length = ly)
+ sigma[sigma < 1e-10] <- 1e-10 
           mu <- rep(mu, length = ly)   
           bd <- rep(bd, length = ly) 
-       logfy <-  (lgamma(bd+1)-lgamma(x+1)-lgamma(bd-x+1)
-                  +lgamma((1/sigma))+lgamma(x+mu*(1/sigma))
-                  +lgamma(bd+((1-mu)/sigma)-x)-lgamma(mu*(1/sigma))
+       logfy <-  (lgamma(bd+1)-lgamma(xx+1)-lgamma(bd-xx+1)
+                  +lgamma((1/sigma))+lgamma(xx+mu*(1/sigma))
+                  +lgamma(bd+((1-mu)/sigma)-xx)-lgamma(mu*(1/sigma))
                   -lgamma((1-mu)/sigma)-lgamma(bd+(1/sigma)))
-        if (length(sigma)>1) 
-          logfy2 <- ifelse(sigma>0.0001, logfy, 
-                                        dBI(x, mu = mu, bd=bd, log = TRUE))
-        else logfy2 <- 
-             if (sigma<0.0001)  dBI(x, mu = mu, bd=bd, log = TRUE) 
-             else logfy
-          fy <- if(log == FALSE) exp(logfy2) else logfy2
-          fy[x < 0] <- 0 
+logfy[sigma<0.0001]  <- dBI(xx, mu = mu, bd=bd, log = TRUE)
+         fy <- if(log == FALSE) exp(logfy) else logfy
+  fy[x < 0] <- 0 
+fy[x >= bd] <- 0 
           fy
   }
 ################################################################################
@@ -103,40 +99,21 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
   {     
     if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-    if (any(bd < q))  warning(paste("y  must be <=  than the binomial denominator", bd, "\n"))    
         ly <- max(length(q),length(mu),length(sigma),length(bd)) 
-         q <- rep(q, length = ly)      
+        qq <- rep(q, length = ly)
+ qq[q>bd] <- 0
      sigma <- rep(sigma, length = ly)
-        mu <- rep(mu, length = ly)   
-        bd <- rep(bd, length = ly)   
-      # ly <- length(q)                                                       
-   #     FFF <- rep(0,ly)                         
-   #  nsigma <- rep(sigma, length = ly)
-   #     nmu <- rep(mu, length = ly) 
-   #     nbd <- rep(bd, length = ly)                                                         
-   #       j <- seq(along=q) 
-   # for (i in j)                                                          
-   #    {                                                                 
-   #      y.y <- q[i]                                                   
-   #       nn <- nbd[i]                                                  
-   #       mm <- nmu[i]
-   #     nsig <- nsigma[i]                                                     
-   #   allval <- seq(0,y.y)
-   #   pdfall <- dBB(allval, mu = mm, sigma = nsig, bd = nn, log = FALSE)
-   #   FFF[i] <- sum(pdfall)                                             
-   # }  
+       mu <- rep(mu, length = ly)   
+       bd <- rep(bd, length = ly)   
        fn <- function(q, mu, sigma, bd) sum(dBB(0:q, mu=mu, sigma=sigma, bd=bd))
      Vcdf <- Vectorize(fn)
       cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)
       cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-      cdf <- if(log.p==FALSE) cdf else log(cdf)                                           
-if (length(sigma)>1) cdf2 <- ifelse(sigma>0.0001, cdf, 
-                  pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p))
-      else cdf2 <- if (sigma<0.0001) pBI(q, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
-                   else cdf
-      cdf2[q<0] <- 0
-      cdf2[q>bd] <- 1
-      cdf2
+      cdf <- if(log.p==FALSE) cdf else log(cdf) 
+cdf[sigma>0.0001] <- pBI(qq, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
+      cdf[q<0] <- 0
+      cdf[q>=bd] <- 1
+      cdf
   }
 ################################################################################
 ################################################################################
