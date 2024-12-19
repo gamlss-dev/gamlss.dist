@@ -62,7 +62,6 @@ pLG <- function(q, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
         qq <- rep(q, length = ly)      
         mu <- rep(mu, length = ly)   
         qq[q==Inf] <- 10000 
-       nmu <- rep(mu, length = ly)                                                       
        fn <- function(q, mu) sum(dLG(1:qq, mu=mu))
      Vcdf <- Vectorize(fn)
       cdf <- Vcdf(q=q, mu=mu)   
