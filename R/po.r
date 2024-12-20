@@ -41,7 +41,6 @@ PO <- function (mu.link = "log")
 dPO<-function(x, mu = 1, log = FALSE)
  { 
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-       #   if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
            n <- max(length(x), length(mu))
            x <- rep_len(x, n)
           mu <- rep_len(mu, n)
@@ -49,7 +48,6 @@ dPO<-function(x, mu = 1, log = FALSE)
           fy[x < 0] <- 0
           fy
   }
-  
 ################################################################################
 ################################################################################
 ################################################################################
@@ -63,7 +61,7 @@ pPO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
            mu <- rep_len(mu, n)
           cdf <- ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
           cdf[q < 0] <- 0 
-          cdf[q > Inf] <- 1 
+          cdf[q >= Inf] <- 1 
           cdf
    }
 ################################################################################
@@ -77,7 +75,8 @@ if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", ""))
           n <- max(length(p), length(mu))
           p <- rep_len(p, n)
          mu <- rep_len(mu, n)
-          qq <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+         qq <- rep(0,n)
+qq[!((p< 0)&(p >  1))] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
           qq[abs(p-0)<1e-15] <- 0
           qq[abs(p-1)<1e-15] <- Inf
           qq[p <  0] <- NaN

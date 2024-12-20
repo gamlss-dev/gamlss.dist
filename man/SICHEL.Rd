@@ -94,6 +94,8 @@ for \eqn{y=0,1,2,...,\infty}{y=0,1,2,...},   \eqn{\mu>0}{mu>0} , \eqn{\sigma>0}{
 \deqn{c=K_{\nu+1}(1/\sigma) / K_{\nu}(1/\sigma)}{c=K_{\nu+1} (1/\sigma)/K_{\nu}(1/\sigma)}
 and \eqn{K_{\lambda}(t)}{K_{lambda}(t)} 
 is the modified Bessel function of the third kind see pp 508-510 of Rigby \emph{et al.} (2019).
+The expected value in this parametrization is \eqn{\mu}. i.e.\eqn{ E(y)=\mu}.
+
 Note that the above parametrization is different from Stein, Zucchini and Juritz (1988) who use the above probability function 
 but treat
 \eqn{\mu}{mu}, \eqn{\alpha}{alpha}  and \eqn{\nu}{nu} as the parameters. 
@@ -131,9 +133,7 @@ Estimation of the Sichel Distribution and its Multivariate Extension.
 (see also \url{https://www.gamlss.com/}).
 }
 \author{Rigby, R. A.,  Stasinopoulos D. M.,  Akantziliotou C and Marco Enea. }
-\note{The mean of the above Sichel distribution is \eqn{\mu}{mu} and the variance is 
-\eqn{\mu^2 \left[\frac{2\sigma (\nu+1)}{c} + \frac{1}{c^2}-1\right]}{mu^2 *( 2*sigma*(nu+1)/c + (1/c^2)-1 )}
-}  
+
  
 
 \seealso{ \code{\link{gamlss.family}}, \code{\link{PIG}} , \code{\link{SI}}}
