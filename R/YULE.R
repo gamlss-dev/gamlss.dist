@@ -69,23 +69,24 @@ dYULE<-function (x, mu = 2, log = FALSE)
 pYULE<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
 {
     if (any(mu < 0)) stop(paste("mu must be > 0", "\n", ""))
-       ly <- max(length(q), length(mu))
-        q <- rep(q, length = ly)
-       mu <- rep(mu, length = ly)
-     # cdf1 <- 1-((gamma(2+(1/mu))*gamma(2+q))/gamma(3+(1/mu)+q))
-       fn <- function(q, mu) 
+        ly <- max(length(q), length(mu))
+        qq <- rep(q, length = ly)
+        mu <- rep(mu, length = ly)
+     #cdf1 <- 1-((gamma(2+(1/mu))*gamma(2+q))/gamma(3+(1/mu)+q))
+qq[q==Inf] <- 1 
+        fn <- function(q, mu) 
          {
-         ifelse(q==Inf, 1, sum(dYULE(0:q, mu=mu)))
+       sum(dYULE(0:q, mu=mu))
          }
        Vcdf <- Vectorize(fn)
-       cdf <- Vcdf(q=q, mu=mu)  
+       cdf <- Vcdf(q=qq, mu=mu)  
     if (lower.tail == TRUE) 
         cdf <- cdf
     else cdf = 1 - cdf
     if (log.p == TRUE) cdf <- -(lgamma(2+(1/mu))+lgamma(2+q) -
                               gamma(3+(1/mu)+q))
        cdf[q < 0] <- 0 
-       cdf[q > Inf] <- 1 
+       cdf[q >= Inf] <- 1 
        cdf
 }
 ################################################################################
