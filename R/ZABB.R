@@ -80,14 +80,16 @@ dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))
    #       if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
-         ly <- max(length(x),length(mu),length(sigma),length(bd) ) 
-          x <- rep(x, length = ly)      
-      sigma <- rep(sigma, length = ly)
-         mu <- rep(mu, length = ly) 
-         nu <- rep(nu, length = ly)
-         bd <- rep(bd, length = ly)  
-      logfy <- rep(0, ly)
-      logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
+          ly <- max(length(x),length(mu),length(sigma),length(bd) ) 
+           x <- rep(x, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly) 
+          nu <- rep(nu, length = ly)
+          bd <- rep(bd, length = ly)  
+       logfy <- rep(0, ly)
+logfy[x==0] <-  log(nu)
+logfy[x!=0] <-  log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd))
+#      logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
       fy[x < 0] <- 0 
       fy[x > bd] <- 0 
@@ -112,9 +114,13 @@ pZABB <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, lower.tail = TRUE,
          cdf <- rep(0,ly)
         cdf1 <- pBB(q, mu, sigma, bd, lower.tail = TRUE, log.p = FALSE)
         cdf2 <- pBB(0, mu, sigma, bd, lower.tail = TRUE, log.p = FALSE)
-        cdf3 <- nu+((1-nu)*(cdf1-cdf2)/(1-cdf2))
-         cdf <- ifelse((q==0), nu,  cdf3)
-         cdf <- ifelse(cdf>1L, 1L , cdf)
+       cdf3 <- nu+((1-nu)*(cdf1-cdf2)/(1-cdf2))
+cdf[q==0]  <-  nu
+cdf[q!=0]  <-  cdf3               
+#      cdf <- ifelse((q==0), nu,  cdf3)
+#         cdf <- ifelse(cdf>1L, 1L , cdf)
+cdf[cdf>1L]  <-  1L
+cdf[cdf<=1L]  <-  cdf3          
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
          cdf[q<0] <- 0
