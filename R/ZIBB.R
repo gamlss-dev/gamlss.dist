@@ -110,7 +110,9 @@ dZIBB<-function(x, mu = 0.5, sigma = 0.5, nu = 0.1, bd = 1, log = FALSE)
              nu <- rep(nu, length = ly)   
              bd <- rep(bd, length = ly) 
           logfy <- rep(0, ly)
-          logfy <- ifelse((x==0), log(nu+(1-nu)*dBB(0,mu,sigma,bd)), (log(1-nu) + dBB(x,mu,sigma,bd,log=T) ))
+    logfy[x==0] <- log(nu+(1-nu)*dBB(0,mu,sigma,bd))
+    logfy[x!=0] <- log(1-nu) + dBB(x,mu,sigma,bd,log=T)
+#          logfy <- ifelse((x==0), log(nu+(1-nu)*dBB(0,mu,sigma,bd)), (log(1-nu) + dBB(x,mu,sigma,bd,log=T) ))
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0 
           fy[x > bd] <- 0 
