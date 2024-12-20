@@ -55,11 +55,13 @@ dZIPF<- function(x, mu = 1, log = FALSE)
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
  # if (any(x < 1) )  stop(paste("x must be >=1", "\n", ""))
      ly <- max(length(x),length(mu)) 
-      x <- rep(x, length = ly)      
+      xx <- rep(x, length = ly)
+xx[x <= 0] <- 1  
      mu <- rep(mu, length = ly)   
-   logL <- -(mu+1)*log(x)-log(zetaP(mu+1)) # or zeta
+   logL <- -(mu+1)*log(xx)-log(zetaP(mu+1)) # or zeta
     lik <- if (log) logL else exp(logL)
     lik[x <= 0] <- 0
+    lik[x==Inf] <-0
   as.numeric(lik)
 }
 ################################################################################

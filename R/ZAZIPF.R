@@ -75,9 +75,12 @@ dZAZIPF<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
            sigma <- rep(sigma, length = ly)
               mu <- rep(mu, length = ly)
            logfy <- rep(0, ly)
-           logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dZIPF(ifelse(x==0,1,x),mu,log = TRUE))      
+           logfy[x==0] <- log(sigma)
+           logfy[x!=0] <- log(1-sigma)+dZIPF(ifelse(x==0,1,x),mu,log = TRUE)
+         #  logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dZIPF(ifelse(x==0,1,x),mu,log = TRUE))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0  
+         fy[x==Inf] <- 0
           fy
   }
 ################################################################################
