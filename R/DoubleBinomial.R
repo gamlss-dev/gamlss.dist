@@ -129,23 +129,33 @@ GetBI_C <- function(mu, sigma, bd)
 dDBI <- function(x, mu = .5, sigma = 1, bd=2,  log = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-  if (any(bd < x))  warning(paste("x  must be <=  than the binomial denominator", bd, "\n")) 
+ # if (any(bd < x))  warning(paste("x  must be <=  than the binomial denominator", bd, "\n")) 
   if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
   if (any(sigma < 1e-10)) warning(" values of sigma in BB less that 1e-10 are set to 1e-10" )
        ly <- max(length(x),length(bd),length(mu),length(sigma)) 
-        x <- rep(x, length = ly)
+       ll <- rep(0, length = ly)
+   logofx <- rep(1, length = ly)
+logofbd_x <- rep(1, length = ly)  
+       xx <- rep(x, length = ly)
+       xx[x<0 | x>bd] <- 1
        bd <- rep(bd, length = ly)
     sigma <- rep(sigma, length = ly)
        mu <- rep(mu, length = ly) 
-   logofx <- ifelse(x==0,1,log(x))
-logofbd_x <- ifelse(bd==x,1,log(bd-x))
-      res <- GetBI_C(mu,sigma,bd)# res=-log(C)=1/log(C)
-       ll <- ifelse((abs(sigma-1) < 0.001), dbinom(x, size = bd, prob = mu, log = TRUE),
-                  lchoose(bd,x)+x*logofx+(bd-x)*logofbd_x-bd*log(bd)+
-                  (bd/sigma)*log(bd) + (x/sigma)*log(mu)+((bd-x)/sigma)*log(1-mu)-
-                  (x/sigma)*logofx - ((bd-x)/sigma)*logofbd_x+res)
+logofx[xx!=0] <- log(xx)[xx!=0]
+#   logofx <- ifelse(xx==0,1,log(xx))
+logofbd_x[bd<xx] <-  log(bd-xx) 
+#logofbd_x <- ifelse(bd==xx,1,log(bd-xx))
+      res <- GetBI_C(mu,sigma,bd)
+       
+ll[abs(sigma-1) >= 0.001] <-  lchoose(bd,xx)+xx*logofx+(bd-xx)*logofbd_x-bd*log(bd)+
+                              (bd/sigma)*log(bd) + (xx/sigma)*log(mu)+((bd-xx)/sigma)*log(1-mu)-
+                              (xx/sigma)*logofx - ((bd-xx)/sigma)*logofbd_x+res
+ll[abs(sigma-1) < 0.001] <-dbinom(xx, size = bd, prob = mu, log = TRUE)
+     #  ll <- ifelse((abs(sigma-1) < 0.001), ,
+                  
   if(log==FALSE) fy <- exp(ll) else fy <- ll 
 fy[x < 0] <- 0 
+fy[x >bd] <- 0 
        fy     
 }
 #-------------------------------------------------------------------------------

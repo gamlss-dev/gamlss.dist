@@ -72,8 +72,9 @@ dZIBI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
              mu <- rep(mu, length = ly)   
              bd <- rep(bd, length = ly) 
           logfy <- rep(0, length(x))
-          logfy <- ifelse((x==0), log(sigma+(1-sigma)*dBI(0,bd,mu)), (log(1-sigma) + dBI(x,bd,mu,log=T) ))  
-          if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+    logfy[x==0] <- log(sigma+(1-sigma)*dBI(0,bd,mu))
+    logfy[x!=0] <- log(1-sigma) + dBI(x, bd, mu, log=T)
+  if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0 
          fy[x > bd] <- 0 
           fy
