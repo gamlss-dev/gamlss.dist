@@ -167,19 +167,20 @@ dDPO <- function(x, mu = 1, sigma = 1, log = FALSE)
 { 
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-      ly <- max(length(x),length(mu),length(sigma)) 
-       x <- rep(x, length = ly) 
-       x[x>=Inf] <- 10000 # mikis his is to prevent Inf values and assumed that mu is relative small
-   sigma <- rep(sigma, length = ly)
-      mu <- rep(mu, length = ly) 
-  logofx <- ifelse(x<= 0,1,log(x))
-      lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(x+1)+x*logofx-x+
-    (x*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(x, mu, sigma)        
+        ly <- max(length(x),length(mu),length(sigma)) 
+        xx <- rep(x, length = ly) 
+xx[x>=Inf] <- xx[x<0] <-1 # mikis his is to prevent Inf values 
+     sigma <- rep(sigma, length = ly)
+        mu <- rep(mu, length = ly)
+    logofx <- rep(1,length(ly))  
+logofx[x > 0] <- log(xx)
+      lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(xx+1)+xx*logofx-xx+
+    (xx*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(xx, mu, sigma)        
   if(log==FALSE) fy <- exp(lh) else fy <- lh 
-   fy[x < 0] <- 0
+    fy[x < 0] <- 0
+fy[ x >= Inf] <- 0
    fy
 }
-
 #-------------------------------------------------------------------------------
 #  The p function  
 #-------------------------------------------------------------------------------
@@ -188,13 +189,13 @@ pDPO<-function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
   #if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
-      ly <- max(length(q),length(mu),length(sigma)) 
-       q <- rep(q, length = ly) 
-       q[q>=Inf] <- 10000 # mikis his is to prevent Inf values and assumed that mu is relative small
-      qq <- ifelse(q < 0, 0, q)
+        ly <- max(length(q),length(mu),length(sigma)) 
+        qq <- rep(q, length = ly) 
+qq[q>=Inf] <- 1 # mikis his is to prevent Inf values 
+      qq[q < 0] <- 0
    sigma <- rep(sigma, length = ly)
       mu <- rep(mu, length = ly) 
-    maxV <- max(max(q)*3,500)
+    maxV <- max(max(qq)*3,500)
   #y <- 0:maxV
   den <- unlist(lapply(1:ly,function(x)
          .C("dDPOgetC5_C",as.double(mu[x]),as.double(sigma[x]),as.integer(1), as.integer(qq[x]+1),ans=double(1 ))$ans))
@@ -203,7 +204,7 @@ pDPO<-function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   cdf <- if(lower.tail==TRUE) cdf else 1-cdf
   cdf <- if(log.p==FALSE) cdf else log(cdf) 
   cdf[q < 0] <- 0 
-  cdf[q > Inf] <- 1 
+  cdf[q >= Inf] <- 1 
   cdf
 }
 #-------------------------------------------------------------------------------
