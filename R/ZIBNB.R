@@ -180,7 +180,9 @@ dZIBNB<-function(x, mu=1, sigma=1, nu=1, tau=0.1, log=FALSE)
   nu <- rep(nu, length = ly) 
   fy <- dBNB(x, mu = mu, sigma=sigma, nu=nu, log = T)
   logfy <- rep(0, length(x))
-  logfy <- ifelse((x==0), log(tau+(1-tau)*exp(fy)), (log(1-tau) + fy ))          
+  logfy[x==0]  <- log(tau+(1-tau)*exp(fy))
+  logfy[x!=0]  <- log(1-tau) + fy 
+  #logfy <- ifelse((x==0), log(tau+(1-tau)*exp(fy)), (log(1-tau) + fy ))          
   if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
   fy2[x < 0] <- 0
   fy2[x == Inf] <- 0
@@ -200,7 +202,7 @@ pZIBNB <- function(q, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
 #  if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
   ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
   qq <- rep(q, length = ly)
-  qq[q==Inf] <- 1000
+  qq[q==Inf] <- 1
   sigma <- rep(sigma, length = ly)
   mu <- rep(mu, length = ly)   
   nu <- rep(nu, length = ly) 
@@ -218,22 +220,23 @@ pZIBNB <- function(q, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
 ################################################################################
 qZIBNB <- function(p, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = FALSE,  
                    max.value = 10000)
-{      
-  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
-  if (any(tau <= 0)|any(tau >= 1))
-    stop(paste("tau must be between 0 and 1 ", "\n", ""))
- # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", ""))
-  if (log.p == TRUE) p <- exp(p)   else p <- p
-  if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-  ly <- max(length(p),length(mu),length(sigma),length(nu),length(tau)) 
-  p <- rep(p, length = ly)      
-  sigma <- rep(sigma, length = ly)
-  mu <- rep(mu, length = ly)   
-  nu <- rep(nu, length = ly) 
+{   
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
+if (any(tau <= 0)|any(tau >= 1))
+                   stop(paste("tau must be between 0 and 1 ", "\n", ""))
+if (log.p == TRUE) p <- exp(p)   else p <- p
+if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+   ly <- max(length(p),length(mu),length(sigma),length(nu),length(tau)) 
+    p <- rep(p, length = ly)      
+sigma <- rep(sigma, length = ly)
+   mu <- rep(mu, length = ly)   
+   nu <- rep(nu, length = ly) 
   tau <- rep(tau, length = ly)
-  pnew <- (p-tau)/(1-tau)-(1e-7)# added 28-2-17
-  pnew <- ifelse((pnew > 0 ),pnew, 0)
+ pnew <- (p-tau)/(1-tau)
+ pnew[pnew > 0] <- pnew
+ pnew[pnew < 0] <- 0
+ #pnew <- ifelse((pnew > 0 ),pnew, 0)
   q <- qBNB(pnew, mu = mu, sigma=sigma, nu, , max.value = max.value)           
   q[p == 0] <- 0
   q[p == 1] <- Inf
