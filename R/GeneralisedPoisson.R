@@ -85,21 +85,16 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
  { 
         if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-    #    if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))
         ly <- max(length(x),length(mu),length(sigma)) 
          x <- rep(x, length = ly)      
      sigma <- rep(sigma, length = ly)
         mu <- rep(mu, length = ly)   
-        logL <- x*log(mu/(1+sigma*mu))+(x-1)*log(1+sigma*x)+(-mu*(1+sigma*x))/(1+sigma*mu)-lgamma(x+1)
-        Lik <- if (log) logL else exp(logL)
-        if (length(sigma)>1) fy <- ifelse(sigma>0.0000001, 
-                                          Lik, 
-                                          dPO(x, mu = mu, log = log))
-        else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = log) 
-                   else Lik
-        fy[x < 0] <- 0
-        fy[x >= Inf] <- 0
-        fy
+      logL <- x*log(mu/(1+sigma*mu))+(x-1)*log(1+sigma*x)+(-mu*(1+sigma*x))/(1+sigma*mu)-lgamma(x+1)
+logL[sigma>0.000001]  <- dPO(x, mu = mu, log = TRUE)   # if sigma too small Poisson 
+          Lik <- if (log) logL else exp(logL)
+   Lik[x < 0] <- 0
+Lik[x >= Inf] <- 0
+        Lik
 }
 ################################################################################
 ################################################################################
@@ -111,33 +106,29 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
       ly <- max(length(q),length(mu),length(sigma)) 
-       q <- rep(q, length = ly)      
+      qq <- rep(q, length = ly)      
    sigma <- rep(sigma, length = ly)   
       mu <- rep(mu, length = ly)   
      FFF <- rep(0,ly)                         
   nsigma <- rep(sigma, length = ly)
      nmu <- rep(mu, length = ly) 
-    j <- seq(along=q) 
-    for (i in j)                                                          
-    {                                                                 
-         y.y <- ifelse(q[i]==Inf, 10000, q[i]) # Mikis: here we assume that mu is not very large   
-         mm <- nmu[i]
-        nsig <- nsigma[i]                                                     
-      allval <- seq(0,y.y)
-      pdfall <- dGPO(allval, mu = mm, sigma = nsig,  log = FALSE)
-      FFF[i] <- sum(pdfall)                                             
+     
+    for (i in seq(along=qq))                                                          
+    {   
+            y.y <- qq[i]
+y.y[qq[i]==Inf] <- 1      
+             mm <- nmu[i]
+           nsig <- nsigma[i]                                                     
+         allval <- seq(0,y.y)
+         pdfall <- dGPO(allval, mu = mm, sigma = nsig,  log = FALSE)
+         FFF[i] <- sum(pdfall)                                             
     }  
     cdf <- FFF
-    cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-    cdf <- if(log.p==FALSE) cdf else log(cdf)                                                                    
-  #  cdf
-  if (length(sigma)>1) cdf <- ifelse(sigma>0.0001, 
-                                     cdf, 
-                                    pPO(q, mu = mu, log.p = log.p, lower.tail=lower.tail))
-    else cdf <- if (sigma<0.0001)   pPO(q, mu = mu, log.p = log.p, lower.tail=lower.tail) 
-    else cdf 
-        cdf <-ifelse(q < 0, 0, cdf) 
-        
+cdf[sigma<0.0001]  <- pPO(q, mu = mu, log.p = TRUE)
+       cdf[q<0] <- 0
+    cdf[q>=Inf] <- 1 
+            cdf <- if(lower.tail==TRUE) cdf else 1-cdf
+            cdf <- if(log.p==FALSE) cdf else log(cdf)                                                             
         cdf
    }
 ################################################################################
