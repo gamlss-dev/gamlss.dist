@@ -178,7 +178,8 @@ dZIBNB<-function(x, mu=1, sigma=1, nu=1, tau=0.1, log=FALSE)
   sigma <- rep(sigma, length = ly)
   mu <- rep(mu, length = ly)   
   nu <- rep(nu, length = ly) 
-  fy <- dBNB(x, mu = mu, sigma=sigma, nu=nu, log = T)
+  fy <-   rep(0, length = ly) 
+  fy <- dBNB(x, mu = mu, sigma=sigma, nu=nu, log = TRUE)
   logfy <- rep(0, length(x))
   logfy[x==0]  <- log(tau+(1-tau)*exp(fy))
   logfy[x!=0]  <- log(1-tau) + fy 
@@ -201,7 +202,7 @@ pZIBNB <- function(q, mu=1, sigma=1, nu=1, tau=0.1, lower.tail = TRUE, log.p = F
     stop(paste("tau must be between 0 and 1 ", "\n", ""))
 #  if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
   ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
-  qq <- rep(q, length = ly)
+  qq <- q <- rep(q, length = ly)
   qq[q==Inf] <- 1
   sigma <- rep(sigma, length = ly)
   mu <- rep(mu, length = ly)   
