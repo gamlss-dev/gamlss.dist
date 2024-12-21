@@ -181,16 +181,22 @@ dZISICHEL<-function(x, mu=1, sigma=1, nu=-0.5, tau=0.1, log=FALSE)
    if (any(tau <= 0)|any(tau >= 1))  stop(paste("tau must be between 0 and 1 ", "\n", ""))
  #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
        ly <- max(length(x),length(mu),length(sigma),length(nu),length(tau)) 
-        x <- rep(x, length = ly)      
+       xx <- x <- rep(x, length = ly)
+       xx[x<0] <- 0
+       xx[x>=Inf] <- 0
     sigma <- rep(sigma, length = ly)
        mu <- rep(mu, length = ly)   
        nu <- rep(nu, length = ly) 
       tau <- rep(tau, length = ly) 
-       fy <- dSICHEL(x, mu = mu, sigma=sigma, nu=nu, log = T)
+       fy <- dSICHEL(xx, mu = mu, sigma=sigma, nu=nu, log = T)
     logfy <- rep(0, length(x))
-    logfy <- ifelse((x==0), log(tau+(1-tau)*exp(fy)), (log(1-tau) + fy ))          
+    logfy[x==0]  <- log(tau+(1-tau)*exp(fy))
+    logfy[x!=0] < log(1-tau) + fy
+   # logfy <- ifelse((x==0), log(tau+(1-tau)*exp(fy)), (log(1-tau) + fy ))          
   if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
-  fy2 <- ifelse(x < 0, 0, fy2)   
+    fy2[x < 0] <- 0
+    fy2[x == Inf] <- 0  
+ #fy2 <- ifelse(x < 0, 0, fy2)   
   fy2  
   }
 ################################################################################
@@ -206,16 +212,20 @@ pZISICHEL <- function(q, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE, log
     stop(paste("tau must be between 0 and 1 ", "\n", ""))
 #  if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
     ly <- max(length(q),length(mu),length(sigma),length(nu),length(tau)) 
-     q <- rep(q, length = ly)      
+    # qq <- rep(q, length = ly) 
+     qq <- q <- rep(q, length = ly)
+     qq[q<0] <- 0
+     qq[q>=Inf] <- 0
  sigma <- rep(sigma, length = ly)
     mu <- rep(mu, length = ly)   
     nu <- rep(nu, length = ly) 
    tau <- rep(tau, length = ly) 
-   cdf <- pSICHEL(q, mu = mu, sigma=sigma, nu=nu)
+   cdf <- pSICHEL(qq, mu = mu, sigma=sigma, nu=nu)
    cdf <- tau + (1-tau)*cdf
   if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
   if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-   cdf <- ifelse(q < 0, 0, cdf) 
+   cdf[q < 0] <- 0
+   cdf[q == Inf] <- 0 
    cdf
 }
 ################################################################################
@@ -232,7 +242,7 @@ qZISICHEL <- function(p, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE, log
         # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", ""))    
         if (log.p == TRUE) p <- exp(p)   else p <- p
         if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-        pnew <- (p-tau)/(1-tau)-(1e-7)# added 28-2-17
+        pnew <- (p-tau)/(1-tau)# added 28-2-17
         pnew <- ifelse((pnew > 0 ),pnew, 0)
            q <- qSICHEL(pnew, mu = mu, sigma=sigma, nu,  max.value= max.value)           
            q[p == 0] <- 0
