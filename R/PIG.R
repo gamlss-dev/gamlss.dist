@@ -128,14 +128,14 @@ dPIG<-function(x, mu = 1, sigma = 1 , log = FALSE)
       nsigma <- rep(sigma, length = ly)
          nmu <- rep(mu, length = ly)
           xx[x < 0] <- 0
-       xx[x == Inf] <- 10000 # 
+       xx[x == Inf] <- 1 # 
       sumlty <- as.double(.C("tofyPIG2", as.double(xx), as.double(nmu), as.double(nsigma),
                              ans=double(ly), as.integer(length(x)), 
                              as.integer(max(xx)+1), PACKAGE="gamlss.dist")$ans)
        logfy <- -lgamma(x+1)+(1-sqrt(1+2*sigma*mu))/sigma +sumlty
           if(log==FALSE) fy <- exp(logfy) else fy <- logfy
        fy[x<0] <- 0
-       fy[x==Inf] <- 0
+       fy[x>=Inf] <- 0
           fy
   }
 ################################################################################
