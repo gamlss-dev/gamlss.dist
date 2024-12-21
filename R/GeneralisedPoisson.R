@@ -112,7 +112,6 @@ pGPO <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
      FFF <- rep(0,ly)                         
   nsigma <- rep(sigma, length = ly)
      nmu <- rep(mu, length = ly) 
-     
     for (i in seq(along=qq))                                                          
     {   
             y.y <- qq[i]
