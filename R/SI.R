@@ -186,18 +186,21 @@ dSI<-function(x, mu=0.5, sigma=0.02, nu=-0.5, log=FALSE)
    if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
  #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
     ly <- max(length(x),length(mu),length(sigma),length(nu)) 
-     x <- rep(x, length = ly)  
-    xx <- ifelse(x < 0, 0, x)
+     xx <- rep(x, length = ly)  
+xx[x < 0]  <- 0
+xx[x >= Inf]  <- 0
+#    xx <- ifelse(x < 0, 0, x)
  sigma <- rep(sigma, length = ly)
     mu <- rep(mu, length = ly)   
     nu <- rep(nu, length = ly) 
  alpha <- sqrt(1+2*sigma*mu)/sigma
   lbes <-  log(besselK(alpha,nu+1))-log(besselK((alpha),nu))
 sumlty <- as.double(.C("tofySI2", as.double(xx), as.double(mu), as.double(sigma), as.double(nu), 
-                       as.double(lbes), ans=double(ly),  as.integer(ly),as.integer(max(x)+1), PACKAGE="gamlss.dist")$ans)
+          as.double(lbes), ans=double(ly),  as.integer(ly), as.integer(max(xx)+1), PACKAGE="gamlss.dist")$ans)
 logfy <- -lgamma(x+1)-nu*log(sigma*alpha)+sumlty+log(besselK(alpha,nu))-log(besselK((1/sigma),nu))
   if(log==FALSE) fy <- exp(logfy) else fy <- logfy
-  fy <- ifelse(x < 0, 0, fy) 
+  fy[x < 0] <- 0
+  fy[x >= Inf] <- 0
   fy
   }
 ################################################################################
@@ -206,11 +209,13 @@ logfy <- -lgamma(x+1)-nu*log(sigma*alpha)+sumlty+log(besselK(alpha,nu))-log(bess
 ################################################################################  
 pSI <- function(q, mu=0.5, sigma=0.02, nu=-0.5, lower.tail = TRUE, log.p = FALSE)
   {     
-  #--------------------------------------------------
+#--------------------------------------------------
   tocdfS <- function (y, mu, sigma, nu, bsum=TRUE, ...)
   {
       ly <- max(length(q),length(mu), length(sigma)) 
-       q <- rep(q, length = ly)     
+      qq <- rep(q,length = ly) 
+qq[q < 0] <- 0
+qq[q >= Inf] <- 0
    sigma <- rep(sigma, length = ly)
       mu <- rep(mu, length = ly)   
       nu <- rep(nu, length = ly) 
@@ -226,8 +231,8 @@ pSI <- function(q, mu=0.5, sigma=0.02, nu=-0.5, lower.tail = TRUE, log.p = FALSE
         lpnew[1] <- -nu[i]*log(sigma[i]*alpha[i])+log(besselK(alpha[i],nu[i]))-
                      log(besselK(1/sigma[i],nu[i])) 
         dum <- ifelse(lyp1==1, 1,2)
-        for (j in dum:lyp1)
-        {
+  for (j in dum:lyp1)
+    {
             if (j !=1)
              {
             tynew[j] <- (sigma[i]*(2*(j-1+nu[i])/mu[i])+(1/tynew[j-1]))*
@@ -235,26 +240,27 @@ pSI <- function(q, mu=0.5, sigma=0.02, nu=-0.5, lower.tail = TRUE, log.p = FALSE
             lpnew[j] <- lpnew[j-1] + log(tynew[j-1]) - log(j-1)
              }           
             ty[i] <- tynew[lyp1] 
-        }
-        if (bsum ) 
+    }
+        if (bsum) 
             cdf[i] <- sum(exp(lpnew))
     }
     cdf
   }
-  #-----------------------------------------------
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-      #    if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))  
+#-----------------------------------------------
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           ly <- max(length(q),length(mu),length(sigma),length(nu)) 
-           q <- rep(q,length = ly)  
-          qq <- ifelse(q < 0, 0, q)
+          qq <- rep(q,length = ly)  
+   qq[q < 0] <- 0
+qq[q >= Inf] <- 0 
        sigma <- rep(sigma, length = ly)
           mu <- rep(mu, length = ly)   
           nu <- rep(nu, length = ly)   
-         cdf <- tocdfS(y=qq, mu=mu, sigma=sigma, nu=nu, bsum=TRUE)
-          if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
-          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)
-          cdf <-ifelse(q < 0, 0, cdf) 
+  cdf <- tocdfS(y=qq, mu=mu, sigma=sigma, nu=nu, bsum=TRUE)
+if(lower.tail==TRUE) cdf <- cdf else cdf=1-cdf
+if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)
+  cdf[q < 0] <- 0
+  cdf[q >= Inf] <- 1
           cdf
    }
 ################################################################################
