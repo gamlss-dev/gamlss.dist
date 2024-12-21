@@ -57,15 +57,15 @@ dNBI<-function(x, mu = 1, sigma = 1, log = FALSE)
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
 #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-            n <- max(length(x), length(mu), length(sigma))
-            x <- rep_len(x, n)
-           mu <- rep_len(mu, n)
-        sigma <- rep_len(sigma, n)
-           fy <- rep_len(0,n)        
-        fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
-       # fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
-        fy[x < 0]  <- 0 
-        fy[x == Inf]  <- 0 
+                n <- max(length(x), length(mu), length(sigma))
+                x <- rep_len(x, n)
+               mu <- rep_len(mu, n)
+            sigma <- rep_len(sigma, n)
+               fy <- rep_len(0,n)        
+               fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
+fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
+       fy[x < 0]  <- 0 
+    fy[x == Inf]  <- 0 
         return(fy)
   }
 #------------------------------------------------------------------------------------------
@@ -80,9 +80,9 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
             sigma <- rep_len(sigma, n)
               cdf <- rep_len(0,n)
              cdf  <-  pnbinom(q, size=1/sigma, mu=mu, 
-                              lower.tail=lower.tail,log.p=log.p)
-#cdf[sigma<=0.0001] <-  ppois(q, lambda = mu, lower.tail = lower.tail, 
-#                              log.p = log.p)
+                              lower.tail=lower.tail, log.p = log.p)
+cdf[sigma<=0.0001]<-  ppois(q, lambda = mu, 
+                            lower.tail = lower.tail, log.p = log.p)            
         cdf[q < 0] <- 0
         cdf[q == Inf] <- 1
         return(cdf)

@@ -33,11 +33,9 @@ pGEOM<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
      mu <- rep(mu, length = ly)
    prob <- 1/(mu+1)
     cdf <-  pgeom(q, prob=prob, lower.tail = lower.tail, log.p =log.p)
-    cdf 
     cdf[q < 0] <- 0
     cdf[q ==Inf] <- 1
     cdf    
-    
 }
 ################################################################################
 ################################################################################
