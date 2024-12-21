@@ -85,11 +85,13 @@ dZIP2<-function(x, mu = 5, sigma = 0.1, log = FALSE)
            mu <- rep(mu, length = ly)   
           mus <- mu/(1-sigma)
         logfy <- rep(0, length(x))
-        logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mus)), 
-                                  ((1-x)*log(1-sigma) - mus +x*log(mu) -lgamma(x+1)))          
-          if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-        fy[x < 0] <- 0
-        fy[x == Inf] <- 0
+  logfy[x==0] <-  log(sigma+(1-sigma)*exp(-mus))
+  logfy[x!=0] <- (1-x)*log(1-sigma) - mus +x*log(mu) -lgamma(x+1)
+ #       logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mus)), 
+#                                  ((1-x)*log(1-sigma) - mus +x*log(mu) -lgamma(x+1)))          
+if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+      fy[x < 0] <- 0
+   fy[x >= Inf] <- 0
           fy
   }
 ################################################################################

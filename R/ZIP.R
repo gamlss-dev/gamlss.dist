@@ -77,10 +77,12 @@ dZIP<-function(x, mu = 5, sigma = 0.1, log = FALSE)
           sigma <- rep(sigma, length = ly)
              mu <- rep(mu, length = ly)
           logfy <- rep(0, ly)
-          logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mu)), (log(1-sigma) -mu +x*log(mu) -lgamma(x+1)))          
+    logfy[x==0] <- log(sigma+(1-sigma)*exp(-mu))
+    logfy[x!=0] <-  log(1-sigma) -mu +x*log(mu) -lgamma(x+1)
+   #       logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mu)), (log(1-sigma) -mu +x*log(mu) -lgamma(x+1)))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0
-          fy[x == Inf] <- 0
+          fy[x >= Inf] <- 0
           fy
   }
 ################################################################################
@@ -102,7 +104,7 @@ pZIP <- function(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)  
          cdf[q < 0] <- 0 
-         cdf[q > Inf] <- 1 
+         cdf[q >= Inf] <- 1 
          cdf
    }
 ################################################################################
