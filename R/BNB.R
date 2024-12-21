@@ -188,7 +188,7 @@ pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
   sigma <- rep(sigma, length = ly)
      mu <- rep(mu, length = ly)   
      nu <- rep(nu, length = ly) 
-  qq[q==Inf] <- 1000
+  qq[q==Inf] <- 1
      fn <- function(q, mu, sigma, nu) sum(dBNB(0:qq, mu=mu, sigma=sigma, nu=nu))
    Vcdf <- Vectorize(fn)
     cdf <- Vcdf(q=qq, mu=mu, sigma=sigma, nu=nu)
