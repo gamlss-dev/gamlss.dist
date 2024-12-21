@@ -87,15 +87,15 @@ dNBII<-function(x, mu=1, sigma=1, log=FALSE)
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
 #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", ""))  
-            n <- max(length(x), length(mu), length(sigma))
-            x <- rep_len(x, n)
-           mu <- rep_len(mu, n)
-        sigma <- rep_len(sigma, n)
-           fy <- rep_len(0,n)        
-           fy <- dnbinom(x, size=mu/sigma, mu=mu, log=log) 
-  #fy[sigma<=0.0001] <-  dpois(x = x, lambda = mu, log = log)
-           fy[x < 0]  <- 0 
-           fy[x == Inf]  <- 0 
+                n <- max(length(x), length(mu), length(sigma))
+                x <- rep_len(x, n)
+               mu <- rep_len(mu, n)
+            sigma <- rep_len(sigma, n)
+               fy <- rep_len(0,n)        
+               fy <- dnbinom(x, size=mu/sigma, mu=mu, log=log) 
+fy[sigma<=0.0001] <-  dpois(x, lambda = mu, log = log)
+        fy[x < 0] <- 0 
+     fy[x == Inf] <- 0 
   return(fy)  
   }
 ################################################################################
@@ -111,7 +111,8 @@ pNBII <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
             mu <- rep_len(mu, n)
          sigma <- rep_len(sigma, n)
            cdf <- rep_len(0,n)
-           cdf <- pnbinom(q, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p)
+              cdf <- pnbinom(q, size=mu/sigma, mu=mu, lower.tail = lower.tail, log.p = log.p)
+cdf[sigma>0.0001] <- ppois(q, lambda = mu, lower.tail = lower.tail, log.p = log.p)
     #   if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
         # if (length(sigma)>1) cdf <- ifelse(sigma>0.0001, 
         #     pnbinom(q, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p),
@@ -130,12 +131,6 @@ qNBII <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
   {      
          if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
-#         if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
-         # if (length(sigma)>1) q <- ifelse(sigma>0.0001,  
-         #                              qnbinom(p, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p),
-         #                              qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p))
-         # else q <- if (sigma<0.0001) qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
-         #           else qnbinom(p, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p) 
            n <- max(length(p), length(mu), length(sigma))
           mu <- rep_len(mu, n)
        sigma <- rep_len(sigma, n)
