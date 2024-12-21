@@ -173,15 +173,15 @@ pZAPIG <- function(q, mu = 1, sigma = 1,  nu = 0.3, lower.tail = TRUE, log.p = F
 qZAPIG <- function(p, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, 
                    log.p = FALSE, max.value = 10000)
 {      
-  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
-  if (log.p == TRUE) p <- exp(p)   else p <- p
-  if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-  pnew <- (p-nu)/(1-nu)-1e-10
-  cdf0 <- pPIG(0, mu = mu, sigma=sigma )                   
-  pnew2 <- cdf0*(1-pnew) + pnew           
-  pnew2 <- ifelse((pnew2 > 0 ),pnew2, 0)
-  q <- qPIG(pnew2, mu = mu, sigma=sigma, max.value = max.value)                   
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
+if (log.p == TRUE) p <- exp(p)   else p <- p
+if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+     pnew <- (p-nu)/(1-nu)-1e-10
+     cdf0 <- pPIG(0, mu = mu, sigma=sigma )                   
+    pnew2 <- cdf0*(1-pnew) + pnew           
+    pnew2 <- ifelse((pnew2 > 0 ),pnew2, 0)
+        q <- qPIG(pnew2, mu = mu, sigma=sigma, max.value = max.value)                   
   q[p == 0] <- 0
   q[p == 1] <- Inf
   q[p <  0] <- NaN

@@ -210,7 +210,7 @@ sigma <- rep(sigma, length = ly)
    nu <- rep(nu, length = ly) 
    tau <- rep(tau, length = ly)
    cdf <- rep(0, length = ly)
-   qq[q==Inf] <- 1000
+   qq[q==Inf] <- 1
   cdf0 <- pBNB(0, mu = mu, sigma=sigma, nu=nu)
   cdf1 <- pBNB(qq, mu = mu, sigma=sigma, nu=nu)                   
   cdf3 <- tau+((1-tau)*(cdf1-cdf0)/(1-cdf0))

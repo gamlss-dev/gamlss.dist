@@ -221,8 +221,10 @@ if (any(tau <= 0)|any(tau >= 1))
 # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
 if (log.p == TRUE) p <- exp(p)   else p <- p
 if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-        pnew <- (p-tau)/(1-tau)-(1e-7)# added 28-2-17
-        pnew <- ifelse((pnew > 0 ),pnew, 0)
+        pnew <- (p-tau)/(1-tau)
+pnew[pnew > 0] <- pnew
+pnew[pnew < 0] <- 0        
+#        pnew <- ifelse((pnew > 0 ),pnew, 0)
            q <- qNBF(pnew, mu = mu, sigma=sigma, nu)           
            q[p == 0] <- 0
            q[p == 1] <- Inf

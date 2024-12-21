@@ -108,19 +108,26 @@ if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", ""))
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
 if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
 #      if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
-          ly <- max(length(x),length(mu),length(sigma),length(nu)) 
-           x <- rep(x, length = ly)      
+           ly <- max(length(x),length(mu),length(sigma),length(nu)) 
+           xx <- rep(x, length = ly)
+      xx[x<0] <- 0
+  xx[x>=Inf] <- 0
        sigma <- rep(sigma, length = ly)
           mu <- rep(mu, length = ly)   
           nu <- rep(nu, length = ly) 
-        if (length(sigma)>1) fy <- ifelse(sigma>0.0001, dPIG(x, mu = mu, sigma=sigma, log = T), 
-                                          dPO(x, mu = mu, log = T) )
-        else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = T) 
-                   else dPIG(x, mu = mu, sigma=sigma, log = T)
-          logfy <- rep(0, length(x))
-          logfy <- ifelse((x==0), log(nu+(1-nu)*exp(fy)), (log(1-nu) + fy ))          
-          if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
+          fy <- rep(0, length = ly)
+fy[sigma>0.0001] <- dPIG(x, mu = mu, sigma=sigma, log = TRUE)   
+fy[sigma<=0.0001] <- dPO(x, mu = mu, log = TRUE)  
+        # if (length(sigma)>1) fy <- ifelse(sigma>0.0001, dPIG(x, mu = mu, sigma=sigma, log = T), 
+        #                                   dPO(x, mu = mu, log = T) )
+        # else fy <- if (sigma<0.0001) dPO(x, mu = mu, log = T) 
+        #            else dPIG(x, mu = mu, sigma=sigma, log = T)
+          logfy <- log(1-nu) + fy
+    logfy[x==0] <- log(nu+(1-nu)*exp(fy))
+if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
           fy2 <- ifelse(x < 0, 0, fy2) 
+          fy2[x<0] <- 0
+          fy2[x>=Inf] <- 0
           fy2
   }
 ################################################################################
@@ -129,24 +136,27 @@ if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", 
 ################################################################################
 pZIPIG <- function(q, mu = 1, sigma = 1, nu = 0.3, lower.tail = TRUE, log.p = FALSE)
   {     
-        if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-        if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-        if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
                     stop(paste("nu must be between 0 and 1 ", "\n", ""))
- #       if (any(q < 0) )  stop(paste("y must be >=0", "\n", ""))
-          ly <- max(length(q),length(mu),length(sigma),length(nu)) 
-           q <- rep(q, length = ly)      
-       sigma <- rep(sigma, length = ly)
-          mu <- rep(mu, length = ly)   
-          nu <- rep(nu, length = ly) 
-        if (length(sigma)>1) cdf <- ifelse(sigma>0.0001, pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F), 
-                                          ppois(q, lambda = mu) )
-        else cdf <- if (sigma<0.0001) ppois(q, lambda = mu)
-                   else pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F)
-         cdf <- nu + (1-nu)*cdf
-         if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-         cdf <- ifelse(q < 0, 0, cdf) 
+                ly <- max(length(q),length(mu),length(sigma),length(nu)) 
+                qq <- q <- rep(q, length = ly)      
+             sigma <- rep(sigma, length = ly)
+                mu <- rep(mu, length = ly)   
+                nu <- rep(nu, length = ly) 
+               cdf <-  rep(0, length = ly)
+ cdf[sigma>0.0001] <-   pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F)
+cdf[sigma<=0.0001] <- ppois(q, lambda = mu) 
+        # if (length(sigma)>1) cdf <- ifelse(sigma>0.0001, pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F), 
+        #                                   ppois(q, lambda = mu) )
+        # else cdf <- if (sigma<0.0001) ppois(q, lambda = mu)
+        #            else pPIG(q, mu = mu, sigma=sigma, lower.tail=T, log.p = F)
+             cdf <- nu + (1-nu)*cdf
+if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
+if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
+  cdf[q<0] <- 0
+  cdf[q>=Inf] <- 1
          cdf
    }
 ################################################################################
@@ -162,23 +172,19 @@ if (any(nu <= 0)|any(nu >= 1))  #In this parametrization  nu = alpha
                      stop(paste("nu must be between 0 and 1 ", "\n", ""))
 if (log.p == TRUE) p <- exp(p)   else p <- p
 if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-          ly <- max(length(p),length(mu),length(sigma),length(nu)) 
-           p <- rep(p, length = ly)      
-       sigma <- rep(sigma, length = ly)
-          mu <- rep(mu, length = ly)   
-          nu <- rep(nu, length = ly) 
-          pnew <- (p-nu)/(1-nu)-1e-10
-          pnew <- ifelse((pnew > 0 ),pnew, 0)
-          if (length(sigma)>1) q <- ifelse(sigma>0.0001,  qPIG(pnew, mu = mu, sigma=sigma, lower.tail=TRUE, log.p = FALSE, max.value = max.value), 
-                                          qpois(pnew, lambda = mu) )
-          else q <- if (sigma<0.0001) qpois(pnew, lambda = mu)
-                   else qPIG(pnew, mu = mu, sigma=sigma, lower.tail=TRUE, log.p = FALSE, max.value = max.value)
-           # q2 <- suppressWarnings(ifelse((pnew > 0 ), q, 0))
-#          suppressWarnings(q <- ifelse((pnew > 0 ), qpois(pnew, lambda = mu, ), 0))
+            ly <- max(length(p),length(mu),length(sigma),length(nu)) 
+             p <- rep(p, length = ly)      
+         sigma <- rep(sigma, length = ly)
+            mu <- rep(mu, length = ly)   
+            nu <- rep(nu, length = ly) 
+          pnew <- (p-nu)/(1-nu)
+pnew[pnew > 0] <- pnew
+pnew[pnew < 0] <- 0
+          q <- qPIG(pnew, mu = mu, sigma=sigma, nu, , max.value = max.value)               
           q[p == 0] <- 0
           q[p == 1] <- Inf
           q[p <  0] <- NaN
-          q[p >  1] <- NaN
+          q[p >  1] <- NaN          
           return(q)  
    }
 ################################################################################
