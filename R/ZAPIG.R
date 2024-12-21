@@ -124,16 +124,26 @@ ZAPIG = function (mu.link = "log", sigma.link = "log", nu.link = "logit")
 ################################################################################
 dZAPIG<-function(x, mu = 1, sigma = 1, nu = 0.3, log = FALSE)
 { 
-  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
- # if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
-  fy0 <- dPIG(0, mu = mu, sigma=sigma, log = T)
-   fy <- dPIG(x, mu = mu, sigma=sigma, log = T) 
-  logfy <- rep(0, length(x))
-  logfy <- ifelse((x==0), log(nu), log(1-nu) + fy - log(1-exp(fy0))) 
-  if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
-  fy2 <- ifelse(x < 0, 0, fy2) 
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0)|any(nu >= 1))  stop(paste("nu must be between 0 and 1 ", "\n", ""))
+         ly <- max(length(x),length(mu),length(sigma),length(nu)) 
+          x <- xx <- rep(x, length = ly)
+    xx[x<0] <- 0
+ xx[x>=Inf] <- 0
+      sigma <- rep(sigma, length = ly)
+         mu <- rep(mu, length = ly)   
+         nu <- rep(nu, length = ly) 
+        fy0 <- dPIG(0, mu = mu, sigma=sigma, log = T)
+         fy <- dPIG(x, mu = mu, sigma=sigma, log = T) 
+      logfy <- rep(0, length(x))
+logfy[x!=0] <- log(1-nu) + fy - log(1-exp(fy0))
+logfy[x==0] <- log(nu)
+ # logfy <- ifelse((x==0), log(nu), log(1-nu) + fy - log(1-exp(fy0))) 
+if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
+fy2[x<0] <- 0
+fy2[x>=Inf] <- 0
+#  fy2 <- ifelse(x < 0, 0, fy2) 
   fy2
 }
 ################################################################################
