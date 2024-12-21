@@ -61,11 +61,14 @@ dZALG<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
           if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
      #     if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
            ly <- max(length(x),length(mu),length(sigma)) 
-            x <- rep(x, length = ly)      
+           xx <- rep(x, length = ly)
+      xx[x<0] <- 1   
         sigma <- rep(sigma, length = ly)
            mu <- rep(mu, length = ly)   
           logfy <- rep(0, ly)
-          logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dLG(ifelse(x==0,1,x),mu,log = TRUE))      
+          logfy <- dLG(ifelse(xx==0,1,x),mu,log = TRUE)
+      logfy[x==0] <- log(sigma)
+  #       logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dLG(ifelse(xx==0,1,x),mu,log = TRUE))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 1] <- 0
           fy[x==Inf] <- 0
