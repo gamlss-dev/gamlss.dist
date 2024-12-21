@@ -175,17 +175,19 @@ dZABNB<-function(x, mu=1, sigma=1, nu=1, tau=0.1, log=FALSE)
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
   if (any(tau <= 0)|any(tau >= 1))  stop(paste("tau must be between 0 and 1 ", "\n", ""))
 #  if (any(x < 0) )  stop(paste("x must be >=0", "\n", "")) 
-  ly <- max(length(x),length(mu),length(sigma),length(nu),length(tau)) 
-  x <- rep(x, length = ly)      
+     ly <- max(length(x),length(mu),length(sigma),length(nu),length(tau)) 
+      x <- rep(x, length = ly)      
   sigma <- rep(sigma, length = ly)
-  mu <- rep(mu, length = ly)   
-  nu <- rep(nu, length = ly) 
-  tau <- rep(tau, length = ly)
-  fy0 <- dBNB(0, mu = mu, sigma=sigma,  nu=nu)
-  fy <- dBNB(x, mu = mu, sigma=sigma, nu=nu, log = TRUE)                   
+     mu <- rep(mu, length = ly)   
+     nu <- rep(nu, length = ly) 
+    tau <- rep(tau, length = ly)
+    fy0 <- dBNB(0, mu = mu, sigma=sigma,  nu=nu)
+     fy <- dBNB(x, mu = mu, sigma=sigma, nu=nu, log = TRUE)                   
   logfy <- rep(0, length(x))
-  logfy <- ifelse((x==0), log(tau), log(1-tau) + fy - log(1-fy0))          
-  if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
+  logfy[x==0] <- log(tau)
+  logfy[x!=0] <- log(1-tau) + fy - log(1-fy0)
+#  logfy <- ifelse((x==0), log(tau), log(1-tau) + fy - log(1-fy0))          
+if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
   fy2[x < 0] <- 0
   fy2[x == Inf] <- 0
   fy2
@@ -207,11 +209,13 @@ sigma <- rep(sigma, length = ly)
    mu <- rep(mu, length = ly)   
    nu <- rep(nu, length = ly) 
    tau <- rep(tau, length = ly)
+   cdf <- rep(0, length = ly)
    qq[q==Inf] <- 1000
   cdf0 <- pBNB(0, mu = mu, sigma=sigma, nu=nu)
   cdf1 <- pBNB(qq, mu = mu, sigma=sigma, nu=nu)                   
   cdf3 <- tau+((1-tau)*(cdf1-cdf0)/(1-cdf0))
-  cdf <- ifelse((q==0), tau,  cdf3)
+cdf[q==0] <- tau
+#  cdf <- ifelse((q==0), tau,  cdf3)
   if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
   if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf)  
   cdf[q < 0] <- 0 
