@@ -42,12 +42,13 @@ dLG<-function(x, mu = 0.5, log = FALSE)
           if (any(mu <= 0) | any(mu >= 1) )  stop(paste("mu must be greater than 0 and less than 1", "\n", ""))
        #   if (any(x <= 0) )  stop(paste("x must be >0", "\n", ""))
           ly <- max(length(x),length(mu)) 
-           x <- rep(x, length = ly)      
-          mu <- rep(mu, length = ly)   
-       logfy <- x*log(mu)-log(x)-log(-log(1-mu))
-      if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-       fy[x < 1] <- 0
-       fy[x==Inf] <- 0
+           xx <- rep(x, length = ly) 
+         xx[x <= 0] <- 1 
+           mu <- rep(mu, length = ly)   
+        logfy <- xx*log(mu)-log(xx)-log(-log(1-mu))
+  if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+  fy[x <= 0] <- 0
+  fy[x==Inf] <- 0
        fy
   }
 ################################################################################
@@ -61,7 +62,7 @@ pLG <- function(q, mu = 0.5, lower.tail = TRUE, log.p = FALSE)
         ly <- max(length(q),length(mu)) 
         qq <- rep(q, length = ly)      
         mu <- rep(mu, length = ly)   
-        qq[q==Inf] <- 10000 
+        qq[q==Inf] <- 1 
        fn <- function(q, mu) sum(dLG(1:qq, mu=mu))
      Vcdf <- Vectorize(fn)
       cdf <- Vcdf(q=q, mu=mu)   
