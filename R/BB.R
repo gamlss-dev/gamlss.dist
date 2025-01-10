@@ -121,12 +121,12 @@ cdf[sigma>0.0001] <- pBI(qq, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.
 ################################################################################
 qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fast = FALSE)
   {      
-          if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (log.p==TRUE) p <- exp(p) else p <- p
-          if (lower.tail==TRUE) p <- p else p <- 1-p
+if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
         ly <- max(length(p),length(mu),length(sigma),length(bd)) 
-         p <- rep(p, length = ly)      
+         p <- rep(p, length = ly) 
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
      sigma <- rep(sigma, length = ly)
         mu <- rep(mu, length = ly)   
         bd <- rep(bd, length = ly)   
