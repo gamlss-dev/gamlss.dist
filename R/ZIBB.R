@@ -99,10 +99,9 @@ ZIBB <- function (mu.link ="logit", sigma.link = "log", nu.link = "logit")
 ################################################################################
 dZIBB<-function(x, mu = 0.5, sigma = 0.5, nu = 0.1, bd = 1, log = FALSE)
  { 
-          if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))           
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", "")) 
-   #       if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))
+if (any(mu <= 0) ||  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))           
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", "")) 
              ly <- max(length(x),length(mu),length(sigma),length(nu),length(bd)) 
               x <- rep(x, length = ly)      
           sigma <- rep(sigma, length = ly)
@@ -110,10 +109,9 @@ dZIBB<-function(x, mu = 0.5, sigma = 0.5, nu = 0.1, bd = 1, log = FALSE)
              nu <- rep(nu, length = ly)   
              bd <- rep(bd, length = ly) 
           logfy <- rep(0, ly)
-    logfy[x==0] <- log(nu+(1-nu)*dBB(0,mu,sigma,bd))
-    logfy[x!=0] <- log(1-nu) + dBB(x,mu,sigma,bd,log=T)
-#          logfy <- ifelse((x==0), log(nu+(1-nu)*dBB(0,mu,sigma,bd)), (log(1-nu) + dBB(x,mu,sigma,bd,log=T) ))
-          if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+if (any(x==0)) logfy[x==0] <- log(nu[x==0]+(1-nu[x==0])*dBB(0,mu[x==0],sigma[x==0],bd[x==0]))
+    logfy[x!=0] <- log(1-nu[x!=0]) + dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=T)
+  if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0 
           fy[x > bd] <- 0 
           fy
@@ -150,24 +148,24 @@ pZIBB <- function(q, mu = 0.5, sigma = 0.5, nu = 0.1, bd = 1, lower.tail = TRUE,
 ################################################################################
 qZIBB <- function(p, mu = 0.5, sigma = 0.5, nu = 0.1, bd = 1, lower.tail = TRUE, log.p = FALSE)
   {      
-         if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
-         if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))        
-         if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-         if (log.p == TRUE) p <- exp(p)   else p <- p
-         if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-         ly <- max(length(p),length(mu),length(sigma),length(nu),length(bd)) 
-             p <- rep(p, length = ly)      
+if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))        
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+            ly <- max(length(p),length(mu),length(sigma),length(nu),length(bd)) 
+             p <- rep(p, length = ly)   
+             q <- rep(0, length = ly)      
          sigma <- rep(sigma, length = ly)
             mu <- rep(mu, length = ly)
             nu <- rep(nu, length = ly)   
             bd <- rep(bd, length = ly) 
           pnew <- ((p-nu)/(1-nu)) - (1e-7)
-          pnew<-ifelse((pnew<0),0,pnew)
-          suppressWarnings(q <- ifelse((pnew > 0 ), qBB(p = pnew, mu = mu, sigma=sigma, bd=bd), 0))
-          q[p == 0] <- 0
-          q[p == 1] <- bd
-          q[p <  0] <- NaN
-          q[p >  1] <- NaN
+   pnew[ pnew<0 ] <- 0
+   q[ pnew>0 ] <- qBB(p = pnew, mu = mu, sigma=sigma, bd=bd, lower.tail = lower.tail, log.p = log.p)
+      #    suppressWarnings(q <- ifelse(( ), )
+     q[p == 0] <- 0
+     q[p == 1] <- bd
+     q[p <  0] <- NaN
+     q[p >  1] <- NaN
           return(q)
    }
 ################################################################################
