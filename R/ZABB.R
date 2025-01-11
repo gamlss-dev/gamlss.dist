@@ -76,10 +76,9 @@ ZABB <- function (mu.link ="logit", sigma.link = "log", nu.link = "logit")
 ################################################################################
 dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
  { 
-          if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
-          if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-          if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))
-   #       if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", ""))   
+if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))
           ly <- max(length(x),length(mu),length(sigma),length(bd) ) 
            x <- rep(x, length = ly)      
        sigma <- rep(sigma, length = ly)
@@ -87,8 +86,9 @@ dZABB <- function(x, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, log = FALSE)
           nu <- rep(nu, length = ly)
           bd <- rep(bd, length = ly)  
        logfy <- rep(0, ly)
-logfy[x==0] <-  log(nu)
-logfy[x!=0] <-  log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd))
+logfy[x==0] <-  log(nu[x==0])
+logfy[x!=0] <-  log(1-nu[x!=0])+dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=TRUE)-
+                      log(1-dBB(0,mu[x!=0],sigma[x!=0],bd[x!=0]))
 #      logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
       fy[x < 0] <- 0 
