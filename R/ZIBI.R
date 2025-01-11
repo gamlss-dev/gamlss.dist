@@ -72,8 +72,8 @@ dZIBI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
              mu <- rep(mu, length = ly)   
              bd <- rep(bd, length = ly) 
           logfy <- rep(0, length(x))
-    logfy[x==0] <- log(sigma+(1-sigma)*dBI(0,bd,mu))
-    logfy[x!=0] <- log(1-sigma) + dBI(x, bd, mu, log=T)
+    logfy[x==0] <- log(sigma[x==0]+(1-sigma[x==0])*dBI(0,bd[x==0],mu[x==0]))
+    logfy[x!=0] <- log(1-sigma[x!=0]) + dBI(x[x!=0], bd[x!=0], mu[x!=0], log=T)
   if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0 
          fy[x > bd] <- 0 
@@ -96,8 +96,8 @@ pZIBI <- function(q, bd = 1, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = F
          cdf <- rep(0,length(q))
          cdf <- pbinom(q, size = bd, prob = mu, lower.tail = TRUE, log.p = FALSE)
          cdf <- sigma + (1-sigma)*cdf
-         if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
-         if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
+if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
+if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
          cdf[q<0] <- 0
         cdf[q>bd] <- 1
          cdf
@@ -112,13 +112,14 @@ if (any(mu <= 0) |  any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0", "\n", "")) 
 if (log.p == TRUE) p <- exp(p)  
 if (lower.tail == FALSE)  p <- 1 - p
-            ly <- max(length(q),length(mu),length(sigma),length(bd)) 
-             p <- rep(p, length = ly)      
+            ly <- max(length(p),length(mu),length(sigma),length(bd)) 
+             p <- rep(p, length = ly)    
+             q <- rep(0, length = ly)  
          sigma <- rep(sigma, length = ly)
             mu <- rep(mu, length = ly)   
             bd <- rep(bd, length = ly)   
           pnew <- (p-sigma)/(1-sigma)-1e-10
-          suppressWarnings(q <- ifelse((pnew > 0 ), qbinom(pnew, size = bd, prob = mu, ), 0))
+  q[pnew > 0 ] <- qbinom(pnew[pnew > 0 ], size = bd[pnew > 0 ], prob = mu[pnew > 0 ])
           q[p == 0] <- 0
           q[p == 1] <- bd
           q[p <  0] <- NaN
