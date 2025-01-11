@@ -17,8 +17,8 @@ dBB(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
 pBB(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE,
       log.p = FALSE)
 qBB(p, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, 
-       log.p = FALSE, fast = FALSE)
-rBB(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE)
+       log.p = FALSE)
+rBB(n, mu = 0.5, sigma = 1, bd = 10)
 }
 
 \arguments{
@@ -33,12 +33,6 @@ rBB(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE)
   \item{log, log.p}{logical; if TRUE, probabilities p are given as log(p)}
   \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],
           otherwise, P[X > x]}
-  \item{fast}{a logical variable if  \code{fast=TRUE} the \code{dBB} function is used in the calculation of the 
-         inverse c.d.f function. This is faster to the default \code{fast=FALSE}, where the \code{pBB{}} is used,  
-         but not always consistent with the results obtained from \code{pBB()}, for example if   
-         p <- pBB(c(0,1,2,3,4,5), mu=.5 , sigma=1, bd=5) do not ensure that  qBB(p, mu=.5 , sigma=1, bd=5) will be 
-         c(0,1,2,3,4,5)
-          }   
 }
 \details{
   Definition file for beta binomial distribution. 
@@ -89,9 +83,9 @@ qqBB <- qBB(ppBB, mu=.2 , sigma=3, bd=40)
 plot(qqBB~ ppBB)
 # when the argument fast is useful
 p <- pBB(c(0,1,2,3,4,5), mu=.01 , sigma=1, bd=5)
-qBB(p, mu=.01 , sigma=1, bd=5, fast=TRUE)
+qBB(p, mu=.01 , sigma=1, bd=5)
 #  0 1 1 2 3 5
-qBB(p, mu=.01 , sigma=1, bd=5, fast=FALSE)
+qBB(p, mu=.01 , sigma=1, bd=5)
 #  0 1 2 3 4 5
 # generate random sample
 tN <- table(Ni <- rBB(1000, mu=.2, sigma=1, bd=20))

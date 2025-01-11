@@ -157,14 +157,14 @@ if (lower.tail == FALSE) p <- 1-p
 ################################################################################
 ################################################################################
 ################################################################################
-rBB <- function(n, mu = 0.5, sigma = 1, bd = 10, fast = FALSE )
+rBB <- function(n, mu = 0.5, sigma = 1, bd = 10)
   { 
           if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
           if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
           if (any(n <= 0))  stop(paste("n must be a positive integer", "\n", ""))  
           n <- ceiling(n)
           p <- runif(n)
-          r <- qBB(p, mu=mu, sigma=sigma, bd=bd, fast=fast)
+          r <- qBB(p, mu=mu, sigma=sigma, bd=bd)
           as.integer(r)
   }
 ################################################################################
