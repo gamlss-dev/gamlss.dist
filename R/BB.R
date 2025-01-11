@@ -88,7 +88,7 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
 logfy[sigma<0.0001]  <- dBI(xx, mu = mu, bd=bd, log = TRUE)
          fy <- if(log == FALSE) exp(logfy) else logfy
   fy[x < 0] <- 0 
-fy[x >= bd] <- 0 
+fy[x > bd] <- 0 
           fy
   }
 ################################################################################
@@ -101,16 +101,17 @@ pBB <- function(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, log.p = FALS
     if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
         ly <- max(length(q),length(mu),length(sigma),length(bd)) 
         qq <- rep(q, length = ly)
- qq[q>bd] <- 0
+  qq[q>bd] <- qq[q<0] <- 0
      sigma <- rep(sigma, length = ly)
-       mu <- rep(mu, length = ly)   
-       bd <- rep(bd, length = ly)   
-       fn <- function(q, mu, sigma, bd) sum(dBB(0:q, mu=mu, sigma=sigma, bd=bd))
-     Vcdf <- Vectorize(fn)
-      cdf <- Vcdf(q=q, mu=mu, sigma=sigma, bd=bd)
-      cdf <- if(lower.tail==TRUE) cdf else 1-cdf
-      cdf <- if(log.p==FALSE) cdf else log(cdf) 
-cdf[sigma>0.0001] <- pBI(qq, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.p)
+        mu <- rep(mu, length = ly)   
+        bd <- rep(bd, length = ly)   
+        fn <- function(q, mu, sigma, bd) sum(dBB(0:q, mu=mu, sigma=sigma, bd=bd))
+      Vcdf <- Vectorize(fn)
+       cdf <- Vcdf(q=qq, mu=mu, sigma=sigma, bd=bd)
+cdf[sigma<0.0001] <- pbinom(qq, prob = mu, size = bd, lower.tail=lower.tail, 
+                                   log.p = log.p)
+if (lower.tail==FALSE)  cdf <- 1-cdf
+if (log.p==TRUE)        cdf <- log(cdf) 
       cdf[q<0] <- 0
       cdf[q>=bd] <- 1
       cdf
@@ -119,14 +120,14 @@ cdf[sigma>0.0001] <- pBI(qq, mu = mu, bd=bd, lower.tail=lower.tail, log.p = log.
 ################################################################################
 ################################################################################
 ################################################################################
-qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE, fast = FALSE)
+qBB <- function(p, mu=0.5, sigma=1, bd=10, lower.tail = TRUE, log.p = FALSE)
   {      
 if (any(mu <= 0) | any(mu >= 1))   stop(paste("mu must be between 0 and 1 ", "\n", "")) 
-if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail == FALSE) p <- 1-p 
         ly <- max(length(p),length(mu),length(sigma),length(bd)) 
          p <- rep(p, length = ly) 
-if (log.p==TRUE) p <- exp(p) else p <- p
-if (lower.tail==TRUE) p <- p else p <- 1-p
      sigma <- rep(sigma, length = ly)
         mu <- rep(mu, length = ly)   
         bd <- rep(bd, length = ly)   
@@ -139,22 +140,18 @@ if (lower.tail==TRUE) p <- p else p <- 1-p
     cumpro <- 0                                                                      
           for (j in seq(from = 0, to = nbd[i]))
             {
-       cumpro <-  if (fast == FALSE) pBB(j, mu = nmu[i], sigma = nsigma[i] , bd = nbd[i] , log.p = FALSE)
-                 else  cumpro+dBB(j, mu = nmu[i], sigma = nsigma[i] , bd = nbd[i] , log = FALSE)# the above is faster 
+       cumpro <- pBB(j, mu = nmu[i], sigma = nsigma[i] , bd = nbd[i] , log.p = FALSE)
        QQQ[i] <- j 
        if  (p[i] <= cumpro ) break 
             } 
-      }           
+    }    
           invcdf <- QQQ
-        if (length(sigma)>1) invcdf2 <- ifelse(sigma>0.0001, invcdf, 
-                                          qBI(p, mu = mu, bd=bd, lower.tail=TRUE))
-        else invcdf2 <- if (sigma<0.0001) qBI(p, mu = mu, bd=bd, lower.tail=TRUE)
-                   else invcdf
-          invcdf2[p == 0] <- 0
-          invcdf2[p == 1] <- bd
-          invcdf2[p <  0] <- NaN
-          invcdf2[p >  1] <- NaN
-     return(invcdf2)    
+        invcdf[sigma<0.0001] <-  qBI(p, mu = mu, bd=bd, lower.tail=TRUE)
+          invcdf[p == 0] <- 0
+          invcdf[p == 1] <- bd
+          invcdf[p <  0] <- NaN
+          invcdf[p >  1] <- NaN
+     return(invcdf)    
    }
 ################################################################################
 ################################################################################

@@ -31,7 +31,7 @@ BI <- function (mu.link = "logit")
 dBI<-function(x, bd = 1, mu = 0.5, log = FALSE)
 { 
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", ""))
-  ly <- max(length(x),length(mu),length(bd)) 
+      ly <- max(length(x),length(mu),length(bd)) 
       xx <- rep(x, length = ly)
       mu <- rep(mu, length = ly)   
       bd <- rep(bd, length = ly) 
@@ -63,11 +63,11 @@ qBI <- function(p, bd = 1, mu = 0.5,  lower.tail = TRUE, log.p = FALSE)
       pp <- rep(p, length = ly)  
       mu <- rep(mu, length = ly)   
       bd <- rep(bd, length = ly) 
-if (log.p==TRUE) p <- exp(p)
    qfun <- qbinom(pp, size = bd, prob = mu, lower.tail = lower.tail, log.p = log.p)
+   if (log.p == TRUE) p <- exp(p)
    qfun[p == 0] <- 0
    qfun[p == 1] <- bd
-   qfun[p <=  0 | p >= bd ] <- NaN
+   qfun[p <  0 | p > bd ] <- NaN
    qfun
 }
 #------------------------------------------------------------------------------------------
