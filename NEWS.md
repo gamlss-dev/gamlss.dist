@@ -1,7 +1,9 @@
 
 # Version 6.1-4
 
-- The `dPO`, `pPO` and `qPO` are updated do the length of y is equal to the length of `mu` 
+- The `dPO`, `pPO` and `qPO` are updated so the length of y is equal to the length of `mu`
+
+- the functions `test_continuous_gamlss_dist()` and `test_discrete_gamlss_dist()` are added to the package for checking distributions but the function not have help files. 
 
 # Version 6.1-3
 
