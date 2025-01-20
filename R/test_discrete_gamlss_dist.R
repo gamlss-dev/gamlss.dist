@@ -39,13 +39,13 @@ test_discrete_gamlss_dist<- function(family = "PO",
 {
 ################################################################################
 ## main function     
-require(codetools)
-require(gamlss)
+requireNamespace(codetools)
+requireNamespace(gamlss)
 ################################################################################  
 # local function
 test_range <- function(family, lower, upper )
   {
-    fam  <- as.gamlss.family(family)
+    fam  <- gamlss::as.gamlss.family(family)
     fname <- fam$family[[1]] 
     dfun <- paste0("d", fname)
     pfun <- paste0("p", fname)
@@ -79,7 +79,7 @@ test_range <- function(family, lower, upper )
 ################################################################################
 test_range_bi <- function(family, lower, upper=bd, bd )
 {
-   fam  <- as.gamlss.family(family)
+   fam  <- gamlss::as.gamlss.family(family)
   fname <- fam$family[[1]] 
   dfun <- paste0("d", fname)
   pfun <- paste0("p", fname)
@@ -112,7 +112,7 @@ cat("pdf", "\n")
 ################################################################################  
 test_options_in_qfun_bi <- function(family, bd)
 {
-   fam  <- as.gamlss.family(family)
+   fam  <- gamlss::as.gamlss.family(family)
   fname <- fam$family[[1]]
    qfun <- paste0("q", fname) 
   cat(eval(call(qfun,-1, log.p=TRUE, bd=bd)), "\n")
@@ -122,7 +122,7 @@ test_options_in_qfun_bi <- function(family, bd)
 ################################################################################  
 test_options_in_qfun <- function(family)
 {
-    fam  <- as.gamlss.family(family)
+    fam  <- gamlss::as.gamlss.family(family)
    fname <- fam$family[[1]]
     qfun <- paste0("q", fname) 
 cat(eval(call(qfun,-1, log.p=TRUE)), "\n")
@@ -134,11 +134,11 @@ cat(eval(call(qfun, exp(-1), lower.tail=FALSE)), "\n")
 ################################################################################
 ################################################################################  
         mixed <- NULL
-          fam <- as.gamlss.family(family) # family 
+          fam <- gamlss::as.gamlss.family(family) # family 
       distype <- fam$type 
 if (distype!="Discrete") stop("The type of the distribution should be Discrete")
         fname <- fam$family[[1]] # family names
-if (fname%in%gamlss:::.gamlss.bi.list)
+if (fname%in%gamlss::.gamlss.bi.list)
           {
           if (is.null(bd)) stop("The family requires binomial denominator")
           bd <- bd
@@ -157,23 +157,23 @@ theDiffdata <- NULL
 cat("****************************************************************************", "\n")
 cat("************************* test for", paste(fname), "start here ***************************", "\n") 
 cat("----- using the checkUsage() function ----", "\n")
-checkUsage(eval(parse(text=fname)))
-checkUsage(eval(parse(text=dorfun)))
-checkUsage(eval(parse(text=porfun)))
-checkUsage(eval(parse(text=qorfun)))
-checkUsage(eval(parse(text=rorfun)))
+codetools::checkUsage(eval(parse(text=fname)))
+codetools::checkUsage(eval(parse(text=dorfun)))
+codetools::checkUsage(eval(parse(text=porfun)))
+codetools::checkUsage(eval(parse(text=qorfun)))
+codetools::checkUsage(eval(parse(text=rorfun)))
 cat("----- checkUsage() finished ----", "\n")
 ################################################################################
 cat("****************************************************************************", "\n")
 cat("----- start checking the range of the functions ----", "\n")
-if (fname%in%gamlss:::.gamlss.bi.list) test_range_bi(BI, lower=y.range[1], bd=10)
+if (fname%in%gamlss::.gamlss.bi.list) test_range_bi(BI, lower=y.range[1], bd=10)
 else  test_range(fname, lower=y.range[1], upper=y.range[2])
 cat("----- finish checking the range of the functions ----", "\n")
 cat("****************************************************************************", "\n")
 ################################################################################
 ################################################################################
 cat("----- start checking the option of the q-function ----", "\n")
-if (fname%in%gamlss:::.gamlss.bi.list)  test_options_in_qfun_bi(fname, bd=bd)
+if (fname%in%gamlss::.gamlss.bi.list)  test_options_in_qfun_bi(fname, bd=bd)
 else test_options_in_qfun(fname)
 cat("----- finish checking the option of the q-function ----", "\n")
 cat("****************************************************************************", "\n")
@@ -196,7 +196,7 @@ cat("testing at mu", mu.val[i], "\n")
     }
 ################################################################################
 ##  test whether it is a proper distribution summing up to 1
-  intY <- if (fname%in%gamlss:::.gamlss.bi.list) 
+  intY <- if (fname%in%gamlss::.gamlss.bi.list) 
               sum(eval(call(dorfun, x= y.range [1]:bd, mu=mu.val[i], bd=bd)))    
           else sum(eval(call(dorfun, x= y.range [1]:10000, mu=mu.val[i])))    
 if (abs(intY-1)> 0.001) 
@@ -204,28 +204,28 @@ if (abs(intY-1)> 0.001)
   else cat("The", fname,  "distribution at mu", mu.val[i], "sums up to one", "\n")   
 ################################################################################
 ## checking  whether the cdf and the inverse cdf  (q-function) are compatible 
-   val <- if (fname%in%gamlss:::.gamlss.bi.list) eval(call(rorfun, n=100,   mu=mu.val[i], bd=bd))
-          else eval(call(rorfun, n=100,   mu=mu.val[i])) # randomly generate a value
-    pr <- if (fname%in%gamlss:::.gamlss.bi.list) eval(call(porfun, q=val, mu=mu.val[i], bd=bd))
+   val <- if (fname%in%gamlss::.gamlss.bi.list) eval(call(rorfun, n=1,   mu=mu.val[i], bd=bd))
+          else eval(call(rorfun, n=1,   mu=mu.val[i])) # randomly generate a value
+    pr <- if (fname%in%gamlss::.gamlss.bi.list) eval(call(porfun, q=val, mu=mu.val[i], bd=bd))
           else eval(call(porfun, q=val, mu=mu.val[i])) #  get the cdf
-    qq <-  if (fname%in%gamlss:::.gamlss.bi.list) eval(call(qorfun, p=pr,  mu=mu.val[i], bd=bd )) 
+    qq <-  if (fname%in%gamlss::.gamlss.bi.list) eval(call(qorfun, p=pr,  mu=mu.val[i], bd=bd )) 
            else eval(call(qorfun, p=pr,  mu=mu.val[i])) 
 if(any(abs(qq-val)>0.0001)) 
-    warning( cat( "the p and q functions of", fnams, "are NOT all matching", "at mu", mu.val[i], "and y =",val,"\n"))  else  
+    warning( cat( "the p and q functions of", fname, "are NOT all matching", "at mu", mu.val[i], "and y =",val,"\n"))  else  
       cat("The p and q function of distribution", fname, "at mu=", mu.val[i], "are compatible", "\n")
 ################################################################################
 ## checking whether pdf and cdf match 
-  p1 <- if (fname%in%gamlss:::.gamlss.bi.list) 
+  p1 <- if (fname%in%gamlss::.gamlss.bi.list) 
            sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i], bd=bd)))  
         else sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i])))     
-  aa <-  if (fname%in%gamlss:::.gamlss.bi.list) p1- eval(call(porfun, q=val[1], mu=mu.val[i], bd=bd))
+  aa <-  if (fname%in%gamlss::.gamlss.bi.list) p1- eval(call(porfun, q=val[1], mu=mu.val[i], bd=bd))
           else p1-eval(call(porfun, q=val[1], mu=mu.val[i])) #pNO(val)
 if(abs(aa)>0.0001)
    warning( cat( "the value of d and p functions do NOT match", "at mu", mu.val[i], "\n")) 
    else cat("The d and p values of distribution", fname, "at mu=" , mu.val[i], "are OK", "\n")  
 ################################################################################ 
 ## checking the tails in p function 
-   tt <- if (fname%in%gamlss:::.gamlss.bi.list) 
+   tt <- if (fname%in%gamlss::.gamlss.bi.list) 
         { 
         eval(call(porfun, q=val, mu=mu.val[i], bd=bd, lower.tail=TRUE))+
         eval(call(porfun, q=val, mu=mu.val[i], bd=bd, lower.tail=FALSE))
@@ -242,20 +242,20 @@ warning( cat( "for the value", val, "the tails of p functions do not add to 1", 
 ################################################################################
 ## fitting data 
 ## create data set in the  global environment 
-   dat <<-dat <- if (fname%in%gamlss:::.gamlss.bi.list) eval(call(rorfun, N ,mu=mu.val[i], bd=bd))
-                 else eval(call(rorfun, N ,mu=mu.val[i])) #create data
+   dat <<-dat <- if (fname%in%gamlss::.gamlss.bi.list) eval(call(rorfun, n=N ,mu=mu.val[i], bd=bd))
+                 else eval(call(rorfun, n=N ,mu=mu.val[i])) #create data
 if (trace==TRUE) cat("--fitting models-- \n")
-   m1 <- try(if (fname%in%gamlss:::.gamlss.bi.list)  
-                   gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
-              else gamlss(dat~1, family=fam, trace=FALSE, n.cyc=100))  
+   m1 <- try(if (fname%in%gamlss::.gamlss.bi.list)  
+                   gamlss::gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
+              else gamlss::gamlss(dat~1, family=fam, trace=FALSE, n.cyc=100))  
     if (any(class(m1)%in%"try-error")||any(is.na(deviance(m1))))
          { 
-         warning(paste("gamlss method RS()  failed", "at mu", mu.val[i], "\n"))
+         warning(paste("gamlss failed", "at mu", mu.val[i], "\n"))
     }
 cat("gamlss: ", deviance(m1), "\n")
-   m2 <- try(if (fname%in%gamlss:::.gamlss.bi.list) 
-         gamlss2(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
-    else gamlss2(dat~1, family=fam, trace=FALSE, ...))
+   m2 <- try(if (fname%in%gamlss::.gamlss.bi.list) 
+         gamlss2::gamlss2(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
+    else gamlss2::gamlss2(dat~1, family=fam, trace=FALSE, ...))
 cat("gamlss2:", deviance(m2), "\n")
 if (any(class(m2)%in%"try-error")||any(is.na(deviance(m2))))
          { 
@@ -299,7 +299,7 @@ cat("testing at mu", mu.val[i], "sigma", sigma.val[j], "\n")
       }
 ################################################################################
 ## test whether a proper distribution summing up to 1
-intY <- if (fname%in%gamlss:::.gamlss.bi.list) 
+intY <- if (fname%in%gamlss::.gamlss.bi.list) 
       sum(eval(call(dorfun, x= c(y.range [1]:y.range[2]), mu=mu.val[i],  sigma=sigma.val[j], bd=bd))) 
         else sum(eval(call(dorfun, x= y.range [1]:10000, mu=mu.val[i],  sigma=sigma.val[j])))    
 if (abs(intY-1)> 0.001) 
@@ -308,11 +308,11 @@ else
   cat("The", fname,"distribution at mu", mu.val[i], "and sigma",  sigma.val[i],"sums up to one", "\n") 
 ################################################################################
 ## checking the whether the cdf and the inverse cdf match
-val <- if (fname%in%gamlss:::.gamlss.bi.list) eval(call(rorfun, n=1,mu=mu.val[i],sigma=sigma.val[j], bd=bd)) 
+val <- if (fname%in%gamlss::.gamlss.bi.list) eval(call(rorfun, n=1,mu=mu.val[i],sigma=sigma.val[j], bd=bd)) 
        else eval(call(rorfun, n=1,mu=mu.val[i],sigma=sigma.val[j])) # randomly generate a value
- pr <- if (fname%in%gamlss:::.gamlss.bi.list) eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], bd=bd))
+ pr <- if (fname%in%gamlss::.gamlss.bi.list) eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], bd=bd))
        else  eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j]))#  get the cdf
-qq <-  if (fname%in%gamlss:::.gamlss.bi.list) eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], bd=bd)) 
+qq <-  if (fname%in%gamlss::.gamlss.bi.list) eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], bd=bd)) 
        else eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j])) 
 if(abs(qq-val)>0.0001) 
   {
@@ -321,10 +321,10 @@ if(abs(qq-val)>0.0001)
   cat("The p and q function of distribution", fname, "at mu=", mu.val[i],"and sigma=",  sigma.val[i], "are compatible", "\n")     
 ################################################################################
 ## checking whether pdf and cdf match 
-    p1 <- if (fname%in%gamlss:::.gamlss.bi.list) 
+    p1 <- if (fname%in%gamlss::.gamlss.bi.list) 
                 sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i], sigma=sigma.val[j], bd=bd))) 
            else sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i], sigma=sigma.val[j])))     
-    aa <- if (fname%in%gamlss:::.gamlss.bi.list) 
+    aa <- if (fname%in%gamlss::.gamlss.bi.list) 
                  p1-eval(call(porfun, q=val[1], mu=mu.val[i], sigma=sigma.val[j], bd=bd))
           else   p1- eval(call(porfun, q=val[1], mu=mu.val[i], sigma=sigma.val[j])) #pNO(val)
    if(abs(aa)>0.0001)
@@ -332,7 +332,7 @@ if(abs(qq-val)>0.0001)
        cat("The d and p values of distribution", fname, "at mu=", mu.val[i],"and sigma=", sigma.val[i], "are OK", "\n")     
 ################################################################################ 
 ## checking whether tails in p function 
-tt <- if (fname%in%gamlss:::.gamlss.bi.list) 
+tt <- if (fname%in%gamlss::.gamlss.bi.list) 
       {
       eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], bd=bd, lower.tail=TRUE))+
       eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], bd=bd, lower.tail=FALSE))
@@ -348,18 +348,18 @@ if(abs(tt-1)>0.0001)
 ################################################################################
 ## fitting data 
 ## create data set in the  global environment  
-dat <<- dat <- if (fname%in%gamlss:::.gamlss.bi.list) 
-                  eval(call(rorfun, N ,mu=mu.val[i], sigma=sigma.val[j], bd=bd))
-             else eval(call(rorfun, N ,mu=mu.val[i], sigma=sigma.val[j])) #create data
+dat <<- dat <- if (fname%in%gamlss::.gamlss.bi.list) 
+                  eval(call(rorfun, n=N ,mu=mu.val[i], sigma=sigma.val[j], bd=bd))
+             else eval(call(rorfun, n=N ,mu=mu.val[i], sigma=sigma.val[j])) #create data
 if (trace==TRUE) cat("--fitting models-- \n")
-m1 <- try( if (fname%in%gamlss:::.gamlss.bi.list) gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
+m1 <- try( if (fname%in%gamlss::.gamlss.bi.list) gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
           else gamlss(dat~1, family=fam, trace=FALSE, ...))  
 if (any(class(m1)%in%"try-error")||any(is.na(deviance(m1))))
          { 
          warning(paste("gamlss method RS()  failed", "at mu", mu.val[i], "and sigma", sigma.val[j], "\n"))
 }
 cat("gamlss: ", deviance(m1), "\n")
-m2 <- try( if (fname%in%gamlss:::.gamlss.bi.list) 
+m2 <- try( if (fname%in%gamlss::.gamlss.bi.list) 
                 gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, method=mixed(2,100), ...)
            else gamlss(dat~1, family=fam, trace=FALSE, method=mixed(2,100),...))
 cat("gamlss2:", deviance(m2), "\n")
@@ -414,7 +414,7 @@ cat("testing at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k], "\n")
 }
 ################################################################################       
 ## test whether a proper distribution summing up to 1
-intY <- if (fname%in%gamlss:::.gamlss.bi.list)  
+intY <- if (fname%in%gamlss::.gamlss.bi.list)  
     sum(eval(call(dorfun, x= y.range [1]:bd, mu=mu.val[i],  sigma=sigma.val[j],  nu=nu.val[k], bd=bd)))   
         else  sum(eval(call(dorfun, x= y.range [1]:10000, mu=mu.val[i],  sigma=sigma.val[j],  nu=nu.val[k])))    
 if (abs(intY-1)> 0.001) 
@@ -422,13 +422,13 @@ if (abs(intY-1)> 0.001)
       cat("The",fname,"distribution at mu", mu.val[i], "sigma", sigma.val[i], "and nu", nu.val[i], "sums up to one", "\n")     
 ################################################################################
 ## checking the whether the cdf and the inverse cdf are compatible
-val <-  if (fname%in%gamlss:::.gamlss.bi.list) 
+val <-  if (fname%in%gamlss::.gamlss.bi.list) 
              eval(call(rorfun, n=1,mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], bd=bd))
         else eval(call(rorfun, n=1,mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k]))  
- pr <- if (fname%in%gamlss:::.gamlss.bi.list) 
+ pr <- if (fname%in%gamlss::.gamlss.bi.list) 
              eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], bd=bd))
         else eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k])) #  get the cdf
-qq <-  if (fname%in%gamlss:::.gamlss.bi.list) 
+qq <-  if (fname%in%gamlss::.gamlss.bi.list) 
              eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], bd=bd)) 
         else eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k])) 
 if(abs(qq-val)>0.0001) 
@@ -436,10 +436,10 @@ if(abs(qq-val)>0.0001)
      cat("The p and q functions of", fname, "at mu", mu.val[i], "sigma", sigma.val[i], "and nu", nu.val[i], "sums up to one", "\n")  
 ################################################################################
 ## checking whether pdf and cdf match 
-  p1 <- if (fname%in%gamlss:::.gamlss.bi.list) 
+  p1 <- if (fname%in%gamlss::.gamlss.bi.list) 
               sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i],  sigma=sigma.val[j], nu=nu.val[k], bd=bd)))   
          else sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i], sigma=sigma.val[j],nu=nu.val[k])))     
-  aa <- if (fname%in%gamlss:::.gamlss.bi.list) 
+  aa <- if (fname%in%gamlss::.gamlss.bi.list) 
               p1-eval(call(porfun, q=val[1],  mu=mu.val[i],sigma=sigma.val[j],  nu=nu.val[k], bd=bd))
         else p1-eval(call(porfun, q=val[1],  mu=mu.val[i], sigma=sigma.val[j],  nu=nu.val[k])) #pNO(val)
 if(abs(aa)>0.0001)
@@ -448,7 +448,7 @@ if(abs(aa)>0.0001)
             nu.val[k], "are OK", "\n")
 ################################################################################
 ## checking the tails in p function 
-tt <-  if (fname%in%gamlss:::.gamlss.bi.list) 
+tt <-  if (fname%in%gamlss::.gamlss.bi.list) 
        {
        eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], bd=bd, lower.tail=TRUE))+
        eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], bd=bd, lower.tail=FALSE))
@@ -465,11 +465,11 @@ if(abs(tt-1)>0.0001)
 ################################################################################
 ## fitting data 
 ## generate data in the global enviroment 
-dat <<- dat<- if (fname%in%gamlss:::.gamlss.bi.list) 
+dat <<- dat<- if (fname%in%gamlss::.gamlss.bi.list) 
                  eval(call(rorfun, N ,mu=mu.val[i], sigma=sigma.val[j], nu=nu.val[k], bd=bd )) 
             else eval(call(rorfun, N ,mu=mu.val[i], sigma=sigma.val[j], nu=nu.val[k])) #create data
 if (trace==TRUE) cat("--fitting models-- \n")
-m1 <- try( if (fname%in%gamlss:::.gamlss.bi.list) 
+m1 <- try( if (fname%in%gamlss::.gamlss.bi.list) 
                gamlss(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
           else gamlss(dat~1, family=fam, trace=FALSE)) 
 cat("gamlss : ", deviance(m1), "\n")
@@ -477,7 +477,7 @@ cat("gamlss : ", deviance(m1), "\n")
          { 
           warning(paste("gamlss method RS()  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k],  "\n"))
       }
-m2 <- try( if (fname%in%gamlss:::gamlss.bi.list) 
+m2 <- try( if (fname%in%gamlss::gamlss.bi.list) 
                 gamlss2(cbind(dat, bd-dat)~1, family=fam, trace=FALSE, ...)
            else gamlss(dat~1, family=fam, trace=FALSE, method=mixed(2,100),...))
 cat("gamlss2: ", deviance(m2), "\n")
@@ -531,7 +531,7 @@ cat("testing at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau"
  }
 ################################################################################
 ## test whether a proper distribution summing up to 1
- intY <- if (fname%in%gamlss:::.gamlss.bi.list)  
+ intY <- if (fname%in%gamlss::.gamlss.bi.list)  
    sum(eval(call(dorfun, x= y.range [1]:bd, mu=mu.val[i],  sigma=sigma.val[j],  nu=nu.val[k],  tau=tau.val[l], bd=bd))) else  
    sum(eval(call(dorfun, x= y.range [1]:10000, mu=mu.val[i],  sigma=sigma.val[j],  nu=nu.val[k], tau=tau.val[l])))    
 if (abs(intY-1)> 0.001) 
@@ -540,15 +540,15 @@ if (abs(intY-1)> 0.001)
              "and tau", tau.val[i], "sums up to one","\n")      
 ################################################################################
 ## checking the whether the cdf an inverse cdf are comparable 
-val <- if (fname%in%gamlss:::.gamlss.bi.list)  
+val <- if (fname%in%gamlss::.gamlss.bi.list)  
   eval(call(rorfun, n=1,   mu=mu.val[i], sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l], bd=bd)) 
       else  
   eval(call(rorfun, n=1,   mu=mu.val[i], sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l])) 
- pr <- if (fname%in%gamlss:::.gamlss.bi.list) 
+ pr <- if (fname%in%gamlss::.gamlss.bi.list) 
   eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l], bd=bd))
       else 
   eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l])) #  get the cdf
- qq <-  if (fname%in%gamlss:::.gamlss.bi.list) 
+ qq <-  if (fname%in%gamlss::.gamlss.bi.list) 
   eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l], bd=bd)) 
 else eval(call(qorfun, p=pr, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l])) 
 if(abs(qq-val)>0.0001) 
@@ -557,10 +557,10 @@ if(abs(qq-val)>0.0001)
           cat("The p and q functions of", fname, "at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k], "and tau", tau.val[l], "sums up to one", "\n")  
 ################################################################################
 ## checking whether pdf and cdf match 
- p1 <- if (fname%in%gamlss:::.gamlss.bi.list) 
+ p1 <- if (fname%in%gamlss::.gamlss.bi.list) 
    sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i],  sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l], bd=bd)))   
  else sum(eval(call(dorfun, x=y.range [1]:val[1],  mu=mu.val[i],  sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l])))     
- aa <- if (fname%in%gamlss:::.gamlss.bi.list) 
+ aa <- if (fname%in%gamlss::.gamlss.bi.list) 
    p1-eval(call(porfun, q=val[1],  mu=mu.val[i],  sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l], bd=bd))
        else p1-eval(call(porfun, q=val[1],  mu=mu.val[i],   sigma=sigma.val[j], nu=nu.val[k], tau=tau.val[l])) 
 if(abs(aa)>0.0001)
@@ -569,7 +569,7 @@ if(abs(aa)>0.0001)
           nu.val[k], "and tau", tau.val[l], "are OK", "\n")
 ################################################################################
 ## checking the tail in p function 
- tt <-  if (fname%in%gamlss:::.gamlss.bi.list) 
+ tt <-  if (fname%in%gamlss::.gamlss.bi.list) 
  {
    eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k],  tau=tau.val[l], bd=bd, lower.tail=TRUE))+
      eval(call(porfun, q=val, mu=mu.val[i],sigma=sigma.val[j], nu=nu.val[k],  tau=tau.val[l], bd=bd, lower.tail=FALSE))
@@ -624,8 +624,7 @@ if (trace==FALSE) cat("---------------------------------------------------------
 ################################################################################
 ################################################################################
 # PLOTS
-# 
-if (fname%in%gamlss:::.gamlss.bi.list) 
+if (fname%in%gamlss::.gamlss.bi.list) 
 {
 if (no.active.par==1&&y.range[1]==0&&y.range[2]==bd)
     binom_1_31(fam)
@@ -668,17 +667,17 @@ cat("***************************************************************************
 
 #*******************************************************************************
 
-plotDiff <- function(...)
-{
-nrows<-dim(theDdata)[2]
-for (i in 1:nrows) 
- {
- Da<-theDdata[,i]
- op<-par(ask=TRUE)
- histDist(Da, ...)
- }
-par(op) 
-}
+# plotDiff <- function(...)
+# {
+# nrows<-dim(theDdata)[2]
+# for (i in 1:nrows) 
+#  {
+#  Da<-theDdata[,i]
+#  op<-par(ask=TRUE)
+#  histDist(Da, ...)
+#  }
+# par(op) 
+# }
 ################################################################################
 ################################################################################
 #test_discrete_gamlss_dist("PO",mu.val=c(1,2,10), y.range=c(0, Inf))

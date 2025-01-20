@@ -42,6 +42,7 @@ pEXP <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
    }
 #----------------------------------------------------------------------------------------
 qEXP <- function(p, mu = 1, lower.tail = TRUE, log.p = FALSE)
+
   {      
           if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
        #   if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    

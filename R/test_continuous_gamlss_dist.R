@@ -19,7 +19,7 @@
 ################################################################################
 # Mikis : this function is a new version of the old `testContDist`
 # 21_11_2007   RS with 500 and mixed(20,500) for  3 and 4 parameter distributions
-test_continuous_gamlss_dist<- function(family = "NO", 
+test_continuous_gamlss_dist <- function(family = "NO", 
                    y.range = c(-Inf,Inf), # the range of the resposnse  
                   mu.range = c(-Inf,Inf), # 
                sigma.range = c(0,Inf),
@@ -88,9 +88,9 @@ cat(eval(call(qfun, exp(-1), lower.tail=FALSE)), "\n")
 ################################################################################  
 ################################################################################
 ## main function  starts here    
-require(codetools)
-require(gamlss)
-require(gamlss2)
+requireNamespace(codetools)
+requireNamespace(gamlss)
+requireNamespace(gamlss2)
 ################################################################################  
        fam  <- as.gamlss.family(family) # family
     distype <- fam$type 
@@ -109,11 +109,11 @@ theDiffdata <- NULL
 cat("************** the test for", paste(fname), "distribution starts here ****************", "\n") 
 cat("----- first using the checkUsage() function ----", "\n")
 # checking using codetools #####################################################
-checkUsage(eval(parse(text=fname)))
-checkUsage(eval(parse(text=dorfun)))
-checkUsage(eval(parse(text=porfun)))
-checkUsage(eval(parse(text=qorfun)))
-checkUsage(eval(parse(text=rorfun)))
+codetools::checkUsage(eval(parse(text=fname)))
+codetools::checkUsage(eval(parse(text=dorfun)))
+codetools::checkUsage(eval(parse(text=porfun)))
+codetools::checkUsage(eval(parse(text=qorfun)))
+codetools::checkUsage(eval(parse(text=rorfun)))
 cat("----- checkUsage() finished ----", "\n")
 ################################################################################
 cat("----- start checking the range of the functions ----", "\n")
@@ -153,7 +153,7 @@ cat("testing for  mu at value", mu.val[i], "\n")
   else cat("The", fname,  "distribution at mu", mu.val[i], "sums up to one", "\n")   
 ################################################################################
 ## checking  whether the cdf and the inverse cdf  (q-function) are compatible 
-val <- eval(call(rorfun, n=100,   mu=mu.val[i])) # randomly generate a value
+val <- eval(call(rorfun, n=N,   mu=mu.val[i])) # randomly generate a value
  pr <- eval(call(porfun, q=val, mu=mu.val[i])) #  get the cdf
 qq <-  eval(call(qorfun, p=pr,  mu=mu.val[i])) 
 if(any(abs(qq-val)>crit)) 
@@ -284,7 +284,7 @@ m2 <- try(gamlss2(dat~1, family=fam, trace=FALSE))
 cat("gamlss2:", deviance(m2), "\n")
 if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2)))))
          { 
-         warning(paste("gamlss method mixed()  failed", "at mu", mu.val[i], "and sigma", sigma.val[j], "\n"))
+         warning(paste("gamlss  failed", "at mu", mu.val[i], "and sigma", sigma.val[j], "\n"))
          }
       if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2))))||(any(class(m1)[1]%in%"try-error"||any(is.na(deviance(m1))))))
          { 
@@ -375,11 +375,11 @@ m1 <- try(gamlss(dat~1, family=fam, trace=FALSE, n.cyc=500))
           warning(paste("gamlss method RS()  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k],  "\n"))
       }
 cat("gamlss : ", deviance(m1), "\n")
-m2 <- try(gamlss(dat~1, family=fam, trace=FALSE, method=mixed(20,500)))
+m2 <- try(gamlss(dat~1, family=fam, trace=FALSE))
 cat("gamlss2: ", deviance(m2), "\n")
 if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2)))))
          { 
-         warning(paste("gamlss method mixed()  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k], "\n"))
+         warning(paste("gamlss  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k], "\n"))
          }
       if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2))))||(any(class(m1)[1]%in%"try-error"||any(is.na(deviance(m1))))))
          { 
@@ -392,7 +392,7 @@ if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2)))))
          {
          dd <- deviance(m1)-deviance(m2)
          if(abs(dd)>crit) # what level we want ?? 
-         warning( cat("The deviances for methods RS() and mixed() do not agree at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k],  "with a difference", dd, "\n"))  
+         warning( cat("The deviances for methods do not agree at mu", mu.val[i], "sigma", sigma.val[j], "and nu", nu.val[k],  "with a difference", dd, "\n"))  
          if(abs(dd)>0.5)
           {
            theDiffdata<-cbind(theDiffdata,dat) 
@@ -471,10 +471,10 @@ if (any(class(m1)[1]%in%"try-error"||any(is.na(deviance(m1)))))
           { 
           warning(paste("gamlss method RS()  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau", tau.val[l], "\n"))
 } else cat("gamlss : ", deviance(m1), "\n") 
-m2 <- try(gamlss(dat~1, family=fam, trace=FALSE, method=mixed(20,500)))
+m2 <- try(gamlss(dat~1, family=fam, trace=FALSE))
 if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2)))))
           { 
-          warning(paste("gamlss method mixed()  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau", tau.val[l], "\n"))
+          warning(paste("gamlss  failed", "at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau", tau.val[l], "\n"))
           } else cat("gamlss2: ", deviance(m2), "\n") 
 if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2))))||(any(class(m1)[1]%in%"try-error"||any(is.na(deviance(m1))))))
           { 
@@ -487,7 +487,7 @@ if (any(class(m2)[1]%in%"try-error"||any(is.na(deviance(m2))))||(any(class(m1)[1
          {
       dd <- deviance(m1)-deviance(m2)
    if(abs(dd)>crit) # what level we want ?? 
-      warning( cat("The deviances for methods RS() and mixed() do not agree at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau", tau.val[l], "with a difference", dd, "\n"))  
+      warning( cat("The deviances do not agree at mu", mu.val[i], "sigma", sigma.val[j], "nu", nu.val[k],"and tau", tau.val[l], "with a difference", dd, "\n"))  
       if(abs(dd)>0.5)
           {
            theDiffdata <-cbind(theDiffdata,dat) 
