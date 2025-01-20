@@ -89,13 +89,10 @@ structure(list(family = c("GEOM", "Geometric"),
         nopar = 1,                       
         type = "Discrete",               
         mu.link = as.character(substitute(mu.link)),  
-        mu.linkfun = mstats$linkfun,
-        mu.linkinv = mstats$linkinv,
-        mu.dr = mstats$mu.eta,
-        dldm <- function(y, mu){
-          dldm <- (y - mu)/(mu + (mu^2))
-          dldm
-        },                                             
+        mu.linkfun = mstats$linkfun, 
+        mu.linkinv = mstats$linkinv, 
+        mu.dr = mstats$mu.eta, 
+        dldm = function(y, mu) (y - mu)/(mu + (mu^2)),                                             
         d2ldm2 = function(mu){
           d2ldm2 <- -1/(mu+(mu^2))
           d2ldm2
