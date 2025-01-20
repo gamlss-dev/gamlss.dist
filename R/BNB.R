@@ -207,9 +207,8 @@ qBNB <- function(p, mu=1, sigma=1, nu=1,  lower.tail = TRUE, log.p = FALSE,
   {      
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
 if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-
-if (log.p==TRUE) p <- exp(p) else p <- p
-if (lower.tail==TRUE) p <- p else p <- 1-p  
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail==FALSE) p <- 1-p  
            ly <- max(length(p),length(mu),length(sigma),length(nu)) 
             p <- rep(p, length = ly)                                                         
           QQQ <- rep(0,length = ly)                         

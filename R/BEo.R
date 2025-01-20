@@ -61,7 +61,13 @@ dBEo<-function(x, mu = 0.5, sigma = 0.2, log = FALSE)
           if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
       #    if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
+          ly <- max(length(x),length(mu),length(sigma)) 
+           x <- rep(x, length = ly)      
+       sigma <- rep(sigma, length = ly)
+          mu <- rep(mu, length = ly)   
           fy <- dbeta(x, shape1=mu, shape2=sigma, ncp=0, log=log)
+          fy[x <= 0] <- 0
+          fy[x >= 1] <- 0
           fy
   }
 #------------------------------------------------------------------------------------------
@@ -70,22 +76,28 @@ pBEo <- function(q, mu=0.5, sigma=0.2, lower.tail = TRUE, log.p = FALSE)
          if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
  #        if (any(q <= 0) | any(q >= 1))  stop(paste("y must be between 0 and 1", "\n", ""))  
+            n <- max(length(q), length(mu), length(sigma))
+            q <- rep_len(q, n)
+           mu <- rep_len(mu, n)
+        sigma <- rep_len(sigma, n)
           cdf <- pbeta(q, shape1=mu, shape2=sigma, ncp=0, lower.tail=lower.tail, log.p=log.p)
+          cdf[q<0] <- 0
+          cdf[q>=1] <- 1
           cdf
    }
 #------------------------------------------------------------------------------------------
 qBEo <- function(p, mu=0.5, sigma=0.2,  lower.tail = TRUE, log.p = FALSE)
   {      if (any(mu <= 0)) stop(paste("mu must be positive", "\n", ""))
           if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", ""))  
-         # if (any(p <= 0) | any(p >= 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
+          n <- max(length(p), length(mu), length(sigma))
+          p <- rep_len(p, n)
+         mu <- rep_len(mu, n)
+      sigma <- rep_len(sigma, n) 
           q <- qbeta(p, shape1=mu, shape2=sigma, lower.tail=lower.tail, log.p=log.p)
-          # q[p-0 < abs(1e-10)]  <- 0
-          # q[1-p < abs(1e-10)]  <- 1
-          # q[p <  0] <- NaN
-          # q[p >  1] <- NaN
-          q[p <= 0] <- -Inf
-          q[p >= 1] <- Inf
-   q[p < 0 | p > 1] <- NaN
+          q[p-0 < abs(1e-10)]  <- 0
+          q[1-p < abs(1e-10)]  <- 1
+          q[p <  0] <- NaN
+          q[p >  1] <- NaN
           return(q)
    }
 #------------------------------------------------------------------------------------------

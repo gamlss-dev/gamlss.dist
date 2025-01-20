@@ -254,21 +254,22 @@ dSEP1 <- function(x, mu = 0, sigma = 1, nu = 0, tau = 2, log = FALSE)
  {
           if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
           if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-      z <- (x-mu)/sigma
-      w <- nu*z
-     sz <- ((abs(z))^tau)/tau 
-      s <- ((abs(w))^tau)/tau 
+       z <- (x-mu)/sigma
+       w <- nu*z
+      sz <- ((abs(z))^tau)/tau 
+       s <- ((abs(w))^tau)/tau 
     lpdf <- (1-(1/tau))*log(tau)-sz-lgamma(1/tau)-log(2)
-    lcdf1 <- log(0.5*(1+pgamma(s,shape=1/tau,scale=1)*sign(w)))
+   lcdf1 <- log(0.5*(1+pgamma(s,shape=1/tau,scale=1)*sign(w)))
     cdf2 <- 0.5 + w*exp((1-(1/tau))*log(tau)-lgamma(1/tau)-log(2))
-     suppressWarnings(lcdf2 <- log(cdf2))
+ suppressWarnings(lcdf2 <- log(cdf2))
     lcdf <- ifelse((s==0),lcdf2,lcdf1) # note this change, note ifelse used here 
- loglik <- lpdf + lcdf + log(2) - log(sigma)
-       if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
+  loglik <- lpdf + lcdf + log(2) - log(sigma)
+if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
        ft
   }    
-#------------------------------------------------------------------------------------------
-pSEP1 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+#-------------------------------------------------------------------------------
+pSEP1 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+                  log.p = FALSE)
  {   if (any(sigma <= 0)) stop(paste("sigma must be positive", "\n", "")) 
      if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))    
          lp <- pmax.int(length(q), length(mu), length(sigma), length(nu), length(tau))                                                                  
@@ -292,9 +293,10 @@ pSEP1 <- function(q, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.
 ################################################################################
 ################################################################################
 ################################################################################
-qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log.p = FALSE)
+qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, 
+                   log.p = FALSE)
   { 
-#---functions--------------------------------------------   
+#---functions-------------------------------------------------------------------   
        h1 <- function(q)
        { 
      pSEP1(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) - p[i] 
@@ -303,7 +305,7 @@ qSEP1 <-  function(p, mu = 0, sigma = 1, nu = 0, tau = 2, lower.tail = TRUE, log
        { 
      pSEP1(q , mu = mu[i], sigma = sigma[i], nu = nu[i], tau = tau[i]) 
        }
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
     #if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
     if (log.p==TRUE) p <- exp(p) else p <- p

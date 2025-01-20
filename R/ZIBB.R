@@ -109,9 +109,9 @@ if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n
              nu <- rep(nu, length = ly)   
              bd <- rep(bd, length = ly) 
           logfy <- rep(0, ly)
-if (any(x==0)) logfy[x==0] <- log(nu[x==0]+(1-nu[x==0])*dBB(0,mu[x==0],sigma[x==0],bd[x==0]))
-    logfy[x!=0] <- log(1-nu[x!=0]) + dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=T)
-  if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+if (any(x==0))  logfy[x==0] <- log(nu[x==0]+(1-nu[x==0])*dBB(0,mu[x==0],sigma[x==0],bd[x==0]))
+if (any(x!=0))  logfy[x!=0] <- log(1-nu[x!=0]) + dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=T)
+if(log == FALSE) fy <- exp(logfy) else fy <- logfy
           fy[x < 0] <- 0 
           fy[x > bd] <- 0 
           fy
@@ -159,9 +159,9 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
             nu <- rep(nu, length = ly)   
             bd <- rep(bd, length = ly) 
           pnew <- ((p-nu)/(1-nu)) - (1e-7)
-   pnew[ pnew<0 ] <- 0
-   q[ pnew>0 ] <- qBB(p = pnew, mu = mu, sigma=sigma, bd=bd, lower.tail = lower.tail, log.p = log.p)
-      #    suppressWarnings(q <- ifelse(( ), )
+if (any( pnew<0))   pnew[ pnew<0 ] <- 0
+if (any( pnew>0))   q[ pnew>0 ] <- qBB(p = pnew[ pnew>0 ], mu = mu[ pnew>0 ], 
+    sigma=sigma[ pnew>0 ], bd=bd[ pnew>0 ], lower.tail = lower.tail, log.p = log.p)
      q[p == 0] <- 0
      q[p == 1] <- bd
      q[p <  0] <- NaN

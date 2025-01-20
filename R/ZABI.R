@@ -63,7 +63,7 @@ dZABI<-function(x, bd = 1, mu = 0.5, sigma = 0.1, log = FALSE)
            logfy <- rep(0, ly)
 if (any(x==0)) logfy[x==0] <- log(sigma)[x==0]
      logfy[x!=0] <- log(1-sigma[x!=0])+dBI(x[x!=0],bd[x!=0],mu[x!=0],log=TRUE)-log(1-dBI(0,bd[x!=0],mu[x!=0]))
-#           logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dBI(x,bd,mu,log=TRUE)-log(1-dBI(0,bd,mu)))      
+#          logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dBI(x,bd,mu,log=TRUE)-log(1-dBI(0,bd,mu)))      
 if(log == FALSE) fy <- exp(logfy) else fy <- logfy
            fy[x < 0] <- 0 
            fy[x > bd] <- 0 

@@ -68,6 +68,8 @@ dLOGITNO<-function(x, mu=0.5, sigma=1, log=FALSE)
      
     loglik <- dnorm(z, mean=log(mu/(1-mu)), sd=sigma, log=TRUE)-log(x)-log(1-x)
     if(log==FALSE) fy  <- exp(loglik) else fy <- loglik 
+    fy[x <= 0] <- 0
+    fy[x >= 1] <- 0
     fy
   }
 ################################################################################
@@ -79,6 +81,8 @@ pLOGITNO<- function(q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     qz <- log(q/(1-q))
     cdf <- pnorm(qz, mean=log(mu/(1-mu)), sd=sigma, lower.tail = lower.tail, log.p = log.p)
+    cdf[q<0] <- 0
+    cdf[q>=1] <- 1
     cdf
    }
 ################################################################################
@@ -91,8 +95,8 @@ qLOGITNO<- function(p, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
 #    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
     qz <- qnorm(p, mean=log(mu/(1-mu)), sd=sigma, lower.tail = lower.tail )
     qy <- 1/(1+exp(-qz))
-    qy[p == 0] <- 0
-    qy[p == 1] <- 1
+    qy[p-0 < abs(1e-10)]  <- 0
+    qy[1-p < abs(1e-10)]  <- 1
     qy[p <  0] <- NaN
     qy[p >  1] <- NaN
     return(qy)

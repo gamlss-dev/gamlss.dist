@@ -308,7 +308,7 @@ pSICHEL <- function(q, mu=1, sigma=1, nu=-0.5, lower.tail = TRUE, log.p = FALSE)
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
  # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))  
      ly <- max(length(q),length(mu),length(sigma),length(nu)) 
-      qq <- rep(q,length = ly) 
+      qq <- q <- rep(q,length = ly) 
   qq[q < 0] <- 0
   qq[q >= Inf] <- 0
  #    qq <- ifelse(q < 0, 0, q)

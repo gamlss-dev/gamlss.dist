@@ -62,11 +62,17 @@ dSIMPLEX <- function (x, mu=0.5, sigma=1, log = FALSE)
    if (any(mu <= 0) || any(mu >= 1) )  stop(paste("mu must be between 0 and 1", "\n", ""))
    if (any(sigma <= 0) )  stop(paste("sigma must be positive", "\n", "")) 
 #   if (any(x <= 0) || any( x >= 1))  stop(paste(" must be between 0 and 1", "\n", ""))
-       xx <- ifelse( x<= 0 | x>=1, 0.5 ,  x) 
+             lp <- pmax.int(length(x), length(mu), length(sigma))                                                  
+             xx <- rep(x, length = lp)
+          sigma <- rep(sigma, length = lp)
+             mu <- rep(mu, length = lp)
+      xx[x<= 0] <- 0.5 
+      xx[x>= 1] <- 0.5 
    logpdf <- -((xx - mu)/(mu * (1 - mu)))^2/(2 * xx * (1 - xx) * sigma^2) - 
               (log(2 * pi * sigma^2) + 3 * (log(xx) + log(1 - xx)))/2
    if (!log) logpdf <- exp(logpdf)
-     logpdf <- ifelse( x<= 0 | x>=1, 0, logpdf)
+     logpdf[x<= 0] <- 0
+     logpdf[x>= 1] <- 0
      logpdf
 }
 ################################################################################
@@ -98,14 +104,15 @@ pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
  # if (any(q <= 0) || any(q >= 1)) stop(paste("q must be between 0 and 1", "\n", ""))
   if (any(mu <= 0) || any(mu >= 1))   stop(paste("mu must be between 0 and 1", "\n", ""))
   if (any(sigma <= 0) )    stop(paste("sigma must be between positive", "\n", ""))    
-     lp <- pmax.int(length(q), length(mu), length(sigma))                                                                  
-      q <- rep(q, length = lp)
-  sigma <- rep(sigma, length = lp)
-     mu <- rep(mu, length = lp)
-   zero <- rep(0, length = lp)
-    qq <- ifelse( q<= 0 | q>=1, 0.5 ,  q)
-    pdf <- function(x, mu,sigma) 1/sqrt(2 * pi * sigma^2 * (x * (1 - x))^3) * exp(-1/2/sigma^2 * 
-                      (x - mu)^2/(x * (1 - x) * mu^2 * (1 - mu)^2))
+       lp <- pmax.int(length(q), length(mu), length(sigma))                                                       
+       qq <- rep(q, length = lp)
+    sigma <- rep(sigma, length = lp)
+       mu <- rep(mu, length = lp)
+     zero <- rep(0, length = lp)
+qq[qq<= 0] <- 0.5
+qq[qq>= 1] <- 0.5 
+      pdf <- function(x, mu,sigma) 1/sqrt(2 * pi * sigma^2 * (x * (1 - x))^3) * exp(-1/2/sigma^2 * 
+                       (x - mu)^2/(x * (1 - x) * mu^2 * (1 - mu)^2))
     cdfun <- function(upper, mu, sigma) 
      {int <- integrate(pdf, lower=0, upper=upper, mu, sigma)
       int$value 
@@ -114,7 +121,8 @@ pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
      cdf <- Vcdf(upper=qq, mu=mu, sigma=sigma)
   if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
   if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
-  cdf <- ifelse( q<= 0 | q>=1, 0, cdf)   
+  cdf[q<= 0] <- 0   
+  cdf[q>= 1] <- 1  
   cdf    
 }
 ################################################################################
@@ -153,16 +161,17 @@ pSIMPLEX <- function (q, mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
 qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE) 
 {
  
-    if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-    if (any(mu <= 0) || any(mu >= 1))   stop(paste("mu must be between 0 and 1", "\n", ""))     
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
-    #    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-    lp <-  max(length(p),length(mu),length(sigma))
-    p <- rep(p, length = lp)                                                                     
-    sigma <- rep(sigma, length = lp)
-    mu <- rep(mu, length = lp)
-    q <- rep(0,lp) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(mu <= 0) || any(mu >= 1))   stop(paste("mu must be between 0 and 1", "\n", ""))     
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
+      lp <-  max(length(p),length(mu),length(sigma))
+       p <- pp <- rep(p, length = lp)                                                                     
+   sigma <- rep(sigma, length = lp)
+      mu <- rep(mu, length = lp)
+       q <- rep(0,lp) 
+pp[p<= 0] <- 0.5
+pp[p>= 1] <- 0.5   
     # local functions    
     h1 <- function(x,mu,sigma,p) pSIMPLEX(x , mu, sigma ) - p  
     uni <- function(mu, sigma, p)
@@ -171,9 +180,9 @@ qSIMPLEX <- function (p,  mu=0.5, sigma=1, lower.tail = TRUE, log.p = FALSE)
       val$root
     }
     UNI <- Vectorize(uni)
-    q <- UNI( mu=mu, sigma=sigma, p=p)
-    q[p == 0] <- 0
-    q[p == 1] <- 1
+    q <- UNI( mu=mu, sigma=sigma, p=pp)
+    q[p-0 < abs(1e-10)]  <- 0
+    q[1-p < abs(1e-10)]  <- 1
     q[p <  0] <- NaN
     q[p >  1] <- NaN
     return(q)

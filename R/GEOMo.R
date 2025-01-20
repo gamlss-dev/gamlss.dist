@@ -40,8 +40,9 @@ pGEOMo<-function (q, mu = .5, lower.tail = TRUE, log.p = FALSE)
 #Quantile function
 qGEOMo<-function (p, mu = .5, lower.tail = TRUE, log.p = FALSE)
 {
-    if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
-#    if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
+if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail == FALSE) p <- 1-p 
    QQQ <- qgeom(p, prob=mu, lower.tail = TRUE, log.p = FALSE)
    QQQ[p == 0] <- 0
    QQQ[p == 1] <- Inf

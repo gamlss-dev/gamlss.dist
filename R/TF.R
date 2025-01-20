@@ -5,10 +5,9 @@
 # MS + BR last change Thursday, April 13, 2006
 TF <- function (mu.link="identity", sigma.link="log", nu.link ="log")
 {
-    mstats <- checklink("mu.link", "t Family", substitute(mu.link), c("inverse", "log", "identity", "own"))
-    dstats <- checklink("sigma.link", "t Family", substitute(sigma.link), c("inverse", "log", "identity", "own"))
-    vstats <- checklink("nu.link", "t Family", substitute(nu.link), c("inverse", "log", "identity", "own"))
-    
+  mstats <- checklink("mu.link", "t Family", substitute(mu.link), c("inverse", "log", "identity", "own"))
+  dstats <- checklink("sigma.link", "t Family", substitute(sigma.link), c("inverse", "log", "identity", "own"))
+  vstats <- checklink("nu.link", "t Family", substitute(nu.link), c("inverse", "log", "identity", "own"))
     structure(
           list(family = c("TF", "t Family"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE), 
@@ -105,8 +104,8 @@ pTF <- function(q, mu=0, sigma=1, nu=10, lower.tail = TRUE, log.p = FALSE)
   { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     if (any(nu <= 0))  stop(paste("nu must be positive", "\n", ""))  
     if (length(nu)>1) cdf <- ifelse(nu>1000000, 
-                                   pNO(q, mu=mu, sigma=sigma, lower.tail=lower.tail, log.p=log.p),
-                                    pt((q-mu)/sigma, df=nu,   lower.tail=lower.tail, log.p=log.p))
+                pNO(q, mu=mu, sigma=sigma, lower.tail=lower.tail, log.p=log.p),
+                 pt((q-mu)/sigma, df=nu,   lower.tail=lower.tail, log.p=log.p))
     else cdf <- if (nu>1000000)    pNO(q, mu=mu, sigma=sigma, lower.tail=lower.tail, log.p=log.p)
                    else pt((q-mu)/sigma, df=nu, lower.tail = lower.tail, log.p = log.p)
     cdf

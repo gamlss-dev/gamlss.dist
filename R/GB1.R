@@ -180,15 +180,22 @@ if (any(sigma <= 0) | any(sigma >= 1))
   stop(paste("sigma must be between 0 and 1", "\n", "")) 
 if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-           xx <- ifelse( x<= 0 | x>=1, 0.5 ,  x) 
-#if (any(x <= 0) | any(x >= 1))  stop(paste("x must be between 0 and 1", "\n", ""))  
-            a <- mu*((1/sigma^2)-1)
+            lp <- pmax.int(length(x), length(mu), length(sigma), length(nu), length(tau))                         
+            xx <- rep(x, length = lp)
+         sigma <- rep(sigma, length = lp)
+            mu <- rep(mu, length = lp)
+            nu <- rep(nu, length = lp)
+           tau <- rep(tau, length = lp)
+     xx[x<= 0] <- 0.5 
+     xx[x>= 1] <- 0.5 
+             a <- mu*((1/sigma^2)-1)
              b <- a*(1-mu)/mu
         loglik <- log(tau) + b*log(nu) + (tau*a-1)*log(xx) + (b-1)*log(1-xx^tau)
         loglik <- loglik -lgamma(a)-lgamma(b)+lgamma(a+b) - (a+b)*log(nu+(1-nu)*(xx^tau))
 if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
-               ft <- ifelse( x<= 0 | x>=1, 0, ft)
-               ft
+        ft[x <= 0] <- 0
+        ft[x >= 1] <- 0
+        ft
   }    
 ################################################################################
 ################################################################################
@@ -202,13 +209,22 @@ if (any(sigma <= 0) | any(sigma >= 1))
   stop(paste("sigma must be between 0 and 1", "\n", "")) 
 if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
+  lp <- pmax.int(length(q), length(mu), length(sigma), length(nu), length(tau))                         
+           qq <- rep(q, length = lp)
+        sigma <- rep(sigma, length = lp)
+           mu <- rep(mu, length = lp)
+           nu <- rep(nu, length = lp)
+          tau <- rep(tau, length = lp)
             a <- mu*((1/sigma^2)-1)
             b <- a*(1-mu)/mu
             z <- (q^tau)/(nu+(1-nu)*(q^tau))
+     z[q<= 0] <- 0.5
+     z[q>= 1] <- 0.5 
             p <- pbeta(z,a,b)
 if(lower.tail==TRUE) p  <- p else  p <- 1-p 
 if(log.p==FALSE) p  <- p else  p <- log(p) 
-            p <- ifelse( q<= 0 | q>=1, 0, p)
+     p[q<=0] <- 0
+     p[q>=1] <- 1
             p
  }
 ################################################################################
@@ -224,12 +240,20 @@ if (any(sigma <= 0) | any(sigma >= 1))
   stop(paste("sigma must be between 0 and 1", "\n", "")) 
 if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))  
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
-
+         lp <-  max(length(p),length(mu),length(sigma), length(nu), length(tau))
+          p <- pp <- rep(p, length = lp)                                                                     
+      sigma <- rep(sigma, length = lp)
+         mu <- rep(mu, length = lp)
+         nu <- rep(nu, length = lp)
+        tau <- rep(tau, length = lp)
+  pp[p<= 0] <- 0.5
+  pp[p>= 1] <- 0.5   
+          a <- mu*((1/sigma^2)-1)
+         b <- a*(1-mu)/mu
+         z <- qbeta(pp,a,b)  
 if (log.p==TRUE) p <- exp(p) else p <- p
 if (lower.tail==TRUE) p <- p else p <- 1-p
-                      a <- mu*((1/sigma^2)-1)
-                      b <- a*(1-mu)/mu
-                      z <- qbeta(p,a,b)
+                      
                       q <- (nu/((1/z)-(1-nu)))^(1/tau)
               q[p == 0] <- 0
               q[p == 1] <- 1

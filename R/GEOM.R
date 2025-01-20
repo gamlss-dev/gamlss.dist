@@ -44,9 +44,10 @@ pGEOM<-function (q, mu = 2, lower.tail = TRUE, log.p = FALSE)
 #Quantile function
 qGEOM<-function (p, mu = 2, lower.tail = TRUE, log.p = FALSE)
 {
-    if (any(mu < 0))
-        stop(paste("mu must be > 0)", "\n", ""))     
-#  if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
+if (any(mu < 0))
+        stop(paste("mu must be > 0)", "\n", ""))  
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail == FALSE) p <- 1-p 
      ly <- max(length(p), length(mu))
       p <- rep(p, length = ly)
      mu <- rep(mu, length = ly)

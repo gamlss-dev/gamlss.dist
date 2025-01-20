@@ -188,10 +188,11 @@ qDBI <- function(p, mu = .5, sigma = 1, bd=2, lower.tail = TRUE, log.p = FALSE  
   if (any(mu < 0) | any(mu > 1))  stop(paste("mu must be between 0 and 1", "\n", "")) 
   if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
   # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", "")) 
-  if (log.p==TRUE) p <- exp(p) else p <- p
-  if (lower.tail==TRUE) p <- p else p <- 1-p 
+  if (log.p==TRUE) p <- exp(p) 
+  if (lower.tail==FALSE)  p <- 1-p 
          ly <- max(length(p),length(mu),length(sigma)) 
           p <- rep(p, length = ly)      
+          
       sigma <- rep(sigma, length = ly)
          mu <- rep(mu, length = ly) 
          bd <- rep(bd, length = ly) 

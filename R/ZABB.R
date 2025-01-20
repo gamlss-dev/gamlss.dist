@@ -86,8 +86,8 @@ if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n
           nu <- rep(nu, length = ly)
           bd <- rep(bd, length = ly)  
        logfy <- rep(0, ly)
-logfy[x==0] <-  log(nu[x==0])
-logfy[x!=0] <-  log(1-nu[x!=0])+dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=TRUE)-
+if (any(x==0)) logfy[x==0] <-  log(nu[x==0])
+if (any(x!=0)) logfy[x!=0] <-  log(1-nu[x!=0])+ dBB(x[x!=0],mu[x!=0],sigma[x!=0],bd[x!=0],log=TRUE)-
                       log(1-dBB(0,mu[x!=0],sigma[x!=0],bd[x!=0]))
 #      logfy <- ifelse((x==0), log(nu), log(1-nu)+dBB(x,mu,sigma,bd,log=TRUE)-log(1-dBB(0,mu,sigma,bd)))          
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
@@ -114,9 +114,9 @@ pZABB <- function(q, mu = 0.5, sigma = 0.1, nu = 0.1, bd = 1, lower.tail = TRUE,
          cdf <- rep(0,ly)
         cdf1 <- pBB(q, mu, sigma, bd, lower.tail = TRUE, log.p = FALSE)
         cdf2 <- pBB(0, mu, sigma, bd, lower.tail = TRUE, log.p = FALSE)
-       cdf3 <- nu+((1-nu)*(cdf1-cdf2)/(1-cdf2))
-cdf[q==0]  <-  nu
-cdf[q!=0]  <-  cdf3               
+        cdf3 <- nu+((1-nu)*(cdf1-cdf2)/(1-cdf2))
+cdf[q==0]  <-  nu[q==0]
+cdf[q!=0]  <-  cdf3[q!=0]               
 #      cdf <- ifelse((q==0), nu,  cdf3)
 #         cdf <- ifelse(cdf>1L, 1L , cdf)
 cdf[cdf>1L]  <-  1L
@@ -138,8 +138,15 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
 if (any(nu <= 0) |  any(nu >= 1) )  stop(paste("nu must be between 0 and 1", "\n", ""))        
 if (log.p == TRUE) p <- exp(p)   else p <- p
 if (lower.tail == TRUE)  p <- p  else p <- 1 - p
-          pnew  <- (p-nu)/(1-nu)- (1e-7)
-          pnew <- ifelse((pnew<0),0,pnew)  #  corrected 16-04-10
+               ly <- max(length(p),length(mu),length(sigma),length(bd) ) 
+                p <- rep(p, length = ly)
+            sigma <- rep(sigma, length = ly)
+               mu <- rep(mu, length = ly) 
+               nu <- rep(nu, length = ly)
+               bd <- rep(bd, length = ly)
+            pnew  <- (p-nu)/(1-nu)- (1e-7)
+   pnew[pnew>=0] <- pnew[pnew>=0] 
+    pnew[pnew<0] <- 0 #  corrected 16-04-10
           pnew2 <- pBB(0, mu, sigma, bd, lower.tail = TRUE, 
                        log.p = FALSE)*(1-pnew) + pnew 
           suppressWarnings(q <- ifelse((pnew > 0 ), qBB(pnew2, mu, sigma, bd, ), 0))
