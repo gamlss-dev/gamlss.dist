@@ -96,20 +96,20 @@ qq[q==Inf] <- 1
 #Quantile function
 qYULE<-function (p, mu = 2, lower.tail = TRUE, log.p = FALSE, max.value = 10000)
 {
-    # if (any(p < 0) | any(p > 1.0001))
-    #     stop(paste("p must be in [0,1]", "\n", ""))
-    if (any(mu < 0))
+if (any(mu < 0))
         stop(paste("mu must be > 0)", "\n", ""))
        n <- max(length(p), length(mu))
        p <- rep_len(p, n)
       mu <- rep_len(mu, n)
-if (lower.tail) p <- p
-else p <- 1 - p
-    ly <- max(length(p), length(mu))
-    p <- rep(p, length = ly)
-    QQQ <- rep(0, length = ly)
-    mu <- rep(mu, length = ly)
-    for (i in seq(along = p)) {
+p <- if (lower.tail)  p
+    else  1 - p
+p <- if (log.p == TRUE) exp(p)
+    else p  
+      ly <- max(length(p), length(mu))
+       p <- rep(p, length = ly)
+     QQQ <- rep(0, length = ly)
+      mu <- rep(mu, length = ly)
+for (i in seq(along = p)) {
         cumpro <- 0
         if (p[i] + 1e-09 >= 1)
             QQQ[i] <- Inf
