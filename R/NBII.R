@@ -136,10 +136,6 @@ qNBII <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
        sigma <- rep_len(sigma, n)
            q <- rep_len(0,n) 
            q <-  qnbinom(p, size=mu/sigma, mu=mu, lower.tail=lower.tail, log.p=log.p)
-           q[p == 0] <- 0
-           q[p == 1] <- Inf
-           q[p <  0] <- NaN
-           q[p >  1] <- NaN
            return(q)
    }
 ################################################################################
