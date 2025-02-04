@@ -71,16 +71,16 @@ pPO <- function(q, mu = 1, lower.tail = TRUE, log.p = FALSE)
 qPO <- function(p, mu = 1, lower.tail = TRUE, log.p = FALSE)
   {      
 if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
- #if (any(p < 0) | any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))
           n <- max(length(p), length(mu))
           p <- rep_len(p, n)
          mu <- rep_len(mu, n)
          qq <- rep(0,n)
-qq[!((p< 0)&(p >  1))] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
-          qq[abs(p-0)<1e-15] <- 0
-          qq[abs(p-1)<1e-15] <- Inf
-          qq[p <  0] <- NaN
-          qq[p >  1] <- NaN
+#qq[!((p< 0)&(p >  1))] 
+qq <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+          # qq[abs(p-0)<1e-15] <- 0
+          # qq[abs(p-1)<1e-15] <- Inf
+          # qq[p <  0] <- NaN
+          # qq[p >  1] <- NaN
           return(qq)  
    }
 ################################################################################
