@@ -58,12 +58,12 @@ qq[q==Inf] <- 1000
 #Quantile Function
 qWARING<- function (p,  mu=2, sigma=2, lower.tail = TRUE, log.p = FALSE, max.value = 10000)
 {
-    if (any(mu < 0))
+if (any(mu < 0))
         stop(paste("mu must be > 0", "\n", ""))
-    if (any(sigma < 0))
+if (any(sigma < 0))
     	stop(paste("sigma must be > 0", "\n", ""))
-if (lower.tail) p <- p
-else p <- 1 - p
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail == FALSE) p <- 1-p 
     ly <- max(length(p), length(mu), length(sigma))
      p <- rep(p, length = ly)
    QQQ <- rep(0, length = ly)
