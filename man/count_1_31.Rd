@@ -31,7 +31,7 @@ binom_1_31(family = BI, mu = c(0.1, 0.5, 0.7), bd = NULL, miny = 0,
            maxy = 20, cex.axis = 1.2, cex.all = 1.5)
            
 binom_2_33(family = BB, mu = c(0.1, 0.5, 0.8), sigma = c(0.5, 1, 2), 
-           bd = NULL, miny = 0, maxy = 10, cex.axis = 1.5, 
+           bd = NULL, miny = 0, maxy = 10, cex.y.axis = 1.5, 
            cex.all = 1.5)  
            
 binom_3_33(family = ZIBB, mu = c(0.1, 0.5, 0.8), sigma = c(0.5, 1, 2),
@@ -102,19 +102,19 @@ contR01_4_33(family = GB1, mu = c(0.5), sigma = c(0.2, 0.5, 0.7),
               legend.where=c("left","right", "center"))
 
 count_1_31(family = PO, mu = c(1, 2, 5), miny = 0, maxy = 10, 
-           cex.axis = 1.2, cex.all = 1.5)
+           cex.y.axis = 1.2, cex.all = 1.5)
            
 count_1_22(family = PO, mu = c(1, 2, 5, 10), miny = 0, 
-           maxy = 20, cex.axis = 1.2, cex.all = 1.5) 
+           maxy = 20, cex.y.axis = 1.2, cex.all = 1.5) 
            
 count_2_32(family = NBI, mu = c(0.5, 1, 5), sigma = c(0.1, 2), 
-           miny = 0, maxy = 10, cex.axis = 1.5, cex.all = 1.5)
+           miny = 0, maxy = 10, cex.y.axis = 1.5, cex.all = 1.5)
 
 count_2_32R(family = NBI, mu = c(1, 2), sigma = c(0.1, 1, 2), 
-           miny = 0, maxy = 10, cex.axis = 1.5, cex.all = 1.5) 
+           miny = 0, maxy = 10, cex.y.axis = 1.5, cex.all = 1.5) 
            
 count_2_33(family = NBI, mu = c(0.1, 1, 2), sigma = c(0.5, 1, 2), 
-          miny = 0, maxy = 10, cex.axis = 1.5, cex.all = 1.5) 
+          miny = 0, maxy = 10, cex.y.axis = 1.5, cex.all = 1.5) 
           
 count_3_32(family = SICHEL, mu = c(1, 5, 10), sigma = c(0.5, 1), 
            nu = c(-0.5, 0.5), miny = 0, maxy = 10, cex.axis = 1.5, 
@@ -123,7 +123,7 @@ count_3_32(family = SICHEL, mu = c(1, 5, 10), sigma = c(0.5, 1),
                   legend.where=c("left","right"))          
            
 count_3_33(family = SICHEL, mu = c(1, 5, 10), sigma = c(0.5, 1, 2), 
-           nu = c(-0.5, 0.5, 1), miny = 0, maxy = 10, cex.axis = 1.5,
+           nu = c(-0.5, 0.5, 1), miny = 0, maxy = 10, cex.y.axis = 1.5,
            cex.all = 1.5, cols = c("darkgray", "black"), spacing = 0.3,
            legend.cex=1, legend.x="topright",
            legend.where=c("left","right", "center"))
@@ -140,6 +140,7 @@ count_3_33(family = SICHEL, mu = c(1, 5, 10), sigma = c(0.5, 1, 2),
   \item{miny}{minimal value for the y axis}
   \item{maxy}{maximal value for the y axis}
   \item{cex.axis}{the size of the letters in the two axes}
+  \item{cex.y.axis}{the size of the letters in the y axe}
   \item{cex.all}{the overall size of all plotting characters}
   \item{cols}{colours}
   \item{spacing}{spacing between plots}

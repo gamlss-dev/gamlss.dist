@@ -1,4 +1,9 @@
 
+# Version 6.1-7
+
+* the plotting functions in the file PlottingDistributions.R i.e `count_1_23` e.t.c. were checked  
+
+
 # Version 6.1-4
 
 - The `dPO`, `pPO` and `qPO` are updated so the length of y is equal to the length of `mu`
