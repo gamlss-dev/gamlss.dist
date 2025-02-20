@@ -13,6 +13,12 @@ install:
 		R CMD build --no-build-vignettes gamlss.dist && \
 		R CMD INSTALL gamlss.dist_$(VERSION).tar.gz)
 
+install2:
+	@echo Installing current version: $(VERSION)
+	(cd ../ && \
+		R CMD build gamlss.dist && \
+		R CMD INSTALL gamlss.dist_$(VERSION).tar.gz)
+
 # Reto: Let me know how we can write this in a multi-line command in cmake
 .PHONY: coverage
 coverage:
