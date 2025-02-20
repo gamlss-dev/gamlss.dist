@@ -1,3 +1,6 @@
 
 
 /_coverage.html
+
+# Ignore 'local test files'
+/test*.R
