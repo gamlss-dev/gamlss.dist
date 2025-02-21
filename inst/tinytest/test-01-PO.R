@@ -1,13 +1,10 @@
 # -------------------------------------------------------------------
-# Testing the PO distribution.
+# Testing the Poisson (PO) family
 #
 # TODO(R):
 # - ppois(0, 0) Returns, pPO(0, 0) throws an error.
 # - pdf(p, numeric()) returns NA_real_, ppois(0, numeric()) returns empty vector.
 # - PO$mean and PO$variance allow for negative inputs (just the identify function).
-# - Currently have no tests for the evaluation of:
-#     - x$rqres = expression(rqres(pfun="pPO", type="Discrete", ymin=0, y=y, mu=mu))
-#     - x$mu.initial = expression({mu <- (y +mean(y))/2 })
 # -------------------------------------------------------------------
 
 # Used for development/testing manually
@@ -349,30 +346,9 @@ expect_error(PO("foo"),
 expect_error(PO(mu.link = "foo"),
     info = "Expected error when using invalid link.")
 
-# Testing for allowed links (shall be silent)
-expect_silent(tmp <- PO(mu.link = "inverse"),
-    info = "Expected function PO() to be silent when using 'mu.link = \"inverse\".")
-expect_identical(tmp$mu.link, "inverse")
-rm(tmp)
-
-expect_silent(tmp <- PO(mu.link = "sqrt"),
-    info = "Expected function PO() to be silent when using 'mu.link = \"sqrt\".")
-expect_identical(tmp$mu.link, "sqrt")
-rm(tmp)
-
-expect_silent(tmp <- PO(mu.link = "log"),
-    info = "Expected function PO() to be silent when using 'mu.link = \"log\".")
-expect_identical(tmp$mu.link, "log")
-rm(tmp)
-
-expect_silent(tmp <- PO(mu.link = "identity"),
-    info = "Expected function PO() to be silent when using 'mu.link = \"identity\".")
-expect_identical(tmp$mu.link, "identity")
-rm(tmp)
-
 # Testing default family object
 expect_silent(x <- PO(),
-    info = "Expected PO() to be silent.")
+    info = "Expected PO() to be silent (using default mu.link = \"log\").")
 expect_inherits(x, "gamlss.family",
     info = "Expected PO() to return an object of class 'gamlss.family'.")
 expect_identical(x$family, c("PO", "Poisson"),
@@ -412,10 +388,23 @@ expect_inherits(x$G.dev.incr, "function",
 expect_identical(deparse(x$G.dev.incr)[[1L]], "function (y, mu, ...) ",
     info = "Unexpected function call for $G.dev.incr.")
 
+requireNamespace("gamlss")
 expect_inherits(x$rqres, "expression",
     info = "Unexpected content in $rqres.")
+expect_equal(with(list(y = 3, mu = 7.2, rqres = gamlss:::rqres), eval(x$rqres)),
+             -1.5524239775, tol = 0.5,
+             info = "Unexpected result from $rqres.")
+expect_equal(with(list(y = c(3, 8), mu = 7.2, rqres = gamlss:::rqres), eval(x$rqres)),
+             c(-1.6544225896, 0.4156280629), tol = 0.5,
+             info = "Unexpected result from $rqres.")
+
 expect_inherits(x$mu.initial, "expression",
     info = "Unexpected content in $mu.initial.")
+expect_identical(with(list(y = 3), eval(x$mu.initial)), 3,
+    info = "Unexpected result of $mu.initial.")
+expect_identical(with(list(y = c(1, 8, 3)), eval(x$mu.initial)),
+                 (c(1, 8, 3) + mean(c(1, 8, 3))) / 2,
+    info = "Unexpected result of $mu.initial.")
 
 expect_identical(deparse(x$mu.valid)[[1L]], "function (mu) ",
     info = "Unexpected function call for $mu.valid.")
@@ -465,4 +454,62 @@ expect_identical(x$mean((-4):4), (-4):4)
 expect_identical(x$variance(5.2), 5.2)
 expect_identical(x$variance(-1), -1)
 expect_identical(x$variance((-4):4), (-4):4)
+rm(x)
+
+
+# Testing alternative link functions (above we only tested mainly
+# mu.link = "log") which is the default.
+
+# Testing mu.link = "inverse"
+expect_silent(x <- PO(mu.link = "inverse"),
+    info = "Expected function PO() to be silent when using 'mu.link = \"inverse\".")
+expect_identical(x$mu.link, "inverse")
+
+expect_identical(x$mu.linkfun(3), 1 / 3,
+    info = "Unexpected result from mu.linkfun (using mu.link = \"inverse\").")
+expect_identical(x$mu.linkinv(1 / 3), 3,
+    info = "Unexpected result from mu.linkinv (using mu.link = \"inverse\").")
+expect_equal(x$mu.linkinv(x$mu.linkfun(3)), 3,
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_equal(x$mu.linkinv(x$mu.linkfun(c(10, 3, 17.3))), c(10, 3, 17.3),
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_identical(x$mu.dr(3), -1 / 3^2,
+    info = "Unexpected result when calling $mu.dr.")
+rm(x)
+
+# Testing mu.link = "sqrt"
+expect_silent(x <- PO(mu.link = "sqrt"),
+    info = "Expected function PO() to be silent when using 'mu.link = \"sqrt\".")
+expect_identical(x$mu.link, "sqrt")
+
+expect_identical(x$mu.linkfun(3), sqrt(3),
+    info = "Unexpected result from mu.linkfun (using mu.link = \"inverse\").")
+expect_identical(x$mu.linkinv(3), 9,
+    info = "Unexpected result from mu.linkinv (using mu.link = \"inverse\").")
+expect_equal(x$mu.linkinv(x$mu.linkfun(3)), 3,
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_equal(x$mu.linkinv(x$mu.linkfun(c(10, 3, 17.3))), c(10, 3, 17.3),
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_identical(x$mu.dr(3), 2 * 3,
+    info = "Unexpected result when calling $mu.dr.")
+rm(x)
+
+# Testing mu.link = "identity"
+expect_silent(x <- PO(mu.link = "identity"),
+    info = "Expected function PO() to be silent when using 'mu.link = \"identity\".")
+expect_identical(x$mu.link, "identity")
+
+expect_identical(x$mu.linkfun(3), 3,
+    info = "Unexpected result from mu.linkfun (using mu.link = \"inverse\").")
+expect_identical(x$mu.linkinv(1 / 3), 1 / 3,
+    info = "Unexpected result from mu.linkinv (using mu.link = \"inverse\").")
+expect_equal(x$mu.linkinv(x$mu.linkfun(3)), 3,
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_equal(x$mu.linkinv(x$mu.linkfun(c(10, 3, 17.3))), c(10, 3, 17.3),
+    info = "Unexpected result when testing x > linkfun > inverse link fun.")
+expect_identical(x$mu.dr(3), 1,
+    info = "Unexpected result when calling $mu.dr.")
+rm(x)
+
+
 
