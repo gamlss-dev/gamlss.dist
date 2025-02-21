@@ -13,13 +13,18 @@ install:
 		R CMD build --no-build-vignettes gamlss.dist && \
 		R CMD INSTALL gamlss.dist_$(VERSION).tar.gz)
 
+.PHONY: check
+check:
+	@echo Checking current version: $(VERSION)
+	(cd ../ && \
+		R CMD build --no-build-vignettes gamlss.dist && \
+		R CMD check --as-cran gamlss.dist_$(VERSION).tar.gz)
+
 # Reto: Let me know how we can write this in a multi-line command in cmake
 .PHONY: coverage
 coverage:
-	#Rscript -e 'covr::package_coverage(type = "none", quiet = FALSE, file  = "_coverage.html")'
-	##Rscript -e 'covr::package_coverage(runs = "tests", quiet = FALSE, file  = "_coverage.html")'
-	#Rscript -e 'covr::package_coverage(runs = "tests", line_exclusions = list("R/*", "src/*", "chm/*"), quiet = FALSE, file  = "_coverage.html")'
-	Rscript -e 'options(covr.debug = TRUE); covr::report(covr::package_coverage(type = "none", quiet = FALSE, file  = "_coverage.html"))'
+	Rscript -e "covr::report(covr::package_coverage(type = \"tests\", line_exclusions = list('src/gamlss.dist_init.c'), quiet = FALSE), file = \"_coverage.html\")"
+
 
 .PHONY: cov2
 cov2:
