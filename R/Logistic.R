@@ -43,7 +43,11 @@ LO <- function (mu.link ="identity", sigma.link="log")
 ################################################################################
 dLO<-function(x, mu=0, sigma=1, log=FALSE)
  { 
-          if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+    ly <- max(length(x),length(mu),length(sigma)) 
+     x <- rep(x, length = ly) 
+ sigma <- rep(sigma, length = ly) 
+    mu <- rep(mu, length = ly) 
     fy <- dlogis(x, location=mu, scale=sigma, log=log)
     fy
   }
@@ -53,15 +57,24 @@ dLO<-function(x, mu=0, sigma=1, log=FALSE)
 ################################################################################
 pLO <- function(q, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
-          if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+     ly <- max(length(q),length(mu),length(sigma)) 
+      q <- rep(q, length = ly) 
+  sigma <- rep(sigma, length = ly) 
+     mu <- rep(mu, length = ly) 
     cdf <- plogis(q, location=mu, scale=sigma, lower.tail = lower.tail, log.p = log.p)
     cdf
    }
 #----------------------------------------------------------------------------------------
 qLO <- function(p, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
-  { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-    if (log.p==TRUE) p <- exp(p) else p <- p
-#    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
+  { 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (log.p==TRUE) p <- exp(p) 
+#if (lower.tail==FALSE) p <- 1-p
+   ly <- max(length(p),length(mu),length(sigma)) 
+    p <- rep(p, length = ly) 
+sigma <- rep(sigma, length = ly) 
+   mu <- rep(mu, length = ly)     
     q <- qlogis(p, location=mu, scale=sigma, lower.tail = lower.tail )
     q[p == 0] <- -Inf
     q[p == 1] <- Inf

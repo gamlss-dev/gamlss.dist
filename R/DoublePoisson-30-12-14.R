@@ -172,8 +172,9 @@ dDPO <- function(x, mu = 1, sigma = 1, log = FALSE)
 xx[x>=Inf] <- xx[x<0] <-1 # mikis his is to prevent Inf values 
      sigma <- rep(sigma, length = ly)
         mu <- rep(mu, length = ly)
-    logofx <- rep(1,length(ly))  
-logofx[x > 0] <- log(xx)
+    logofx <- rep(1,length(ly)) 
+  
+logofx[x > 0] <- log(xx)[x > 0]
       lh <- -0.5*log(sigma)-(mu/sigma)-lgamma(xx+1)+xx*logofx-xx+
     (xx*log(mu))/sigma+x/sigma-(x*logofx)/sigma+get_C(xx, mu, sigma)        
   if(log==FALSE) fy <- exp(lh) else fy <- lh 

@@ -179,17 +179,16 @@ dBNB<-function(x, mu=1, sigma=1, nu=1, log=FALSE)
 ################################################################################
 pBNB <- function(q, mu = 1, sigma = 1, nu = 1, lower.tail = TRUE, log.p = FALSE)
 {     
-  if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-  if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
-  if (any(nu <= 0) )  stop(paste("nu must be greater than 0 ", "\n", "")) 
- # if (any(q < 0) )  stop(paste("q must be >=0", "\n", ""))
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", "")) 
+if (any(nu <= 0) )  stop(paste("nu must be greater than 0 ", "\n", "")) 
      ly <- max(length(q),length(mu),length(sigma),length(nu)) 
      qq <- rep(q, length.out = ly)      
   sigma <- rep(sigma, length.out = ly)
      mu <- rep(mu, length.out = ly)   
      nu <- rep(nu, length.out = ly) 
   qq[q==Inf] <- 1
-     fn <- function(q, mu, sigma, nu) sum(dBNB(0:qq, mu=mu, sigma=sigma, nu=nu))
+     fn <- function(q, mu, sigma, nu) sum(dBNB(0:q, mu=mu, sigma=sigma, nu=nu))
    Vcdf <- Vectorize(fn)
     cdf <- Vcdf(q=qq, mu=mu, sigma=sigma, nu=nu)
     cdf <- if(lower.tail==TRUE) cdf else 1-cdf
