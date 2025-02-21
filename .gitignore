@@ -1,6 +1,8 @@
 
 
+# Output from covr
 /_coverage.html
+/lib
 
 # Ignore 'local test files'
 /test*.R
