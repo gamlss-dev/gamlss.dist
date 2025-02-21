@@ -60,7 +60,7 @@ if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
 ################################################################################ 
 pGU <- function(q, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
   { if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-     ly <- max(length(q),length(mu),length(sigma)) 
+      ly <- max(length(q),length(mu),length(sigma)) 
        q <- rep(q, length = ly) 
    sigma <- rep(sigma, length = ly) 
      mu <- rep(mu, length = ly) 
