@@ -2,59 +2,70 @@
 # Helper functions for testing the different families and functions.
 # -------------------------------------------------------------------
 
-my_expect_silent <- function(f, expr) {
+my_expect_silent <- function(f, expr, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": Expected '%s' to run silent.", f[[1]], deparse(expr))
+    if (is.null(info)) info <- sprintf("Family \"%s\": Expected '%s' to run silent.", f[[1]], deparse(expr))
     eval(substitute(expect_silent(expr, info = info)), envir = parent.frame())
 }
-my_expect_warning <- function(f, expr) {
+
+my_expect_warning <- function(f, expr, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to throw a warning.", f[[1]], deparse(expr))
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to throw a warning.", f[[1]], deparse(expr))
     eval(substitute(expect_warning(expr, info = info)), envir = parent.frame())
 }
-my_expect_error <- function(f, expr) {
+
+my_expect_error <- function(f, expr, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to fail (error).", f[[1]], deparse(expr))
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to fail (error).", f[[1]], deparse(expr))
     eval(substitute(expect_error(expr, info = info)), envir = parent.frame())
 }
-my_expect_true <- function(f, expr, class) {
+
+my_expect_true <- function(f, expr, class, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
                     f[[1]], deparse(expr))
     eval(substitute(expect_true(expr, info = info)), envir = parent.frame())
 }
-my_expect_false <- function(f, expr, class) {
+
+my_expect_false <- function(f, expr, class, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
                     f[[1]], deparse(expr))
     eval(substitute(expect_false(expr, info = info)), envir = parent.frame())
 }
-my_expect_inherits <- function(f, expr, class) {
+
+my_expect_inherits <- function(f, expr, class, info = NULL) {
     stopifnot(is.character(f))
     stopifnot(is.character(class))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to inherit from %s.",
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to inherit from %s.",
                     f[[1]], deparse(expr), class[[1]])
     eval(substitute(expect_inherits(expr, class[[1]], info = info)), envir = parent.frame())
 }
-my_expect_identical <- function(f, expr, target) {
+
+my_expect_identical <- function(f, expr, target, info = NULL) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
     eval(substitute(expect_identical(expr, target, info = info)), envir = parent.frame())
 }
-my_expect_equal <- function(f, expr, target, ...) {
+
+my_expect_equal <- function(f, expr, target, info = NULL, ...) {
     stopifnot(is.character(f))
     expr <- substitute(expr)
-    info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
+    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
     eval(substitute(expect_equal(expr, target, info = info, ...)), envir = parent.frame())
 }
 
+
+# -------------------------------------------------------------------
+# Limits for discrete and continuous families (for automated tests)
+# -------------------------------------------------------------------
 get_limits <- function(type = c("discrete", "continuous")) {
     type <- match.arg(type)
 
