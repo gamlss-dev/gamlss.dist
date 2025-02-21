@@ -1286,6 +1286,66 @@ par(op)
 ################################################################################
 ################################################################################
 ################################################################################
+# FUNCTION 14a
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+contRplus_1_1 <- function(family=EXP, mu=c(1,2,3),  
+                           cols=c(gray(.1),gray(.2),gray(.3)), 
+                           maxy=4, no.points=201, 
+                           y.axis.lim=1.1, ltype = c(1,2,3),
+                           cex.axis=1.5, cex.all=1.5,
+                           legend.cex=1, legend.x="topright"
+)
+{
+################################################################################
+  fname <- if (is.name(family)) as.character(family)
+           else if (is.character(family)) family
+           else if (is.call(family)) as.character(family[[1]])
+           else if (is.function(family)) deparse(substitute(family))
+           else if (is(family, "gamlss.family"))  family$family[1]
+           else stop("the family must be a character or a gamlss.family name")
+       fam1 <- eval(parse(text=fname)) # the family to output
+        fam <- as.gamlss.family(family) # this is created so I can get things
+     dorfun <- paste("d",fname,sep="") # say dNO
+      nopar <- fam$nopar # or fam1$nopar
+       type <- fam$type
+if (type!="Continuous") stop("This plot is design for continuous distributions")
+if (!(nopar==1)) stop("This plot is design for one parameter continuous distributions")
+################################################################################
+        op <- par(omi=rep(1.0, 4), mar=c(0,0,0,0))
+         y <- seq(0.001,maxy,length=no.points)
+     pdf11 <- paste0("d",fname,"(y, mu=mu[1])")
+      fy11 <- eval(parse(text=pdf11))
+     pdf12 <- paste0("d",fname,"(y,mu=mu[2])")
+      fy12 <- eval(parse(text=pdf12))
+     pdf13 <- paste0("d",fname,"(y, mu=mu[3])")
+      fy13 <- eval(parse(text=pdf13))
+  maxfy <- y.axis.lim*max(fy11,fy12,fy13)
+  ylabel <- "f(y)"
+  #1
+  plot(fy11~y, type="l", col=cols[1],
+       ylab="", xlab="y",lty=ltype[1],lwd=2,ylim=c(0,maxfy), cex.axis=cex.axis)
+  lines(fy12~y, col=cols[2],lty=ltype[2],lwd=2)
+  lines(fy13~y, col=cols[3],lty=ltype[3],lwd=2)
+  ex.leg <- c(bquote(paste(mu," = ",.(mu[1]))),
+              bquote(paste(mu," = ",.(mu[2]))),
+              bquote(paste(mu," = ",.(mu[3]))))
+  
+  legend(legend.x,legend=as.expression(ex.leg),
+         lty=ltype, col=cols[1:3], lwd=2, cex=legend.cex)
+  mtexti( ylabel, 2, 0.6,cex=cex.all)
+  mtexti("y", 1, 0.6,cex=cex.all)
+  mtexti(fname, 3 , off=.7, cex=cex.all)
+  par(op)
+}
+################################################################################
+################################################################################
+################################################################################
+################################################################################ 
+
+
 # FUNCTION 15
 ################################################################################
 ################################################################################
