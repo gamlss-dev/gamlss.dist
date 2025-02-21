@@ -42,9 +42,15 @@ RG <-function (mu.link ="identity", sigma.link="log")
 ################################################################################
 ################################################################################
 dRG<-function(x, mu=0, sigma=1, log=FALSE)
-  { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+  { 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+      ly <- max(length(x),length(mu),length(sigma)) 
+       x <- rep(x, length = ly) 
+   sigma <- rep(sigma, length = ly) 
+      mu <- rep(mu, length = ly)   
  log.lik <- (-log(sigma) -((x-mu)/sigma)  -exp(-(x-mu)/sigma))
      if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
+  fy[x==-Inf] <- fy[ x == Inf ] <-  0
       fy 
   }
 ################################################################################
@@ -52,10 +58,17 @@ dRG<-function(x, mu=0, sigma=1, log=FALSE)
 ################################################################################
 ################################################################################
 pRG <- function(q, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
-  { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+  { 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+     ly <- max(length(q),length(mu),length(sigma)) 
+      q <- rep(q, length = ly) 
+  sigma <- rep(sigma, length = ly) 
+     mu <- rep(mu, length = ly) 
     cdf <- exp(-exp(-(q-mu)/sigma))
     if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
     if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
+    cdf[q==-Inf] <- 0
+    cdf[ q == Inf ] <-  1
     cdf
   }
 ################################################################################
@@ -63,10 +76,14 @@ pRG <- function(q, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
 ################################################################################
 ################################################################################  
 qRG <- function(p, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
-  { if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
- #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))    
+  { 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
+    ly <- max(length(p),length(mu),length(sigma)) 
+    p <- rep(p, length = ly) 
+sigma <- rep(sigma, length = ly) 
+   mu <- rep(mu, length = ly)   
     q <- mu-sigma*log(-log(p))
     q[p == 0] <- 0
     q[p == 1] <- Inf
