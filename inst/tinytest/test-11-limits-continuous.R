@@ -23,41 +23,41 @@ families <- c(
 # Getting required functions
 for (f in families) {
     #x <- readline(paste("Starting with ", f, "?  [enter] "))
-    my_expect_silent(f, fam  <- get(f)())
+    my_expect_silent(fam  <- get(f)(), family = f)
     dfun <- get(paste0("d", f))
     qfun <- get(paste0("q", f))
     pfun <- get(paste0("p", f))
 
     # Checking family object properties (few of them)
-    my_expect_inherits(f, fam, "gamlss.family")
-    my_expect_inherits(f, fam, "family")
-    my_expect_identical(f, fam$type, "Continuous")
+    my_expect_inherits(fam, "gamlss.family", family = f)
+    my_expect_inherits(fam, "family", family = f)
+    my_expect_identical(fam$type, "Continuous", family = f)
 
-    my_expect_inherits(f, fam$parameters, "list")
-    my_expect_inherits(f, names(fam$parameters), "character")
-    my_expect_true(f, length(fam$parameters) > 0)
-    my_expect_inherits(f, fam$nopar, "numeric")
-    my_expect_identical(f, length(fam$parameters), as.integer(fam$nopar))
+    my_expect_inherits(fam$parameters, "list", family = f)
+    my_expect_inherits(names(fam$parameters), "character", family = f)
+    my_expect_true(length(fam$parameters) > 0, family = f)
+    my_expect_inherits(fam$nopar, "numeric", family = f)
+    my_expect_identical(length(fam$parameters), as.integer(fam$nopar), family = f)
 
     # Testing distribution function
-    my_expect_silent(f, pfun(limits$y.range[1]))
-    my_expect_silent(f, pfun(limits$y.range[2]))
-    my_expect_silent(f, pfun(limits$y.range[1] - eps))
-    my_expect_silent(f, pfun(limits$y.range[2] + eps))
+    my_expect_silent(pfun(limits$y.range[1]), family = f)
+    my_expect_silent(pfun(limits$y.range[2]), family = f)
+    my_expect_silent(pfun(limits$y.range[1] - eps), family = f)
+    my_expect_silent(pfun(limits$y.range[2] + eps), family = f)
 
     # Testing density function
-    my_expect_silent(f, dfun(limits$y.range[1]))
-    my_expect_silent(f, dfun(limits$y.range[2]))
-    ##my_expect_silent(f, dfun(limits$y.range[1] - eps))
-    my_expect_silent(f, dfun(limits$y.range[2] + eps))
+    my_expect_silent(dfun(limits$y.range[1]), family = f)
+    my_expect_silent(dfun(limits$y.range[2]), family = f)
+    ##my_expect_silent(f, dfun(limits$y.range[1] - eps), family = f)
+    my_expect_silent(dfun(limits$y.range[2] + eps), family = f)
 
     # Testing quantile function
-    my_expect_silent(f, qfun(limits$p.range[1]))
-    my_expect_silent(f, qfun(limits$p.range[2]))
-    my_expect_identical(f, qfun(limits$p.range[1] - 1), NaN)
-    my_expect_identical(f, qfun(limits$p.range[2] + 1), NaN)
-    my_expect_identical(f, qfun(limits$p.range[1] - eps), NaN)
-    my_expect_identical(f, qfun(limits$p.range[2] + eps), NaN)
+    my_expect_silent(qfun(limits$p.range[1]), family = f)
+    my_expect_silent(qfun(limits$p.range[2]), family = f)
+    my_expect_identical(qfun(limits$p.range[1] - 1), NaN, family = f)
+    my_expect_identical(qfun(limits$p.range[2] + 1), NaN, family = f)
+    my_expect_identical(qfun(limits$p.range[1] - eps), NaN, family = f)
+    my_expect_identical(qfun(limits$p.range[2] + eps), NaN, family = f)
 
     # Testing whether the sum over the density sums up to 1.
     # Families with one parameter
@@ -69,8 +69,8 @@ for (f in families) {
                                  subdivisions = 1000L))
             my_expect_equal(f, tmp, 1)
         }
-        my_expect_equal(f, pfun(limits$y.range[1]), 0)
-        my_expect_equal(f, pfun(limits$y.range[2]), 1)
+        my_expect_equal(pfun(limits$y.range[1]), 0, family = f)
+        my_expect_equal(pfun(limits$y.range[2]), 1, family = f)
     }
 
 }

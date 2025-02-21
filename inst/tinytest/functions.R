@@ -2,63 +2,84 @@
 # Helper functions for testing the different families and functions.
 # -------------------------------------------------------------------
 
-my_expect_silent <- function(f, expr, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_silent <- function(expr, info = NULL, family = NULL) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": Expected '%s' to run silent.", f[[1]], deparse(expr))
+    if (is.null(info))   info <- sprintf("Expected '%s' to run silent.", deparse(expr))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
     eval(substitute(expect_silent(expr, info = info)), envir = parent.frame())
 }
 
-my_expect_warning <- function(f, expr, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_warning <- function(expr, info = NULL, family = NULL, ...) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to throw a warning.", f[[1]], deparse(expr))
-    eval(substitute(expect_warning(expr, info = info)), envir = parent.frame())
+    if (is.null(info))   info <- sprintf("Expected '%s' to throw a warning.", deparse(expr))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
+    eval(substitute(expect_warning(expr, info = info, ...)), envir = parent.frame())
 }
 
-my_expect_error <- function(f, expr, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_error <- function(expr, info = NULL, family = NULL, ...) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to fail (error).", f[[1]], deparse(expr))
-    eval(substitute(expect_error(expr, info = info)), envir = parent.frame())
+    if (is.null(info))   info <- sprintf("Expected '%s' to fail with an error.", deparse(expr))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
+    eval(substitute(expect_error(expr, info = info, ...)), envir = parent.frame())
 }
 
-my_expect_true <- function(f, expr, class, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_true <- function(expr, info = NULL, family = NULL) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
-                    f[[1]], deparse(expr))
+    if (is.null(info))   info <- sprintf("Expected '%s' to evaluate to TRUE.", deparse(expr))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
     eval(substitute(expect_true(expr, info = info)), envir = parent.frame())
 }
 
-my_expect_false <- function(f, expr, class, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_false <- function(expr, info = NULL, family = NULL) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to evaluate to TRUE.",
-                    f[[1]], deparse(expr))
+    if (is.null(info))   info <- sprintf("Expected '%s' to evaluate to FALSE.", deparse(expr))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
     eval(substitute(expect_false(expr, info = info)), envir = parent.frame())
 }
 
-my_expect_inherits <- function(f, expr, class, info = NULL) {
-    stopifnot(is.character(f))
-    stopifnot(is.character(class))
+my_expect_inherits <- function(expr, class, info = NULL, family = NULL) {
+    stopifnot(is.null(class) || is.character(class))
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to inherit from %s.",
-                    f[[1]], deparse(expr), class[[1]])
-    eval(substitute(expect_inherits(expr, class[[1]], info = info)), envir = parent.frame())
+    if (is.null(info))   info <- sprintf("Expected '%s' to inherit from '%s'.", deparse(expr), class)
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
+    eval(substitute(expect_inherits(expr, class, info = info)), envir = parent.frame())
 }
 
-my_expect_identical <- function(f, expr, target, info = NULL) {
-    stopifnot(is.character(f))
+my_expect_identical <- function(expr, target, info = NULL, family = NULL) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
+    if (is.null(info))   info <- sprintf("Expected '%s' to be identical to %s.", deparse(expr), deparse(target))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
     eval(substitute(expect_identical(expr, target, info = info)), envir = parent.frame())
 }
 
-my_expect_equal <- function(f, expr, target, info = NULL, ...) {
-    stopifnot(is.character(f))
+my_expect_equal <- function(expr, target, info = NULL, family = NULL, ...) {
+    stopifnot(is.null(info) || is.character(info))
+    stopifnot(is.null(family) || is.character(family))
+
     expr <- substitute(expr)
-    if (is.null(info)) info <- sprintf("Family \"%s\": expected '%s' to return %s.", f[[1]], deparse(expr), deparse(target))
+    if (is.null(info))   info <- sprintf("Expected '%s' to be equal to %s.", deparse(expr), deparse(target))
+    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
     eval(substitute(expect_equal(expr, target, info = info, ...)), envir = parent.frame())
 }
 
