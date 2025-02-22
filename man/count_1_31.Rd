@@ -12,6 +12,7 @@
 \alias{contR_2_12}
 \alias{contR_3_11}
 \alias{contR_4_13}
+\alias{contRplus_1_1}
 \alias{contRplus_2_11}
 \alias{contRplus_3_13}
 \alias{contRplus_4_33}
@@ -58,6 +59,12 @@ contR_4_13(family = "SEP3", mu = 0, sigma = 1, nu = c(0.5, 1, 2),
          y.axis.lim = 1.1, cex.axis = 1.5, cex.all = 1.5,
          legend.cex=1, legend.x="topleft", 
           legend.where=c("left","right"))
+
+contRplus_1_1(family = EXP, mu = c(1, 2, 3), 
+       cols = c(gray(0.1), gray(0.2), gray(0.3)), maxy = 4, 
+       no.points = 201, y.axis.lim = 1.1, ltype = c(1, 2, 3), 
+       cex.axis = 1.5, cex.all = 1.5, legend.cex = 1, 
+       legend.x = "topright")
          
 contRplus_2_11(family = GA, mu = 1, sigma = c(0.1, 0.6, 1), 
           cols=c(gray(.1),gray(.2),gray(.3)), 
