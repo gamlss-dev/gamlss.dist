@@ -43,12 +43,18 @@ IG <-function (mu.link = "log", sigma.link = "log")
 ################################################################################
 ################################################################################ 
 dIG<-function(x, mu = 1, sigma = 1, log=FALSE)
- {        if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-          if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-       #   if (any(x < 0))  stop(paste("x must be positive", "\n", ""))  
- log.lik <- (-0.5*log(2*pi)-log(sigma)-(3/2)*log(x)-((x-mu)^2)/(2*sigma^2*(mu^2)*x) )
-     if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
+ {  
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+        n <- max(length(x), length(mu), length(sigma))
+        x <- rep_len(x, n)
+       mu <- rep_len(mu, n)
+    sigma <- rep_len(sigma, n)
+  log.lik <- (-0.5*log(2*pi)-log(sigma)-(3/2)*log(x)-((x-mu)^2)/(2*sigma^2*(mu^2)*x) )
+if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
       fy <-ifelse(x <= 0, 0, fy)
+      fy[x <= 0] <- 0
+      fy[x == Inf] <- 0
       fy 
   }
 ################################################################################
@@ -57,19 +63,20 @@ dIG<-function(x, mu = 1, sigma = 1, log=FALSE)
 ################################################################################ 
 pIG <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
   {    #  browser() 
-    if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
-#    if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
-      lq <- length(q)                                                                    
-   sigma <- rep(sigma, length = lq)
-      mu <- rep(mu, length = lq)           
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
+       n <- max(length(q), length(mu), length(sigma))
+       q <- rep_len(q, n)
+      mu <- rep_len(mu, n)
+   sigma <- rep_len(sigma, n)
     cdf1 <- pnorm(((q/mu)-1)/(sigma*sqrt(q))) 
    lcdf2 <- (2/(mu*sigma^2))+pnorm((-((q/mu)+1))/(sigma*sqrt(q)),log.p=TRUE)
      cdf <- cdf1+ exp(lcdf2)
-    if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
-    if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
-    cdf <-ifelse(q <= 0, 0, cdf) 
-    cdf
+if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
+if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
+     cdf[q<=0] <- 0
+     cdf[q>=Inf] <- 1
+     cdf
    }
 ################################################################################
 ################################################################################
@@ -77,44 +84,47 @@ pIG <- function(q, mu = 1, sigma = 1, lower.tail = TRUE, log.p = FALSE)
 ################################################################################  
 qIG <- function(p, mu=1, sigma=1,  lower.tail = TRUE, log.p = FALSE)
  {
-# local functions-##############################################################   
-       h1 <- function(q)
-       { 
-     pIG(q , mu = mu[i], sigma = sigma[i])-p[i]   
-       }
-       h <- function(q)
-       { 
-################################################################################         
-     pIG(q , mu = mu[i], sigma = sigma[i])   
-       }
-#-------------------------------------------------------
+################################################################################  
+# local functions
+  h1 <- function(q)
+  { 
+    pIG(q , mu = mu[i], sigma = sigma[i])-pp[i]   
+  }
+################################################################################  
+  h <- function(q)
+  { 
+    pIG(q , mu = mu[i], sigma = sigma[i])   
+  }
+################################################################################
 if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))      
-if (log.p==TRUE) p <- exp(p) else p <- p
-if (lower.tail==TRUE) p <- p else p <- 1-p
-#if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))     
-        lp <-  max(length(p),length(mu),length(sigma))
-          p <- rep(p, length = lp)                                                                      
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", ""))    
+if (log.p==TRUE) p <- exp(p) 
+if (lower.tail==FALSE) p <- 1-p
+         lp <-  max(length(p),length(mu),length(sigma))
+         pp <- rep(p, length = lp) 
+ pp[p == 1] <- 0.5
+pp[p == 0]  <- 0.5
       sigma <- rep(sigma, length = lp)
          mu <- rep(mu, length = lp)
           q <- rep(0,lp)      
-         for (i in  seq(along=p)) 
-         {
-         if (h(mu[i])<p[i]) 
-          { 
-           interval <- c(mu[i], mu[i]+sigma[i])
-           j <-2
-           while (h(interval[2]) < p[i]) 
-              {interval[2]<- mu[i]+j*sigma[i]
-              j<-j+1 
-              }
-           } 
-          else  
-           {
-           interval <-  interval <- c(.Machine$double.xmin, mu[i])
-           }
-        q[i] <- uniroot(h1, interval)$root
-         }
+for (i in  seq(along=pp)) 
+{
+if (h(mu[i])<pp[i]) 
+  { 
+  interval <- c(mu[i], mu[i]+sigma[i])
+         j <- 2
+while (h(interval[2]) < pp[i]) 
+  {
+interval[2] <- mu[i]+j*sigma[i]
+          j <- j+1 
+  }
+  } 
+else  
+  {
+  interval <-  interval <- c(.Machine$double.xmin, mu[i])
+  }
+            q[i] <- uniroot(h1, interval)$root
+}
           q[p == 0] <- 0
           q[p == 1] <- Inf
           q[p <  0] <- NaN
