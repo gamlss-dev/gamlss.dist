@@ -2,85 +2,101 @@
 # Helper functions for testing the different families and functions.
 # -------------------------------------------------------------------
 
-my_expect_silent <- function(expr, info = NULL, family = NULL) {
+my_expect_silent <- function(expr, info = NULL, family = NULL, env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to run silent.", deparse(expr))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_silent(expr, info = info)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to run silent.", deparse(expr))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_silent(expr, info = info)), envir = env)
 }
 
-my_expect_warning <- function(expr, info = NULL, family = NULL, ...) {
+my_expect_warning <- function(expr, info = NULL, family = NULL, ..., env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
     if (is.null(info))   info <- sprintf("Expected '%s' to throw a warning.", deparse(expr))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_warning(expr, info = info, ...)), envir = parent.frame())
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_warning(expr, info = info, ...)), envir = env)
 }
 
-my_expect_error <- function(expr, info = NULL, family = NULL, ...) {
+my_expect_error <- function(expr, info = NULL, family = NULL, ..., env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to fail with an error.", deparse(expr))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_error(expr, info = info, ...)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to fail with an error.", deparse(expr))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_error(expr, info = info, ...)), envir = env)
 }
 
-my_expect_true <- function(expr, info = NULL, family = NULL) {
+my_expect_true <- function(expr, info = NULL, family = NULL, env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to evaluate to TRUE.", deparse(expr))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_true(expr, info = info)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to evaluate to TRUE.", deparse(expr))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_true(expr, info = info)), envir = env)
 }
 
-my_expect_false <- function(expr, info = NULL, family = NULL) {
+my_expect_false <- function(expr, info = NULL, family = NULL, env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to evaluate to FALSE.", deparse(expr))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_false(expr, info = info)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to evaluate to FALSE.", deparse(expr))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_false(expr, info = info)), envir = env)
 }
 
-my_expect_inherits <- function(expr, class, info = NULL, family = NULL) {
+my_expect_inherits <- function(expr, class, info = NULL, family = NULL, env = NULL) {
     stopifnot(is.null(class) || is.character(class))
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to inherit from '%s'.", deparse(expr), class)
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_inherits(expr, class, info = info)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to inherit from '%s'.", deparse(expr), class)
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_inherits(expr, class, info = info)), envir = env)
 }
 
-my_expect_identical <- function(expr, target, info = NULL, family = NULL) {
+my_expect_identical <- function(expr, target, info = NULL, family = NULL, env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to be identical to %s.", deparse(expr), deparse(target))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_identical(expr, target, info = info)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to be identical to %s.", deparse(expr), deparse(target))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_identical(expr, target, info = info)), envir = env)
 }
 
-my_expect_equal <- function(expr, target, info = NULL, family = NULL, ...) {
+my_expect_equal <- function(expr, target, info = NULL, family = NULL, ..., env = NULL) {
     stopifnot(is.null(info) || is.character(info))
     stopifnot(is.null(family) || is.character(family))
+    stopifnot(is.null(env) || inherits(env, "environment"))
+    if (is.null(env)) env <- parent.frame()
 
     expr <- substitute(expr)
-    if (is.null(info))   info <- sprintf("Expected '%s' to be equal to %s.", deparse(expr), deparse(target))
-    if (is.null(family)) info <- sprintf("Family \"%s\": %s", info)
-    eval(substitute(expect_equal(expr, target, info = info, ...)), envir = parent.frame())
+    if (is.null(info))    info <- sprintf("Expected '%s' to be equal to %s.", deparse(expr), deparse(target))
+    if (!is.null(family)) info <- sprintf("Family \"%s\": %s", family, info)
+    eval(substitute(expect_equal(expr, target, info = info, ...)), envir = env)
 }
 
 
@@ -128,4 +144,40 @@ get_limits <- function(type = c("discrete", "continuous")) {
     }
     return(res)
 }
+
+
+# -------------------------------------------------------------------
+# Limits for discrete and continuous families (for automated tests)
+# -------------------------------------------------------------------
+get_test_config <- function(family) {
+    if (family == "NO") {
+        params <- list("mu"    = list(range = c(-Inf, Inf),
+                                      links = c("inverse", "log", "identity", "own")),
+                       "sigma" = list(range = c(0, Inf),
+                                      links = c("inverse", "log", "identity", "own"))
+                       )
+    } else if (family == "LO") {
+        params <- list("mu"    = list(range = c(-Inf, Inf),
+                                      links = c("inverse", "log", "identity", "own")),
+                       "sigma" = list(range = c(0, Inf),
+                                      links = c("inverse", "log", "identity", "own"))
+                       )
+    } else if (family == "BE") {
+        params <- list("mu"    = list(range = c(0, 1),
+                                      links = c("logit", "probit", "cloglog", "cauchit", "log", "own")),
+                       "sigma" = list(range = c(0, 1),
+                                      links = c("logit", "probit", "cloglog", "cauchit", "log", "own"))
+                       )
+    } else {
+        stop("Test configuration for family \"", family, "\" not defined!")
+    }
+    return(list(params = params))
+}
+
+
+
+
+
+
+
 
