@@ -52,7 +52,7 @@ dGA<-function(x, mu=1, sigma=1, log=FALSE)
  log.lik <- (1/sigma^2)*log(x/(mu*sigma^2))-x/(mu*sigma^2)-log(x)-lgamma(1/sigma^2)
      if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
        fy[x <= 0] <- 0
-       fy[x >= Inf] <- 0
+       fy[x == Inf] <- 0
        fy 
   }
 ################################################################################

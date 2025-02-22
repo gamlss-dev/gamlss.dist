@@ -11,18 +11,19 @@
 #Probability Density function
 dIGAMMA <- function(x, mu = 1, sigma = 0.5, log = FALSE)
 {
-   if (any(mu < 0))
-	stop(paste("mu must be greater than 0", "\n", ""))
-   if (any(sigma <= 0))
-	stop(paste("sigma must be greater than 0", "\n", ""))
-  # if (any(x < 0))
-	#stop(paste("x must be greater than 0", "\n", ""))
+if (any(mu < 0)) stop(paste("mu must be greater than 0", "\n", ""))
+if (any(sigma <= 0)) stop(paste("sigma must be greater than 0", "\n", ""))
+      ln <- max(length(x), length(mu), length(sigma))
+       x <- rep_len(x, ln)
+      mu <- rep_len(mu, ln)
+   sigma <- rep_len(sigma, ln)
    alpha <- 1/(sigma^2)
-   lfy <- alpha*log(mu) + alpha*log(alpha+1) - lgamma(alpha) -
-	  (alpha + 1)*log(x) - ((mu*(alpha + 1))/x)
-    fy <- if (log == FALSE) exp(lfy) else lfy
-    fy <-ifelse(x <= 0, 0, fy)
-   fy
+     lfy <- alpha*log(mu) + alpha*log(alpha+1) - lgamma(alpha) -
+	          (alpha + 1)*log(x) - ((mu*(alpha + 1))/x)
+     fy <- if (log == FALSE) exp(lfy) else lfy
+  fy[x <= 0] <- 0
+fy[x >= Inf] <- 0
+   fy 
 }
 ################################################################################
 ################################################################################
@@ -31,20 +32,19 @@ dIGAMMA <- function(x, mu = 1, sigma = 0.5, log = FALSE)
 #Cumulative density function
 pIGAMMA <- function(q, mu = 1, sigma = 0.5, lower.tail = TRUE, log.p = FALSE)
 {
-   if (any(mu <= 0))
-	stop(paste("mu must be greater than 0", "\n", ""))
-   if (any(sigma <= 0))
-	stop(paste("sigma must be greater than 0", "\n", ""))
- #  if (any(q < 0))
- #	stop(paste("q must be greater than 0", "\n", ""))
+if (any(mu <= 0)) stop(paste("mu must be greater than 0", "\n", ""))
+if (any(sigma <= 0)) stop(paste("sigma must be greater than 0", "\n", ""))
+       n <- max(length(q), length(mu), length(sigma))
+       q <- rep_len(q, n)
+      mu <- rep_len(mu, n)
+   sigma <- rep_len(sigma, n)
    alpha <- 1/(sigma^2)
-   lcdf <- pgamma(((mu*(alpha + 1))/q), shape=alpha, lower.tail=FALSE, log.p = TRUE)  
-   if (log.p == FALSE) cdf <- exp(lcdf)
-   else cdf <- lcdf 
-   if (lower.tail == TRUE) cdf <- cdf
-   else cdf <- 1 - cdf
-   cdf <-ifelse(q <= 0, 0, cdf)
-   cdf
+    lcdf <- pgamma(((mu*(alpha + 1))/q), shape=alpha, lower.tail=FALSE, log.p = TRUE)  
+if (log.p == FALSE) cdf <- exp(lcdf) else cdf <- lcdf 
+if (lower.tail == TRUE) cdf <- cdf else cdf <- 1 - cdf
+    cdf[q<=0] <- 0
+    cdf[q>=Inf] <- 1
+    cdf
 } 
 ################################################################################
 ################################################################################
@@ -98,15 +98,18 @@ pIGAMMA <- function(q, mu = 1, sigma = 0.5, lower.tail = TRUE, log.p = FALSE)
 ################################################################################
 qIGAMMA <- function(p, mu=1, sigma=0.5,  lower.tail = TRUE, log.p = FALSE )
  { 
-    if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
-    if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))  
-    if (log.p==TRUE) p <- exp(p) else p <- p
-    if (lower.tail==TRUE) p <- p else p <- 1-p
- #   if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", ""))       
+if (any(mu < 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))  
+if (log.p==TRUE) p <- exp(p) else p <- p
+if (lower.tail==TRUE) p <- p else p <- 1-p
+               n <- max(length(p), length(mu), length(sigma))
+               p <- rep_len(p, n)
+              mu <- rep_len(mu, n)
+           sigma <- rep_len(sigma, n)  
               nu <- -1
                p <- if(nu>0)  p else 1-p
-              z <- qGA(p, mu=1, sigma=sigma*abs(nu))
-            mu2 <- mu *(1+sigma^2) 
+               z <- qGA(p, mu=1, sigma=sigma*abs(nu))
+             mu2 <- mu *(1+sigma^2) 
               y <- mu2*z^(1/nu)
               y[p == 0] <- 0
               y[p == 1] <- Inf

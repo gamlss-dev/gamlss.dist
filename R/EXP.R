@@ -32,7 +32,7 @@ if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", ""))
         mu <- rep(mu, length = ly) 
         fy <- dexp(x = x, rate =1/mu, log = log)
         fy[x <= 0] <- 0 
-        fy[x >= Inf] <- 0
+        fy[x == Inf] <- 0
         fy
   }
 #----------------------------------------------------------------------------------------
