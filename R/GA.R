@@ -61,9 +61,8 @@ dGA<-function(x, mu=1, sigma=1, log=FALSE)
 ################################################################################
 pGA <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
-          if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
-          if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-      #    if (any(q < 0))  stop(paste("y must be positive", "\n", ""))  
+if (any(mu <= 0))  stop(paste("mu must be positive", "\n", "")) 
+if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
       n <- max(length(q), length(mu), length(sigma))
       q <- rep_len(q, n)
      mu <- rep_len(mu, n)
