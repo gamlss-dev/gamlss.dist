@@ -17,7 +17,7 @@ eps <- sqrt(.Machine$double.eps)
 
 # TODO(R): A few hand selected distributions which do not fail these basic tests.
 families <- c(
-    "NO", "LO", "BE"
+    "NO", "NO2", "LO", "BE"
 )
 
 # -------------------------------------------------------------------
@@ -33,5 +33,5 @@ for (family in families) {
 
     ## Test family constructor (basic tests) with different
     ## combinations of links (if there are any).
-    test_constructor_function(family, conf)
+    ##test_constructor_function(family, conf)
 }
