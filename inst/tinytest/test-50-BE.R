@@ -14,6 +14,8 @@ if (interactive()) {
     library("gamlss.dist")
 }
 
+# Required
+suppressPackageStartupMessages(requireNamespace("gamlss"))
 
 
 # -------------------------------------------------------------------
@@ -430,7 +432,6 @@ expect_inherits(x$G.dev.incr, "function",
 expect_identical(deparse(x$G.dev.incr)[[1L]], "function (y, mu, sigma, w, ...) ",
     info = "Unexpected function call for $G.dev.incr.")
 
-requireNamespace("gamlss")
 expect_inherits(x$rqres, "expression",
     info = "Unexpected content in $rqres.")
 expect_equal(with(list(y = 0.53, mu = 0.2, sigma = 0.1, rqres = gamlss:::rqres), eval(x$rqres)),

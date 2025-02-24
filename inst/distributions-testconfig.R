@@ -59,66 +59,66 @@ get_testconfig <- function(family = NULL) {
     # Configuration for NO and NO2 (Normal)
     # ---------------------------------------------------------------
     res$NO <- res$NO2 <- list(
-        type    <- "Continuous",
-        support <- c(-Inf, Inf),
+        type    = "Continuous",
+        support = c(-Inf, Inf),
         # Distribution parameters with support (range) and all available links
-        params <- list("mu"    = list(range = c(-Inf, Inf),
+        params  = list("mu"    = list(range = c(-Inf, Inf),
                                       links = c("inverse", "log", "identity", "own")),
                        "sigma" = list(range = c(0, Inf),
                                       links = c("inverse", "log", "identity", "own"))
                        ),
         # Valid values used for testing dpqr
-        values  <- list("y"     = c(-30, -5 -1, 0, 1, 5, 30),
-                        "mu"    = c(-30, -5 -1, 0, 1, 5, 30),
-                        "sigma" = c(eps, 1, 5, 30)),
+        values  = list("y"     = c(-30, -5 -1, 0, 1, 5, 30),
+                       "mu"    = c(-30, -5 -1, 0, 1, 5, 30),
+                       "sigma" = c(eps, 1, 5, 30)),
         # Illegal values, any combination of these must fail
-        illegal <- list("y"     = 0,
-                        "mu"    = 0,
-                        "sigma" = c(0, -0.0001, -100))
+        illegal = list("y"     = 0,
+                       "mu"    = 0,
+                       "sigma" = c(0, -0.0001, -100))
     )
 
     # ---------------------------------------------------------------
     # Configuration for LO (Logistic)
     # ---------------------------------------------------------------
     res$LO <- list(
-        type    <- "Continuous",
-        support <- c(-Inf, Inf),
+        type    = "Continuous",
+        support = c(-Inf, Inf),
         # Distribution parameters with support (range) and all available links
-        params <- list("mu"    = list(range = c(-Inf, Inf),
+        params  = list("mu"    = list(range = c(-Inf, Inf),
                                       links = c("inverse", "log", "identity", "own")),
                        "sigma" = list(range = c(0, Inf),
                                       links = c("inverse", "log", "identity", "own"))
                        ),
         # Valid values used for testing dpqr
-        values <- list("y"     = c(-30, -5 -1, 0, 1, 5, 30),
+        values  = list("y"     = c(-30, -5 -1, 0, 1, 5, 30),
                        "mu"    = c(-30, -5 -1, 0, 1, 5, 30),
                        "sigma" = c(eps, 1, 5, 30)),
         # Illegal values, any combination of these must fail
-        illegal <- list("y"     = 0,
-                        "mu"    = 0,
-                        "sigma" = c(0, -0.0001, -100))
+        illegal = list("y"     = 0,
+                       "mu"    = 0,
+                       "sigma" = c(0, -0.0001, -100))
     )
 
     # ---------------------------------------------------------------
     # Configuration for BE (Beta)
     # ---------------------------------------------------------------
     res$BE <- list(
-        type   <- "Continuous",
-        support <- c(0, 1),
+        type    = "Continuous",
+        support = c(0, 1),
         # Distribution parameters with support (range) and all available links
-        params <- list("mu"    = list(range = c(0, 1),
+        params  = list("mu"    = list(range = c(0, 1),
                                       links = c("logit", "probit", "cloglog", "cauchit", "log", "own")),
                        "sigma" = list(range = c(0, 1),
                                       links = c("logit", "probit", "cloglog", "cauchit", "log", "own"))
                        ),
         # Valid values used for testing dpqr
-        values <- list("y"     = c(0 + eps, 0.1, 0.5, 0.9, 1 - eps),
+        values  = list("y"     = c(0 + eps, 0.1, 0.5, 0.9, 1 - eps),
                        "mu"    = c(0 + eps, 0.1, 0.5, 0.9, 1 - eps),
                        "sigma" = c(0 + eps, 0.1, 0.5, 0.9, 1 - eps)),
         # Illegal values, any combination of these must fail
-        illegal <- list("y"     = c(-10, -0.00001, 0, 1, 1.00001, 10),
-                        "mu"    = c(-10, -0.00001, 0, 1, 1.00001, 10),
-                        "sigma" = c(-10, -0.00001, 0, 1, 1.00001, 10))
+        illegal = list("y"     = c(-10, -0.00001, 0, 1, 1.00001, 10),
+                       "mu"    = c(-10, -0.00001, 0, 1, 1.00001, 10),
+                       "sigma" = c(-10, -0.00001, 0, 1, 1.00001, 10))
     )
 
     # ---------------------------------------------------------------

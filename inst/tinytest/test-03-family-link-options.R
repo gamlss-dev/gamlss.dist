@@ -11,23 +11,34 @@ source("../distributions-testconfig.R")
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL)
 
+# Used to format numeric values for expressions/commands
+fmt <- function(x) format(x, digits = 10)
+
 # Looping over all defined families
 for (family in names(configs)) {
-    # Testing if the constructor function as well as the dpqr functions
-    # exist in gamlss.dist and that they are functions.
-    check_and_load <- paste0(c("", "d", "p", "q", "r"), family)
-    for (f in check_and_load) {
-        # Attach 'f' to the environment in which we will evaluate the expression
-        expect_silent(get(f, envir = getNamespace("gamlss.dist")),
-            info = sprintf("Cannot find function 'famlss.dist::%s'.", f))
-        expect_inherits(get(f, envir = getNamespace("gamlss.dist")), "function",
-            info = sprintf("'gamlss.dist::%s' is not a function.", f))
+    # For convenience
+    conf <- configs[[family]]
 
+    # Create grid of possible link combinations
+    links <- expand.grid(lapply(conf$param, function(x) x$links), stringsAsFactors = FALSE)
+
+    # Create grid valid values for testing (for density, dist)
+    testvals <- expand.grid(conf$values)
+
+    for (i in seq_len(nrow(links))) {
+        # Call constructor function (default args)
+        cmd <- sprintf("obj <- %s(%s)", family,
+            paste(sprintf("%s.link = \"%s\"", names(links[i, ]), links[i, ]), collapse = ", "))
+
+        # Call constructor to create family object
+        expect_silent(eval(parse(text = cmd)), info = sprintf("'%s' was not silent.", cmd))
+
+
+        # Cleaning up
+        rm(obj, cmd, j)
     }
 }
 
-## Used to format numeric values for expressions/commands
-#fmt <- function(x) format(x, digits = 10)
 #
 ## Create grid of possible link combinations
 #links <- expand.grid(lapply(conf$param, function(x) x$links),
