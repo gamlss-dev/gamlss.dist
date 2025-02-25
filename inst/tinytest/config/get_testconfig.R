@@ -63,22 +63,37 @@ load_check_config <- function(f, dir) {
         if (res$support[1] >= res$support[2])
             stop("'res$support' (\"", file, "\") not properly defined.")
 
-        # 'Good' Values
-        if (!is.list(res$values) || is.null(names(res$values)))
-            stop("'res$values' (\"", file, "\") must be a named list.")
-        lapply(res$values, function(x) {
-            if (!is.numeric(x))
-                stop("entries in 'res$values' (\"", file, "\") must be numeric.")
-        })
+        # Names of the parameters
+        if (!is.character(res$params) || !length(res$params) > 0L || !all(nchar(res$params) > 0L))
+            stop("'res$params' (\"", file, "\") misspecified, must be valid character vector with length > 0.")
 
-        # 'Illegal' Values
-        if (!is.list(res$illegal) || is.null(names(res$illegal)))
-            stop("'res$illegal' (\"", file, "\") must be a named list.")
-        lapply(res$illegal, function(x) {
-            if (!is.numeric(x))
-                stop("entries in 'res$illegal' (\"", file, "\") must be numeric.")
-        })
+        # Checking res[[parameter]][[link]] content
+        test_param <- function(p, n) {
+            x <- res[[p]][[n]]
+            # Must exist
+            if (is.null(x))
+                stop("'res$", p, "$", n, "' (\"", file, "\") not defined (got NULL).")
+            # Must be a named list
+            if (!is.list(x) || is.null(names(x)) || length(x) == 0L)
+                stop("'res$", p, "' (\"", file, "\") must be a named list of length > 0L.")
 
+            # Checking list entries
+            expected <- c("range", "valid", "invalid")
+            if (!all(expected %in% names(x)))
+                stop("'res$", p, "' (\"", file, "\") does not contain all expected elements: ",
+                     paste(expected, collapse = ", "))
+            if (!is.numeric(x$range) || length(x$range) != 2L || any(is.na(x$range)))
+                stop("'res$", p, "$", n, "$range' (\"", file, "\") must be numeric vector of lenth 2 without missing values.")
+            if (!is.numeric(x$valid) || length(x$valid) == 0L || any(is.na(x$valid)))
+                stop("'res$", p, "$", n, "$valid' (\"", file, "\") must be numeric vector of lenth >0 without missing values.")
+            if (!is.null(x$invalid) && (!is.numeric(x$invalid) || length(x$invalid) == 0L || any(is.na(x$invalid))))
+                stop("'res$", p, "$", n, "$invalid' (\"", file, "\") must be NULL or numeric vector of lenth >0 without missing values.")
+        }
+        for (p in res$params) {
+            for (n in names(res[[p]])) {
+                test_param(p, n)
+            }
+        }
 
         return(res)
     })

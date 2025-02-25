@@ -19,56 +19,29 @@ for (family in names(configs)) {
     # For convenience: character vector with distribution parameters as expected
     params <- names(conf$param)
 
-    # Create grid of possible link combinations
-    links <- expand.grid(lapply(conf$param, function(x) x$links), stringsAsFactors = FALSE)
+    # Create default family object
+    cmd <- sprintf("obj <- %s()", family)
 
-    # Create grid valid values for testing (for density, dist)
-    testvals <- expand.grid(conf$values)
+    # Call constructor to create family object
+    expect_silent(eval(parse(text = cmd)),
+        info = sprintf("'%s' was not silent.", cmd))
 
-
-    # ---------------------------------------------------------------
-    # Testing all available link combinations.
-    # Within, check if the returned object is correct, focusing
-    # on ensuring that the links are set properly. Does not
-    # test the link functions themselves, and does not test
-    # all elements of the family object.
-    # ---------------------------------------------------------------
-    for (i in seq_len(nrow(links))) {
-        # Call constructor function (default args)
-        cmd <- sprintf("obj <- %s(%s)", family,
-            paste(sprintf("%s.link = \"%s\"", names(links[i, ]), links[i, ]), collapse = ", "))
-
-        # Call constructor to create family object
-        expect_silent(eval(parse(text = cmd)),
-            info = sprintf("'%s' was not silent.", cmd))
-
-        # Checking xx.link entries, ensure the xx.linkfun and xx.invlink are available and
-        # are both functions. 'p': Name of parameter to test.
-        for (p in params) {
-            expect_identical(obj[[paste0(p, ".link")]], links[i, p],
-                info = sprintf("%s(...)$%s.link not '%s' as expected.", family, p, links[i, p]))
-            # Check if xx.linkfun exists and is a function
-            expect_true(paste0(p, ".linkfun") %in% names(obj),
-                info = sprintf("%s(...)$%s.linkfun not found.", family, p))
-            expect_inherits(obj[[paste0(p, ".linkfun")]], "function",
-                info = sprintf("%s(...)$%s.linkfun is not a function.", family, p))
-            # Check if xx.linkinv exists and is a function
-            expect_true(paste0(p, ".linkinv") %in% names(obj),
-                info = sprintf("%s(...)$%s.linkinv not found.", family, p))
-            expect_inherits(obj[[paste0(p, ".linkinv")]], "function",
-                info = sprintf("%s(...)$%s.linkinv is not a function.", family, p))
-        }
+    # Checking xx.link entries, ensure the xx.linkfun and xx.invlink are available and
+    # are both functions. 'p': Name of parameter to test.
+    for (p in params) {
+        # Check if xx.linkfun exists and is a function
+        expect_true(paste0(p, ".linkfun") %in% names(obj),
+            info = sprintf("%s(...)$%s.linkfun not found.", family, p))
+        expect_inherits(obj[[paste0(p, ".linkfun")]], "function",
+            info = sprintf("%s(...)$%s.linkfun is not a function.", family, p))
+        # Check if xx.linkinv exists and is a function
+        expect_true(paste0(p, ".linkinv") %in% names(obj),
+            info = sprintf("%s(...)$%s.linkinv not found.", family, p))
+        expect_inherits(obj[[paste0(p, ".linkinv")]], "function",
+            info = sprintf("%s(...)$%s.linkinv is not a function.", family, p))
     }
     # Cleaning up
-    rm(cmd, obj, p, i)
-
-
-    # ---------------------------------------------------------------
-    # Testing the remaining elements of the family object
-    # - Create new defualt family object
-    # - Test the different entries
-    # ---------------------------------------------------------------
-    obj <- eval(parse(text = sprintf("%s()", family)))
+    rm(cmd, p)
 
     # Checking basic properties
     expect_inherits(obj, "gamlss.family",

@@ -10,18 +10,18 @@ eps <- sqrt(.Machine$double.eps)
 res <- list(
     type    = "Continuous",
     support = c(-Inf, Inf),
-    # Distribution parameters with support (range) and all available links
-    params  = list("mu"    = list(range = c(-Inf, Inf),
-                                  links = c("inverse", "log", "identity", "own")),
-                   "sigma" = list(range = c(0, Inf),
-                                  links = c("inverse", "log", "identity", "own"))
-                   ),
-    # Valid values used for testing dpqr
-    values  = list("y"     = c(-30, -5 -1, 0, 1, 5, 30),
-                   "mu"    = c(-30, -5 -1, 0, 1, 5, 30),
-                   "sigma" = c(eps, 1, 5, 30)),
-    # Illegal values, any combination of these must fail
-    illegal = list("y"     = 0,
-                   "mu"    = 0,
-                   "sigma" = c(0, -0.0001, -100))
+
+    # Name of the parameters
+    params = c("mu", "sigma"),
+
+    # Valid and invalid response values
+    y     = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+
+    mu    = list("identity" = list(range = c(-Inf, Inf), valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+                 "inverse"  = list(range = c(-Inf, Inf), valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+                 "log"      = list(range = c(eps, Inf),  valid = c(eps, 1, 5, 30), invalid = c(-eps, 0))),
+
+    sigma = list("identity" = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)),
+                 "inverse"  = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)),
+                 "log"      = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)))
 )
