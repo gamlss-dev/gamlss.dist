@@ -25,6 +25,14 @@ for (family in names(configs)) {
     # Create grid valid values for testing (for density, dist)
     testvals <- expand.grid(conf$values)
 
+
+    # ---------------------------------------------------------------
+    # Testing all available link combinations.
+    # Within, check if the returned object is correct, focusing
+    # on ensuring that the links are set properly. Does not
+    # test the link functions themselves, and does not test
+    # all elements of the family object.
+    # ---------------------------------------------------------------
     for (i in seq_len(nrow(links))) {
         # Call constructor function (default args)
         cmd <- sprintf("obj <- %s(%s)", family,
@@ -33,29 +41,6 @@ for (family in names(configs)) {
         # Call constructor to create family object
         expect_silent(eval(parse(text = cmd)),
             info = sprintf("'%s' was not silent.", cmd))
-
-        # Checking basic properties
-        expect_inherits(obj, "gamlss.family",
-            info = sprintf("object returned by %s(...) not of class 'gamlss.family'.", family))
-        expect_inherits(obj, "family",
-            info = sprintf("object returned by %s(...) not of class 'family'.", family))
-
-        # Test if $type is specified correctly
-        expect_identical(obj$type, conf$type,
-            info = sprintf("%s(...)$type incorrect, expected '%s'.", family, conf$type))
-
-        # Check if family was set correctly
-        expect_identical(obj$family[[1]], family,
-            info = sprintf("'%1$s()$family[[1]]' does not contain \"%1$s\" as expected.", family))
-
-        # Test if $parameters is set correctly
-        expect_identical(obj$parameters,
-            as.list(setNames(rep(TRUE, length(params)), params)),
-            info = sprintf("%s(...)$parameters does not include all expected parameters.", family))
-
-        # Test if $nopar is correct
-        expect_equal(obj$nopar, length(params),
-            info = sprintf("%s(...)$nopar contains incorrect value.", family))
 
         # Checking xx.link entries, ensure the xx.linkfun and xx.invlink are available and
         # are both functions. 'p': Name of parameter to test.
@@ -73,50 +58,83 @@ for (family in names(configs)) {
             expect_inherits(obj[[paste0(p, ".linkinv")]], "function",
                 info = sprintf("%s(...)$%s.linkinv is not a function.", family, p))
         }
-
-        # Test that xx.valid exists and is a function
-        for (p in c("y", params)) {
-            expect_true(paste0(p, ".valid") %in% names(obj),
-                info = sprintf("%s(...)$%s.valid not found.", family, p))
-            expect_inherits(obj[[paste0(p, ".valid")]], "function",
-                info = sprintf("%s(...)$%s.valid is not a function.", family, p))
-        }
-
-        # Find all elements '^d.*' which should be the derivatives, and check
-        # that they are functions.
-        derivs <- names(obj)[grepl("^d.*", names(obj))]
-        for (d in derivs) {
-            expect_inherits(obj[[d]], "function",
-                info = sprintf("%s(...)$%s (derivative) is not a function.", family, d))
-        }
-
-        # Function G.dev.incr
-        expect_inherits(obj[["G.dev.incr"]], "function",
-            info = sprintf("%s(...)$G.devv.incr is not a function.", family))
-
-        # Function G.dev.incr
-        expect_inherits(obj[["rqres"]], "expression",
-            info = sprintf("%s(...)$rqres is not an expression.", family))
-
-        # TODO(R): Not all families have initial values
-        # Test that xx.initial is available and an expression
-        for (p in params) {
-            expect_true(paste0(p, ".initial") %in% names(obj),
-                info = sprintf("%s(...)$%s.initial not found.", family, p))
-            expect_inherits(obj[[paste0(p, ".initial")]], "expression",
-                info = sprintf("%s(...)$%s.initial is not an expression.", family, p))
-        }
-
-        # Mean and variance
-        for (d in c("mean", "variance")) {
-            expect_true(d %in% names(obj),
-                info = sprintf("%s(...)$%s not found.", family, d))
-            expect_inherits(obj[[d]], "function",
-                info = sprintf("%s(...)$%s is not a function.", family, d))
-        }
-
-        # Cleaning up
-        rm(obj, cmd, j)
     }
+    # Cleaning up
+    rm(cmd, obj, p, i)
+
+
+    # ---------------------------------------------------------------
+    # Testing the remaining elements of the family object
+    # - Create new defualt family object
+    # - Test the different entries
+    # ---------------------------------------------------------------
+    obj <- eval(parse(text = sprintf("%s()", family)))
+
+    # Checking basic properties
+    expect_inherits(obj, "gamlss.family",
+        info = sprintf("object returned by %s(...) not of class 'gamlss.family'.", family))
+    expect_inherits(obj, "family",
+        info = sprintf("object returned by %s(...) not of class 'family'.", family))
+
+    # Test if $type is specified correctly
+    expect_identical(obj$type, conf$type,
+        info = sprintf("%s(...)$type incorrect, expected '%s'.", family, conf$type))
+
+    # Check if family was set correctly
+    expect_identical(obj$family[[1]], family,
+        info = sprintf("'%1$s()$family[[1]]' does not contain \"%1$s\" as expected.", family))
+
+    # Test if $parameters is set correctly
+    expect_identical(obj$parameters,
+        as.list(setNames(rep(TRUE, length(params)), params)),
+        info = sprintf("%s(...)$parameters does not include all expected parameters.", family))
+
+    # Test if $nopar is correct
+    expect_equal(obj$nopar, length(params),
+        info = sprintf("%s(...)$nopar contains incorrect value.", family))
+
+    # Test that xx.valid exists and is a function
+    for (p in c("y", params)) {
+        expect_true(paste0(p, ".valid") %in% names(obj),
+            info = sprintf("%s(...)$%s.valid not found.", family, p))
+        expect_inherits(obj[[paste0(p, ".valid")]], "function",
+            info = sprintf("%s(...)$%s.valid is not a function.", family, p))
+    }
+
+    # Find all elements '^d.*' which should be the derivatives, and check
+    # that they are functions.
+    derivs <- names(obj)[grepl("^d.*", names(obj))]
+    for (d in derivs) {
+        expect_inherits(obj[[d]], "function",
+            info = sprintf("%s(...)$%s (derivative) is not a function.", family, d))
+    }
+
+    # Function G.dev.incr
+    expect_inherits(obj[["G.dev.incr"]], "function",
+        info = sprintf("%s(...)$G.devv.incr is not a function.", family))
+
+    # Function G.dev.incr
+    expect_inherits(obj[["rqres"]], "expression",
+        info = sprintf("%s(...)$rqres is not an expression.", family))
+
+    # TODO(R): Not all families have initial values
+    # Test that xx.initial is available and an expression
+    for (p in params) {
+        expect_true(paste0(p, ".initial") %in% names(obj),
+            info = sprintf("%s(...)$%s.initial not found.", family, p))
+        expect_inherits(obj[[paste0(p, ".initial")]], "expression",
+            info = sprintf("%s(...)$%s.initial is not an expression.", family, p))
+    }
+
+    # Mean and variance
+    for (d in c("mean", "variance")) {
+        expect_true(d %in% names(obj),
+            info = sprintf("%s(...)$%s not found.", family, d))
+        expect_inherits(obj[[d]], "function",
+            info = sprintf("%s(...)$%s is not a function.", family, d))
+    }
+
+    # Cleaning up
+    rm(obj)
 }
 
