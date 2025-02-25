@@ -45,17 +45,34 @@ for (family in names(configs)) {
     links <- unlist(obj[sprintf("%s.link", conf$param)])
     names(links) <- gsub("\\.link$", "", names(links))
 
+
     valid <- list(y = conf$y$valid)
     for (p in conf$param) valid[[p]] <- conf[[c(p, links[p], "valid")]]
+    valid
+    sapply(valid,length)
 
     expect_silent(tmp <- cdf(valid$y, valid$mu, valid$sigma),
-        info = sprintf("'d%s(...)' expected to be silent when tested with all-valid input values.", family))
+            info = sprintf("'d%s(...)' expected to be silent when tested with all-valid input values.", family))
+    # TODO(R): I just call it agian as I do not get object 'tmp' if the call
+    #          above is not silent (we currently have this with dGT)
+    tmp <- cdf(valid$y, valid$mu, valid$sigma)
     expect_silent(is.numeric(tmp),
         info = sprintf("'d%s(...)' expected to return numeric result.", family))
     expect_silent(is.numeric(tmp),
         info = sprintf("'d%s(...)' returned NA when used with all-valid input values.", family))
     expect_identical(length(tmp), max(sapply(valid, length)),
         info = sprintf("'d%s(...)' returned result of unexpected length.", family))
+
+    # Testing invalid parameters (should aus an error)
+    for (p in conf$param) {
+        for (v in conf[[c(p, links[p], "invalid")]]) {
+            tmpfun <- cdf
+            formals(tmpfun)[c("x", p)] <- c(valid$y[1], v)
+            expect_error(tmpfun(),
+                info = sprintf("'d%s(x = %s, %s = %s)' (invalid %s) did not throw a warning.",
+                               family, fmt(valid$y[1]), p, fmt(v), p))
+        }
+    }
 
 
     # ---------------------------------------------------------------

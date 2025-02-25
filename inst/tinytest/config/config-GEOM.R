@@ -9,8 +9,8 @@
 eps <- sqrt(.Machine$double.eps)
 
 # Same set of valid/invalid values for all parameters
-val_valid   <- c(0 + eps, 0.1, 0.5, 0.9, 1 - eps)
-val_invalid <- c(-10, -0.00001, 0, 1, 1.00001, 10)
+val_valid   <- c(eps, 0.1, 0.5, 0.9, 1 - eps)
+val_invalid <- c(-1, -eps, 0)
 
 # Setting up configuration
 res <- list(
@@ -33,9 +33,13 @@ res <- list(
     # Valid and invalid response values
     y     = list(valid = c(0, 1, 2, 30), invalid = c(-eps, -1)),
 
-    mu    = list("log"      = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "probit"   = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cloglog"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cauchit"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid))
+    # TODO(R): These settings are perfectly fine for testing
+    #          mu.linkfun/mu.linkinv and mu.valid, however,
+    #          they do not throw errors when used with dGEOM as
+    #          dGEOM (who does not know the link) only checks for mu > 0.
+    mu    = list("log"      = list(range = c(eps, Inf), valid = c(eps, 1, 5, 30), invalid = c(-1, -eps, 0)),
+                 "probit"   = list(range = c(eps, Inf), valid = val_valid, invalid = val_invalid),
+                 "cloglog"  = list(range = c(eps, Inf), valid = val_valid, invalid = val_invalid),
+                 "cauchit"  = list(range = c(eps, Inf), valid = val_valid, invalid = val_invalid))
 )
 

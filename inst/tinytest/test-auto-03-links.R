@@ -6,7 +6,7 @@
 if (interactive()) { library("tinytest"); library("gamlss.dist") }
 
 # Used for printing numerics
-fmt <- function(x) format(x, digits = 10)
+fmt <- function(x) format(x, digits = 5)
 
 # Helper functions
 source("config/get_testconfig.R")
