@@ -19,10 +19,35 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # Get all link combinations for testing.
-    # TODO(R): Currently the config does not specify anything for 'link = "own"',
-    #          so this feature is currently not tested.
-    links  <- expand.grid(lapply(conf[conf$params], names), stringsAsFactors = FALSE)
+    # ---------------------------------------------------------------
+    # Before testing all valid link combinations, test that the
+    # constructor function fails if we provide invalid links.
+    # ---------------------------------------------------------------
+    for (p in conf$param) {
+        tmpfun <- get(family, envir = getNamespace("gamlss.dist"))
+
+        formals(tmpfun)[paste0(p, ".link")] <- "foo"
+        expect_error(tmpfun(),
+            info = sprintf("'%s(...) did not throw error when using %s.link = \"foo\" (invalid link).", family, p))
+
+        formals(tmpfun)[paste0(p, ".link")] <- TRUE
+        expect_error(tmpfun(),
+            info = sprintf("'%s(...) did not throw error when using %s.link = TRUE (invalid link).", family, p))
+
+        formals(tmpfun)[paste0(p, ".link")] <- c(1, 2, 3)
+        expect_error(tmpfun(),
+            info = sprintf("'%s(...) did not throw error when using %s.link = character() (invalid link).", family, p))
+
+        cmd <- sprintf("%s(%s.link = character())", family, p)
+        expect_error(eval(parse(text = cmd)),
+            info = sprintf("'%s(...) did not throw error when using %s.link = character() (invalid link).", family, p))
+
+        cmd <- sprintf("%s(%s.link = list())", family, p)
+        expect_error(eval(parse(text = cmd)),
+            info = sprintf("'%s(...) did not throw error when using %s.link = character() (invalid link).", family, p))
+
+        rm(tmpfun, cmd)
+    }
 
     # ---------------------------------------------------------------
     # Testing all available link combinations. Based on the test run
@@ -32,7 +57,14 @@ for (family in names(configs)) {
     # Here we are testing all possible link combinations, and test
     # that they work as expected.
     # ---------------------------------------------------------------
+
+    # Get all link combinations for testing.
+    # TODO(R): Currently the config does not specify anything for 'link = "own"',
+    #          so this feature is currently not tested.
+    links  <- expand.grid(lapply(conf[conf$params], names), stringsAsFactors = FALSE)
+
     for (i in seq_len(nrow(links))) {
+
         # Call constructor function (default args)
         cmd <- sprintf("obj <- %s(%s)", family,
             paste(sprintf("%s.link = \"%s\"", names(links[i, , drop = FALSE]), links[i, ]), collapse = ", "))

@@ -2,9 +2,11 @@
 # Getting current package version from DESCRIPTION file
 VERSION := $(shell grep '^Version:' DESCRIPTION | awk '{print $$2}')
 
-.PHONY: test
+.PHONY: test testv
 test:
-	Rscript -e "library('gamlss.dist'); tinytest::test_all()"
+	Rscript -e "library('gamlss.dist'); print(tinytest::test_all())"
+testv:
+	Rscript -e "library('gamlss.dist'); print(tinytest::test_all(), n = 100)"
 
 .PHONY: install
 install:

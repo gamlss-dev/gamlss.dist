@@ -8,6 +8,10 @@ eps <- sqrt(.Machine$double.eps)
 
 # Setting up configuration
 res <- list(
+    # If set TRUE it will not be used for auto-testing
+    disabled = FALSE,
+
+    # Type of distribution and response support
     type    = "Continuous",
     support = c(-Inf, Inf),
 
@@ -21,18 +25,23 @@ res <- list(
         "r" = expression(n =, mu = 0, sigma = 1)
     ),
 
-    # Name of the parameters
+    # Name of the parameters used for testing the constructor function
     params = c("mu", "sigma"),
 
     # Valid and invalid response values
     y     = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
 
-    mu    = list("identity" = list(range = c(-Inf, Inf), valid = c(-30, -1, 0, 1, 30), invalid = NULL),
-                 "inverse"  = list(range = c(-Inf, Inf), valid = c(-30, -1, 0, 1, 30), invalid = NULL),
-                 "log"      = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0))),
+    mu    = list("identity" = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+                 "inverse"  = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+                 "log"      = list(valid = c(eps, 1, 30), invalid = c(-eps, 0))),
 
-    sigma = list("identity" = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "inverse"  = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "log"      = list(range = c(eps, Inf),  valid = c(eps, 1, 30), invalid = c(-eps, 0)))
+    sigma = list("identity" = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
+                 "inverse"  = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
+                 "log"      = list(valid = c(eps, 1, 30), invalid = c(-eps, 0))),
+
+    # Parameters used for testing the dprq methods; they are not aware of the
+    # link function and have different valid/invalid ranges.
+    dpqr  = list("mu"    = list(valid = c(-30, -5, -1, 0, 1, 5, 30), invalid = NULL),
+                 "sigma" = list(valid = c(0, 1, 30), invalid = c(-1, -eps)))
 )
 

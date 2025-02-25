@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------
 
 # Used for development/testing manually
-if (interactive()) { library("tinytest"); library("gamlss.dist") }
+if (interactive()) { library("tinytest"); library("gamlss.dist"); family <- "NO" }
 
 # Used for printing numerics
 fmt <- function(x) format(x, digits = 10)
@@ -29,6 +29,10 @@ for (family in names(configs)) {
     # Getting d<FAM> function (pdf)
     cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
+    # Missing argument 'x' should throw an error
+    expect_error(cdf(),
+        info = sprintf("'d%s()' without argument 'x' did not throw an error.", family))
+
     # ---------------------------------------------------------------
     # Testing arguments, order of arguments, and default values
     # ---------------------------------------------------------------
@@ -41,21 +45,16 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     # Setting up combinations of valid values
     # ---------------------------------------------------------------
-    # Extracting default links from the family for testing
-    links <- unlist(obj[sprintf("%s.link", conf$param)])
-    names(links) <- gsub("\\.link$", "", names(links))
+    valid <- list(x = conf$y$valid)
+    for (p in conf$param) valid[[p]]   <- conf$dpqr[[p]]$valid
+    invalid <- setNames(lapply(conf$params, function(p) conf$dpqr[[p]]$invalid), conf$params)
 
-
-    valid <- list(y = conf$y$valid)
-    for (p in conf$param) valid[[p]] <- conf[[c(p, links[p], "valid")]]
-    valid
-    sapply(valid,length)
-
-    expect_silent(tmp <- cdf(valid$y, valid$mu, valid$sigma),
+    expect_silent(tmp <- do.call(cdf, valid),
             info = sprintf("'d%s(...)' expected to be silent when tested with all-valid input values.", family))
     # TODO(R): I just call it agian as I do not get object 'tmp' if the call
     #          above is not silent (we currently have this with dGT)
-    tmp <- cdf(valid$y, valid$mu, valid$sigma)
+    tmp <- do.call(cdf, valid)
+
     expect_silent(is.numeric(tmp),
         info = sprintf("'d%s(...)' expected to return numeric result.", family))
     expect_silent(is.numeric(tmp),
@@ -64,13 +63,13 @@ for (family in names(configs)) {
         info = sprintf("'d%s(...)' returned result of unexpected length.", family))
 
     # Testing invalid parameters (should aus an error)
-    for (p in conf$param) {
-        for (v in conf[[c(p, links[p], "invalid")]]) {
-            tmpfun <- cdf
-            formals(tmpfun)[c("x", p)] <- c(valid$y[1], v)
+    for (p in names(invalid)) {
+        tmpfun <- cdf
+        for (v in invalid[[p]]) {
+            formals(tmpfun)[c("x", p)] <- c(valid$x[1], v)
             expect_error(tmpfun(),
                 info = sprintf("'d%s(x = %s, %s = %s)' (invalid %s) did not throw a warning.",
-                               family, fmt(valid$y[1]), p, fmt(v), p))
+                               family, fmt(valid$x[1]), p, fmt(v), p))
         }
     }
 
@@ -78,7 +77,7 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     # Testing if the integral of the density sums up to one
     # ---------------------------------------------------------------
-    grd <- expand.grid(valid[!names(valid) == "y"])
+    grd <- expand.grid(valid[!names(valid) == "x"])
 
     # If continuous: Try numeric integration for all combinations
     if (conf$type == "Continuous") {

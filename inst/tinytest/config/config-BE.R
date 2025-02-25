@@ -12,6 +12,10 @@ val_invalid <- c(-10, -0.00001, 0, 1, 1.00001, 10)
 
 # Setting up configuration
 res <- list(
+    # If set TRUE it will not be used for auto-testing
+    disabled = FALSE,
+
+    # Type of distribution and response support
     type    = "Continuous",
     support = c(0, 1),
 
@@ -28,18 +32,24 @@ res <- list(
     # Name of the parameters
     params = c("mu", "sigma"),
 
-    # Valid and invalid response values
+    # Valid and invalid response values used for testing the constructor function
     y     = list(valid = val_valid, invalid = val_invalid),
 
-    mu    = list("logit"    = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "probit"   = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cloglog"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cauchit"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "log"      = list(range = c(0, 1), valid = val_valid, invalid = val_invalid)),
+    mu    = list("logit"    = list(valid = val_valid, invalid = val_invalid),
+                 "probit"   = list(valid = val_valid, invalid = val_invalid),
+                 "cloglog"  = list(valid = val_valid, invalid = val_invalid),
+                 "cauchit"  = list(valid = val_valid, invalid = val_invalid),
+                 "log"      = list(valid = val_valid, invalid = val_invalid)),
 
-    sigma = list("logit"    = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "probit"   = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cloglog"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "cauchit"  = list(range = c(0, 1), valid = val_valid, invalid = val_invalid),
-                 "log"      = list(range = c(0, 1), valid = val_valid, invalid = val_invalid))
+    sigma = list("logit"    = list(valid = val_valid, invalid = val_invalid),
+                 "probit"   = list(valid = val_valid, invalid = val_invalid),
+                 "cloglog"  = list(valid = val_valid, invalid = val_invalid),
+                 "cauchit"  = list(valid = val_valid, invalid = val_invalid),
+                 "log"      = list(valid = val_valid, invalid = val_invalid)),
+
+    # Parameters used for testing the dprq methods; they are not aware of the
+    # link function and have different valid/invalid ranges.
+    dpqr  = list("mu"    = list(valid = c(eps, 0.1, 0.5, 0.9, 1 - eps), invalid = c(-eps, 0, 1, 1 + eps)),
+                 "sigma" = list(valid = c(eps, 0.1, 0.5, 0.9, 1 - eps), invalid = c(-eps, 0, 1, 1 + eps)))
+
 )
