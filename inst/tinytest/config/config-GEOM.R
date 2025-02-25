@@ -17,6 +17,9 @@ res <- list(
     type    = "Discrete",
     support = c(0, Inf),
 
+    # Specify arguments for constructor function; correct order and correct default values
+    arguments = list(mu.link = "log"),
+
     # Name of the parameters
     params = "mu",
 

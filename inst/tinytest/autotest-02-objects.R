@@ -19,10 +19,29 @@ for (family in names(configs)) {
     # Create default family object
     cmd <- sprintf("obj <- %s()", family)
 
+    # ---------------------------------------------------------------
     # Call constructor to create family object
+    # ---------------------------------------------------------------
     expect_silent(eval(parse(text = cmd)),
         info = sprintf("'%s' was not silent.", cmd))
 
+    # ---------------------------------------------------------------
+    # Testing arguments, order of arguments, and default values
+    # ---------------------------------------------------------------
+    cfun <- get(family, envir = getNamespace("gamlss.dist")) # constructor function
+    expect_identical(names(formals(cfun)), names(conf$arguments),
+        info = sprintf("Names of arguments or order of arguments changed in '%s()'!", family))
+    expect_true(all.equal(obj, do.call(cfun, conf$arguments)),
+        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
+    expect_true(all.equal(obj, do.call(cfun, rev(conf$arguments))),
+        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
+    expect_true(all.equal(obj, do.call(cfun, unname(conf$arguments))),
+        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
+    rm(cfun)
+
+    # ---------------------------------------------------------------
+    # Checking elements of returned object (family)
+    # ---------------------------------------------------------------
     # Checking xx.link entries, ensure the xx.linkfun and xx.invlink are available and
     # are both functions. 'p': Name of parameter to test.
     for (p in conf$params) {

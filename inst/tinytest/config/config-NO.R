@@ -11,6 +11,9 @@ res <- list(
     type    = "Continuous",
     support = c(-Inf, Inf),
 
+    # Specify arguments for constructor function; correct order and correct default values
+    arguments = list(mu.link = "identity", sigma.link = "log"),
+
     # Name of the parameters
     params = c("mu", "sigma"),
 
