@@ -28,23 +28,23 @@ for (family in names(configs)) {
 
     # Getting d<FAM> function (pdf)
     cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
+
+    # ---------------------------------------------------------------
+    # Testing arguments, order of arguments, and default values
+    # ---------------------------------------------------------------
     f <- formals(cdf)
-
-    # Checking arguments, expecting 'x', <params>, 'log'.
-    expect_identical(names(f), (expected <- c("x", conf$params, "log")),
-        info = sprintf("Missing arguments for 'd%s()', expected: %s",
-                       family, paste(expected, collapse = ", ")))
-
+    expect_identical(as.list(f), as.list(conf$arguments$d),
+        info = sprintf("Names of arguments or order of arguments changed in 'd%s()'!", family))
     # Expecting log = FALSE per default
     expect_false(f$log, info = "'d%s()': Expected default argument 'log = FALSE'.")
-
-    # Using default links from obj
-    links <- unlist(obj[sprintf("%s.link", conf$param)])
-    names(links) <- gsub("\\.link$", "", names(links))
 
     # ---------------------------------------------------------------
     # Setting up combinations of valid values
     # ---------------------------------------------------------------
+    # Extracting default links from the family for testing
+    links <- unlist(obj[sprintf("%s.link", conf$param)])
+    names(links) <- gsub("\\.link$", "", names(links))
+
     valid <- list(y = conf$y$valid)
     for (p in conf$param) valid[[p]] <- conf[[c(p, links[p], "valid")]]
 
@@ -56,6 +56,23 @@ for (family in names(configs)) {
         info = sprintf("'d%s(...)' returned NA when used with all-valid input values.", family))
     expect_identical(length(tmp), max(sapply(valid, length)),
         info = sprintf("'d%s(...)' returned result of unexpected length.", family))
+
+
+    # ---------------------------------------------------------------
+    # Testing if the integral of the density sums up to one
+    # ---------------------------------------------------------------
+    ## RETO RETO ## if (conf$type == "Continuous") {
+    ## RETO RETO ##     grd <- expand.grid(valid[!names(valid) == "y"])
+    ## RETO RETO ##     for (i in seq_along(nrow(grd))) {
+    ## RETO RETO ##         tmp <- as.list(grd[i, , drop = FALSE])
+    ## RETO RETO ##         attributes(tmp) <- NULL
+    ## RETO RETO ##         tmp
+    ## RETO RETO ##     }
+    ## RETO RETO ## } else {
+    ## RETO RETO ## }
+
+
+
 
 
 }

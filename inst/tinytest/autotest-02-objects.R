@@ -29,14 +29,8 @@ for (family in names(configs)) {
     # Testing arguments, order of arguments, and default values
     # ---------------------------------------------------------------
     cfun <- get(family, envir = getNamespace("gamlss.dist")) # constructor function
-    expect_identical(names(formals(cfun)), names(conf$arguments),
+    expect_identical(as.list(formals(cfun)), as.list(conf$arguments$constructor),
         info = sprintf("Names of arguments or order of arguments changed in '%s()'!", family))
-    expect_true(all.equal(obj, do.call(cfun, conf$arguments)),
-        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
-    expect_true(all.equal(obj, do.call(cfun, rev(conf$arguments))),
-        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
-    expect_true(all.equal(obj, do.call(cfun, unname(conf$arguments))),
-        info = sprintf("Default arguments or order of arguments for '%s()' seem to have changed!", family))
     rm(cfun)
 
     # ---------------------------------------------------------------

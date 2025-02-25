@@ -60,6 +60,12 @@ load_check_config <- function(f, dir) {
         # Default arguments (named list)
         if (!is.list(res$arguments) || is.null(names(res$arguments)))
             stop("'res$arguments' (\"", file, "\") not a named list.")
+        expected <- c("constructor", "d", "p", "q", "r")
+        if (!all(expected %in% names(res$arguments)))
+            stop("'res$arguments' (\"", file, "\") not containing all required elements: ", paste(expected, collapse = ", "))
+        for (e in expected)
+            if (!is.expression(res$arguments[[e]]))
+                stop("'res$arguments$", e, "' is not an expression.")
 
         # Support
         if (!is.numeric(res$support) || !length(res$support) == 2L)

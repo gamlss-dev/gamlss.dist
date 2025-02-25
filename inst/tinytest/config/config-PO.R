@@ -11,8 +11,15 @@ res <- list(
     type    = "Discrete",
     support = c(-Inf, Inf),
 
-    # Specify arguments for constructor function; correct order and correct default values
-    arguments = list(mu.link = "log"),
+    # Default arguments (correct order, correct defaults) for
+    # the constructor functions as well as dpqr.
+    arguments = list(
+        "constructor" = expression(mu.link = "log"),
+        "d" = expression(x =, mu = 1, log = FALSE),
+        "p" = expression(q =, mu = 1, lower.tail = TRUE, log.p = FALSE),
+        "q" = expression(p =, mu = 1, lower.tail = TRUE, log.p = FALSE),
+        "r" = expression(n =, mu = 1)
+    ),
 
     # Name of the parameters
     params = "mu",

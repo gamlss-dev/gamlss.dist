@@ -15,8 +15,15 @@ res <- list(
     type    = "Continuous",
     support = c(0, 1),
 
-    # Specify arguments for constructor function; correct order and correct default values
-    arguments = list(mu.link = "logit", sigma.link = "logit"),
+    # Default arguments (correct order, correct defaults) for
+    # the constructor functions as well as dpqr.
+    arguments = list(
+        "constructor" = expression(mu.link = "logit", sigma.link = "logit"),
+        "d" = expression(x =, mu = 0.5, sigma = 0.2, log = FALSE),
+        "p" = expression(q =, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE),
+        "q" = expression(p =, mu = 0.5, sigma = 0.2, lower.tail = TRUE, log.p = FALSE),
+        "r" = expression(n =, mu = 0.5, sigma = 0.2)
+    ),
 
     # Name of the parameters
     params = c("mu", "sigma"),
