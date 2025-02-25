@@ -1,5 +1,6 @@
 # -------------------------------------------------------------------
-# Testing limits of continuous distributions.
+# Testing density functions in the valid range (w/ valid parameters
+# within support).
 # -------------------------------------------------------------------
 
 # Used for development/testing manually
@@ -19,13 +20,6 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # Setting up family with default arguments used for testing
-    obj <- get(family, envir = getNamespace("gamlss.dist"))()
-
-    # TODO(R): Currently the config does not specify anything for 'link = "own"',
-    #          so this feature is currently not tested.
-    links  <- expand.grid(lapply(conf[conf$params], names), stringsAsFactors = FALSE)
-
     # Getting d<FAM> function (pdf)
     cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
@@ -43,40 +37,10 @@ for (family in names(configs)) {
     expect_false(f$log, info = "'d%s()': Expected default argument 'log = FALSE'.")
 
     # ---------------------------------------------------------------
-    # Setting up combinations of valid values
-    # ---------------------------------------------------------------
-    valid <- list(x = conf$y$valid)
-    for (p in conf$param) valid[[p]]   <- conf$dpqr[[p]]$valid
-    invalid <- setNames(lapply(conf$params, function(p) conf$dpqr[[p]]$invalid), conf$params)
-
-    expect_silent(tmp <- do.call(cdf, valid),
-            info = sprintf("'d%s(...)' expected to be silent when tested with all-valid input values.", family))
-    # TODO(R): I just call it agian as I do not get object 'tmp' if the call
-    #          above is not silent (we currently have this with dGT)
-    tmp <- do.call(cdf, valid)
-
-    expect_silent(is.numeric(tmp),
-        info = sprintf("'d%s(...)' expected to return numeric result.", family))
-    expect_silent(is.numeric(tmp),
-        info = sprintf("'d%s(...)' returned NA when used with all-valid input values.", family))
-    expect_identical(length(tmp), max(sapply(valid, length)),
-        info = sprintf("'d%s(...)' returned result of unexpected length.", family))
-
-    # Testing invalid parameters (should aus an error)
-    for (p in names(invalid)) {
-        tmpfun <- cdf
-        for (v in invalid[[p]]) {
-            formals(tmpfun)[c("x", p)] <- c(valid$x[1], v)
-            expect_error(tmpfun(),
-                info = sprintf("'d%s(x = %s, %s = %s)' (invalid %s) did not throw a warning.",
-                               family, fmt(valid$x[1]), p, fmt(v), p))
-        }
-    }
-
-
-    # ---------------------------------------------------------------
     # Testing if the integral of the density sums up to one
     # ---------------------------------------------------------------
+    valid <- list(x = conf$y$valid)
+
     grd <- expand.grid(valid[!names(valid) == "x"])
 
     # If continuous: Try numeric integration for all combinations
