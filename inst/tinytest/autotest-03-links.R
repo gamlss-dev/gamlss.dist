@@ -19,7 +19,7 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # For convenience: character vector with distribution parameters as expected
+    # Get all link combinations for testing.
     # TODO(R): Currently the config does not specify anything for 'link = "own"',
     #          so this feature is currently not tested.
     links  <- expand.grid(lapply(conf[conf$params], names), stringsAsFactors = FALSE)

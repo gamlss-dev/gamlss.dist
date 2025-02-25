@@ -57,6 +57,10 @@ load_check_config <- function(f, dir) {
         if (!res$type %in% c("Continuous", "Discrete"))
             stop("'res$type' (\"", file, "\") must be \"Continuous\" or \"Discrete\".")
 
+        # Default arguments (named list)
+        if (!is.list(res$arguments) || is.null(names(res$arguments)))
+            stop("'res$arguments' (\"", file, "\") not a named list.")
+
         # Support
         if (!is.numeric(res$support) || !length(res$support) == 2L)
             stop("'res$support' (\"", file, "\") not numeric of length 2L.")
@@ -84,8 +88,8 @@ load_check_config <- function(f, dir) {
                      paste(expected, collapse = ", "))
             if (!is.numeric(x$range) || length(x$range) != 2L || any(is.na(x$range)))
                 stop("'res$", p, "$", n, "$range' (\"", file, "\") must be numeric vector of lenth 2 without missing values.")
-            if (!is.numeric(x$valid) || length(x$valid) == 0L || any(is.na(x$valid)))
-                stop("'res$", p, "$", n, "$valid' (\"", file, "\") must be numeric vector of lenth >0 without missing values.")
+            if (!is.numeric(x$valid) || length(x$valid) < 3L || any(is.na(x$valid)))
+                stop("'res$", p, "$", n, "$valid' (\"", file, "\") must be numeric vector of lenth >2 without missing values.")
             if (!is.null(x$invalid) && (!is.numeric(x$invalid) || length(x$invalid) == 0L || any(is.na(x$invalid))))
                 stop("'res$", p, "$", n, "$invalid' (\"", file, "\") must be NULL or numeric vector of lenth >0 without missing values.")
         }
