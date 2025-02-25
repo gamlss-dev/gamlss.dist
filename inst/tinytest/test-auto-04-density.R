@@ -61,15 +61,41 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     # Testing if the integral of the density sums up to one
     # ---------------------------------------------------------------
-    ## RETO RETO ## if (conf$type == "Continuous") {
-    ## RETO RETO ##     grd <- expand.grid(valid[!names(valid) == "y"])
-    ## RETO RETO ##     for (i in seq_along(nrow(grd))) {
-    ## RETO RETO ##         tmp <- as.list(grd[i, , drop = FALSE])
-    ## RETO RETO ##         attributes(tmp) <- NULL
-    ## RETO RETO ##         tmp
-    ## RETO RETO ##     }
-    ## RETO RETO ## } else {
-    ## RETO RETO ## }
+    grd <- expand.grid(valid[!names(valid) == "y"])
+
+    # If continuous: Try numeric integration for all combinations
+    if (conf$type == "Continuous") {
+        for (i in seq_along(nrow(grd))) {
+            # Dynamically create cdf function with different default arguments
+            args   <- grd[i, , drop = FALSE]
+            tmpfun <- cdf
+            formals(tmpfun)[names(grd)] <- grd[i, ]
+
+            # Integrate
+            tmp <- integrate(cdf, lower = conf$support[1], upper = conf$support[2],
+                             subdivisions = 1000L)
+            expect_equal(tmp$value, 1,
+                info = sprintf("Integral of 'd%s(x, %s)' does not result in 1.", family,
+                     paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
+        }
+        rm(args, tmpfun, tmp)
+    # Else build sum
+    } else {
+        # TODO(R): Using 0:5000 here not conf$support as e.g., the Poisson
+        #          distribution supports -Inf,Inf.
+        for (i in seq_along(nrow(grd))) {
+            # Dynamically create cdf function with different default arguments
+            args   <- grd[i, , drop = FALSE]
+            tmpfun <- cdf
+            formals(tmpfun)[names(grd)] <- grd[i, ]
+
+            # Integrate
+            expect_equal(sum(cdf(seq.int(0, 5000))), 1,
+                info = sprintf("Sum of 'd%s(x, %s)' does not result in 1.", family,
+                     paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
+        }
+        rm(args, tmpfun)
+    }
 
 
 

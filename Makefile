@@ -4,7 +4,7 @@ VERSION := $(shell grep '^Version:' DESCRIPTION | awk '{print $$2}')
 
 .PHONY: test
 test:
-	Rscript -e "library('gamlss.dist'); tinytest::run_test_dir(\"inst/tinytest\", pattern = \"^(auto|dist|test).*.[rR]\$\")"
+	Rscript -e "library('gamlss.dist'); tinytest::test_all()"
 
 .PHONY: install
 install:

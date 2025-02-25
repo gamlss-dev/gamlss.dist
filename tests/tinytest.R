@@ -1,6 +1,5 @@
 
 if (requireNamespace("tinytest", quietly = TRUE)) {
-    tinytest::test_package("gamlss.dist",
-                           pattern = "^(auto|dist|test).*\\.[rR]$")
+    tinytest::test_package("gamlss.dist")
 }
 
