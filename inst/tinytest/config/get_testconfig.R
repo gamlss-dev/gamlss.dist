@@ -4,7 +4,7 @@
 # -------------------------------------------------------------------
 # Helper function for loading one or multiple test configs
 # -------------------------------------------------------------------
-get_testconfig <- function(family = NULL, dir = "config") {
+get_testconfig <- function(family = NULL, dir = "config", verbose = FALSE) {
     stopifnot(
         "'family' must be NULL or valid caracter of length 1" =
             is.null(family) || (is.character(family) && length(family) == 1 && nchar(family) > 0L)
@@ -30,8 +30,9 @@ get_testconfig <- function(family = NULL, dir = "config") {
     # Any of these 'disabled' for auto testing?
     i <- sapply(res, function(x) isTRUE(x$disabled))
     if (any(i)) {
-        cat("\n[!] The following families are currently disabled for auto-testing: ",
-            paste(names(res)[i], collapse = ", "), "\n")
+        if (verbose)
+            cat("\n[!] The following families are currently disabled for auto-testing: ",
+                paste(names(res)[i], collapse = ", "), "\n")
         res <- res[!i]
         if (length(res) == 0L)
             stop("No non-disabled families remaining. Stop.")

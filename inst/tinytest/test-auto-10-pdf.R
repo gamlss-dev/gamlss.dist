@@ -13,7 +13,7 @@ fmt <- function(x) format(x, digits = 10)
 source("config/get_testconfig.R")
 
 # Get test config; could also be added here directly
-configs <- get_testconfig(NULL)
+configs <- get_testconfig(NULL, verbose = FALSE)
 
 # Looping over all defined families
 for (family in names(configs)) {
@@ -37,15 +37,36 @@ for (family in names(configs)) {
     expect_false(f$log, info = "'d%s()': Expected default argument 'log = FALSE'.")
 
     # ---------------------------------------------------------------
-    # Testing if the integral of the density sums up to one
+    # Getting valid parameter set
     # ---------------------------------------------------------------
     valid <- list(x = conf$y$valid)
+    for (p in conf$params) valid[[p]] <- conf[[c("dpqr", p, "valid")]]
 
+    # ---------------------------------------------------------------
+    # Testing all valid combinations; expecting silent execution and
+    # a valid (non-NA) numeric return.
+    # ---------------------------------------------------------------
     grd <- expand.grid(valid[!names(valid) == "x"])
 
+    tmpfun <- cdf
+    formals(tmpfun)["x"] <- valid$x[[1]]
+    for (i in seq_len(nrow(grd))) {
+        formals(tmpfun)[names(grd)] <- grd[i, ]
+        expect_silent(tmp <- tmpfun(),
+            info = sprintf("'d%s%s' did not run silent.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
+        expect_inherits(tmp, "numeric",
+            info = sprintf("'d%s%s' did not return numeric.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
+        expect_inherits(tmp, "numeric",
+            info = sprintf("'d%s%s' did not return result of length 1.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
+    }
+    rm(tmpfun)
+
+    # ---------------------------------------------------------------
+    # Testing integral, should sum up to 1
+    # ---------------------------------------------------------------
     # If continuous: Try numeric integration for all combinations
     if (conf$type == "Continuous") {
-        for (i in seq_along(nrow(grd))) {
+        for (i in seq_len(nrow(grd))) {
             # Dynamically create cdf function with different default arguments
             args   <- grd[i, , drop = FALSE]
             tmpfun <- cdf
@@ -63,7 +84,7 @@ for (family in names(configs)) {
     } else {
         # TODO(R): Using 0:5000 here not conf$support as e.g., the Poisson
         #          distribution supports -Inf,Inf.
-        for (i in seq_along(nrow(grd))) {
+        for (i in seq_len(nrow(grd))) {
             # Dynamically create cdf function with different default arguments
             args   <- grd[i, , drop = FALSE]
             tmpfun <- cdf

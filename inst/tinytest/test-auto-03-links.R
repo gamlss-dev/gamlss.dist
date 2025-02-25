@@ -12,7 +12,7 @@ fmt <- function(x) format(x, digits = 5)
 source("config/get_testconfig.R")
 
 # Get test config; could also be added here directly
-configs <- get_testconfig(NULL)
+configs <- get_testconfig(NULL, verbose = FALSE)
 
 # Looping over all defined families
 for (family in names(configs)) {

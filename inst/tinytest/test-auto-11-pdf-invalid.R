@@ -12,7 +12,7 @@ fmt <- function(x) format(x, digits = 10)
 source("config/get_testconfig.R")
 
 # Get test config; could also be added here directly
-configs <- get_testconfig(NULL)
+configs <- get_testconfig(NULL, verbose = FALSE)
 
 # Looping over all defined families
 for (family in names(configs)) {
@@ -26,7 +26,7 @@ for (family in names(configs)) {
     # Setting up combinations of valid values
     # ---------------------------------------------------------------
     valid <- list(x = conf$y$valid)
-    for (p in conf$param) valid[[p]]   <- conf$dpqr[[p]]$valid
+    for (p in conf$params) valid[[p]] <- conf[[c("dpqr", p, "valid")]]
     invalid <- setNames(lapply(conf$params, function(p) conf$dpqr[[p]]$invalid), conf$params)
 
     # Testing invalid parameters (should aus an error)
