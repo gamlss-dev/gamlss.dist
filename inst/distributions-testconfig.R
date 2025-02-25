@@ -62,6 +62,7 @@ get_testconfig <- function(family = NULL) {
         type    = "Continuous",
         support = c(-Inf, Inf),
         # Distribution parameters with support (range) and all available links
+        # TODO(R): Currently not testing link = "own".
         params  = list("mu"    = list(range = c(-Inf, Inf),
                                       links = c("inverse", "log", "identity", "own")),
                        "sigma" = list(range = c(0, Inf),
