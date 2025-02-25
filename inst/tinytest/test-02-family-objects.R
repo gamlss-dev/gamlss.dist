@@ -82,6 +82,22 @@ for (family in names(configs)) {
                 info = sprintf("%s(...)$%s.valid is not a function.", family, p))
         }
 
+        # Find all elements '^d.*' which should be the derivatives, and check
+        # that they are functions.
+        derivs <- names(obj)[grepl("^d.*", names(obj))]
+        for (d in derivs) {
+            expect_inherits(obj[[d]], "function",
+                info = sprintf("%s(...)$%s (derivative) is not a function.", family, d))
+        }
+
+        # Function G.dev.incr
+        expect_inherits(obj[["G.dev.incr"]], "function",
+            info = sprintf("%s(...)$G.devv.incr is not a function.", family))
+
+        # Function G.dev.incr
+        expect_inherits(obj[["rqres"]], "expression",
+            info = sprintf("%s(...)$rqres is not an expression.", family))
+
         # TODO(R): Not all families have initial values
         # Test that xx.initial is available and an expression
         for (p in params) {
@@ -89,6 +105,14 @@ for (family in names(configs)) {
                 info = sprintf("%s(...)$%s.initial not found.", family, p))
             expect_inherits(obj[[paste0(p, ".initial")]], "expression",
                 info = sprintf("%s(...)$%s.initial is not an expression.", family, p))
+        }
+
+        # Mean and variance
+        for (d in c("mean", "variance")) {
+            expect_true(d %in% names(obj),
+                info = sprintf("%s(...)$%s not found.", family, d))
+            expect_inherits(obj[[d]], "function",
+                info = sprintf("%s(...)$%s is not a function.", family, d))
         }
 
         # Cleaning up
