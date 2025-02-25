@@ -35,7 +35,7 @@ for (family in names(configs)) {
     for (i in seq_len(nrow(links))) {
         # Call constructor function (default args)
         cmd <- sprintf("obj <- %s(%s)", family,
-            paste(sprintf("%s.link = \"%s\"", names(links[i, ]), links[i, ]), collapse = ", "))
+            paste(sprintf("%s.link = \"%s\"", names(links[i, , drop = FALSE]), links[i, ]), collapse = ", "))
 
         # Call constructor to create family object
         expect_silent(eval(parse(text = cmd)),
@@ -62,7 +62,7 @@ for (family in names(configs)) {
         # are both functions. 'p': Name of parameter to test.
         for (p in conf$params) {
             expect_identical(obj[[paste0(p, ".link")]], links[i, p],
-                info = sprintf("%s(...)$%s.link not '%s' as expected.", family, p, links[i, p]))
+                info = sprintf("%s$%s.link not '%s' as expected.", cmd, p, links[i, p]))
 
             # Check if xx.linkfun exists and is a function
             linkfun <- obj[[paste0(p, ".linkfun")]]
