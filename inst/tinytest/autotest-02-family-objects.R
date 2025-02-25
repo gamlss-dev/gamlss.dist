@@ -6,7 +6,7 @@
 if (interactive()) { library("tinytest"); library("gamlss.dist") }
 
 # Helper functions
-source("../distributions-testconfig.R")
+source("config/get_testconfig.R")
 
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL)
@@ -15,9 +15,6 @@ configs <- get_testconfig(NULL)
 for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
-
-    # For convenience: character vector with distribution parameters as expected
-    params <- names(conf$param)
 
     # Create default family object
     cmd <- sprintf("obj <- %s()", family)
@@ -28,7 +25,7 @@ for (family in names(configs)) {
 
     # Checking xx.link entries, ensure the xx.linkfun and xx.invlink are available and
     # are both functions. 'p': Name of parameter to test.
-    for (p in params) {
+    for (p in conf$params) {
         # Check if xx.linkfun exists and is a function
         expect_true(paste0(p, ".linkfun") %in% names(obj),
             info = sprintf("%s(...)$%s.linkfun not found.", family, p))
@@ -59,15 +56,15 @@ for (family in names(configs)) {
 
     # Test if $parameters is set correctly
     expect_identical(obj$parameters,
-        as.list(setNames(rep(TRUE, length(params)), params)),
+        as.list(setNames(rep(TRUE, length(conf$params)), conf$params)),
         info = sprintf("%s(...)$parameters does not include all expected parameters.", family))
 
     # Test if $nopar is correct
-    expect_equal(obj$nopar, length(params),
+    expect_equal(obj$nopar, length(conf$params),
         info = sprintf("%s(...)$nopar contains incorrect value.", family))
 
     # Test that xx.valid exists and is a function
-    for (p in c("y", params)) {
+    for (p in c("y", conf$params)) {
         expect_true(paste0(p, ".valid") %in% names(obj),
             info = sprintf("%s(...)$%s.valid not found.", family, p))
         expect_inherits(obj[[paste0(p, ".valid")]], "function",
@@ -92,7 +89,7 @@ for (family in names(configs)) {
 
     # TODO(R): Not all families have initial values
     # Test that xx.initial is available and an expression
-    for (p in params) {
+    for (p in conf$params) {
         expect_true(paste0(p, ".initial") %in% names(obj),
             info = sprintf("%s(...)$%s.initial not found.", family, p))
         expect_inherits(obj[[paste0(p, ".initial")]], "expression",

@@ -14,7 +14,7 @@ val_invalid <- c(-10, -0.00001, 0, 1, 1.00001, 10)
 
 # Setting up configuration
 res <- list(
-    type    = "Continuous",
+    type    = "Discrete",
     support = c(0, Inf),
 
     # Name of the parameters

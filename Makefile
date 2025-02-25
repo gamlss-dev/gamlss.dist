@@ -4,7 +4,7 @@ VERSION := $(shell grep '^Version:' DESCRIPTION | awk '{print $$2}')
 
 .PHONY: test
 test:
-	Rscript -e "library('gamlss.dist'); tinytest::test_all()"
+	Rscript -e "library('gamlss.dist'); tinytest::run_test_dir(\"inst/tinytest\", pattern = \"^(auto|dist|test).*.[rR]\$\")"
 
 .PHONY: install
 install:
@@ -13,18 +13,10 @@ install:
 		R CMD build --no-build-vignettes gamlss.dist && \
 		R CMD INSTALL gamlss.dist_$(VERSION).tar.gz)
 
-.PHONY: check
-check:
-	@echo Checking current version: $(VERSION)
-	(cd ../ && \
-		R CMD build --no-build-vignettes gamlss.dist && \
-		R CMD check --as-cran gamlss.dist_$(VERSION).tar.gz)
-
 # Reto: Let me know how we can write this in a multi-line command in cmake
 .PHONY: coverage
 coverage:
 	Rscript -e "covr::report(covr::package_coverage(type = \"tests\", line_exclusions = list('src/gamlss.dist_init.c'), quiet = FALSE), file = \"_coverage.html\")"
-
 
 .PHONY: cov2
 cov2:

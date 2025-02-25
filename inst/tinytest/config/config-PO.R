@@ -12,7 +12,7 @@ res <- list(
     support = c(-Inf, Inf),
 
     # Name of the parameters
-    params = c("mu", "sigma"),
+    params = "mu",
 
     # Valid and invalid response values
     y     = list(valid = c(0, 1, 30), invalid = c(-1, -eps)),
