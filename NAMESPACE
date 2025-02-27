@@ -122,7 +122,7 @@ export(dBCCG, pBCCG, qBCCG, rBCCG, BCCG, BCCGo, BCCGuntr,
       flexDist, count_1_31, count_1_22, count_2_32,
       count_2_32R, count_2_33, count_3_32, count_3_33,
       binom_1_31, binom_2_33, binom_3_33,
-      contR_2_12, contR_3_11, contR_4_13,
+      contR_2_12, contR_3_11, contR_4_13,contRplus_1_1,
       contRplus_2_11, contRplus_3_13, contRplus_4_33, contR01_2_13,
       contR01_4_33, momentSK, centileSK, centileSkew, centileKurt, 
       theoCentileSK, plotCentileSK, checkMomentSK, checkCentileSK 

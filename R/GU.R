@@ -51,7 +51,7 @@ if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", ""))
          mu <- rep(mu, length = ly) 
     log.lik <- -log(sigma)+((x-mu)/sigma)-exp((x-mu)/sigma)
 if(log==FALSE) fy  <- exp(log.lik) else fy <- log.lik
-    fy[x==-Inf] <- fy[ x == Inf ] <-  0
+    fy[x<=0] <- fy[ x == Inf ] <-  0
     fy 
 }
 ################################################################################
@@ -67,7 +67,7 @@ pGU <- function(q, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
     cdf <- 1-exp(-exp((q-mu)/sigma))
 if(lower.tail==TRUE) cdf  <- cdf else  cdf <- 1-cdf 
 if(log.p==FALSE) cdf  <- cdf else  cdf <- log(cdf) 
-    cdf[q==-Inf] <- 0
+    cdf[q>=-Inf] <- 0
     cdf[ q == Inf ] <-  1
     cdf
    }

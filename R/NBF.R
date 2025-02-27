@@ -164,14 +164,6 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
           sigma1 <- sigma*mu^(nu-2)
                q <- qnbinom(p, size=1/sigma1, mu=mu1, lower.tail=lower.tail, log.p=log.p)
 q[sigma1<0.0001] <- qpois(p, lambda = mu1, lower.tail = lower.tail, log.p = log.p)        
-  # if (length(sigma1)>1) q <- ifelse(sigma1>0.0001,  , 
-  #                                   qpois(p, lambda = mu1, lower.tail = lower.tail, log.p = log.p) )
-  # else q <- if (sigma1<0.0001) qpois(p, lambda = mu1, lower.tail = lower.tail, log.p = log.p)
-  #           else qnbinom(p, size=1/sigma1, mu=mu1, lower.tail=lower.tail, log.p=log.p)
-     q[p == 0] <- 0
-     q[p == 1] <- Inf
-     q[p <  0] <- NaN
-     q[p >  1] <- NaN
   return(q)
 }
 ################################################################################
