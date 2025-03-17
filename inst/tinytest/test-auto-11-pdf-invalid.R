@@ -35,7 +35,7 @@ for (family in names(configs)) {
         for (v in invalid[[p]]) {
             formals(tmpfun)[c("x", p)] <- c(valid$x[1], v)
             expect_error(tmpfun(),
-                info = sprintf("'d%s(x = %s, %s = %s)' (invalid %s) did not throw a warning.",
+                info = sprintf("'d%s(x = %s, %s = %s)' (invalid %s) did not throw an error.",
                                family, fmt(valid$x[1]), p, fmt(v), p))
         }
     }
