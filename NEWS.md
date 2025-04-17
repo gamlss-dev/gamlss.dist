@@ -4,6 +4,14 @@ editor_options:
     wrap: 72
 ---
 
+
+
+# Version 6.1-8
+
+-   The `LOGSHASH` is introduced as a distribution in the range (0, Inf).  I could be fitted before but it had to be  generated  by the function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
+
+
+
 # Version 6.1-7
 
 -   the plotting functions in the file PlottingDistributions.R i.e
@@ -16,7 +24,7 @@ editor_options:
 
 -   the functions `test_continuous_gamlss_dist()` and
     `test_discrete_gamlss_dist()` are added to the package for checking
-    distributions but the function not have help files.
+    distributions but the functions not have help files.
 
 # Version 6.1-3
 
