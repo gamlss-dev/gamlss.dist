@@ -8,7 +8,7 @@ editor_options:
 
 # Version 6.1-8
 
--   The `LOGSHASH` is introduced as a distribution in the range (0, Inf).  I could be fitted before but it had to be  generated  by the function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
+-   The `LOGSHASH` is introduced as a distribution in the range (0, Inf).  It could be fitted before but it had to be  generated  by the function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
 
 
 

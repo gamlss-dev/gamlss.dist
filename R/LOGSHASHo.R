@@ -1,21 +1,21 @@
 # THIS IS THE  NEW FILE
-#  Mikis 15-07-2025
+#  Mikis 20-07-2025
 ################################################################################
 ################################################################################
 ################################################################################
 ################################################################################
-LOGSHASH <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link="log")
+LOGSHASHo <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.link="log")
 {
-    mstats <- checklink(   "mu.link", "LOGSinh-Arcsinh", substitute(mu.link), 
+    mstats <- checklink(   "mu.link", "LOGSHASHo", substitute(mu.link), 
                            c("1/mu^2", "log", "identity")) # may change this 
-    dstats <- checklink("sigma.link", "LOGSinh-Arcsinh", substitute(sigma.link), 
+    dstats <- checklink("sigma.link", "LOGSHASHo", substitute(sigma.link), 
                            c("inverse", "log", "identity"))
-    vstats <- checklink(   "nu.link", "LOGSinh-Arcsinh", substitute(nu.link),    
+    vstats <- checklink(   "nu.link", "LOGSHASHo", substitute(nu.link),    
                            c("1/nu^2", "log", "identity"))
-    tstats <- checklink(  "tau.link", "LOGSinh-Arcsinh", substitute(tau.link),   
+    tstats <- checklink(  "tau.link", "LOGSHASHo", substitute(tau.link),   
                            c("1/tau^2", "log", "identity")) 
     structure(
-          list(family = c("LOGSHASH", "LOGSinh-Arcsinh"),
+          list(family = c("LOGSHASHo", "LOGSinh-Arcsinh-orig"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
                 nopar = 4, 
                  type = "Continuous",
@@ -37,76 +37,76 @@ LOGSHASH <- function (mu.link="identity", sigma.link="log", nu.link ="log", tau.
                tau.dr = tstats$mu.eta, 
     dldm = function(y,mu,sigma,nu,tau) 
        {
-      dldm <- SHASH()$dldm(log(y),mu,sigma, nu, tau)
+      dldm <- SHASHo()$dldm(log(y),mu,sigma, nu, tau)
       dldm
        },
    d2ldm2 = function(y,mu,sigma,nu,tau)
       {
-      d2ldm2 = SHASH()$d2ldm2(log(y),mu,sigma,nu,tau)
+      d2ldm2 = SHASHo()$d2ldm2(log(y),mu,sigma,nu,tau)
       d2ldm2
       },     
    dldd = function(y,mu,sigma,nu,tau) 
       {  
-      dldd <- SHASH()$dldd(log(y),mu,sigma, nu,tau)
+      dldd <- SHASHo()$dldd(log(y),mu,sigma, nu,tau)
       dldd                 
       } ,
    d2ldd2 = function(y,mu,sigma,nu,tau)
       {
-     d2ldd2 = SHASH()$d2ldd2(log(y),mu,sigma,nu,tau)
+     d2ldd2 = SHASHo()$d2ldd2(log(y),mu,sigma,nu,tau)
      d2ldd2   
       },   
      dldv = function(y,mu,sigma,nu,tau) 
        { 
-      dldv <- SHASH()$dldv(log(y),mu,sigma, nu,tau)
+      dldv <- SHASHo()$dldv(log(y),mu,sigma, nu,tau)
       dldv    
       },
    d2ldv2 = function(y,mu,sigma,nu,tau) 
       { 
-     d2ldv2 = SHASH()$d2ldv2(log(y),mu,sigma,nu,tau)
+     d2ldv2 = SHASHo()$d2ldv2(log(y),mu,sigma,nu,tau)
      d2ldv2      
       },
       dldt = function(y,mu,sigma,nu,tau) 
       {
-        dldt <- SHASH()$dldt(log(y),mu,sigma, nu,tau)
+        dldt <- SHASHo()$dldt(log(y),mu,sigma, nu,tau)
         dldt        
       },
    d2ldt2 = function(y,mu,sigma,nu,tau) 
       { 
-     d2ldt2 = SHASH()$d2ldt2(log(y),mu,sigma,nu,tau)
+     d2ldt2 = SHASHo()$d2ldt2(log(y),mu,sigma,nu,tau)
      d2ldt2    
       },
 d2ldmdd = function(y,mu,sigma,nu,tau)## ok
       {
-  d2ldmdd = SHASH()$d2ldmdd(log(y),mu,sigma,nu,tau)
+  d2ldmdd = SHASHo()$d2ldmdd(log(y),mu,sigma,nu,tau)
   d2ldmdd
       },
  d2ldmdv = function(y,mu,sigma,nu,tau)# OK
       { 
-   d2ldmdv = SHASH()$d2ldmdv(log(y),mu,sigma,nu,tau)
+   d2ldmdv = SHASHo()$d2ldmdv(log(y),mu,sigma,nu,tau)
    d2ldmdv   
    },
 d2ldmdt = function(y,mu,sigma,nu,tau) #ok
       {
-  d2ldmdt = SHASH()$d2ldmdt(log(y),mu,sigma,nu,tau)
+  d2ldmdt = SHASHo()$d2ldmdt(log(y),mu,sigma,nu,tau)
   d2ldmdt 
       },
 d2ldddv = function(y,mu,sigma,nu,tau) #ok
                {
-  d2ldddv = SHASH()$d2ldddv(log(y),mu,sigma,nu,tau)
+  d2ldddv = SHASHo()$d2ldddv(log(y),mu,sigma,nu,tau)
   d2ldddv
       },
 d2ldddt = function(y,mu,sigma,nu,tau) #ok
       {
-  d2ldddt = SHASH()$d2ldddt(log(y),mu,sigma,nu,tau)
+  d2ldddt = SHASHo()$d2ldddt(log(y),mu,sigma,nu,tau)
   d2ldddt
       },
 d2ldvdt = function(y,mu,sigma,nu,tau) #ok
       { 
-  d2ldvdt = SHASH()$d2ldvdt(log(y),mu,sigma,nu,tau)
+  d2ldvdt = SHASHo()$d2ldvdt(log(y),mu,sigma,nu,tau)
   d2ldvdt   
       },
- G.dev.incr  = function(y,mu,sigma,nu,tau,...) -2*dLOGSHASH(y,mu,sigma,nu,tau,log=TRUE),               
-         rqres = expression(rqres(pfun="pLOGSHASH", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)),
+ G.dev.incr  = function(y,mu,sigma,nu,tau,...) -2*dLOGSHASHo(y,mu,sigma,nu,tau,log=TRUE),               
+         rqres = expression(rqres(pfun="pLOGSHASHo", type="Continuous", y=y, mu=mu, sigma=sigma, nu=nu, tau=tau)),
  mu.initial = expression(mu <- (log(y)+mean(log(y)))/2),   
  sigma.initial = expression(sigma<- rep(sd(log(y))/5, length(y))),
     nu.initial = expression(nu <- rep(.5, length(y))), 
@@ -124,7 +124,7 @@ d2ldvdt = function(y,mu,sigma,nu,tau) #ok
 ################################################################################
 ################################################################################
 ################################################################################
-dLOGSHASH <- function(x, mu = 0, sigma = 1, nu = .5, tau = .5, log = FALSE)
+dLOGSHASHo <- function(x, mu = 0, sigma = 1, nu = .5, tau = .5, log = FALSE)
  {
 if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))  
@@ -135,7 +135,13 @@ if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))
      sigma <- rep_len(sigma, n)
         nu <- rep_len(nu, n)
        tau <- rep_len(tau, n)
-    loglik <- dSHASH(log(x), mu=mu, sigma=sigma, nu=nu, tau=tau, log=TRUE)-log(x)
+         z <- (x-mu)/sigma
+         c <- cosh(tau*asinh(z)-nu)
+         r <- sinh(tau*asinh(z)-nu)
+    loglik <- -log(sigma) + log(tau) -0.5*log(2*pi) -0.5*log(1+(z^2)) +log(c) -0.5*(r^2)
+    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2
+    loglik <- -log(sigma) + log(tau) -0.5*log(2*pi) -0.5*log(1+(z^2)) +log(c) -0.5*(r^2)
+    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2
 if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
     ft[x <= 0] <- 0
     ft
@@ -144,7 +150,7 @@ if(log==FALSE) ft  <- exp(loglik) else ft <- loglik
 ################################################################################
 ################################################################################
 ################################################################################
-pLOGSHASH <- function(q, mu = 0, sigma = 1, nu = .5, tau = .5, lower.tail = TRUE, log.p = FALSE)
+pLOGSHASHo <- function(q, mu = 0, sigma = 1, nu = .5, tau = .5, lower.tail = TRUE, log.p = FALSE)
  { 
 if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", "")) 
@@ -155,7 +161,7 @@ if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))
   sigma <- rep_len(sigma, n)
      nu <- rep_len(nu, n)
     tau <- rep_len(tau, n)
-    cdf <- pSHASH(log(q), mu=mu, sigma=sigma, nu=nu, tau=tau)
+    cdf <- pSHASHo(log(q), mu=mu, sigma=sigma, nu=nu, tau=tau)
 if (lower.tail==FALSE)  cdf <- 1-cdf 
 if (log.p ==TRUE)  cdf <- log(cdf)      
 cdf[q<=0] <- 0 
@@ -166,7 +172,7 @@ cdf[q==Inf] <- 1
 ################################################################################
 ################################################################################
 ################################################################################
-qLOGSHASH <-  function(p, mu=0, sigma=1, nu=.5, tau=.5, lower.tail = TRUE, log.p = FALSE)
+qLOGSHASHo <-  function(p, mu=0, sigma=1, nu=.5, tau=.5, lower.tail = TRUE, log.p = FALSE)
   { 
 if (any(sigma < 0))  stop(paste("sigma must be positive", "\n", "")) 
 if (any(tau < 0))  stop(paste("tau must be positive", "\n", "")) 
@@ -179,7 +185,7 @@ if (!lower.tail) p <- 1 - p
   sigma <- rep_len(sigma, n)
      nu <- rep_len(nu, n)
     tau <- rep_len(tau, n)
-   q <- exp(qSHASH(p, mu=mu, sigma=sigma, nu=nu, tau=tau)) 
+   q <- exp(qSHASHo(p, mu=mu, sigma=sigma, nu=nu, tau=tau)) 
    q[p == 0] <- 0
    q[p == 1] <- Inf
    q[p <  0] <- NaN
@@ -190,12 +196,12 @@ if (!lower.tail) p <- 1 - p
 ################################################################################
 ################################################################################
 ################################################################################
-rLOGSHASH <- function(n, mu=0, sigma=1, nu=.5, tau=.5)
+rLOGSHASHo <- function(n, mu=0, sigma=1, nu=.5, tau=.5)
   {
     if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
     n <- ceiling(n)
     p <- runif(n)
-    r <- qLOGSHASH(p, mu=mu, sigma=sigma, nu=nu, tau=tau)
+    r <- qLOGSHASHo(p, mu=mu, sigma=sigma, nu=nu, tau=tau)
   r
   }
 ################################################################################
