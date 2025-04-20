@@ -10,6 +10,7 @@ editor_options:
 
 -   The `LOGSHASH` is introduced as a distribution in the range (0, Inf).  It could be fitted before but it had to be  generated  by the function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
 
+-   The `LOGSHASHo` is also introduced as a distribution in the range (0, Inf) but at moment remains hidden. 
 
 
 # Version 6.1-7
