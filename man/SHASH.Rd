@@ -17,6 +17,13 @@
 \alias{qSHASHo2}
 \alias{rSHASHo2}
 
+\alias{LOGSHASH}
+\alias{dLOGSHASH}
+\alias{pLOGSHASH}
+\alias{qLOGSHASH}
+\alias{rLOGSHASH}
+
+
 \title{The Sinh-Arcsinh (SHASH) distribution for fitting a GAMLSS}
 \description{
 The Sinh-Arcsinh (SHASH) distribution is a four parameter distribution, 
@@ -26,7 +33,7 @@ GAMLSS fitting using the function \code{gamlss()}.  The functions \code{dSHASH},
 distribution function, quantile function and random
 generation for the Sinh-Arcsinh (SHASH) distribution.   
 
-There are 3 different SHASH distributions implemented in GAMLSS. 
+There are 3 different \code{SHASH} distributions implemented in GAMLSS \code{SHASH}, \code{SHASHo} and \code{SHASH2o2} (see Details) but also there is an exponential version \code{LOGSHASH} for responses in \eqn{(0,\infty)}. 
 
 }
 \usage{
@@ -56,6 +63,17 @@ pSHASHo2(q, mu = 0, sigma = 1, nu = 0, tau = 1, lower.tail = TRUE,
 qSHASHo2(p, mu = 0, sigma = 1, nu = 0, tau = 1, lower.tail = TRUE, 
      log.p = FALSE)
 rSHASHo2(n, mu = 0, sigma = 1, nu = 0, tau = 1)
+
+LOGSHASH(mu.link = "identity", sigma.link = "log", nu.link = "log", 
+     tau.link = "log")
+dLOGSHASH(x, mu = 0, sigma = 1, nu = 0.5, tau = 0.5, log = FALSE)     
+pLOGSHASH(q, mu = 0, sigma = 1, nu = 0.5, tau = 0.5, lower.tail = TRUE, 
+     log.p = FALSE)     
+qLOGSHASH(p, mu = 0, sigma = 1, nu = 0.5, tau = 0.5, lower.tail = TRUE, 
+     log.p = FALSE)
+rLOGSHASH(n, mu = 0, sigma = 1, nu = 0.5, tau = 0.5)
+
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -138,9 +156,10 @@ for \eqn{ -\infty < y < \infty }{0<y<0},
      function, \code{qSHASH()} gives the quantile function, and \code{rSHASH()}
      generates random deviates. 
 }
+\note{The parameters \code{sigma}, \code{nu} and \code{tau} are highly correlated. It is recomended to use \code{method=mixed(10,100)} for fitting.}
 \references{
 
-Jones, M. C. (2006) p 546-547 in the discussion of Rigby, R. A. and  Stasinopoulos D. M. (2005) 
+Jones, M. C. (2005) p 546-547 in the discussion of Rigby, R. A. and  Stasinopoulos D. M. (2005) 
 \emph{Appl. Statist.}, \bold{54}, part 3.
 
 Jones and Pewsey (2009) Sinh-arcsinh distributions. \emph{Biometrika.} \bold{96}(4), pp. 761?780. 
