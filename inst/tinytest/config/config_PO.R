@@ -7,18 +7,18 @@
 eps <- sqrt(.Machine$double.eps)
 
 # Setting up configuration
-res <- list(
+config_PO <- list(
     # If set TRUE it will not be used for auto-testing
     disabled = FALSE,
 
     # Type of distribution and response support
     type    = "Discrete",
-    support = c(-Inf, Inf),
+    support = c(0, Inf),
 
     # Default arguments (correct order, correct defaults) for
     # the constructor functions as well as dpqr.
     arguments = list(
-        "constructor" = expression(mu.link = "log"),
+        "family" = expression(mu.link = "log"),
         "d" = expression(x =, mu = 1, log = FALSE),
         "p" = expression(q =, mu = 1, lower.tail = TRUE, log.p = FALSE),
         "q" = expression(p =, mu = 1, lower.tail = TRUE, log.p = FALSE),
@@ -28,18 +28,24 @@ res <- list(
     # Name of the parameters used for testing the constructor function
     params = "mu",
 
-    # Valid and invalid response values
-    y     = list(valid = c(0, 1, 30), invalid = c(-1, -eps)),
+    # Names of the supported named links
+    links = list(
+        "mu" = c("identity", "inverse", "log", "sqrt")
+    ),
 
-    # TODO(R): PO currently does not allow for '0' (base R does)
-    mu    = list("identity" = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "inverse"  = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "log"      = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "sqrt"     = list(valid = c(eps, 1, 30), invalid = c(-eps, 0))),
+    # Response values inside and outside of the support
+    y = list(inside = c(0, 1, 30), outside = c(-1, -eps, 1.5)),
 
-    # Parameters used for testing the dprq methods; they are not aware of the
-    # link function and have different valid/invalid ranges.
-    dpqr  = list("mu"    = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)))
-
+    # Parameters:
+    # - valid interval
+    # - values inside and outside of interval
+    # - whether boundaries are valid for d/p/q/r functions and/or family (none, both, left, right)
+    mu = list(
+      interval = c(0, Inf),
+      inside   = c(eps, 1, 30),
+      outside  = c(-1, -eps),
+      dpqr     = "both",
+      family   = "none"
+    )
 )
 
