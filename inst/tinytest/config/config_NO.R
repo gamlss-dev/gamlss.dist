@@ -7,7 +7,7 @@
 eps <- sqrt(.Machine$double.eps)
 
 # Setting up configuration
-res <- list(
+config_NO <- list(
     # If set TRUE it will not be used for auto-testing
     disabled = FALSE,
 
@@ -18,7 +18,7 @@ res <- list(
     # Default arguments (correct order, correct defaults) for
     # the constructor functions as well as dpqr.
     arguments = list(
-        "constructor" = expression(mu.link = "identity", sigma.link = "log"),
+        "family" = expression(mu.link = "identity", sigma.link = "log"),
         "d" = expression(x =, mu = 0, sigma = 1, log = FALSE),
         "p" = expression(q =, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE),
         "q" = expression(p =, mu = 0, sigma = 1, lower.tail = TRUE, log.p = FALSE),
@@ -28,20 +28,33 @@ res <- list(
     # Name of the parameters used for testing the constructor function
     params = c("mu", "sigma"),
 
+    # Names of the supported named links
+    links = list(
+        "mu"    = c("inverse", "log", "identity"),
+        "sigma" = c("inverse", "log", "identity")
+    ),
+
     # Valid and invalid response values
-    y     = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
+    y = list(inside = c(-30, -1, 0, 1, 30), outside = NULL),
 
-    mu    = list("identity" = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
-                 "inverse"  = list(valid = c(-30, -1, 0, 1, 30), invalid = NULL),
-                 "log"      = list(valid = c(eps, 1, 30), invalid = c(-eps, 0))),
+    # Parameters:
+    # - valid interval
+    # - values inside and outside of interval
+    # - whether boundaries are valid for d/p/q/r functions and/or family (none, both, left, right)
+    mu = list(
+      interval = c(-Inf, Inf),
+      inside   = c(-30, -1, 0, 1, 30),
+      outside  = NULL,
+      dpqr     = "both",
+      family   = "both"
+    ),
 
-    sigma = list("identity" = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "inverse"  = list(valid = c(eps, 1, 30), invalid = c(-eps, 0)),
-                 "log"      = list(valid = c(eps, 1, 30), invalid = c(-eps, 0))),
-
-    # Parameters used for testing the dprq methods; they are not aware of the
-    # link function and have different valid/invalid ranges.
-    dpqr  = list("mu"    = list(valid = c(-30, -5, -1, 0, 1, 5, 30), invalid = NULL),
-                 "sigma" = list(valid = c(0, 1, 30), invalid = c(-1, -eps)))
+    sigma = list(
+      interval = c(-Inf, Inf),
+      inside   = c(0, 1, 30),
+      outside  = -eps,
+      dpqr     = "both",
+      family   = "none"
+    )
 )
 

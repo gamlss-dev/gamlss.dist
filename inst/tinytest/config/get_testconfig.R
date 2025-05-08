@@ -13,17 +13,15 @@ get_testconfig <- function(family = NULL, dir = "config", verbose = FALSE) {
 
     # First let us check what config files we have available.
     files <- list.files(dir, full.names = TRUE)
-    files <- files[grepl("^config-.*\\.R$", basename(files))]
+    files <- files[grepl("^config_.*\\.R$", basename(files))]
     stopifnot("No config files found on disc" = length(files) > 0L)
-    fams  <- regmatches(files, regexpr("(?<=(config-)).*(?=(\\.R))", files, perl = TRUE))
+    fams  <- regmatches(files, regexpr("(?<=(config_)).*(?=(\\.R))", files, perl = TRUE))
 
     # If 'family' is chracter, check if it is one of the allowed
     # families, i.e., families for which we have a config file.
     # Replace 'fams' with the requested family; used for loading
     # the configuration in the next step.
-    if (is.character(family)) {
-        fams <- match.arg(family, fams)
-    }
+    if (is.character(family)) fams <- match.arg(family, fams)
 
     res <- setNames(lapply(fams, load_check_config, dir = dir), fams)
 
@@ -31,7 +29,7 @@ get_testconfig <- function(family = NULL, dir = "config", verbose = FALSE) {
     i <- sapply(res, function(x) isTRUE(x$disabled))
     if (any(i)) {
         if (verbose)
-            cat("\n[!] The following families are currently disabled for auto-testing: ",
+            cat("\n[!] The following families are currently disabled for auto-testing:",
                 paste(names(res)[i], collapse = ", "), "\n")
         res <- res[!i]
         if (length(res) == 0L)
@@ -50,107 +48,121 @@ get_testconfig <- function(family = NULL, dir = "config", verbose = FALSE) {
 # misspecified or can't be sourced.
 # -------------------------------------------------------------------
 load_check_config <- function(f, dir) {
-    file <- file.path(dir, sprintf("config-%s.R", f))
+    file <- file.path(dir, sprintf("config_%s.R", f))
     res <- with(new.env(), {
         tryCatch(source(file, local = TRUE),
                  warning = function(w) stop("Issues sourcing \"", file, "\" (W): ", w),
                  error   = function(e) stop("Issues sourcing \"", file, "\" (E): ", e))
-        # Test if 'res' is defined when sourcing the file
-        if (!"res" %in% ls())
-            stop("Can't find object 'res' when sourcing \"", file, "\".")
-        # Test 'res' is a list
-        if (!is.list(res))
-            stop("Object 'res' created by \"", file, "\" is not a list.")
+
+        # Check newly added variables to find the config list defined.
+        # Only consider list objects; if we find != 1L - throw an error.
+        # Else we assume that one list object is our config, checked below.
+        config_obj <- sapply(ls(), function(o) is.list(get(o)))
+        if (sum(config_obj) == 0L) {
+            stop("Can't find list object with configuration when sourcing \"", file, "\".")
+        } else if (sum(config_obj) > 1L) {
+            stop("Found multiple list object when sourcing \"", file, "\"; not sure which one is the configuration list element.")
+        }
+        config_obj <- names(config_obj)[config_obj]
+        config     <- get(config_obj)
+
+        # Helper function for output (errors).
+        # Scopes 'config_obj' and 'file'.
+        cvar <- function(x) sprintf("'%s$%s' (in \"%s\") ", config_obj, x, file)
 
         # Check 'disabled' flag
-        if (!is.logical(res$disabled) || (!isTRUE(res$disabled) && !isFALSE(res$disabled)))
-            stop("'res$disabled' (\"", file, "\") not defined or not TRUE or FALSE.")
+        if (!is.logical(config$disabled) || (!isTRUE(config$disabled) && !isFALSE(config$disabled)))
+            stop(cvar("disabled"), "not defined or not TRUE or FALSE.")
 
         # Check if we have the expected elements
-        if (!is.character(res$type) || !length(res$type) == 1L)
-            stop("'res$type' (\"", file, "\") not character of length 1L.")
-        if (!res$type %in% c("Continuous", "Discrete"))
-            stop("'res$type' (\"", file, "\") must be \"Continuous\" or \"Discrete\".")
-
-        # Default arguments (named list)
-        if (!is.list(res$arguments) || is.null(names(res$arguments)))
-            stop("'res$arguments' (\"", file, "\") not a named list.")
-        expected <- c("constructor", "d", "p", "q", "r")
-        if (!all(expected %in% names(res$arguments)))
-            stop("'res$arguments' (\"", file, "\") not containing all required elements: ", paste(expected, collapse = ", "))
-        for (e in expected)
-            if (!is.expression(res$arguments[[e]]))
-                stop("'res$arguments$", e, "' is not an expression.")
+        if (!is.character(config$type) || !length(config$type) == 1L)
+            stop(cvar("type"), "not character of length 1L.")
+        if (!config$type %in% c("Continuous", "Discrete"))
+            stop(cvar("type"), "must be \"Continuous\" or \"Discrete\".")
 
         # Support
-        if (!is.numeric(res$support) || !length(res$support) == 2L)
-            stop("'res$support' (\"", file, "\") not numeric of length 2L.")
-        if (res$support[1] >= res$support[2])
-            stop("'res$support' (\"", file, "\") not properly defined.")
+        if (!is.numeric(config$support) || !length(config$support) == 2L)
+            stop(cvar("support"), "not numeric of length 2L.")
+        if (config$support[1] >= config$support[2])
+            stop(cvar("support"), "not properly defined.")
+
+        # Default arguments (named list)
+        if (!is.list(config$arguments) || is.null(names(config$arguments)))
+            stop(cvar("arguments"), "not a named list.")
+        expected <- c("family", "d", "p", "q", "r")
+        if (!all(expected %in% names(config$arguments)))
+            stop(cvar("arguments"), "not containing all required elements: ", paste(expected, collapse = ", "))
+        for (e in expected)
+            if (!is.expression(config$arguments[[e]]))
+                stop(cvar(paste0("arguments$", e)), "' is not an expression.")
 
         # Names of the parameters
-        if (!is.character(res$params) || !length(res$params) > 0L || !all(nchar(res$params) > 0L))
-            stop("'res$params' (\"", file, "\") misspecified, must be valid character vector with length > 0.")
+        if (!is.character(config$params) || !length(config$params) > 0L || !all(nchar(config$params) > 0L))
+            stop(cvar("params"), "misspecified, must be valid character vector with length > 0.")
 
-        # Checking res[[parameter]][[link]] content
+
+        # Testing 'links' config
+        if (is.null(config$links) || !is.list(config$links) || is.null(names(config$links)))
+            stop(cvar("links"), "must be a named list.")
+        # Testing config$links[[parameter]] specification
+        test_links <- function(p) {
+            # Not defined?
+            if (!p %in% names(config$links)) stop("Element ", cvar(paste0("links$", p)), "not found.")
+            # Else check content
+            x <- config$links[[p]]
+            if (!is.character(x) || length(x) == 0L)
+                stop(cvar(paste0("links$", p)), "must be character vector length > 0L.")
+            if (any(is.na(x)))
+                stop(cvar(paste0("links$", p)), "contains missing values (not allowed).")
+        }
+        for (p in config$params) test_links(p)
+
+        # Checking specificaction for response y
+        if (is.null(config$y) || !is.list(config$y) || is.null(names(config$y)))
+            stop(cvar("y"), "must be a named list.")
+        # Checking content; config$y$inside and config$y$outside are some numeric values
+        if (!is.numeric(config$y$inside) || length(config$y$inside) == 0L || any(is.na(config$y$inside)))
+            stop(cvar("y$inside"), "must be numeric vector of length >0 without missing values.")
+        if (!is.null(config$y$outside) && !(is.numeric(config$y$outside) || length(config$y$outside) > 0L || all(!is.na(config$y$outside))))
+            stop(cvar("y$outside"), "must be NULL or a numeric vector of length >0 without missing values.")
+
+        # Checking config[[parameter]][[link]] content; scopes 'config'
         test_param <- function(p, n) {
-            x <- res[[p]][[n]]
+            # Not defined?
+            if (!p %in% names(config)) stop("Element ", cvar(p), "not found.")
+            # Else check content
+            x <- config[[p]]
             # Must exist
-            if (is.null(x))
-                stop("'res$", p, "$", n, "' (\"", file, "\") not defined (got NULL).")
-            # Must be a named list
-            if (!is.list(x) || is.null(names(x)) || length(x) == 0L)
-                stop("'res$", p, "' (\"", file, "\") must be a named list of length > 0L.")
+            if (is.null(x) || !is.list(x) || is.null(names(x)))
+                stop(cvar(p), "must be a named list.")
 
             # Checking list entries
-            expected <- c("valid", "invalid")
+            expected <- c("interval", "inside", "outside", "dpqr", "family")
             if (!all(expected %in% names(x)))
-                stop("'res$", p, "' (\"", file, "\") does not contain all expected elements: ",
-                     paste(expected, collapse = ", "))
-            if (!is.numeric(x$valid) || length(x$valid) < 3L || any(is.na(x$valid)))
-                stop("'res$", p, "$", n, "$valid' (\"", file, "\") must be numeric vector of lenth >2 without missing values.")
-            if (!is.null(x$invalid) && (!is.numeric(x$invalid) || length(x$invalid) == 0L || any(is.na(x$invalid))))
-                stop("'res$", p, "$", n, "$invalid' (\"", file, "\") must be NULL or numeric vector of lenth >0 without missing values.")
-        }
-        for (p in res$params) {
-            if (!p %in% names(res)) stop("Element $", p, " not found (\"", file, "\").")
-            for (n in names(res[[p]])) {
-                test_param(p, n)
-            }
-        }
+                stop(cvar(p), "does not contain all expected elements: ", paste(expected, collapse = ", "))
 
-        # Now we do the same for 'dpqr' parameters
-        # Checking res$dpqr[[parameter]] content
-        test_dpqr_param <- function(p) {
-            x <- res$dpqr[[p]]
-            # Must exist
-            if (is.null(x))
-                stop("'res$dpqr$", p, "' (\"", file, "\") not defined (got NULL).")
-            # Must be a named list
-            if (!is.list(x) || is.null(names(x)) || length(x) == 0L)
-                stop("'res$dpqr$", p, "' (\"", file, "\") must be a named list of length > 0L.")
+            # x$interval expected to be a numeric vector of length 2, no missing values allowed
+            if (!is.numeric(x$interval) || !length(x$interval) == 2L || any(is.na(x$interval)))
+                stop(cvar(paste0(p, "$interval")), "must be numeric vector of length 2 without missing values.")
 
-            # Checking list entries
-            expected <- c("valid", "invalid")
-            if (!all(expected %in% names(x)))
-                stop("'res$dpqr$", p, "' (\"", file, "\") does not contain all expected elements: ",
-                     paste(expected, collapse = ", "))
-            if (!is.numeric(x$valid) || length(x$valid) < 3L || any(is.na(x$valid)))
-                stop("'res$", p, "$", n, "$valid' (\"", file, "\") must be numeric vector of lenth >2 without missing values.")
-            if (!is.null(x$invalid) && (!is.numeric(x$invalid) || length(x$invalid) == 0L || any(is.na(x$invalid))))
-                stop("'res$", p, "$", n, "$invalid' (\"", file, "\") must be NULL or numeric vector of lenth >0 without missing values.")
-        }
-        if (!"dpqr" %in% names(res))
-            stop("Missing $dpqr configuration (\"", file, "\").")
-        if (!is.list(res$dpqr) || is.null(names(res$dpqr)))
-            stop("'dpqr' (\"", file, "\") is not a named list.")
-        if (!all(res$params %in% names(res$dpqr)))
-            stop("Not all parameters found in $dpqr (\"", file, "\"). Expected config for: ", paste(res$params, collapse = ", "))
-        for (p in res$params) {
-            test_dpqr_param(p)
-        }
+            # x$inside and x$outside are some numeric values to be tested
+            if (!is.numeric(x$inside) || length(x$inside) == 0L || any(is.na(x$inside)))
+                stop(cvar(paste0(p, "$inside")), "must be numeric vector of length >0 without missing values.")
+            if (!is.null(x$outside) && !(is.numeric(x$outside) || length(x$outside) > 0L || all(!is.na(x$outside))))
+                stop(cvar(paste0(p, "$outside")), "must be NULL or a numeric vector of length >0 without missing values.")
 
-        return(res)
+            # x$dpqr and x$family must be one of: "left", "right", "both", or "none"
+            expected <- c("left", "right", "both", "none")
+            expected_str <- paste(sprintf("\"%s\"", expected), collapse = ", ")
+            if (!is.character(x$dpqr) || length(x$dpqr) != 1L || !x$dpqr %in% expected)
+                stop(cvar(paste0(p, "$dpqr")), "must be one of: ", expected_str, ".")
+            if (!is.character(x$family) || length(x$family) != 1L || !x$family %in% expected)
+                stop(cvar(paste0(p, "$family")), "must be one of: ", expected_str, ".")
+        }
+        for (p in config$params) test_param(p, n)
+
+        # Seems the configuration list contains what we expect, return
+        return(config)
     })
 }
 
