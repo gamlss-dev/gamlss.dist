@@ -27,7 +27,8 @@ for (family in names(configs)) {
     cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
     # ---------------------------------------------------------------
-    # Setting up combinations of valid where 'x' is always outside support.
+    # Setting up combinations of valid where 'x' is always outside support,
+    # such that we always expect '0' as result (no density).
     # ---------------------------------------------------------------
     dead_end <- match.arg(conf$type, c("Continuous", "Discrete")) # Ensure we have this captured
     if (conf$type == "Continuous") {
@@ -35,7 +36,7 @@ for (family in names(configs)) {
     } else {
         valid <- list(x = conf$support + c(-1, 1))
     }
-    for (p in conf$params) valid[[p]] <- conf$dpqr[[p]]$valid
+    for (p in conf$params) valid[[p]] <- conf[[c(p, "inside")]]
 
     # Make grid of unique combinations
     grd <- expand.grid(valid)

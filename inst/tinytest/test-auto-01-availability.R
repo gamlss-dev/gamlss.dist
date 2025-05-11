@@ -19,7 +19,7 @@ for (family in names(configs)) {
     for (f in check_and_load) {
         # Attach 'f' to the environment in which we will evaluate the expression
         expect_silent(get(f, envir = getNamespace("gamlss.dist")),
-            info = sprintf("Cannot find function 'famlss.dist::%s'.", f))
+            info = sprintf("Cannot find function 'gamlss.dist::%s'.", f))
         expect_inherits(get(f, envir = getNamespace("gamlss.dist")), "function",
             info = sprintf("'gamlss.dist::%s' is not a function.", f))
 

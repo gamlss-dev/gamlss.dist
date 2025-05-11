@@ -34,7 +34,7 @@ for (family in names(configs)) {
         expect_error(tmpfun(),
             info = sprintf("'%s(...) did not throw error when using %s.link = TRUE (invalid link).", family, p))
 
-        formals(tmpfun)[paste0(p, ".link")] <- c(1, 2, 3)
+        suppressWarnings(formals(tmpfun)[paste0(p, ".link")] <- c(1, 2, 3))
         expect_error(tmpfun(),
             info = sprintf("'%s(...) did not throw error when using %s.link = character() (invalid link).", family, p))
 
@@ -61,7 +61,7 @@ for (family in names(configs)) {
     # Get all link combinations for testing.
     # TODO(R): Currently the config does not specify anything for 'link = "own"',
     #          so this feature is currently not tested.
-    links  <- expand.grid(lapply(conf[conf$params], names), stringsAsFactors = FALSE)
+    links  <- expand.grid(conf$links, stringsAsFactors = FALSE)
 
     for (i in seq_len(nrow(links))) {
 
@@ -81,12 +81,12 @@ for (family in names(configs)) {
             expect_identical(length(tmp), 1L,      info = sprintf("%s(...)$%s.valid expected to have one argument.", family, p))
             expect_true(is.symbol(tmp[[1]]),       info = sprintf("%s(...)$%s.valid arguments must not have defaults.", family, p))
 
-            for (v in conf[[c(p, "valid")]])
+            for (v in conf[[c(p, "family", "inside")]])
                 expect_true(obj[[paste0(p, ".valid")]](v),
-                    info = sprintf("%s: %s.valid(%s) should evaluate to TRUE, got FALSE.", cmd, p, fmt(v)))
-            for (v in conf[[c(p, "invalid")]])
+                    info = sprintf("%s: obj$%s.valid(%s) should evaluate to TRUE, got FALSE.", cmd, p, fmt(v)))
+            for (v in conf[[c(p, "family", "outside")]])
                 expect_false(obj[[paste0(p, ".valid")]](v),
-                    info = sprintf("%s: %s.valid(%s) should evaluate to FALSE, got TRUE.", cmd, p, fmt(v)))
+                    info = sprintf("%s: obj$%s.valid(%s) should evaluate to FALSE, got TRUE.", cmd, p, fmt(v)))
         }
         rm(p, v, tmp)
 
@@ -122,7 +122,7 @@ for (family in names(configs)) {
         for (p in conf$params) {
             linkfun  <- obj[[paste0(p, ".linkfun")]]
             linkinv  <- obj[[paste0(p, ".linkinv")]]
-            vals     <- conf[[c(p, links[i, p], "valid")]]
+            vals     <- conf[[c(p, "family", "inside")]]
             vals_str <- sprintf("c(%s)", paste(fmt(vals), collapse = ","))
             expect_equal(linkinv(linkfun(vals)), vals,
                 info = sprintf("%s: %s.linkinv(%s.linkfun(%s)) not equal to itself.", cmd, p, p, vals_str))

@@ -15,7 +15,11 @@ source("config/get_testconfig.R")
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL, verbose = FALSE)
 
-configs <- configs["NO"]
+# If 'outside' is  a numeric vector, return as is. If 'outside' is invalid, we
+# take the 50% quantile (no interpolation; closest value defined) of the
+# 'inside' vector to have a valid element for testing.
+get_vals <- function(inside, outside)
+    if (is.null(outside)) unname(quantile(inside, p = 0.5, type = 1)) else outside
 
 # Looping over all defined families
 for (family in names(configs)) {
@@ -39,21 +43,24 @@ for (family in names(configs)) {
     expect_false(f$log, info = "'d%s()': Expected default argument 'log = FALSE'.")
 
     # ---------------------------------------------------------------
-    # Getting valid parameter set
+    # Getting valid value set (inside defined range for dpqr)
     # ---------------------------------------------------------------
-    valid <- list(x = conf$y$valid)
-    for (p in conf$params) valid[[p]] <- conf[[c("dpqr", p, "valid")]]
+    valid <- list(x = conf$y$inside)
+    for (p in conf$params) valid[[p]] <- conf[[c(p, "dpqr", "inside")]]
+
+    invalid <- list(x = with(conf$y, get_vals(inside, outside)))
+    for (p in conf$params)
+        invalid[[p]] <- with(conf[[c(p, "dpqr")]], get_vals(inside, outside))
 
     # ---------------------------------------------------------------
     # Testing all valid combinations; expecting silent execution and
     # a valid (non-NA) numeric return.
     # ---------------------------------------------------------------
-    grd <- expand.grid(valid[!names(valid) == "x"])
+    grd_valid <- expand.grid(valid)
 
     tmpfun <- cdf
-    formals(tmpfun)["x"] <- valid$x[[1]]
-    for (i in seq_len(nrow(grd))) {
-        formals(tmpfun)[names(grd)] <- grd[i, ]
+    for (i in seq_len(nrow(grd_valid))) {
+        formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
         expect_silent(tmp <- tmpfun(),
             info = sprintf("'d%s%s' did not run silent.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
         expect_inherits(tmp, "numeric",
@@ -68,34 +75,34 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     # If continuous: Try numeric integration for all combinations
     if (conf$type == "Continuous") {
-        for (i in seq_len(nrow(grd))) {
+        for (i in seq_len(nrow(grd_valid))) {
             # Dynamically create cdf function with different default arguments
-            args   <- grd[i, , drop = FALSE]
+            args   <- grd_valid[i, , drop = FALSE]
             tmpfun <- cdf
-            formals(tmpfun)[names(grd)] <- grd[i, ]
+            formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
 
             # Integrate
             tmp <- integrate(cdf, lower = conf$support[1], upper = conf$support[2],
                              subdivisions = 1000L)
             expect_equal(tmp$value, 1,
                 info = sprintf("Integral of 'd%s(x, %s)' does not result in 1.", family,
-                     paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
+                     paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
         }
         rm(args, tmpfun, tmp)
     # Else build sum
     } else {
         # TODO(R): Using 0:5000 here not conf$support as e.g., the Poisson
         #          distribution supports -Inf,Inf.
-        for (i in seq_len(nrow(grd))) {
+        for (i in seq_len(nrow(grd_valid))) {
             # Dynamically create cdf function with different default arguments
-            args   <- grd[i, , drop = FALSE]
+            args   <- grd_valid[i, , drop = FALSE]
             tmpfun <- cdf
-            formals(tmpfun)[names(grd)] <- grd[i, ]
+            formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
 
             # Integrate
             expect_equal(sum(cdf(seq.int(0, 5000))), 1,
                 info = sprintf("Sum of 'd%s(x, %s)' does not result in 1.", family,
-                     paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
+                     paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
         }
         rm(args, tmpfun)
     }
