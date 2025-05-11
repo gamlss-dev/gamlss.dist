@@ -145,7 +145,7 @@ load_check_config <- function(f, dir) {
 
         if (!is.null(config$y$outside) && !(is.numeric(config$y$outside) || length(config$y$outside) > 0L || all(!is.na(config$y$outside))))
             stop(cvar("y$outside"), "must be NULL or a numeric vector of length >0 without missing values.")
-        if (!is.null(config$y$outside) && !all(diff(confi$y$outside) > 0))
+        if (!is.null(config$y$outside) && !all(diff(config$y$outside) > 0))
             stop(cvar("y$outside"), "must be monotonically increasing if not NULL.")
 
         # Checking config[[parameter]][[link]] content; scopes 'config'
