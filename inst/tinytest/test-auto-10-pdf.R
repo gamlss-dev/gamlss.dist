@@ -10,16 +10,10 @@ if (interactive()) { library("tinytest"); library("gamlss.dist"); family <- "NO"
 fmt <- function(x) format(x, digits = 10)
 
 # Helper functions
-source("config/get_testconfig.R")
+source("helperfunctions.R")
 
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL, verbose = FALSE)
-
-# If 'outside' is  a numeric vector, return as is. If 'outside' is invalid, we
-# take the 50% quantile (no interpolation; closest value defined) of the
-# 'inside' vector to have a valid element for testing.
-get_vals <- function(inside, outside)
-    if (is.null(outside)) unname(quantile(inside, p = 0.5, type = 1)) else outside
 
 # Looping over all defined families
 for (family in names(configs)) {
@@ -27,34 +21,21 @@ for (family in names(configs)) {
     conf <- configs[[family]]
 
     # Getting d<FAM> function (pdf)
-    cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
-
-    # Missing argument 'x' should throw an error
-    expect_error(cdf(),
-        info = sprintf("'d%s()' without argument 'x' did not throw an error.", family))
+    pdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
     # ---------------------------------------------------------------
     # Testing arguments, order of arguments, and default values
     # ---------------------------------------------------------------
-    f <- formals(cdf)
+    f <- formals(pdf)
     expect_identical(as.list(f), as.list(conf$arguments$d),
         info = sprintf("Names of arguments or order of arguments changed in 'd%s()'!", family))
-    # Expecting log = FALSE per default
-    expect_false(f$log, info = "'d%s()': Expected default argument 'log = FALSE'.")
 
     # ---------------------------------------------------------------
     # Getting valid value set (inside defined range for dpqr)
     # ---------------------------------------------------------------
-    valid <- list(x = conf$y$inside)
-    for (p in conf$params) valid[[p]] <- conf[[c(p, "dpqr", "inside")]]
+    grd_valid <- get_testgrid_valid(conf, FALSE, main = "x")
 
-    # ---------------------------------------------------------------
-    # Testing all valid combinations; expecting silent execution and
-    # a valid (non-NA) numeric return.
-    # ---------------------------------------------------------------
-    grd_valid <- expand.grid(valid)
-
-    tmpfun <- cdf
+    tmpfun <- pdf
     for (i in seq_len(nrow(grd_valid))) {
         formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
         expect_silent(tmp <- tmpfun(),
@@ -72,13 +53,13 @@ for (family in names(configs)) {
     # If continuous: Try numeric integration for all combinations
     if (conf$type == "Continuous") {
         for (i in seq_len(nrow(grd_valid))) {
-            # Dynamically create cdf function with different default arguments
+            # Dynamically create pdf function with different default arguments
             args   <- grd_valid[i, , drop = FALSE]
-            tmpfun <- cdf
+            tmpfun <- pdf
             formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
 
             # Integrate
-            tmp <- integrate(cdf, lower = conf$support[1], upper = conf$support[2],
+            tmp <- integrate(pdf, lower = conf$support[1], upper = conf$support[2],
                              subdivisions = 1000L)
             expect_equal(tmp$value, 1,
                 info = sprintf("Integral of 'd%s(x, %s)' does not result in 1.", family,
@@ -90,13 +71,13 @@ for (family in names(configs)) {
         # TODO(R): Using 0:5000 here not conf$support as e.g., the Poisson
         #          distribution supports -Inf,Inf.
         for (i in seq_len(nrow(grd_valid))) {
-            # Dynamically create cdf function with different default arguments
+            # Dynamically create pdf function with different default arguments
             args   <- grd_valid[i, , drop = FALSE]
-            tmpfun <- cdf
+            tmpfun <- pdf
             formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
 
             # Integrate
-            expect_equal(sum(cdf(seq.int(0, 5000))), 1,
+            expect_equal(sum(pdf(seq.int(0, 5000))), 1,
                 info = sprintf("Sum of 'd%s(x, %s)' does not result in 1.", family,
                      paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
         }

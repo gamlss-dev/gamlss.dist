@@ -1,4 +1,52 @@
 
+# Helper function to set up grid with valid parameter values for testing.
+#
+# @param object the config object, a list containing all required information.
+# @param dpqr logical. If TRUE, the valid values ('inside') for the dpqr functions
+#        is used to create the grid, else the valid values ('inside') for
+#        the family constructor function.
+# @param main character. Name of the 'main' argument. For the density
+# @param main_values NULL or numeric. If specified, this overrules
+#        `object$y$inside`.
+#
+# function (PDF) this is typically `"x"`, for the distribution function (CDF)
+# this is typically `"q"`, and for the quantile function `"p"`.
+get_testgrid_valid <- function(object, dpqr, main = "x", main_values = NULL) {
+    stopifnot(is.list(object))
+    stopifnot(isTRUE(dpqr) || isFALSE(dpqr))
+    stopifnot(is.character(main), length(main) == 1)
+    stopifnot(is.null(main_values) || (is.numeric(main_values) && length(main_values) > 0L))
+    what <- if (dpqr) "dpqr" else "family"
+
+    res <- if (is.null(main_values)) object$y$inside else main_values
+    res <- setNames(list(res), main)
+    for (p in object$params) res[[p]] <- object[[c(p, what, "inside")]]
+    return(expand.grid(res))
+}
+# As get_testgrid_valid, but for invalid combinations.
+get_testgrid_invalid <- function(object, dpqr, main = "x", main_values = NULL) {
+    stopifnot(is.list(object))
+    stopifnot(isTRUE(dpqr) || isFALSE(dpqr))
+    stopifnot(is.character(main), length(main) == 1)
+    stopifnot(is.null(main_values) || (is.numeric(main_values) && length(main_values) > 0L))
+    what <- if (dpqr) "dpqr" else "family"
+
+    # Helper function used to always retrieve proper values for testing.
+    # If 'outside' is  a numeric vector, return as is. If 'outside' is invalid, we
+    # take the 50% quantile (no interpolation; closest value defined) of the
+    # 'inside' vector to have a valid element for testing.
+    fn <- function(inside, outside) {
+        stopifnot(is.numeric(inside), length(inside) > 0L)
+        stopifnot(is.null(outside) || (is.numeric(outside) && length(outside) > 0L))
+        if (is.null(outside)) unname(quantile(inside, p = 0.5, type = 1)) else outside
+    }
+
+    res <- if (!is.null(main_values)) main_values else with(object$y, fn(inside, outside))
+    res <- setNames(list(res), main)
+    for (p in object$params) res[[p]] <- with(object[[c(p, what)]], fn(inside, outside))
+    return(expand.grid(res))
+}
+
 
 
 # -------------------------------------------------------------------

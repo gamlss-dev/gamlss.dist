@@ -6,7 +6,7 @@
 if (interactive()) { library("tinytest"); library("gamlss.dist") }
 
 # Helper functions
-source("config/get_testconfig.R")
+source("helperfunctions.R")
 
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL, verbose = FALSE)

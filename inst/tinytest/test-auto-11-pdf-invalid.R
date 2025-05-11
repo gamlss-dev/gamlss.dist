@@ -9,16 +9,10 @@ if (interactive()) { library("tinytest"); library("gamlss.dist"); family <- "NO"
 fmt <- function(x) format(x, digits = 10)
 
 # Helper functions
-source("config/get_testconfig.R")
+source("helperfunctions.R")
 
 # Get test config; could also be added here directly
 configs <- get_testconfig(NULL, verbose = FALSE)
-
-# If 'outside' is  a numeric vector, return as is. If 'outside' is invalid, we
-# take the 50% quantile (no interpolation; closest value defined) of the
-# 'inside' vector to have a valid element for testing.
-get_vals <- function(inside, outside)
-    if (is.null(outside)) unname(quantile(inside, p = 0.5, type = 1)) else outside
 
 # Looping over all defined families
 for (family in names(configs)) {
@@ -28,19 +22,15 @@ for (family in names(configs)) {
     # Getting d<FAM> function (pdf)
     pdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
-    # ---------------------------------------------------------------
-    # Getting invalid value set (outside defined range for dpqr)
-    # ---------------------------------------------------------------
-    invalid <- list(x = with(conf$y, get_vals(inside, outside)))
-    for (p in conf$params)
-        invalid[[p]] <- with(conf[[c(p, "dpqr")]], get_vals(inside, outside))
+    # Missing argument 'x' should throw an error
+    expect_error(pdf(),
+        info = sprintf("'d%s()' without argument 'x' did not throw an error.", family))
 
     # ---------------------------------------------------------------
     # Testing all invalid combinations; expecting warnings and
     # a numeric missing value as return (NA_real_).
     # ---------------------------------------------------------------
-    grd_invalid <- expand.grid(invalid)
-
+    grd_invalid <- get_testgrid_invalid(conf, TRUE, "x")
     for (i in seq_len(nrow(grd_invalid))) {
         formals(pdf)[names(grd_invalid)] <- grd_invalid[i, ]
         expect_warning(tmp <- pdf(),
