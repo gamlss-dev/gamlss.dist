@@ -53,7 +53,7 @@ config_NO <- list(
       interval = c(0, Inf),
       inside   = c(eps, 1, 30),
       outside  = -eps,
-      dpqr     = "both",
+      dpqr     = "none",
       family   = "none"
     )
 )

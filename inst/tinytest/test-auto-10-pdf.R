@@ -48,10 +48,6 @@ for (family in names(configs)) {
     valid <- list(x = conf$y$inside)
     for (p in conf$params) valid[[p]] <- conf[[c(p, "dpqr", "inside")]]
 
-    invalid <- list(x = with(conf$y, get_vals(inside, outside)))
-    for (p in conf$params)
-        invalid[[p]] <- with(conf[[c(p, "dpqr")]], get_vals(inside, outside))
-
     # ---------------------------------------------------------------
     # Testing all valid combinations; expecting silent execution and
     # a valid (non-NA) numeric return.

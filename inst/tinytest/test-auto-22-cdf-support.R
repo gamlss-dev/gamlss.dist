@@ -23,29 +23,42 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # Getting d<FAM> function (pdf)
-    pdf <- get(sprintf("p%s", family), envir = getNamespace("gamlss.dist"))
+    # Getting p<FAM> function (cdf)
+    cdf <- get(sprintf("p%s", family), envir = getNamespace("gamlss.dist"))
 
     # ---------------------------------------------------------------
-    # Setting up combinations of valid where 'x' is always outside support.
+    # Setting up combinations of valid parameters; q is always below the lower
+    # end of the support to check if the CDF returns 0.
     # ---------------------------------------------------------------
     dead_end <- match.arg(conf$type, c("Continuous", "Discrete")) # Ensure we have this captured
-    if (conf$type == "Continuous") {
-        valid <- list(q = conf$support + c(-eps, eps))
-    } else {
-        valid <- list(q = conf$support + c(-1, 1))
-    }
-    for (p in conf$params) valid[[p]] <- conf$dpqr[[p]]$valid
+    valid <- list(q = conf$support[1L] - if (conf$type == "Continuous") 1 else eps)
+    for (p in conf$params) valid[[p]] <- conf[[c(p, "inside")]]
 
     # Make grid of unique combinations
     grd <- expand.grid(valid)
-
     for (i in seq_len(nrow(grd))) {
-        tmpfun <- pdf
-        formals(tmpfun)[names(grd)] <- grd[i, ]
-        expect_equal(tmpfun(), 0,
-            info = sprintf("Expected 'p%s(%s)' (outside support) to return 0.", family,
-                           paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])))))
+        formals(cdf)[names(grd)] <- grd[i, ]
+        expect_equal(cdf(), 0,
+            info = sprintf("Expected 'p%s(%s)' (outside lower support) to return 0.", family,
+                           paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
     }
+    rm(valid, grd)
+
+    # ---------------------------------------------------------------
+    # Doing the very same, but setting q above upper support.
+    # ---------------------------------------------------------------
+    dead_end <- match.arg(conf$type, c("Continuous", "Discrete")) # Ensure we have this captured
+    valid <- list(q = conf$support[2L] + if (conf$type == "Continuous") 1 else eps)
+    for (p in conf$params) valid[[p]] <- conf[[c(p, "inside")]]
+
+    # Make grid of unique combinations
+    grd <- expand.grid(valid)
+    for (i in seq_len(nrow(grd))) {
+        formals(cdf)[names(grd)] <- grd[i, ]
+        expect_equal(cdf(), 1,
+            info = sprintf("Expected 'p%s(%s)' (outside lower support) to return 1.", family,
+                           paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
+    }
+    rm(valid, grd)
 
 }

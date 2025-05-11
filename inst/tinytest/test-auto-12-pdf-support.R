@@ -46,7 +46,7 @@ for (family in names(configs)) {
         formals(tmpfun)[names(grd)] <- grd[i, ]
         expect_equal(tmpfun(), 0,
             info = sprintf("Expected 'd%s(%s)' (outside support) to return 0.", family,
-                           paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])))))
+                           paste(sprintf("%s = %s", names(grd), fmt(grd[i, ])), collapse = ", ")))
     }
 
 }

@@ -26,7 +26,7 @@ for (family in names(configs)) {
     conf <- configs[[family]]
 
     # Getting d<FAM> function (pdf)
-    cdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
+    pdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
     # ---------------------------------------------------------------
     # Getting invalid value set (outside defined range for dpqr)
@@ -42,12 +42,12 @@ for (family in names(configs)) {
     grd_invalid <- expand.grid(invalid)
 
     for (i in seq_len(nrow(grd_invalid))) {
-        formals(cdf)[names(grd_invalid)] <- grd_invalid[i, ]
-        expect_warning(tmp <- cdf(),
-            info = sprintf("'d%s%s' did not throw warning.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
+        formals(pdf)[names(grd_invalid)] <- grd_invalid[i, ]
+        expect_warning(tmp <- pdf(),
+            info = sprintf("'d%s%s' did not throw warning.", family, gsub("^pairlist", "", deparse(formals(pdf)))))
         expect_equal(tmp, NA_real_,
-            info = sprintf("'d%s%s' did not return NA_real_.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
+            info = sprintf("'d%s%s' did not return NA_real_.", family, gsub("^pairlist", "", deparse(formals(pdf)))))
     }
-    rm(cdf)
+    rm(pdf)
 
 }
