@@ -44,6 +44,20 @@ get_testconfig <- function(family = NULL, dir = "config", verbose = FALSE) {
 
 
 # -------------------------------------------------------------------
+# Helper function which creates the list with inside/outside values
+# for the distribution parameters.
+# -------------------------------------------------------------------
+get_param_values_list <- function(interval, inside, outside, boundaries) {
+    x <- sort(unique(c(interval, inside)))
+
+    # Remove left/right boundary if needed
+    if (boundaries %in% c("right", "none")) x <- x[-1L]
+    if (boundaries %in% c("left",  "none")) x <- x[-length(x)]
+
+    return(list(boundaries = boundaries, inside = x, outside = outside))
+}
+
+# -------------------------------------------------------------------
 # Loads and tests the configuration. Will throw an error if the config file is
 # misspecified or can't be sourced.
 # -------------------------------------------------------------------
@@ -120,11 +134,19 @@ load_check_config <- function(f, dir) {
         # Checking specificaction for response y
         if (is.null(config$y) || !is.list(config$y) || is.null(names(config$y)))
             stop(cvar("y"), "must be a named list.")
-        # Checking content; config$y$inside and config$y$outside are some numeric values
+
+        # Checking config$y$inside: Must be numeric vector, monotonically
+        # increasing (no missing values, no duplicates)
         if (!is.numeric(config$y$inside) || length(config$y$inside) == 0L || any(is.na(config$y$inside)))
             stop(cvar("y$inside"), "must be numeric vector of length >0 without missing values.")
+        if (!all(diff(config$y$inside) > 0))
+            stop(cvar("y$inside"), "must be monotonically increasing.")
+
+
         if (!is.null(config$y$outside) && !(is.numeric(config$y$outside) || length(config$y$outside) > 0L || all(!is.na(config$y$outside))))
             stop(cvar("y$outside"), "must be NULL or a numeric vector of length >0 without missing values.")
+        if (!is.null(config$y$outside) && !all(diff(confi$y$outside) > 0))
+            stop(cvar("y$outside"), "must be monotonically increasing if not NULL.")
 
         # Checking config[[parameter]][[link]] content; scopes 'config'
         test_param <- function(p, n) {
@@ -145,11 +167,17 @@ load_check_config <- function(f, dir) {
             if (!is.numeric(x$interval) || !length(x$interval) == 2L || any(is.na(x$interval)))
                 stop(cvar(paste0(p, "$interval")), "must be numeric vector of length 2 without missing values.")
 
-            # x$inside and x$outside are some numeric values to be tested
+            # x$inside must be a numeric vector, monotonically increasing, no missing values.
             if (!is.numeric(x$inside) || length(x$inside) == 0L || any(is.na(x$inside)))
                 stop(cvar(paste0(p, "$inside")), "must be numeric vector of length >0 without missing values.")
+            if (!all(diff(x$inside) > 0))
+                stop(cvar(paste0(p, "$inside")), "must be monotonically increasing.")
+
+            # x$outside mut be either NULL or a monotonically increasing numeric vector.
             if (!is.null(x$outside) && !(is.numeric(x$outside) || length(x$outside) > 0L || all(!is.na(x$outside))))
                 stop(cvar(paste0(p, "$outside")), "must be NULL or a numeric vector of length >0 without missing values.")
+            if (!is.null(x$outside) && !all(diff(x$outside) > 0))
+                stop(cvar(paste0(p, "$outside")), "must be monotonically increasing if not NULL.")
 
             # x$dpqr and x$family must be one of: "left", "right", "both", or "none"
             expected <- c("left", "right", "both", "none")
@@ -159,10 +187,21 @@ load_check_config <- function(f, dir) {
             if (!is.character(x$family) || length(x$family) != 1L || !x$family %in% expected)
                 stop(cvar(paste0(p, "$family")), "must be one of: ", expected_str, ".")
         }
-        for (p in config$params) test_param(p, n)
+
+        for (p in config$params) {
+            # Testing configuration for parameter p
+            test_param(p, n)
+
+            # Now we are sure x$inside, x$outside, x$dpqr and x$family are all properly defined,
+            # we can calculate the 'inside/outside' values for x$family and x$dpqr.
+            config[[c(p, "family")]] <- with(config[[p]], get_param_values_list(interval, inside, outside, family))
+            config[[c(p, "dpqr")]]   <- with(config[[p]], get_param_values_list(interval, inside, outside, dpqr))
+        }
 
         # Seems the configuration list contains what we expect, return
         return(config)
     })
+
+    return(res)
 }
 

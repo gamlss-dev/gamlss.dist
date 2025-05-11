@@ -46,12 +46,12 @@ config_NO <- list(
       inside   = c(-30, -1, 0, 1, 30),
       outside  = NULL,
       dpqr     = "both",
-      family   = "both"
+      family   = "none"
     ),
 
     sigma = list(
-      interval = c(-Inf, Inf),
-      inside   = c(0, 1, 30),
+      interval = c(0, Inf),
+      inside   = c(eps, 1, 30),
       outside  = -eps,
       dpqr     = "both",
       family   = "none"

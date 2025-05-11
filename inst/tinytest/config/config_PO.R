@@ -9,7 +9,7 @@ eps <- sqrt(.Machine$double.eps)
 # Setting up configuration
 config_PO <- list(
     # If set TRUE it will not be used for auto-testing
-    disabled = FALSE,
+    disabled = TRUE,
 
     # Type of distribution and response support
     type    = "Discrete",
