@@ -1,6 +1,5 @@
 # -------------------------------------------------------------------
-# Testing distribution functions; check behavior when the density is
-# calculated outside the support of the distribution.
+# Testing quantile functions.
 # -------------------------------------------------------------------
 
 # Used for development/testing manually

@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------
-# Testing distribution functions; check behavior when the density is
+# Testing density functions; check behavior when the density is
 # calculated outside the support of the distribution.
 # -------------------------------------------------------------------
 

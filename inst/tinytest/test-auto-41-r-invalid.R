@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------
-# Testing quantile function with invalid parameters.
+# Getting random values with invalid parameters.
 # -------------------------------------------------------------------
 
 # Used for development/testing manually
@@ -19,24 +19,23 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # Getting p<FAM> function (quantile function)
-    qfun <- get(sprintf("q%s", family), envir = getNamespace("gamlss.dist"))
+    # Getting r<FAM> function (random number generator)
+    random <- get(sprintf("r%s", family), envir = getNamespace("gamlss.dist"))
 
-    # Missing argument 'x' should throw an error
-    expect_error(qfun(),
-        info = sprintf("'q%s()' without argument 'x' did not throw an error.", family))
+    # Missing argument 'n' should throw an error
+    expect_error(random(), info = sprintf("Calling 'r%s()' without argument 'n' should throw an error.", family))
 
     # ---------------------------------------------------------------
-    # Get grid of invalid combination of parameters.
+    # Testing all invalid combinations; expecting warnings and
+    # a numeric missing value as return (NA_real_).
     # ---------------------------------------------------------------
-    grd_invalid <- get_testgrid_invalid(conf, TRUE, "q")
-
-    # Testing CDF call
+    grd_invalid <- get_testgrid_invalid(conf, TRUE, "n", main_values = c(1L, 7L))
     for (i in seq_len(nrow(grd_invalid))) {
-        formals(qfun)[names(grd_invalid)] <- grd_invalid[i, ]
-        qinfo <- paste0("q", family, gsub("^pairlist", "", deparse(formals(qfun))))
+        formals(random)[names(grd_invalid)] <- grd_invalid[i, ]
+        rinfo <- paste0("r", family, gsub("^pairlist", "", deparse(formals(random))))
 
-        expect_error(tmp <- qfun(), info = sprintf("'%s' expected to throw an error!", qinfo))
+        expect_error(tmp <- random(), info = sprintf("'%s' expected to throw an error.", rinfo))
     }
+    rm(random)
 
 }

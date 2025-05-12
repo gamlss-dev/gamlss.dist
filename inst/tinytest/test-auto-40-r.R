@@ -1,6 +1,5 @@
 # -------------------------------------------------------------------
-# Testing quantile functions in the valid range (w/ valid parameters
-# within support).
+# Testing functions to draw random samples.
 # -------------------------------------------------------------------
 
 # Used for development/testing manually
@@ -21,33 +20,34 @@ for (family in names(configs)) {
     conf <- configs[[family]]
 
     # Getting q<FAM> function (quantile function)
-    qfun <- get(sprintf("q%s", family), envir = getNamespace("gamlss.dist"))
+    random <- get(sprintf("r%s", family), envir = getNamespace("gamlss.dist"))
 
     # ---------------------------------------------------------------
     # Testing arguments, order of arguments, and default values
     # ---------------------------------------------------------------
-    f <- formals(qfun)
-    expect_identical(as.list(f), as.list(conf$arguments$q),
-        info = sprintf("Testing that default arguments of 'q%s()' have not changed!", family))
+    f <- formals(random)
+    expect_identical(as.list(f), as.list(conf$arguments$r),
+        info = sprintf("Testing that default arguments of 'r%s()' have not changed!", family))
 
     # ---------------------------------------------------------------
     # Get grid of valid parameter values
     # ---------------------------------------------------------------
-    p <- seq(0, 1, by = 0.25) # 25% interval
-    grd_valid <- get_testgrid_valid(conf, TRUE, "p", main_values = p)
+    args <- as.data.frame(setNames(lapply(conf$params, function(x) unname(quantile(conf[[c(x, "inside")]], 0.5, type = 2))), conf$params))
 
     # ---------------------------------------------------------------
     # Testing all valid combinations; expecting silent execution and
     # a valid (non-NA) numeric return.
     # ---------------------------------------------------------------
-    for (i in seq_len(nrow(grd_valid))) {
-        formals(qfun)[names(grd_valid)] <- grd_valid[i, ]
-        qinfo <- sprintf("q%s%s", family, gsub("^pairlist", "", deparse(formals(qfun))))
+    for (n in c(1L, 2L, 7L)) {
+        formals(random)[names(args)] <- args
 
-        expect_silent(tmp <- qfun(),      info = sprintf("'%s' expected to run silent.", qinfo))
-        expect_inherits(tmp, "numeric",   info = sprintf("Return of '%s' should be numeric.", qinfo))
-        expect_identical(length(tmp), 1L, info = sprintf("Length of return of '%s' should be 1L.", qinfo))
+        rinfo <- sprintf("r%s(n = %d, %s)", family, n, paste(sprintf("%s = %s", names(args), fmt(args)), collapse = ", "))
+
+        expect_silent(tmp <- random(n = n), info = sprintf("'%s' expected to run silent.", rinfo))
+        expect_inherits(tmp, "numeric",     info = sprintf("Return of '%s' should be numeric.", rinfo))
+        expect_identical(length(tmp), n,    info = sprintf("Length of return of '%s' expected to be %d.", rinfo, n))
+        expect_true(all(!is.na(tmp)),       info = sprintf("Expected return of '%s' to only contain non-missing (NA) values.", rinfo))
     }
-    rm(qfun)
+    rm(random)
 
 }
