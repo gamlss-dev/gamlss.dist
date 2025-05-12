@@ -51,9 +51,9 @@ for (family in names(configs)) {
             expect_silent(tmp <- do.call(cdf, setNames(list(qval, vals), c("q", p))),
                     info = sprintf("Expected '%s' to run silent.", pinfo))
             expect_true(is.double(tmp),
-                    info = sprintf("Expected '%s' to return double.", pinfo))
+                    info = sprintf("Expected '%s' to return object of type double.", pinfo))
             expect_identical(length(tmp), n,
-                    info = sprintf("Return length of '%s' not identical to %dL.", pinfo, n))
+                    info = sprintf("Return length of '%s' expected to be identical to %dL.", pinfo, n))
         }
     }
 

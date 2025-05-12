@@ -36,9 +36,9 @@ for (family in names(configs)) {
     tmpfun <- qfun
     for (i in seq_len(nrow(grd_valid))) {
         formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
-        expect_equal(tmpfun(), NA_real_,
-            info = sprintf("Expected 'q%s(%s)' (p < 0 or p > 1) to return NA_real_.", family,
-                           paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+        qinfo <- sprintf("q%s(%s)", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
+
+        expect_equal(tmpfun(), NA_real_, info = sprintf("Expected '%s' (p < 0 | p > 1) to return NA_real_.", qinfo))
     }
 
     # ---------------------------------------------------------------
@@ -55,31 +55,31 @@ for (family in names(configs)) {
     tmpfun <- qfun
     for (i in seq_len(nrow(grd))) {
         formals(tmpfun)[names(grd)] <- grd[i, ]
-        tmp <- tmpfun(p = p)
+        tmp   <- tmpfun(p = p)
 
+        qinfo <- sprintf("q%s(p = %s, %s)", family, deparse(p),
+                         paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", "))
+
+        # Checking that the return is of correct length and all numeric (no missing values)
+        expect_inherits(tmp, "numeric",
+            info = sprintf("Expected return of '%s' to be numeric.", qinfo))
         expect_identical(length(tmp), length(p),
-            info = sprintf("Expected 'p%s(%s, %s)' to return numeric of length %d.", family, dinfo,
-                           paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", "), length(p)))
+            info = sprintf("Return length of '%s' expected to be %d.", qinfo, length(p)))
+        expect_true(all(!is.na(tmp)),
+            info = sprintf("Expected all elements of '%s' to be non-missing (no NAs).", qinfo))
 
         if (inf$lower && inf$upper) {
             expect_true(all(tmp > -Inf & tmp < Inf),
-                info = sprintf("Expected 'p%s(%s, %s)' to be in (-Inf, Inf).", family, dinfo,
-                               paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+                info = sprintf("Expected return of '%s' to be in (-Inf, Inf).", qinfo))
         } else if (inf$lower) {
             expect_true(all(tmp > -Inf & tmp <= conf$support[2L]),
-                info = sprintf("Expected 'p%s(%s, %s)' to be in (-Inf, %s].", family, dinfo,
-                               paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", "),
-                               fmt(conf$support[2L])))
+                info = sprintf("Expected '%s' to be in the interval (-Inf, %s].", qinfo, fmt(conf$support[2L])))
         } else if (inf$upper) {
             expect_true(all(tmp >= conf$support[1L] & tmp < Inf),
-                info = sprintf("Expected 'p%s(%s, %s)' to be in [%s, Inf).", family, dinfo,
-                               paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", "),
-                               fmt(conf$support[2L])))
+                info = sprintf("Expected '%s' to be in the interval [%s, Inf).", qinfo, fmt(conf$support[2L])))
         } else {
             expect_true(all(tmp >= conf$support[1L] & tmp <= conf$support[2L]),
-                info = sprintf("Expected 'p%s(%s, %s)' to be in [%s, %s).", family, dinfo,
-                               paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", "),
-                               fmt(conf$support[1L]), fmt(conf$support[2L])))
+                info = sprintf("Expected '%s' to be in the interval [%s, %s).", qinfo, fmt(conf$support[1L]), fmt(conf$support[2L])))
         }
 
     }

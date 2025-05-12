@@ -43,9 +43,9 @@ for (family in names(configs)) {
         formals(cdf)[names(grd_valid)] <- grd_valid[i, ]
         pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(cdf))))
 
-        expect_silent(tmp <- cdf(),     info = sprintf("'%s' expected to run silent.", pinfo))
-        expect_inherits(tmp, "numeric", info = sprintf("Return of '%s' should be numeric.", pinfo))
-        expect_inherits(tmp, "numeric", info = sprintf("Length of return of '%s' should be 1L.", pinfo))
+        expect_silent(tmp <- cdf(),       info = sprintf("'%s' expected to run silent.", pinfo))
+        expect_inherits(tmp, "numeric",   info = sprintf("Return of '%s' should be numeric.", pinfo))
+        expect_identical(length(tmp), 1L, info = sprintf("Length of return of '%s' should be 1L.", pinfo))
     }
 
 }

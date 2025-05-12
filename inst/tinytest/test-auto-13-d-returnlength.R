@@ -51,9 +51,9 @@ for (family in names(configs)) {
             expect_silent(tmp <- do.call(pdf, setNames(list(xval, vals), c("x", p))),
                         info = sprintf("Expected '%s' to run silent.", dinfo))
             expect_true(is.double(tmp),
-                        info = sprintf("Expected '%s' to return double.", dinfo))
+                        info = sprintf("Expected '%s' to return object of type double.", dinfo))
             expect_identical(length(tmp), n,
-                        info = sprintf("Return length of '%s' not identical to %dL.", dinfo, n))
+                        info = sprintf("Return length of '%s' expected to be identical to %dL.", dinfo, n))
         }
     }
 

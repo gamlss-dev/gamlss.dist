@@ -34,8 +34,9 @@ for (family in names(configs)) {
     # Testing CDF call
     for (i in seq_len(nrow(grd_invalid))) {
         formals(qfun)[names(grd_invalid)] <- grd_invalid[i, ]
-        expect_error(tmp <- qfun(),
-            info = sprintf("'q%s%s' did not throw an error.", family, gsub("^pairlist", "", deparse(formals(qfun)))))
+        qinfo <- paste0("q", family, gsub("^pairlist", "", deparse(formals(qfun))))
+
+        expect_error(tmp <- qfun(), info = sprintf("'%s' expected to throw an error!", qinfo))
     }
 
 }

@@ -28,7 +28,7 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     f <- formals(qfun)
     expect_identical(as.list(f), as.list(conf$arguments$q),
-        info = sprintf("Names of arguments or order of arguments changed in 'q%s()'!", family))
+        info = sprintf("Testing that default arguments of 'q%s()' have not changed!", family))
 
     # ---------------------------------------------------------------
     # Get grid of valid parameter values
@@ -42,12 +42,12 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     for (i in seq_len(nrow(grd_valid))) {
         formals(qfun)[names(grd_valid)] <- grd_valid[i, ]
-        expect_silent(tmp <- qfun(),
-            info = sprintf("'q%s%s' did not run silent.", family, gsub("^pairlist", "", deparse(formals(qfun)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'p%s%s' did not return numeric.", family, gsub("^pairlist", "", deparse(formals(qfun)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'p%s%s' did not return result of length 1.", family, gsub("^pairlist", "", deparse(formals(qfun)))))
+        qinfo <- sprintf("q%s%s", family, gsub("^pairlist", "", deparse(formals(qfun))))
+
+        expect_silent(tmp <- qfun(),      info = sprintf("'%s' expected to run silent.", qinfo))
+        expect_inherits(tmp, "numeric",   info = sprintf("Return of '%s' should be numeric.", qinfo))
+        expect_identical(length(tmp), 1L, info = sprintf("Length of return of '%s' should be 1L.", qinfo))
     }
+    rm(qfun)
 
 }
