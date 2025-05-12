@@ -34,8 +34,9 @@ for (family in names(configs)) {
     # Testing CDF call
     for (i in seq_len(nrow(grd_invalid))) {
         formals(cdf)[names(grd_invalid)] <- grd_invalid[i, ]
-        expect_error(tmp <- cdf(),
-            info = sprintf("'p%s%s' did not throw an error.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
+        pinfo <- paste0("p", family, gsub("^pairlist", "", deparse(formals(cdf))))
+
+        expect_error(cdf(), info = sprintf("'%s' should throw an error.", pinfo))
     }
 
 }

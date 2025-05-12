@@ -31,15 +31,12 @@ for (family in names(configs)) {
     for (n in c(3L, 7L)) {
         # Getting n 'valid' values for the current parameter
         vals  <- rep(conf$y$inside, length.out = n)
-        dinfo <- sprintf("x = %s", deparse(vals))
+        dinfo <- sprintf("d%s(%s)", family, sprintf("x = %s", deparse(vals)))
 
         # Testing ...
-        expect_silent(tmp <- pdf(x = vals),
-            info = sprintf("Expected 'd%s(%s)' to run silent.", family, dinfo))
-        expect_true(is.double(tmp),
-            info = sprintf("Expected 'd%s(%s)' to return double.", family, dinfo))
-        expect_identical(length(tmp), n,
-            info = sprintf("Return length of 'd%s(%s)' identical to %d.", family, dinfo, n))
+        expect_silent(tmp <- pdf(x = vals), info = sprintf("'%s' expected to run silent.", dinfo))
+        expect_true(is.double(tmp),         info = sprintf("'%s' should return object of type double.", dinfo))
+        expect_identical(length(tmp), n,    info = sprintf("Length of return of '%s' should be identical to %d.", dinfo, n))
     }
 
     # Multiple 'parameter's
@@ -48,15 +45,15 @@ for (family in names(configs)) {
         for (n in c(3L, 7L)) {
             # Getting n 'valid' values for the current parameter
             vals  <- rep(conf[[c(p, "inside")]], length.out = n)
-            dinfo <- sprintf("%s = %s", p, deparse(vals))
+            dinfo <- sprintf("d%s(x = %s, %s)", family, fmt(xval), sprintf("%s = %s", p, deparse(vals)))
 
             # Testing ...
             expect_silent(tmp <- do.call(pdf, setNames(list(xval, vals), c("x", p))),
-                info = sprintf("Expected 'p%s(x = %s, %s)' to run silent.", family, fmt(xval), dinfo))
+                        info = sprintf("Expected '%s' to run silent.", dinfo))
             expect_true(is.double(tmp),
-                info = sprintf("Expected 'p%s(x = %s, %s)' to return double.", family, fmt(xval), dinfo))
+                        info = sprintf("Expected '%s' to return double.", dinfo))
             expect_identical(length(tmp), n,
-                info = sprintf("Return length of 'p%s(x = %s, %s)' not identical to %d.", family, fmt(xval), dinfo, n))
+                        info = sprintf("Return length of '%s' not identical to %dL.", dinfo, n))
         }
     }
 

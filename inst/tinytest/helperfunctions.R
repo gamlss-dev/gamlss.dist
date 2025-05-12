@@ -220,6 +220,8 @@ load_check_config <- function(f, dir) {
                 stop(cvar(paste0(p, "$inside")), "must be numeric vector of length >0 without missing values.")
             if (!all(diff(x$inside) > 0))
                 stop(cvar(paste0(p, "$inside")), "must be monotonically increasing.")
+            if (!all(is.finite(x$inside)))
+                stop(cvar(paste0(p, "$inside")), "must only contain finite values.")
 
             # x$outside mut be either NULL or a monotonically increasing numeric vector.
             if (!is.null(x$outside) && !(is.numeric(x$outside) || length(x$outside) > 0L || all(!is.na(x$outside))))

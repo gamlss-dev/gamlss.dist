@@ -37,9 +37,9 @@ for (family in names(configs)) {
     grd_valid <- get_testgrid_valid(conf, TRUE, "x", main_values = main_val)
     for (i in seq_len(nrow(grd_valid))) {
         formals(cdf)[names(grd_valid)] <- grd_valid[i, ]
-        expect_equal(cdf(), 0,
-            info = sprintf("Expected 'd%s(%s)' (outside support) to return 0.", family,
-                           paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+        dinfo <- sprintf("d%s(%s)", family, gsub("^pairlist", "", deparse(formals(cdf))))
+
+        expect_equal(cdf(), 0, info = sprintf("'%s' (outside support) should return a density of 0.", dinfo))
     }
 
 }

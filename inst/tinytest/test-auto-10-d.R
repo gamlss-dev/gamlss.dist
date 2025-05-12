@@ -28,7 +28,7 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     f <- formals(pdf)
     expect_identical(as.list(f), as.list(conf$arguments$d),
-        info = sprintf("Names of arguments or order of arguments changed in 'd%s()'!", family))
+        info = sprintf("Testing that default arguments of 'd%s()' have not changed!", family))
 
     # ---------------------------------------------------------------
     # Getting valid value set (inside defined range for dpqr)
@@ -38,12 +38,11 @@ for (family in names(configs)) {
     tmpfun <- pdf
     for (i in seq_len(nrow(grd_valid))) {
         formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
-        expect_silent(tmp <- tmpfun(),
-            info = sprintf("'d%s%s' did not run silent.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'d%s%s' did not return numeric.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'d%s%s' did not return result of length 1.", family, gsub("^pairlist", "", deparse(formals(tmpfun)))))
+        dinfo <- sprintf("d%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
+
+        expect_silent(tmp <- tmpfun(),    info = sprintf("'%s' expected to run silent.", dinfo))
+        expect_inherits(tmp, "numeric",   info = sprintf("Return of '%s' should be numeric.", dinfo))
+        expect_identical(length(tmp), 1L, info = sprintf("Length of return of '%s' should be 1L.", dinfo))
     }
     rm(tmpfun)
 
@@ -54,18 +53,14 @@ for (family in names(configs)) {
     if (conf$type == "Continuous") {
         for (i in seq_len(nrow(grd_valid))) {
             # Dynamically create pdf function with different default arguments
-            args   <- grd_valid[i, , drop = FALSE]
             tmpfun <- pdf
             formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
+            dinfo <- sprintf("d%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
 
-            # Integrate
-            tmp <- integrate(pdf, lower = conf$support[1], upper = conf$support[2],
-                             subdivisions = 1000L)
-            expect_equal(tmp$value, 1,
-                info = sprintf("Integral of 'd%s(x, %s)' does not result in 1.", family,
-                     paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+            # Integrate ...
+            integral <- integrate(pdf, lower = conf$support[1], upper = conf$support[2], subdivisions = 1000L)
+            expect_equal(integral$value, 1, info = sprintf("Integral of (continuous) '%s' should evaluate to 1.0", dinfo))
         }
-        rm(args, tmpfun, tmp)
     # Else build sum
     } else {
         # TODO(R): Using 0:5000 here not conf$support as e.g., the Poisson
@@ -75,13 +70,12 @@ for (family in names(configs)) {
             args   <- grd_valid[i, , drop = FALSE]
             tmpfun <- pdf
             formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
+            dinfo <- sprintf("d%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
 
             # Integrate
-            expect_equal(sum(pdf(seq.int(0, 5000))), 1,
-                info = sprintf("Sum of 'd%s(x, %s)' does not result in 1.", family,
-                     paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+            integral <- sum(pdf(seq.int(0, 5000)))
+            expect_equal(integral, 1, info = sprintf("Integral of (discrete) '%s' should evaluate to 1.0", dinfo))
         }
-        rm(args, tmpfun)
     }
 
 }

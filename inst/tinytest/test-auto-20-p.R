@@ -28,7 +28,7 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     f <- formals(cdf)
     expect_identical(as.list(f), as.list(conf$arguments$p),
-        info = sprintf("Names of arguments or order of arguments changed in 'p%s()'!", family))
+        info = sprintf("Testing that default arguments of 'p%s()' have not changed!", family))
 
     # ---------------------------------------------------------------
     # Get grid of valid parameter values
@@ -41,12 +41,11 @@ for (family in names(configs)) {
     # ---------------------------------------------------------------
     for (i in seq_len(nrow(grd_valid))) {
         formals(cdf)[names(grd_valid)] <- grd_valid[i, ]
-        expect_silent(tmp <- cdf(),
-            info = sprintf("'p%s%s' did not run silent.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'p%s%s' did not return numeric.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
-        expect_inherits(tmp, "numeric",
-            info = sprintf("'p%s%s' did not return result of length 1.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
+        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(cdf))))
+
+        expect_silent(tmp <- cdf(),     info = sprintf("'%s' expected to run silent.", pinfo))
+        expect_inherits(tmp, "numeric", info = sprintf("Return of '%s' should be numeric.", pinfo))
+        expect_inherits(tmp, "numeric", info = sprintf("Length of return of '%s' should be 1L.", pinfo))
     }
 
 }

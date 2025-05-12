@@ -23,8 +23,7 @@ for (family in names(configs)) {
     pdf <- get(sprintf("d%s", family), envir = getNamespace("gamlss.dist"))
 
     # Missing argument 'x' should throw an error
-    expect_error(pdf(),
-        info = sprintf("'d%s()' without argument 'x' did not throw an error.", family))
+    expect_error(pdf(), info = sprintf("Calling 'd%s()' without argument 'x' should throw an error.", family))
 
     # ---------------------------------------------------------------
     # Testing all invalid combinations; expecting warnings and
@@ -33,10 +32,10 @@ for (family in names(configs)) {
     grd_invalid <- get_testgrid_invalid(conf, TRUE, "x")
     for (i in seq_len(nrow(grd_invalid))) {
         formals(pdf)[names(grd_invalid)] <- grd_invalid[i, ]
-        expect_warning(tmp <- pdf(),
-            info = sprintf("'d%s%s' did not throw warning.", family, gsub("^pairlist", "", deparse(formals(pdf)))))
-        expect_equal(tmp, NA_real_,
-            info = sprintf("'d%s%s' did not return NA_real_.", family, gsub("^pairlist", "", deparse(formals(pdf)))))
+        dinfo <- paste0("d", family, gsub("^pairlist", "", deparse(formals(pdf))))
+
+        expect_warning(tmp <- pdf(), info = sprintf("'%s' should throw a warning.", dinfo))
+        expect_equal(tmp, NA_real_,  info = sprintf("'%s' should return a numeric missing value (NA_real_).", dinfo))
     }
     rm(pdf)
 
