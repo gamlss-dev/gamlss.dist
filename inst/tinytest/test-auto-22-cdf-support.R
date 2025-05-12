@@ -35,8 +35,9 @@ for (family in names(configs)) {
     grd_valid <- get_testgrid_valid(conf, TRUE, "q", main_values = main_val)
 
     for (i in seq_len(nrow(grd_valid))) {
-        formals(cdf)[names(grd_valid)] <- grd_valid[i, ]
-        expect_equal(cdf(), 0,
+        tmpfun <- cdf
+        formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
+        expect_equal(tmpfun(), 0,
             info = sprintf("Expected 'p%s(%s)' (outside lower support) to return 0.", family,
                            paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
     }
@@ -48,10 +49,28 @@ for (family in names(configs)) {
     grd_valid <- get_testgrid_valid(conf, TRUE, "q", main_values = main_val)
 
     for (i in seq_len(nrow(grd_valid))) {
-        formals(cdf)[names(grd_valid)] <- grd_valid[i, ]
-        expect_equal(cdf(), 1,
+        tmpfun <- cdf
+        formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
+        expect_equal(tmpfun(), 1,
             info = sprintf("Expected 'p%s(%s)' (outside lower support) to return 1.", family,
                            paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+    }
+
+    # ---------------------------------------------------------------
+    # When using in valid range, the CDF must return a value in [0, 1]
+    # ---------------------------------------------------------------
+    # This 'grid' excludes boundaries in the parameters
+    tmp <- list(q = conf$y$inside)
+    for (p in conf$params) tmp[[p]] <- conf[[c(p, "inside")]]
+    grd <- expand.grid(tmp)
+    for (i in seq_len(nrow(grd))) {
+        tmpfun <- cdf
+        formals(tmpfun)[names(grd)] <- grd[i, ]
+        tmp <- tmpfun()
+        expect_true(length(tmp) == 1L && tmp >= 0 && tmp <= 1,
+            info = sprintf("Expected 'p%s(%s)' to return single numeric in [0.0, 1.0].", family,
+                           paste(sprintf("%s = %s", names(grd_valid), fmt(grd_valid[i, ])), collapse = ", ")))
+
     }
 
 }

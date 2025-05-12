@@ -19,12 +19,12 @@ for (family in names(configs)) {
     # For convenience
     conf <- configs[[family]]
 
-    # Getting p<FAM> function (cdf)
-    cdf <- get(sprintf("p%s", family), envir = getNamespace("gamlss.dist"))
+    # Getting p<FAM> function (quantile function)
+    qfun <- get(sprintf("q%s", family), envir = getNamespace("gamlss.dist"))
 
     # Missing argument 'x' should throw an error
-    expect_error(cdf(),
-        info = sprintf("'p%s()' without argument 'x' did not throw an error.", family))
+    expect_error(qfun(),
+        info = sprintf("'q%s()' without argument 'x' did not throw an error.", family))
 
     # ---------------------------------------------------------------
     # Get grid of invalid combination of parameters.
@@ -33,9 +33,9 @@ for (family in names(configs)) {
 
     # Testing CDF call
     for (i in seq_len(nrow(grd_invalid))) {
-        formals(cdf)[names(grd_invalid)] <- grd_invalid[i, ]
-        expect_error(tmp <- cdf(),
-            info = sprintf("'p%s%s' did not throw an error.", family, gsub("^pairlist", "", deparse(formals(cdf)))))
+        formals(qfun)[names(grd_invalid)] <- grd_invalid[i, ]
+        expect_error(tmp <- qfun(),
+            info = sprintf("'q%s%s' did not throw an error.", family, gsub("^pairlist", "", deparse(formals(qfun)))))
     }
 
 }
