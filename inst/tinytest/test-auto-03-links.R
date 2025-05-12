@@ -124,8 +124,8 @@ for (family in names(configs)) {
             linkinv  <- obj[[paste0(p, ".linkinv")]]
             vals     <- conf[[c(p, "family", "inside")]]
             vals_str <- sprintf("c(%s)", paste(fmt(vals), collapse = ","))
-            expect_equal(linkinv(linkfun(vals)), vals,
-                info = sprintf("%s: %s.linkinv(%s.linkfun(%s)) not equal to itself.", cmd, p, p, vals_str))
+            expect_equal(linkfun(linkinv(vals)), vals,
+                info = sprintf("%s: %s.linkfun(%s.linkinv(%s)) not equal to itself.", cmd, p, p, vals_str))
             rm(linkfun, linkinv, vals, vals_str)
         }
 
