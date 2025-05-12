@@ -37,9 +37,9 @@ for (family in names(configs)) {
     for (i in seq_len(nrow(grd_valid))) {
         tmpfun <- cdf
         formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
-        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(cdf))))
+        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
 
-        expect_equal(tmpfun(), 0, info = sprintf("Expected '%s' (outside lower support) to return 0.", pinfo))
+        expect_equal(tmpfun(), 0, info = sprintf("Expected '%s' (q outside lower support) to return 0.", pinfo))
     }
 
     # ---------------------------------------------------------------
@@ -51,9 +51,9 @@ for (family in names(configs)) {
     for (i in seq_len(nrow(grd_valid))) {
         tmpfun <- cdf
         formals(tmpfun)[names(grd_valid)] <- grd_valid[i, ]
-        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(cdf))))
+        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
 
-        expect_equal(tmpfun(), 1, info = sprintf("Expected '%s' (outside upper support) to return 1.", pinfo))
+        expect_equal(tmpfun(), 1, info = sprintf("Expected '%s' (q outside upper support) to return 1.", pinfo))
     }
 
     # ---------------------------------------------------------------
@@ -66,10 +66,11 @@ for (family in names(configs)) {
     for (i in seq_len(nrow(grd))) {
         tmpfun <- cdf
         formals(tmpfun)[names(grd)] <- grd[i, ]
-        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(cdf))))
+        pinfo <- sprintf("p%s%s", family, gsub("^pairlist", "", deparse(formals(tmpfun))))
 
         tmp <- tmpfun()
-        expect_true(length(tmp) == 1L && tmp >= 0 && tmp <= 1, info = sprintf("Expected '%s' to return a single numeric in [0.0, 1.0].", pinfo))
+        expect_true(length(tmp) == 1L && tmp >= 0 && tmp <= 1,
+            info = sprintf("Expected '%s' to return a single numeric in [0.0, 1.0].", pinfo))
     }
 
 }
