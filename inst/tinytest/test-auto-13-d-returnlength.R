@@ -30,7 +30,7 @@ for (family in names(configs)) {
     # Multiple x's
     for (n in c(3L, 7L)) {
         # Getting n 'valid' values for the current parameter
-        vals  <- sample(conf$y$inside, n, replace = TRUE)
+        vals  <- rep(conf$y$inside, length.out = n)
         dinfo <- sprintf("x = %s", deparse(vals))
 
         # Testing ...
