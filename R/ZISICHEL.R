@@ -196,7 +196,6 @@ dZISICHEL<-function(x, mu=1, sigma=1, nu=-0.5, tau=0.1, log=FALSE)
   if(log == FALSE) fy2 <- exp(logfy) else fy2 <- logfy
     fy2[x < 0] <- 0
     fy2[x == Inf] <- 0  
- #fy2 <- ifelse(x < 0, 0, fy2)   
   fy2  
   }
 ################################################################################
@@ -235,13 +234,11 @@ pZISICHEL <- function(q, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE, log
 qZISICHEL <- function(p, mu=1, sigma=1, nu=-0.5, tau=0.1, lower.tail = TRUE, log.p = FALSE,  
                  max.value = 10000)
   {      
-        if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
-        if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
-        if (any(tau <= 0)|any(tau >= 1))
-         stop(paste("tau must be between 0 and 1 ", "\n", ""))
-        # if (any(p < 0) | any(p > 1.0001))  stop(paste("p must be between 0 and 1", "\n", ""))    
-        if (log.p == TRUE) p <- exp(p)   else p <- p
-        if (lower.tail == TRUE)  p <- p  else p <- 1 - p
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0 ", "\n", "")) 
+if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
+if (any(tau <= 0)|any(tau >= 1)) stop(paste("tau must be between 0 and 1 ", "\n", ""))
+if (log.p == TRUE) p <- exp(p)  
+if (lower.tail == FALSE) p <- 1 - p
         pnew <- (p-tau)/(1-tau)# added 28-2-17
         pnew <- ifelse((pnew > 0 ),pnew, 0)
            q <- qSICHEL(pnew, mu = mu, sigma=sigma, nu,  max.value= max.value)           

@@ -13,7 +13,7 @@ BCPE <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau
     vstats <- checklink(   "nu.link", "Box Cox Power Exponential", substitute(nu.link),    
                            c("inverse", "log", "identity", "own"))
     tstats <- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
-                           c("logshiftto1", "log", "identity", "own")) 
+                           c("logshiftto1", "log", "identity", "own", "(1,3]")) 
     structure(
           list(family = c("BCPE", "Box-Cox Power Exponential"),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 
@@ -236,14 +236,14 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
         nu <- rep_len(nu, n)
        tau <- rep_len(tau, n)
          z <- rep_len(0, n)
-       FYy2 <- rep_len(0, n)  
+      FYy2 <- FYy1 <- FYy3 <- rep_len(0, n)  
 ##  calculate the cdf  
          z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma) 
-      FYy1 <- F.T(z,tau)
-      FYy2[nu>0] <-  F.T( -1/(sigma*abs(nu)),tau)
- #    FYy2 <- ifelse(nu > 0, F.T( -1/(sigma*abs(nu)),tau),0)    
-      FYy3 <- F.T(1/(sigma*abs(nu)),tau)
-      FYy  <- (FYy1-FYy2)/FYy3
+       FYy1 <- F.T(z,tau)
+#      FYy2[nu>0] <-  F.T( -1/(sigma*abs(nu)),tau)
+       FYy2 <- ifelse(nu > 0, F.T( -1/(sigma*abs(nu)),tau),0)    
+       FYy3 <- F.T(1/(sigma*abs(nu)),tau)
+       FYy  <- (FYy1-FYy2)/FYy3
 # FYy[nu<=0] <- pPE(z,tau)/ pPE(1/(sigma * abs(nu)), tau)
 #  FYy[nu>0] <- (pPE(z,tau)-pPE(-1/(sigma*abs(nu)),tau)) / 
 #           pPE(1/(sigma * abs(nu)), tau)     
@@ -344,7 +344,10 @@ rBCPE <- rBCPEo <- function(n, mu=5, sigma=0.1, nu=1, tau=2)
     r
   }
 
-#-----------------------------------------------------------------  
+################################################################################
+################################################################################
+################################################################################
+################################################################################ 
 BCPEuntr <- function (mu.link="identity", sigma.link="log", nu.link ="identity", tau.link="log")
 {
     mstats <- checklink(   "mu.link", "Box.Cox.Power.Exponential", substitute(mu.link),    
@@ -497,7 +500,7 @@ BCPEo <- function (mu.link="log", sigma.link="log", nu.link ="identity", tau.lin
     vstats <- checklink(   "nu.link", "Box Cox Power Exponential", substitute(nu.link),    
                            c("inverse", "log", "identity", "own"))
     tstats <- checklink(  "tau.link", "Box Cox Power Exponential", substitute(tau.link),   
-                           c("logshiftto1", "log", "identity", "own")) 
+                          c("logshiftto1", "log", "identity", "own", "(1,3]")) 
     structure(
           list(family = c("BCPEo", "Box-Cox Power Exponential-orig."),
            parameters = list(mu=TRUE, sigma=TRUE, nu=TRUE, tau=TRUE), 

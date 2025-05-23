@@ -154,16 +154,21 @@ if (any(tau < 0))  stop(paste("tau must be positive", "\n", ""))
      nu <- rep_len(nu, n)
     tau <- rep_len(tau, n)
       z <- rep_len(0, n)
-    FYy <- rep_len(0, n)  
+    FYy <-  FYy1 <- FYy2 <- FYy3 <- rep_len(0, n)  
 ##  calculate the cdf 
               z  <-  ifelse(nu != 0, (((q/mu)^nu-1)/(nu*sigma)), log(q/mu)/sigma)
-      FYy[nu<=0] <- pt(z,tau)/  pt(1/(sigma * abs(nu)), tau)
-      FYy[nu>0]  <- (pt(z,tau)-pt(-1/(sigma*abs(nu)),df=tau)) / 
-                     pt(1/(sigma * abs(nu)), tau)   
+              
+              FYy1 <- pt(z,tau)  
+              FYy2 <- ifelse(nu > 0, pt(-1/(sigma*abs(nu)),df=tau) ,0)
+              FYy3 <- pt(1/(sigma*abs(nu)),df=tau)
+               FYy <- (FYy1-FYy2)/FYy3 
+   #   FYy[nu<=0] <- pt(z,tau)/  pt(1/(sigma * abs(nu)), tau)
+   #   FYy[nu>0]  <- (pt(z,tau)-pt(-1/(sigma*abs(nu)),df=tau)) / 
+ #                    pt(1/(sigma * abs(nu)), tau)   
 # the old       
-#   if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
-#       else   if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
-# FYy1 <- pt(z,tau)
+#  if(length(nu)>1)  z <- ifelse(nu != 0,(((q/mu)^nu-1)/(nu*sigma)),log(q/mu)/sigma)
+#       else   {if (nu != 0) z <- (((q/mu)^nu-1)/(nu*sigma)) else z <- log(q/mu)/sigma
+# FYy1 <- pt(z,tau)}
 # if(length(nu)>1)  FYy2 <- ifelse(nu > 0, pt(-1/(sigma*abs(nu)),df=tau) ,0)
 # else   if (nu>0)  FYy2 <-  pt(-1/(sigma*abs(nu)),df=tau) else FYy2 <- 0
 # FYy3 <- pt(1/(sigma*abs(nu)),df=tau)
@@ -173,7 +178,7 @@ if(log.p==FALSE)     FYy  <- FYy else  FYy<- log(FYy)
                FYy[q<=0]  <- 0 
 ##          
          FYy     
- }
+}
 ################################################################################
 ################################################################################
 ################################################################################

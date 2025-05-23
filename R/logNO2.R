@@ -2,7 +2,7 @@
 ################################################################################
 ################################################################################
 ################################################################################
-# LOGNO2 with Re-parameretised log(mu) Mikis 1-7-12
+# LOGNO2 with Re-parameretised mu=log(mu1) Mikis 1-7-12
 #---------------------------------------------------------
 # probably OK needs further testing 
 #---------------------------------------------------------
@@ -26,7 +26,8 @@ LOGNO2 <-function (mu.link ="log", sigma.link="log")
                 mu.dr = mstats$mu.eta, 
              sigma.dr = dstats$mu.eta, 
                  dldm = function(y, mu, sigma){
-                 	      dldm <- (1/sigma^2)*(log(y)-log(mu))/mu #(log(y)-log(mu))/((sigma^2)*mu) 
+                 	      dldm <- (1/sigma^2)*(log(y)-log(mu))/mu 
+                 	              #(log(y)-log(mu))/((sigma^2)*mu) 
                           dldm
                            },
                d2ldm2 = function(mu, sigma) -1/((sigma^2)*(mu^2)),
@@ -68,7 +69,7 @@ dLOGNO2<-function(x, mu=1, sigma=1, log=FALSE)
 pLOGNO2 <- function(q, mu=1, sigma=1, lower.tail = TRUE, log.p = FALSE)
   {     
           if (any(sigma <= 0))  stop(paste("sigma must be positive", "\n", "")) 
-    qz <- log(q)
+     qz <- log(q)
     cdf <- pnorm(qz, mean=log(mu), sd=sigma, lower.tail = lower.tail, log.p = log.p)
     cdf <-ifelse(q <= 0, 0, cdf)
     cdf

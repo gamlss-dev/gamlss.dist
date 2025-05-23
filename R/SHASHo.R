@@ -264,9 +264,7 @@ dSHASHo <- function(x, mu=0, sigma=1, nu=0, tau=1, log = FALSE)
    r <- sinh(tau*asinh(z)-nu)
    loglik <- -log(sigma) + log(tau) -0.5*log(2*pi) -0.5*log(1+(z^2)) +log(c) -0.5*(r^2)
    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2
-  if (log == FALSE)
-    fy <- exp(loglik)
-  else fy <- loglik
+if (log == FALSE) fy <- exp(loglik) else fy <- loglik
   fy
 }
 ################################################################################

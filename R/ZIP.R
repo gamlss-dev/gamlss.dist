@@ -69,20 +69,20 @@ ZIP <- function (mu.link = "log", sigma.link = "logit")
 ################################################################################
 dZIP<-function(x, mu = 5, sigma = 0.1, log = FALSE)
  { 
-          if (any(mu <= 0) )  stop(paste("mu must be greater than 0", "\n", ""))           
-          if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
-    #      if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
+if (any(mu <= 0) )  stop(paste("mu must be greater than 0", "\n", ""))           
+if (any(sigma <= 0) | any(sigma >= 1) )  stop(paste("sigma must be between 0 and 1", "\n", "")) 
+#if (any(x < 0) )  stop(paste("x must be 0 or greater than 0", "\n", "")) 
              ly <- max(length(x),length(mu),length(sigma)) 
               x <- rep(x, length = ly)      
           sigma <- rep(sigma, length = ly)
              mu <- rep(mu, length = ly)
           logfy <- rep(0, ly)
-    logfy[x==0] <- log(sigma+(1-sigma)*exp(-mu))
-    logfy[x!=0] <-  log(1-sigma) -mu +x*log(mu) -lgamma(x+1)
-   #       logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mu)), (log(1-sigma) -mu +x*log(mu) -lgamma(x+1)))      
-          if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy[x < 0] <- 0
-          fy[x >= Inf] <- 0
+ #   logfy[x==0] <- log(sigma+(1-sigma)*exp(-mu))
+#    logfy[x!=0] <-  log(1-sigma) -mu +x*log(mu) -lgamma(x+1)
+          logfy <- ifelse((x==0), log(sigma+(1-sigma)*exp(-mu)), (log(1-sigma) -mu +x*log(mu) -lgamma(x+1)))      
+if(log == FALSE) fy <- exp(logfy) else fy <- logfy
+            fy[x < 0] <- 0
+            fy[x >= Inf] <- 0
           fy
   }
 ################################################################################

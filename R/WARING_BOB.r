@@ -38,7 +38,7 @@ qq[q==Inf] <- 1000
          p <- rep(0, length = ly)
         mu <- rep(mu, length = ly)
      sigma <- rep(sigma, length = ly)
-     fn <- function(q, mu, sigma) sum(dWARING(0:qq, mu=mu, sigma=sigma))
+     fn <- function(q, mu, sigma) sum(dWARING(0:q, mu=mu, sigma=sigma))
    Vcdf <- Vectorize(fn)
     cdf <- Vcdf(q=qq, mu=mu, sigma=sigma)
     # cdf <- 1- ((gamma((1+mu+sigma)/sigma)*gamma(1+(mu/sigma)+q))/

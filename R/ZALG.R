@@ -66,11 +66,10 @@ dZALG<-function(x, mu = 0.5, sigma = 0.1, log = FALSE)
         sigma <- rep(sigma, length = ly)
            mu <- rep(mu, length = ly)   
           logfy <- rep(0, ly)
-          logfy <- dLG(ifelse(xx==0,1,x),mu,log = TRUE)
+          logfy <- dLG(ifelse(xx==0,1,x), mu, log = TRUE)
       logfy[x==0] <- log(sigma)
-  #       logfy <- ifelse((x==0), log(sigma), log(1-sigma)+dLG(ifelse(xx==0,1,x),mu,log = TRUE))      
           if(log == FALSE) fy <- exp(logfy) else fy <- logfy
-          fy[x < 1] <- 0
+          fy[x < 0] <- 0
           fy[x==Inf] <- 0
           fy
   }
@@ -94,7 +93,7 @@ pZALG <- function(q, mu = 0.5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
           cdf <- ifelse((qq==0), sigma,  cdf2)
          if(lower.tail == TRUE) cdf <- cdf else cdf <-1-cdf
          if(log.p==FALSE) cdf <- cdf else cdf <- log(cdf) 
-          cdf[q<1] <- 0 
+          cdf[q<0] <- 0 
           cdf[q==Inf] <- 1
          cdf
    }

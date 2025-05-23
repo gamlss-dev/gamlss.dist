@@ -26,8 +26,10 @@
 # [-1,1]
 # [0,2]
 # [0,5]
-
-
+################################################################################
+################################################################################
+################################################################################
+################################################################################
  make.link.gamlss<-function (link) 
 {
 if (is.character(link) && length(grep("^power", link) > 0)) 
@@ -41,7 +43,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
         warning("calling make.link(number) is deprecated", domain = NA)
         return(power(lambda))
     }
-    else switch(link, logit = 
+    else switch(link, logit = ##################################################
     {
         linkfun <- function(mu)  qLO(mu) #.Call("logit_link", mu, PACKAGE = "stats")
         linkinv <- function(eta)         #.Call("logit_linkinv", eta, PACKAGE = "stats")
@@ -52,7 +54,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
            }  
          mu.eta <- function(eta) pmax(dLO(eta), .Machine$double.eps)#.Call("logit_mu_eta", eta, PACKAGE = "stats")
        valideta <- function(eta) TRUE
-    }, probit = 
+    }, probit = ################################################################
     {
         linkfun <- function(mu) qnorm(mu)
         linkinv <- function(eta) 
@@ -85,7 +87,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
             pmax(exp(eta) * exp(-exp(eta)), .Machine$double.eps)
         }
         valideta <- function(eta) TRUE
-    }, identity = 
+    }, identity = ##############################################################
     {
        linkfun <- function(mu) mu
        linkinv <- function(eta) eta
@@ -115,7 +117,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
        linkinv <- function(eta) eta^0.5
         mu.eta <- function(eta)  0.5 * (eta^-0.5)
       valideta <- function(eta) all(eta > 0)
-     },logshiftto1 = 
+     },logshiftto1 = ###########################################################
      {    # renamed Thursday, March 27, 2008 MS Saturday, February 19, 2005   
        linkfun <- function(mu)  log(mu-1+0.00001)
        linkinv <- function(eta) 1+pmax(.Machine$double.eps, exp(eta)) 
@@ -128,7 +130,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
         mu.eta <- function(eta) pmax(.Machine$double.eps, exp(eta))
       valideta <- function(eta) TRUE   
      },
-        logshiftto0  =
+        logshiftto0  =##########################################################
      {
        linkfun <- function(mu) { log(mu - 1e-05)}
        linkinv <- function(eta){ 1e-05 + pmax(.Machine$double.eps, exp(eta))}
@@ -141,7 +143,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
        linkinv <- function(eta){ 1e-05 + pmax(.Machine$double.eps, exp(eta))}
         mu.eta <- function(eta) pmax(.Machine$double.eps, exp(eta))
       valideta <- function(eta) TRUE
-}, "[-1,1]" =
+}, "[-1,1]" =###################################################################
 {  
   linkfun <- function(mu)
   {
@@ -168,7 +170,7 @@ if (is.character(link) && length(grep("^power", link) > 0))
     res
   }
   valideta <- function(eta) TRUE
- }, "(0,2]" =
+ }, "(0,2]" =###################################################################
  {  
    linkfun <- function(mu)
    {
@@ -195,6 +197,33 @@ if (is.character(link) && length(grep("^power", link) > 0))
      res
    }
    valideta <- function(eta) TRUE
+ }, "(1,3]" =#################################################################
+  {  
+    linkfun <- function(mu)
+    {
+      delta <- 1e-10
+      shift <- c(1, 3+delta)
+      log((mu-shift[1])/(shift[2]-mu))
+    }
+     linkinv <- function(eta){
+       delta <- 1e-10
+       shift <- c(1, 3+delta)
+      thresh <- -log(.Machine$double.eps)
+         eta <- pmin(thresh, pmax(eta, -thresh))
+      (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+    }
+      mu.eta <- function(eta){
+       delta <- 1e-10
+       shift <- c(1, 3+delta)
+      thresh <- -log(.Machine$double.eps)
+      res <- rep(.Machine$souble.eps, length(eta))
+      res[abs(eta) < thresh] <- 
+        (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+        (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+        ((1 + exp(eta))^2)[abs(eta) < thresh]
+      res
+    }
+    valideta <- function(eta) TRUE
  }, "(0,5]" =
    {  
      linkfun <- function(mu)
