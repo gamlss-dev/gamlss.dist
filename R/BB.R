@@ -85,7 +85,11 @@ dBB <- function(x, mu = 0.5, sigma = 1, bd = 10, log = FALSE)
                   +lgamma((1/sigma))+lgamma(xx+mu*(1/sigma))
                   +lgamma(bd+((1-mu)/sigma)-xx)-lgamma(mu*(1/sigma))
                   -lgamma((1-mu)/sigma)-lgamma(bd+(1/sigma)))
-logfy[sigma<0.0001]  <- dBI(xx, mu = mu, bd=bd, log = TRUE)
+       idx <- sigma < 0.0001
+       if (any(idx)){
+        logfy[idx]  <- dBI(xx[idx], mu = mu[idx], bd=bd[idx], log = TRUE)
+       }
+
          fy <- if(log == FALSE) exp(logfy) else logfy
   fy[x < 0] <- 0 
 fy[x > bd] <- 0 
