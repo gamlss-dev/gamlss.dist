@@ -90,7 +90,11 @@ dGPO<-function(x, mu = 1, sigma = 1, log = FALSE)
      sigma <- rep(sigma, length = ly)
         mu <- rep(mu, length = ly)   
       logL <- x*log(mu/(1+sigma*mu))+(x-1)*log(1+sigma*x)+(-mu*(1+sigma*x))/(1+sigma*mu)-lgamma(x+1)
-logL[sigma>0.000001]  <- dPO(x, mu = mu, log = TRUE)   # if sigma too small Poisson 
+      idx <- sigma < 0.000001
+      if (any(idx)){
+       logL[idx]  <- dPO(x[idx], mu = mu[idx], log = TRUE)   # if sigma too small Poisson 
+      }
+ 
           Lik <- if (log) logL else exp(logL)
    Lik[x < 0] <- 0
 Lik[x >= Inf] <- 0
@@ -123,7 +127,11 @@ y.y[qq[i]==Inf] <- 1
          FFF[i] <- sum(pdfall)                                             
     }  
     cdf <- FFF
-cdf[sigma<0.0001]  <- pPO(q, mu = mu, log.p = TRUE)
+    idx <- sigma < 0.0001
+    if (any(idx)){
+     cdf[idx]  <- pPO(q[idx], mu = mu[idx], log.p = TRUE)   
+    }
+
        cdf[q<0] <- 0
     cdf[q>=Inf] <- 1 
             cdf <- if(lower.tail==TRUE) cdf else 1-cdf
