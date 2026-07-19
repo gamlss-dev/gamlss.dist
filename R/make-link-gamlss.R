@@ -205,12 +205,13 @@ if (is.character(link) && length(grep("^power", link) > 0))
       shift <- c(1, 3+delta)
       log((mu-shift[1])/(shift[2]-mu))
     }
-     linkinv <- function(eta){
+     linkinv <- function(eta)
+    {
        delta <- 1e-10
        shift <- c(1, 3+delta)
       thresh <- -log(.Machine$double.eps)
          eta <- pmin(thresh, pmax(eta, -thresh))
-      (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+    (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
     }
       mu.eta <- function(eta){
        delta <- 1e-10
@@ -368,4 +369,66 @@ link.list
 #   structure(list(linkfun = linkfun, linkinv = linkinv, mu.eta = mu.eta,
 #                  valideta = valideta, name = link), class = "link-gamlss")  
 # }
-# ################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+logShift2a <- function(a= 1e-05, tol=1e-10)    
+  {
+  link <- list( 
+    linkfun = function(mu) {log(mu - a+tol)},
+    linkinv = function(eta){a + pmax(.Machine$double.eps, exp(eta))},
+     mu.eta = function(eta){pmax(.Machine$double.eps, exp(eta))},
+   valideta = function(eta) TRUE,
+   name =  sprintf("logShifted2a(%s)",  format(a, digits = 3)))
+  class(link) <- "link-glm"
+return(link)
+}  
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+link_a2b  <- function(a=-1, b=1, delta = 1e-05, exclude_a=TRUE, exclude_b=TRUE) 
+{  
+link <- list(
+  linkfun = function(mu)
+  {      ax <- if (exclude_a) a - delta else a
+         bx <- if (exclude_b) b + delta else b  
+      shift <- c(ax, bx)
+    log((mu-shift[1])/(shift[2]-mu))
+  },
+ linkinv = function(eta)
+  {
+      ax <- if (exclude_a) a - delta else a
+      bx <- if (exclude_b) b + delta else b  
+   shift <- c(ax, bx)  
+    # shift <- c(0, 2+delta)
+  thresh <- -log(.Machine$double.eps)
+      eta <- pmin(thresh, pmax(eta, -thresh))
+    (shift[2]*exp(eta)+shift[1])/(1+exp(eta))
+  },
+mu.eta = function(eta)
+  {
+     ax <- if (exclude_a) a - delta else a
+     bx <- if (exclude_b) b + delta else b  
+  shift <- c(ax, bx)
+ thresh <- -log(.Machine$double.eps)
+res[abs(eta) < thresh] <- 
+        (shift[2]*exp(eta))/(1 + exp(eta))[abs(eta) < thresh] -
+        (exp(eta)*(shift[2]*exp(eta)+shift[1]))/
+        ((1 + exp(eta))^2)[abs(eta) < thresh]
+      res
+  },
+  valideta <- function(eta) TRUE,
+  name =  sprintf("link_a2b(%s)",  format(a, digits = 3)))
+class(link) <- "link-glm"  
+return(link)
+}
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+ 
+
+
+
