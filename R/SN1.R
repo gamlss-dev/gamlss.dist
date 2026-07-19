@@ -244,7 +244,7 @@ q[p <  0] <- NaN
 q[p >  1] <- NaN
 for (i in seq(along = p)) 
  {
-  if ((p[i]<=0)|(p[i]>=1)) p[i] <= p[i]
+  if ((p[i]<=0)|(p[i]>=1)) p[i] <- p[i]
   else 
   {
         if (h(mu[i]) < p[i]) {
