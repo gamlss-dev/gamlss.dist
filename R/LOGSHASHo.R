@@ -135,13 +135,12 @@ if (any(nu < 0))  stop(paste("nu must be positive", "\n", ""))
      sigma <- rep_len(sigma, n)
         nu <- rep_len(nu, n)
        tau <- rep_len(tau, n)
-         z <- (x-mu)/sigma
+         z <- (log(x)-mu)/sigma
          c <- cosh(tau*asinh(z)-nu)
          r <- sinh(tau*asinh(z)-nu)
     loglik <- -log(sigma) + log(tau) -0.5*log(2*pi) -0.5*log(1+(z^2)) +log(c) -0.5*(r^2)
-    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2
-    loglik <- -log(sigma) + log(tau) -0.5*log(2*pi) -0.5*log(1+(z^2)) +log(c) -0.5*(r^2)
-    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2
+    loglik <- -log(sigma) + log(tau) -log(2*pi)/2 -log(1+(z^2))/2 +log(c) -(r^2)/2-log(x)
+    
 if(log==FALSE) ft  <- exp(loglik) else ft <- loglik 
     ft[x <= 0] <- 0
     ft
