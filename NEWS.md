@@ -4,19 +4,27 @@ editor_options:
     wrap: 72
 ---
 
+# Version 6.1-9
+
+-   New CRAN release, addressing various NOTEs from the CRAN checks,
+    especially regarding the documentation.
 
 
 # Version 6.1-8
 
--   The `LOGSHASH` is introduced as a distribution in the range (0, Inf).  It could be fitted before but it had to be  generated  by the function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
+-   The `LOGSHASH` is introduced as a distribution with range (0, Inf).
+    It could be fitted before but it had to be  generated  by the
+    function `gen.Family`, i.e. `gen.Family("SHASH", "log")`.
 
--   The `LOGSHASHo` is also introduced as a distribution in the range (0, Inf) but at moment remains hidden. 
+-   The `LOGSHASHo` is also introduced as a distribution in the range
+    (0, Inf) but at the moment remains hidden. 
 
 
 # Version 6.1-7
 
 -   the plotting functions in the file PlottingDistributions.R i.e
     `count_1_23` e.t.c. were checked.
+
 
 # Version 6.1-4
 
@@ -26,6 +34,7 @@ editor_options:
 -   the functions `test_continuous_gamlss_dist()` and
     `test_discrete_gamlss_dist()` are added to the package for checking
     distributions but the functions not have help files.
+
 
 # Version 6.1-3
 
@@ -42,15 +51,16 @@ editor_options:
 
     -- `q[p >  1] <- NaN`.
 
+
 # Version 6.1-2
 
 -   The GitHub repository is now hosted under the new `gamlss-dev`
     organization: <https://github.com/gamlss-dev/gamlss/>.
 
+
 # Version 6.1-1
 
--   The package is now hosted on GitHub at
-    <https://github.com/mstasinopoulos/GAMLSS-Distibutions/>.
+-   The package is now hosted on GitHub (`mstasinopoulos/GAMLSS-Distibutions`).
 
 -   Add an S3 class `GAMLSS` and corresponding methods encompassing all
     distributions from the `gamlss.dist` package using the workflow from

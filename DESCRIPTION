@@ -1,15 +1,15 @@
 Package: gamlss.dist
 Title: Distributions for Generalized Additive Models for Location Scale and Shape 
 Version: 6.1-9
-Date: 2026-07-19
-Authors@R:  c(person("Mikis", "Stasinopoulos", role = c("aut", "cre", "cph"), 
+Date: 2026-08-10
+Authors@R: c(person("Mikis", "Stasinopoulos", role = c("aut", "cre", "cph"), 
            email = "d.stasinopoulos@gre.ac.uk", comment = c(ORCID = "0000-0003-2407-5704")),
            person("Robert", "Rigby", role = "aut", email = "r.rigby@gre.ac.uk", comment = c(ORCID = "0000-0003-3853-1707")),
            person("Calliope", "Akantziliotou", role = "ctb"),
            person("Vlasios", "Voudouris", role = "ctb"),
            person("Gillian", "Heller", role = "ctb", comment = c(ORCID = "0000-0003-1270-1499")),
            person("Fernanda", "De Bastiani", role = "ctb", comment = c(ORCID = "0000-0001-8532-639X")),
-           person("Raydonal", "Ospina", role = "ctb", email= "rospina@ime.usp.br", comment = c(ORCID = "0000-0002-9884-9090")),
+           person("Raydonal", "Ospina", role = "ctb", email = "rospina@ime.usp.br", comment = c(ORCID = "0000-0002-9884-9090")),
            person("Nicoletta", "Motpan", role = "ctb"),
            person("Fiona", "McElduff", role = "ctb"),
            person("Majid", "Djennad", role = "ctb"),
