@@ -119,7 +119,11 @@ dNBF<-function(x, mu=1, sigma=1, nu=2, log=FALSE)
      mu1 <- mu
   sigma1 <- sigma*mu^(nu-2)
       fy <-  dnbinom(x, size=1/sigma1, mu = mu1, log = log)
-fy[sigma1<=0.0001] <-  dPO(x, mu = mu1, log = log) 
+      idx <- sigma1 <= 0.0001
+      if (any(idx)){
+       fy[idx] <-  dPO(x[idx], mu = mu1[idx], log = log) 
+      }
+ 
   fy[x < 0] <- 0 
   fy[x == Inf] <- 0 
   fy
@@ -140,8 +144,15 @@ pNBF <- function(q, mu=1, sigma=1, nu=2, lower.tail = TRUE, log.p = FALSE)
      cdf <- rep(0,length = ly) 
      mu1 <- mu
   sigma1 <- sigma*mu^(nu-2)
- cdf[sigma1>0.0001] <- pnbinom(q, size=1/sigma1, mu=mu1, lower.tail=lower.tail,log.p=log.p)
-cdf[sigma1<=0.0001] <- ppois(q, lambda = mu1, lower.tail = lower.tail, log.p = log.p) 
+  idx <- sigma1 > 0.0001
+  if (any(idx)){
+   cdf[idx] <- pnbinom(q[idx], size=1/sigma1[idx], mu=mu1[idx], lower.tail=lower.tail,log.p=log.p) 
+  } 
+  idx <- sigma1 <= 0.0001
+  if (any(idx)){
+    cdf[idx] <- ppois(q[idx], lambda = mu1[idx], lower.tail = lower.tail, log.p = log.p)
+  }
+  
   cdf[q < 0] <- 0 
   cdf[q >= Inf] <- 1
   cdf

@@ -68,8 +68,12 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
                mu <- rep_len(mu, n)
             sigma <- rep_len(sigma, n)
                fy <- rep_len(0,n)        
-               fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
-fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
+               fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log)
+               idx <- sigma <= 0.0001
+               if (any(idx)){
+                fy[idx] <-  dPO(x[idx], mu = mu[idx], log = log)
+               } 
+
        fy[x < 0]  <- 0 
     fy[x == Inf]  <- 0 
         return(fy)
@@ -90,8 +94,12 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
               cdf <- rep_len(0,n)
              cdf  <-  pnbinom(q, size=1/sigma, mu=mu, 
                               lower.tail=lower.tail, log.p = log.p)
-cdf[sigma<=0.0001]<-  ppois(q, lambda = mu, 
-                            lower.tail = lower.tail, log.p = log.p)            
+             idx <- sigma <= 0.0001
+             if (any(idx)){
+              cdf[idx]<-  ppois(q[idx], lambda = mu[idx], 
+                            lower.tail = lower.tail, log.p = log.p)  
+             }
+            
         cdf[q < 0] <- 0
         cdf[q == Inf] <- 1
         return(cdf)

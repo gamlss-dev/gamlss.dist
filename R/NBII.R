@@ -93,7 +93,11 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
             sigma <- rep_len(sigma, n)
                fy <- rep_len(0,n)        
                fy <- dnbinom(x, size=mu/sigma, mu=mu, log=log) 
-fy[sigma<=0.0001] <-  dpois(x, lambda = mu, log = log)
+               idx <- sigma <= 0.0001
+               if (any(idx)){
+                fy[idx] <-  dpois(x[idx], lambda = mu[idx], log = log)
+               }
+
         fy[x < 0] <- 0 
      fy[x == Inf] <- 0 
   return(fy)  
