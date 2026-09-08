@@ -4,7 +4,7 @@ editor_options:
     wrap: 72
 ---
 
-# Version 6.1-9
+# Version 6.1-9 and  6.1-10
 
 -   New CRAN release, addressing various NOTEs from the CRAN checks,
     especially regarding the documentation.
