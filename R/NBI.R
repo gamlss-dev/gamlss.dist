@@ -110,7 +110,7 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
               q <- rep_len(0,n)
               q <- qnbinom(p, size=1/sigma, mu=mu, 
                            lower.tail=lower.tail, log.p=log.p)
-#q[sigma<=0.0001] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+q[sigma<=0.0001] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
       # q[p == 0] <- 0
       # q[p == 1] <- Inf
       # q[p <  0] <- NaN

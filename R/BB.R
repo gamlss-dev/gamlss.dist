@@ -148,7 +148,7 @@ if (lower.tail == FALSE) p <- 1-p
           invcdf <- QQQ
         invcdf[sigma<0.0001] <-  qBI(p[sigma<0.0001], mu = mu[sigma<0.0001], bd=bd[sigma<0.0001], lower.tail=TRUE)
           invcdf[p == 0] <- 0
-          invcdf[p == 1] <- bd
+          invcdf[p == 1] <- bd[p == 1]
           invcdf[p <  0] <- NaN
           invcdf[p >  1] <- NaN
      return(invcdf)    
