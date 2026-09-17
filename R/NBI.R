@@ -69,7 +69,8 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
             sigma <- rep_len(sigma, n)
                fy <- rep_len(0,n)        
                fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
-fy[sigma<=0.0001] <-  dPO(x, mu = mu, log = log)
+               fy <- ifelse(sigma < 0.0001, dPO(x, mu = mu, log = log), 
+                        dnbinom(x, size=1/sigma, mu = mu, log = log))
        fy[x < 0]  <- 0 
     fy[x == Inf]  <- 0 
         return(fy)
@@ -88,10 +89,11 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
                mu <- rep_len(mu, n)
             sigma <- rep_len(sigma, n)
               cdf <- rep_len(0,n)
-             cdf  <-  pnbinom(q, size=1/sigma, mu=mu, 
-                              lower.tail=lower.tail, log.p = log.p)
-cdf[sigma<=0.0001]<-  ppois(q, lambda = mu, 
-                            lower.tail = lower.tail, log.p = log.p)            
+              cdf <- ifelse(sigma<0.0001, ppois(q, lambda = mu, 
+                          lower.tail = lower.tail, log.p = log.p),  
+                     pnbinom(q, size=1/sigma, mu=mu, 
+                          lower.tail=lower.tail, log.p = log.p))
+cdf[sigma<=0.0001]<-            
         cdf[q < 0] <- 0
         cdf[q == Inf] <- 1
         return(cdf)
@@ -108,9 +110,11 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
              mu <- rep_len(mu, n)
           sigma <- rep_len(sigma, n)
               q <- rep_len(0,n)
-              q <- qnbinom(p, size=1/sigma, mu=mu, 
-                           lower.tail=lower.tail, log.p=log.p)
-q[sigma<=0.0001] <- qpois(p, lambda = mu, lower.tail = lower.tail, log.p = log.p)
+              q <-  ifelse(sigma<0.0001, qpois(p, lambda = mu, 
+                          lower.tail = lower.tail, log.p = log.p), 
+                    qnbinom(p, size=1/sigma, mu=mu, 
+                          lower.tail = lower.tail, log.p = log.p))
+q[sigma<=0.0001] <- 
       # q[p == 0] <- 0
       # q[p == 1] <- Inf
       # q[p <  0] <- NaN
