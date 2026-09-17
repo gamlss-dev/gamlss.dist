@@ -18,7 +18,7 @@ pBB(q, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE,
       log.p = FALSE)
 qBB(p, mu = 0.5, sigma = 1, bd = 10, lower.tail = TRUE, 
        log.p = FALSE)
-rBB(n, mu = 0.5, sigma = 1, bd = 10)
+rBB(n, mu = 0.5, sigma = 1, bd = 10, ...)
 }
 
 \arguments{
@@ -33,6 +33,7 @@ rBB(n, mu = 0.5, sigma = 1, bd = 10)
   \item{log, log.p}{logical; if TRUE, probabilities p are given as log(p)}
   \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],
           otherwise, P[X > x]}
+   \item{\dots}{further arguments}        
 }
 \details{
   Definition file for beta binomial distribution. 
