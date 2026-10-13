@@ -160,7 +160,11 @@ logpy0 <- -mu*nu-(1/sigma)*(log(1+mu*sigma*(1-nu)))
  logfy <-  logpy0-lgamma(x+1)+S
  if(log==FALSE) fy <- exp(logfy) else fy <- logfy
    fy[sigma>0.0001] <- fy
-   fy[sigma<=0.0001] <- dPO(x, mu = mu, log = log) 
+   idx <- sigma <= 0.0001
+   if (any(idx)){
+    fy[idx] <- dPO(x[idx], mu = mu[idx], log = log)
+   }
+    
    fy[x < 0] <- 0
    fy[x == Inf] <- 0
   fy
