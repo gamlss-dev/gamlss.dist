@@ -5,6 +5,10 @@ editor_options:
 ---
 
 
+#  Version 6.1-12
+
+- the condition to move to  the Poison distribution for small values of sigma<0.0001 was taken out from  the NBI and NBII distributions,as suggested by Gavin Simpson because the negative binomial in R is doing that at the moment. 
+
 #  Version 6.1-11
 
 - corrections to the qBB and qNBI
