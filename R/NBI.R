@@ -69,8 +69,8 @@ if (any(sigma <= 0) )  stop(paste("sigma must be greater than 0 ", "\n", ""))
             sigma <- rep_len(sigma, n)
                fy <- rep_len(0,n)        
                fy <-  dnbinom(x, size=1/sigma, mu = mu, log = log) 
-               fy <- ifelse(sigma < 0.0001, dPO(x, mu = mu, log = log), 
-                        dnbinom(x, size=1/sigma, mu = mu, log = log))
+               # fy <- ifelse(sigma < 0.0001, dPO(x, mu = mu, log = log), 
+               #          dnbinom(x, size=1/sigma, mu = mu, log = log))
        fy[x < 0]  <- 0 
     fy[x == Inf]  <- 0 
         return(fy)
