@@ -8,9 +8,11 @@
 
 \title{Zero inflated poisson distribution for fitting a GAMLSS model }
 \description{
-The function \code{ZIP} defines the zero inflated Poisson distribution, a two parameter distribution, for a \code{gamlss.family} object to be used in GAMLSS fitting 
+The function \code{ZIP} defines the zero inflated Poisson distribution. The the zero inflated Poisson distribution is a two parameter distribution, for a \code{gamlss.family} object to be used in GAMLSS fitting 
 using the function \code{gamlss()}. The functions \code{dZIP}, \code{pZIP}, \code{qZIP} and \code{rZIP} define the density, distribution function, quantile function 
-and random generation for the inflated poisson, \code{ZIP()}, distribution. 
+and random generation for the inflated poisson, \code{ZIP()}, distribution.
+
+In the \code{ZIP} distribution the \eqn{\mu} parameter is not the mean of the distribution but the mean of the original Poisson involved in the construction of the \code{ZIP}. The second parameter of the \code{ZIP} distribution is \eqn{\sigma}  and denotes the extra probability  associated with  \eqn{P(X=0)}. To get a parametrization where \eqn{\mu} is the mean please use  \code{ZIP2()} or \code{ZIP3()}.
 }
 \usage{
 ZIP(mu.link = "log", sigma.link = "logit")
@@ -18,6 +20,7 @@ dZIP(x, mu = 5, sigma = 0.1, log = FALSE)
 pZIP(q, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
 qZIP(p, mu = 5, sigma = 0.1, lower.tail = TRUE, log.p = FALSE)
 rZIP(n, mu = 5, sigma = 0.1)
+
 }
 
 \arguments{
@@ -49,7 +52,6 @@ for \eqn{y=0,1,...}  see  pp 498-500 of Rigby \emph{et al.} (2019).   The expect
 Lambert, D. (1992), Zero-inflated Poisson Regression with an application to defects in Manufacturing,
     \emph{Technometrics},  \bold{34}, pp 1-14.
   
-
 Rigby, R. A. and  Stasinopoulos D. M. (2005). Generalized additive models for location, scale and shape,(with discussion), 
 \emph{Appl. Statist.}, \bold{54}, part 3, pp 507-554.
 
@@ -67,7 +69,7 @@ Chapman and Hall/CRC. \doi{10.1201/b21973}
 }
 \author{ Mikis Stasinopoulos, Bob Rigby}
 
-\seealso{ \code{\link{gamlss.family}}, \code{\link{PO}}, \code{\link{ZIP2}} }
+\seealso{ \code{\link{gamlss.family}}, \code{\link{PO}}, \code{\link{ZIP2}}, \code{\link{ZIP3}} }
 \examples{
 ZIP()# gives information about the default links for the normal distribution
 # creating data and plotting them 
