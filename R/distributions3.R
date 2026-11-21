@@ -14,6 +14,7 @@ GAMLSS <- function(family, mu, sigma, tau, nu) {
   
   ## set up distribution
   d <- eval(parse(text = sprintf("data.frame(%s)", paste(par, "=", par, collapse = ", "))))
+  for (i in seq_along(d)) d[[i]] <- as.numeric(d[[i]]) ## Enforce numeric
   class(d) <- c("GAMLSS", "distribution")
   attr(d, "family") <- f$family
   return(d)
@@ -91,7 +92,7 @@ random.GAMLSS <- function(x, n = 1L, drop = TRUE, ...) {
 
 support.GAMLSS <- function(d, drop = TRUE, ...) {
   stopifnot(requireNamespace("distributions3"))
-  s <- quantile(d, probs = c(0, 1), elementwise = FALSE)
+  s <- quantile(d, probs = c(0, 1), elementwise = FALSE, drop = FALSE)
   distributions3::make_support(s[, 1L], s[, 2L], d, drop = drop)
 }
 
