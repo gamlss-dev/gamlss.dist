@@ -47,24 +47,16 @@ print.GAMLSS <- function(x, digits = pmax(3L, getOption("digits") - 3L), ...) {
 
 mean.GAMLSS <- function(x, ...) {
   f <- .gamlss_family(x)
-  if (is.null(f$mean)) stop(sprintf("the mean is not implemented for the %s family", attr(x, "family")[1L]))
+  if (is.null(f$mean)) return(NextMethod())
   m <- do.call(f$mean, as.list(x))
   setNames(m, names(x))
 }
 
 variance.GAMLSS <- function(x, ...) {
   f <- .gamlss_family(x)
-  if (is.null(f$variance)) stop(sprintf("the variance is not implemented for the %s family", attr(x, "family")[1L]))
+  if (is.null(f$variance)) return(NextMethod())
   m <- do.call(f$variance, as.list(x))
   setNames(m, names(x))
-}
-
-skewness.GAMLSS <- function(x, ...) {
-  stop("not yet implemented")
-}
-
-kurtosis.GAMLSS <- function(x, ...) {
-  stop("not yet implemented")
 }
 
 pdf.GAMLSS <- function(d, x, drop = TRUE, elementwise = NULL, ...) {
