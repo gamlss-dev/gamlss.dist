@@ -11,10 +11,19 @@ GAMLSS <- function(family, mu, sigma, tau, nu) {
   if(!("sigma" %in% par) && !missing(sigma) && (!is.null(sigma) || !is.na(sigma))) warning(sprintf("'sigma' is not a parameter of the '%s' family", family))
   if(!("tau" %in% par)   && !missing(tau)   && (!is.null(tau)   || !is.na(tau)))   warning(sprintf("'tau' is not a parameter of the '%s' family", family))
   if(!("nu" %in% par)    && !missing(nu)    && (!is.null(nu)    || !is.na(nu)))    warning(sprintf("'nu' is not a parameter of the '%s' family", family))
+
+  ## assure defaults
+  if(missing(mu))    mu <- NULL
+  if(missing(sigma)) sigma <- NULL
+  if(missing(tau))   tau <- NULL
+  if(missing(nu))    nu <- NULL
   
   ## set up distribution
-  d <- eval(parse(text = sprintf("data.frame(%s)", paste(par, "=", par, collapse = ", "))))
-  for (i in seq_along(d)) d[[i]] <- as.numeric(d[[i]]) ## Enforce numeric
+  d <- list(mu = mu, sigma = sigma, tau = tau, nu = nu)[par]
+  for (i in par) {
+    if (!is.numeric(d[[i]])) d[[i]] <- as.numeric(d[[i]])
+  }
+  d <- do.call(data.frame, d)
   class(d) <- c("GAMLSS", "distribution")
   attr(d, "family") <- f$family
   return(d)
