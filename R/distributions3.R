@@ -119,19 +119,54 @@ score.GAMLSS <- function(d, x, which = NULL, drop = TRUE, ...) {
   which  <- distributions3::get_deriv_names(params, which = which, expand = FALSE, check = FALSE)
 
   ## always use all arguments
-  args <- as.pairlist(alist(y =, mu =, sigma =, tau =, nu =))
   deriv_nam <- c(mu = "dldm", sigma = "dldd", nu = "dldv", tau = "dldt")
-  for (deriv in deriv_nam) {
-    if (is.function(f[[deriv]])) {
-      formals(f[[deriv]]) <- args
-    } else {
-      f[[deriv]] <- function(y, mu, sigma, tau, nu) stop(sprintf("scores '%s' not available in '%s' family", deriv, f$family[1L]))
-    }
-  }
+  deriv_req <- deriv_nam[unique(names(which))]
+  if (!all(deriv_req %in% names(f))) stop(sprintf("not all score functions available for '%s' family", f$family[1L])) ## return(NextMethod())
+  args <- as.pairlist(alist(y =, mu =, sigma =, tau =, nu =))
+  for (deriv in deriv_req) formals(f[[deriv]]) <- args
 
   ## compute scores
   scr <- function(par, d, x) f[[deriv_nam[par]]](y = x, mu = d$mu, sigma = d$sigma, nu = d$nu, tau = d$tau)
 
   ## Calculate derivatives, prepare return object
   return(distributions3::apply_deriv(d, x, FUN = scr, which = which, drop = drop, check = FALSE))
+}
+
+hessian.GAMLSS <- function(d, x, which = NULL, drop = TRUE, expected = FALSE, ...) {
+  f <- .gamlss_family(d)
+
+  stopifnot("argument 'expected' must be TRUE or FALSE" = isTRUE(expected) || isFALSE(expected))
+  if (expected && (missing(x) || is.null(x))) x <- 0 # dummy
+
+  ## usually gamlss.dist only provide the expected hessian
+  ## exceptions can be handled here
+  if (expected) {
+    unavail <- c("")
+    if (f$family[1L] %in% unavail) return(NextMethod())
+  } else {
+    avail <- c("")
+    if (!(f$family[1L] %in% avail)) return(NextMethod())
+  }
+
+  ## Calculate max length 'n' (plus input sanity check), get parameter names of
+  ## the distribution 'd', and evaluate available/check requested derivative names
+  n      <- distributions3::max_length(d, x)
+  params <- names(unclass(d))
+  which  <- distributions3::get_deriv_names(params, which = which, expand = TRUE)
+  if (length(x) < n) x <- rep.int(x, n)
+
+  ## always use all arguments
+  deriv_nam <- c("mu" = "d2ldm2", "mu:sigma" = "d2ldmdd", "mu:nu" = "d2ldmdv",
+    "sigma:nu" = "d2ldddv", "sigma" = "d2ldd2", "mu:tau" = "d2ldmdt", "sigma:tau" = "d2ldddt",
+    "nu" = "d2ldv2", "nu:tau" = "d2ldvdt", "tau" = "d2ldt2")
+  deriv_req <- deriv_nam[unique(names(which))]
+  if (!all(deriv_req %in% names(f))) stop(sprintf("not all hessian functions available for '%s' family", f$family[1L])) ## return(NextMethod())
+  args <- as.pairlist(alist(y =, mu =, sigma =, tau =, nu =))
+  for (deriv in deriv_req) formals(f[[deriv]]) <- args
+
+  ## compute hessian
+  hess <- function(par, d, x) f[[deriv_nam[par]]](y = x, mu = d$mu, sigma = d$sigma, nu = d$nu, tau = d$tau)
+
+  ## Calculate derivatives, prepare return object
+  return(distributions3::apply_deriv(d, x, FUN = hess, which = which, drop = drop, check = FALSE))
 }
