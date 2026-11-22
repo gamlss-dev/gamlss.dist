@@ -108,3 +108,30 @@ is_continuous.GAMLSS <- function(d, ...) {
   if (is.null(f$type)) stop(sprintf("the type is not implemented for the %s family", attr(d, "family")[1L]))
   setNames(rep.int(f$type == "Continuous", length(d)), names(d))
 }
+
+score.GAMLSS <- function(d, x, which = NULL, drop = TRUE, ...) {
+  f <- .gamlss_family(d)
+
+  ## Calculate max length 'n' (plus input sanity check), get parameter names of
+  ## the distribution 'd', and evaluate available/check requested derivative names
+  n      <- distributions3::max_length(d, x)
+  params <- names(unclass(d))
+  which  <- distributions3::get_deriv_names(params, which = which, expand = FALSE, check = FALSE)
+
+  ## always use all arguments
+  args <- as.pairlist(alist(y =, mu =, sigma =, tau =, nu =))
+  deriv_nam <- c(mu = "dldm", sigma = "dldd", nu = "dldv", tau = "dldt")
+  for (deriv in deriv_nam) {
+    if (is.function(f[[deriv]])) {
+      formals(f[[deriv]]) <- args
+    } else {
+      f[[deriv]] <- function(y, mu, sigma, tau, nu) stop(sprintf("scores '%s' not available in '%s' family", deriv, f$family[1L]))
+    }
+  }
+
+  ## compute scores
+  scr <- function(par, d, x) f[[deriv_nam[par]]](y = x, mu = d$mu, sigma = d$sigma, nu = d$nu, tau = d$tau)
+
+  ## Calculate derivatives, prepare return object
+  return(distributions3::apply_deriv(d, x, FUN = scr, which = which, drop = drop, check = FALSE))
+}

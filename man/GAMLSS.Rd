@@ -15,6 +15,7 @@
 \alias{support.GAMLSS}
 \alias{is_discrete.GAMLSS}
 \alias{is_continuous.GAMLSS}
+\alias{score.GAMLSS}
 
 \title{Create a GAMLSS Distribution}
 
