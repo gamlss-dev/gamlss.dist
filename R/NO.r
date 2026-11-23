@@ -171,7 +171,6 @@ qNO2 <- function(p, mu=0, sigma=1, lower.tail = TRUE, log.p = FALSE)
     if (log.p==TRUE) p <- exp(p) else p <- p
 #    if (any(p < 0)|any(p > 1))  stop(paste("p must be between 0 and 1", "\n", "")) 
     q <- qnorm(p, mean=mu, sd=sqrt(sigma), lower.tail = lower.tail )
-    q <- qnorm(p, mean=mu, sd=sigma, lower.tail = lower.tail )
     q[p-0 < abs(1e-10)]  <- -Inf
     q[1-p < abs(1e-10)]  <- Inf
     q[p <  0] <- NaN
