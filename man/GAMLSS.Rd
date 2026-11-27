@@ -15,6 +15,8 @@
 \alias{support.GAMLSS}
 \alias{is_discrete.GAMLSS}
 \alias{is_continuous.GAMLSS}
+\alias{score.GAMLSS}
+\alias{hessian.GAMLSS}
 
 \title{Create a GAMLSS Distribution}
 
@@ -79,7 +81,10 @@ functions provided in \pkg{gamlss.dist}, see the manual pages of the individual
 families. The methods \code{\link[distributions3]{is_discrete}} and
 \code{\link[distributions3]{is_continuous}} can be used to query whether the
 distributions are discrete on the entire support or continuous on the entire
-support, respectively.
+support, respectively. Finally, the methods \code{\link[distributions3]{score}} and
+\code{\link[distributions3]{hessian}} compute the score (first derivative of the
+log-likelihood with respect to the parameters) and Hessian (corresponding second
+derivative, typically expected).
 
 See the examples below for an illustration of the workflow for the class and methods.
 }

@@ -160,8 +160,6 @@ S3method(format,GAMLSS)
 S3method(print,GAMLSS)
 S3method(mean,GAMLSS)
 S3method(distributions3::variance,GAMLSS)
-S3method(distributions3::skewness,GAMLSS)
-S3method(distributions3::kurtosis,GAMLSS)
 S3method(distributions3::pdf,GAMLSS)
 S3method(distributions3::log_pdf,GAMLSS)
 S3method(distributions3::cdf,GAMLSS)
@@ -170,6 +168,8 @@ S3method(distributions3::random,GAMLSS)
 S3method(distributions3::is_continuous,GAMLSS)
 S3method(distributions3::is_discrete,GAMLSS)
 S3method(distributions3::support,GAMLSS)
+S3method(distributions3::score,GAMLSS)
+S3method(distributions3::hessian,GAMLSS)
 
 
 # the following commands has to be used for creating the c file 
