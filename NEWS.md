@@ -7,7 +7,10 @@ editor_options:
 
 #  Version 6.1-12
 
-- the condition to move to  the Poison distribution for small values of sigma<0.0001 was taken out from  the NBI and NBII distributions,as suggested by Gavin Simpson because the negative binomial in R is doing that at the moment. 
+- the condition to move to  the Poison distribution for small values of sigma<0.0001 was taken out from  the NBI and NBII distributions, as suggested by Gavin Simpson because the negative binomial in R is doing that at the moment. 
+
+- Improved `GAMLSS()` interface for `distributions3` objects based on `gamlss.dist` families: `score()` and `hessian()` methods added, `skewness()` and `kurtosis()` methods could be omitted so that the numeric fallback methods work, and the distribution generator function itself was streamlined.
+
 
 #  Version 6.1-11
 
